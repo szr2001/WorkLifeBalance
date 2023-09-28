@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,8 +30,9 @@ namespace WorkLifeBalance
     {
         [DllImport("kernel32.dll")]
         public static extern bool AllocConsole();
-        
 
+        bool IsClosingApp = false;
+        bool IsTimmerActive = true;
         bool IsWorking = false;
         DateTime Today = DateTime.Now;
         TimeOnly WorkTimeElapsed = new TimeOnly(0,0,0);
@@ -44,6 +46,7 @@ namespace WorkLifeBalance
         SolidColorBrush? BreakBtnColor;
         SolidColorBrush? BreakBtnColorHighlight;
         int ToggleBtnSize = 50;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -82,10 +85,6 @@ namespace WorkLifeBalance
             }
         }
 
-        private void SaveDataToFile()
-        {
-        }
-
         private void UpdateUiText()
         {
             ElapsedWorkT.Text = WorkTimeElapsed.ToString("HH:mm:ss");
@@ -95,7 +94,8 @@ namespace WorkLifeBalance
         private async Task TimmerLoop()
         {
             TimeSpan OneSec = new TimeSpan(0, 0, 1);
-            while (true)
+            
+            while (IsTimmerActive)
             {
                 if (IsWorking)
                 {
@@ -112,6 +112,37 @@ namespace WorkLifeBalance
             }
         }
 
+        private async Task WriteData()
+        {
+            IsTimmerActive = false;
+
+            //simulate writing data
+            await Task.Delay(3000);
+        }
+
+        private void ViewData(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Options(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private async void CloseApp(object sender, RoutedEventArgs e)
+        {
+            if (IsClosingApp) return;
+
+            IsClosingApp = true;
+
+            DateT.Text = "Closing, waiting for database";
+
+            await Task.Run(WriteData);
+
+            Application.Current.Shutdown();
+        }
+
         private void MoveWindow(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
@@ -122,7 +153,7 @@ namespace WorkLifeBalance
 
         private void ToggleRecordingBtnMouseEnter(object sender, MouseEventArgs e)
         {
-            if(IsWorking)
+            if (IsWorking)
             {
                 ToggleBtn.Background = BreakBtnColorHighlight;
             }
@@ -146,6 +177,18 @@ namespace WorkLifeBalance
             }
             ToggleBtn.Width = ToggleBtnSize;
             ToggleBtn.Height = ToggleBtnSize;
+        }
+
+        private void OptionMenuMouseEnter(object sender, MouseEventArgs e)
+        {
+            OptionMenuVisibility.Width = new GridLength(35,GridUnitType.Pixel);
+            OptionsPannel.Visibility = Visibility.Visible;
+        }
+
+        private void OptionMenuMouseLeave(object sender, MouseEventArgs e)
+        {
+            OptionMenuVisibility.Width = new GridLength(15, GridUnitType.Pixel);
+            OptionsPannel.Visibility = Visibility.Collapsed;
         }
     }
 }
