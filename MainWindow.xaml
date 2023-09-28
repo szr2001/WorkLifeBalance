@@ -13,7 +13,7 @@
     
     <Border CornerRadius="15"
             MouseDown="MoveWindow"
-            Background="#028090">
+            Background= "{Binding Source={StaticResource WLFBOceanBlue}}">
         <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="110"/>
@@ -21,13 +21,13 @@
         </Grid.RowDefinitions>
             <Border Grid.Row="0"
                     Margin="4"
-                    Background="#E4FDE1"
+                    Background ="{Binding Source = {StaticResource WLFBBluishWhite}}"
                     CornerRadius="12">
             
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="55"/>
+                        <ColumnDefinition Width="65"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Vertical"
                                 Grid.Column="0"
@@ -50,23 +50,18 @@
                     </StackPanel>
                     <Button Grid.Column="1"
                             Width="50"
+                            Name="ToggleBtn"
+                            ToolTip="Toggle Work/Rest"
                             Height="50" 
-                            Click="ToggleRecording">
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border Background="LightBlue" CornerRadius="50">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
+                            Click="ToggleRecording"
+                            Template="{Binding Source={StaticResource RoundedBtnTemp}}"
+                            Style="{Binding Source={StaticResource RoundedBtnStyle}}" 
+                            MouseEnter="ToggleRecordingBtnMouseEnter" 
+                            MouseLeave="ToggleRecordingBtnMouseLeave">
+                        <Image Margin="5"
+                               Source="Assets/Rest.png"
+                               Name="ToggleRecordingImage"/>
                     </Button>
-                    <Ellipse Grid.Column="1"
-                             Width="30"
-                             Name="RecordIndicatorE"
-                             Height="30"
-                             Fill="Purple">
-                        
-                    </Ellipse>
                 </Grid>
             </Border>
         <StackPanel Orientation="Vertical"
@@ -74,7 +69,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
 
-            <TextBlock Text="Date: 00/00/0000"
+            <TextBlock Text="Today: 00/00/0000"
                        TextAlignment="Center"
                        Name="DateT"
                        FontSize="15"

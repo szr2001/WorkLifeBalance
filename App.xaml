@@ -4,6 +4,41 @@
              xmlns:local="clr-namespace:WorkLifeBalance"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+
+        <SolidColorBrush x:Key="WLFBBluishWhite" Color="#E4FDE1" />
+        <SolidColorBrush x:Key="WLFBOceanBlue" Color="#028090" />
+        
+        <SolidColorBrush x:Key="WLFBLigherBlue" Color="LightBlue" />
+        <SolidColorBrush x:Key="WLFBLightBlue" Color="#a0cede" />
+
+        <SolidColorBrush x:Key="WLFBLighterPurple" Color="#6a73d4" />
+        <SolidColorBrush x:Key="WLFBLightPurple" Color="#5b64c2" />
+
+        <ControlTemplate  x:Key="RoundedBtnTemp" TargetType="Button">
+            <Border CornerRadius="50"
+                    Background="{TemplateBinding Background}">
+                
+                <ContentPresenter HorizontalAlignment="Center" 
+                                  VerticalAlignment="Center">
+                </ContentPresenter>
+                
+            </Border>
+        </ControlTemplate>
+
+        <Style x:Key="RoundedBtnHoverStyle" TargetType="Button">
+            <Setter x:Name="BtnNormalColor" Property="Background" Value="{Binding Source= {StaticResource WLFBLigherBlue}}"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter x:Name="BtnOnHoverColor" Property="Background" Value="{Binding Source= {StaticResource WLFBLightBlue}}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="RoundedBtnStyle" TargetType="Button">
+            <Setter x:Name="BtnNormalColor" Property="Background" Value="{Binding Source= {StaticResource WLFBLigherBlue}}"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
     </Application.Resources>
 </Application>
