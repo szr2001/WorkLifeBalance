@@ -9,7 +9,7 @@
         ResizeMode="NoResize"
         AllowsTransparency="True"
         WindowStyle="None"
-        Title="MainWindow" Height="140" Width="220">
+        Title="WorkLifeBalance" Height="140" Width="220">
     
     <Border CornerRadius="15"
             MouseDown="MoveWindow"

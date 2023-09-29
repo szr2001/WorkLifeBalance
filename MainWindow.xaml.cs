@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Text;
@@ -38,6 +39,9 @@ namespace WorkLifeBalance
         TimeOnly WorkTimeElapsed = new TimeOnly(0,0,0);
         TimeOnly BreakTimeElapsed = new TimeOnly(0,0,0);
 
+        DayData TodayData = new();
+        WLBSettings AppSettings = new();
+
         ImageSource? RestImg;
         ImageSource? WorkImg;
 
@@ -46,16 +50,16 @@ namespace WorkLifeBalance
         SolidColorBrush? BreakBtnColor;
         SolidColorBrush? BreakBtnColorHighlight;
         int ToggleBtnSize = 50;
-
         public MainWindow()
         {
             InitializeComponent();
             AllocConsole();
             LoadStyleInfo();
-
+            LoadTodayData();
             this.Topmost = true;
             DateT.Text = $"Today: {Today.Date.ToString("MM/dd/yyyy")}";
             _ = TimmerLoop();
+            _ = SetWindowLocation();
         }
 
         private void LoadStyleInfo()
@@ -67,6 +71,22 @@ namespace WorkLifeBalance
             WorkingBtnColorHighlight = FindResource("WLFBLightBlue") as SolidColorBrush;
             BreakBtnColor = FindResource("WLFBLighterPurple") as SolidColorBrush;
             BreakBtnColorHighlight = FindResource("WLFBLightPurple") as SolidColorBrush;
+        }
+
+        private void LoadTodayData()
+        {
+
+        }
+
+        private async Task SetWindowLocation()
+        {
+            await Task.Delay(300);
+            Vector2 UserScreen = new Vector2((float)SystemParameters.PrimaryScreenWidth, (float)SystemParameters.PrimaryScreenHeight);
+            IntPtr TargetWindow = WindowPlacementHelper.GetWindow(null, "WorkLifeBalance");
+            Console.WriteLine(TargetWindow);
+            
+            //Todo: switch statement to set the window start corner based on user settings
+            WindowPlacementHelper.SetWindowLocation(TargetWindow, 0, (int)UserScreen.Y - 180);
         }
 
         private void ToggleRecording(object sender, RoutedEventArgs e)
@@ -138,7 +158,7 @@ namespace WorkLifeBalance
 
             DateT.Text = "Closing, waiting for database";
 
-            await Task.Run(WriteData);
+            await WriteData();
 
             Application.Current.Shutdown();
         }
