@@ -23,8 +23,6 @@ namespace WorkLifeBalance
         public static extern bool AllocConsole();
 
         bool IsClosingApp = false;
-        bool IsTimmerActive = true;
-        bool IsSaveTimmerActive = false;
         bool IsAppReady = false;
 
         TimmerState AppTimmerState = TimmerState.Resting;
@@ -32,7 +30,7 @@ namespace WorkLifeBalance
         public static Dispatcher MainDispatcher = Dispatcher.CurrentDispatcher;
 
         DayData? TodayData = null;
-        WLBSettings? AppSettings = null;
+        WLBSettings AppSettings = new();
 
         ImageSource? RestImg;
         ImageSource? WorkImg;
@@ -42,6 +40,7 @@ namespace WorkLifeBalance
         SolidColorBrush? BreakBtnColor;
         SolidColorBrush? BreakBtnColorHighlight;
         int ToggleBtnSize = 50;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -65,23 +64,24 @@ namespace WorkLifeBalance
         private async Task LoadData()
         {
             TodayData = await DataBaseHandler.ReadDay(DateOnly.FromDateTime(DateTime.Now).ToString("MMddyyyy"));
-            //AppSettings = await DataBaseHandler.ReadSettings();
+            AppSettings = await DataBaseHandler.ReadSettings();
 
             try
             {
                 TodayData.ConvertSaveDataToUsableData();
-                //AppSettings.ConvertSaveDataToUsableData();
+                AppSettings.ConvertSaveDataToUsableData();
             }
             catch (Exception ex)
             {
-                ShowErrorBox("Failed to convert data", $"This can be caused by a a missing or corupted database file. {ex.Message}");
+                ShowErrorBox("Failed to convert data", $"This can be caused by unexpected data inside the database. {ex.Message}");
             }
 
-            _ = TimmerLoop();
             _ = SetWindowLocation();
 
             IsAppReady = true;
 
+            _ = TimmerLoop();
+            _ = SaveLoop();
 
             DateT.Text = $"Today: {TodayData.DateC.ToString("MM/dd/yyyy")}";
         }
@@ -91,9 +91,22 @@ namespace WorkLifeBalance
             await Task.Delay(300);
             Vector2 UserScreen = new Vector2((float)SystemParameters.PrimaryScreenWidth, (float)SystemParameters.PrimaryScreenHeight);
             IntPtr TargetWindow = WindowPlacementHelper.GetWindow(null, "WorkLifeBalance");
-            
-            //Todo: switch statement to set the window start corner based on user settings
-            WindowPlacementHelper.SetWindowLocation(TargetWindow, 0, (int)UserScreen.Y - 180);
+
+            switch (AppSettings.StartUpCornerC)
+            {
+                case AnchorCorner.TopLeft:
+                    WindowPlacementHelper.SetWindowLocation(TargetWindow,0, 0);
+                    break;
+                case AnchorCorner.TopRight:
+                    WindowPlacementHelper.SetWindowLocation(TargetWindow, (int)UserScreen.X - 220, 0);
+                    break;
+                case AnchorCorner.BootomLeft:
+                    WindowPlacementHelper.SetWindowLocation(TargetWindow, 0, (int)UserScreen.Y - 180);
+                    break;
+                case AnchorCorner.BottomRight:
+                    WindowPlacementHelper.SetWindowLocation(TargetWindow, (int)UserScreen.X - 220, (int)UserScreen.Y - 180);
+                    break;
+            }
         }
 
         private void ToggleRecording(object sender, RoutedEventArgs e)
@@ -132,8 +145,8 @@ namespace WorkLifeBalance
         private async Task TimmerLoop()
         {
             TimeSpan OneSec = new TimeSpan(0, 0, 1);
-            
-            while (IsTimmerActive)
+
+            while (IsAppReady && !IsClosingApp)
             {
                 switch (AppTimmerState)
                 {
@@ -158,12 +171,24 @@ namespace WorkLifeBalance
             }
         }
 
+        private async Task SaveLoop()
+        {
+            while (IsAppReady && !IsClosingApp)
+            {
+                await Task.Delay(AppSettings.SaveInterval * 60000);
+                await WriteData();
+            }
+        }
+
         private async Task WriteData()
         {
             DateT.Text = $"Saving data...";
 
             TodayData.ConvertUsableDataToSaveData();
+            AppSettings.ConvertUsableDataToSaveData();
+
             await DataBaseHandler.WriteDay(TodayData);
+            await DataBaseHandler.WriteSettings(AppSettings);
 
             DateT.Text = $"Today: {TodayData.DateC.ToString("MM/dd/yyyy")}";
         }
@@ -182,7 +207,8 @@ namespace WorkLifeBalance
         {
             if (IsClosingApp) return;
 
-            IsTimmerActive = false;
+            OptionMenuMouseLeave(sender,null);
+
             IsClosingApp = true;
 
             DateT.Text = "Closing, waiting for database";

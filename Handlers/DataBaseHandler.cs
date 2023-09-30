@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WorkLifeBalance.Data;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WorkLifeBalance.HandlerClasses
 {
@@ -35,8 +36,12 @@ namespace WorkLifeBalance.HandlerClasses
                         {
                             try
                             {
-                                string sql = @"REPLACE INTO FavResidences (Url)
-                                             VALUES (@Url)";
+                                string sql = @"UPDATE Settings 
+                                              SET LastTimeOpened = @LastTimeOpened,
+                                              StartWithWindows = @StartWithWindows,
+                                              StartUpCorner = @StartUpCorner,
+                                              SaveInterval = @SaveInterval
+                                              LIMIT 1";
 
                                 connection.Execute(sql, sett);
                                 await transaction.CommitAsync();
@@ -81,7 +86,9 @@ namespace WorkLifeBalance.HandlerClasses
                     //gets total number
                     try
                     {
-                        string sql = "SELECT COUNT(*) FROM TotalResidences;";
+                        string sql = @$"SELECT * FROM Settings
+                                        LIMIT 1";
+
                         retrivedSettings = connection.QueryFirstOrDefault<WLBSettings>(sql);
                     }
                     catch (Exception ex)
@@ -100,6 +107,7 @@ namespace WorkLifeBalance.HandlerClasses
                 //release sempahore so other methods can run
                 _semaphore.Release();
             }
+
             //returns count
             return retrivedSettings;
         }
