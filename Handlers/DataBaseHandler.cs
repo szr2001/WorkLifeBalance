@@ -2,9 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using WorkLifeBalance.Data;
 
 namespace WorkLifeBalance.HandlerClasses
 {
@@ -13,15 +16,14 @@ namespace WorkLifeBalance.HandlerClasses
         //semaphore to ensure only one method can write to the database at once
         private static SemaphoreSlim _semaphore = new(1);
         //connection string for the db
-        private static readonly string ConnectionString = "Data Source=.\\RecordedData.db;Version=3;";
+        private static readonly string ConnectionString = @$"Data Source={Directory.GetCurrentDirectory()}\RecordedData.db;Version=3;";
 
-        public static async Task WriteSettings(WLBSettings res)
+        public static async Task WriteSettings(WLBSettings sett)
         {
             //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
             try
             {
-                Console.WriteLine("Writing To FavResidences Table");
                 using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                 {
                     //open connection
@@ -33,17 +35,20 @@ namespace WorkLifeBalance.HandlerClasses
                         {
                             try
                             {
-                                string sql = @"INSERT INTO FavResidences (Url)
+                                string sql = @"REPLACE INTO FavResidences (Url)
                                              VALUES (@Url)";
 
-                                connection.Execute(sql, res);
+                                connection.Execute(sql, sett);
                                 await transaction.CommitAsync();
                             }
-                            catch (Exception e)
+                            catch (Exception ex)
                             {
                                 //rols back if failed
-                                Console.WriteLine($"Error writing to FavResidences Table: {e.Message}");
                                 await transaction.RollbackAsync();
+                                MainWindow.MainDispatcher.Invoke(() =>
+                                {
+                                    MainWindow.ShowErrorBox("Failed to write to database", $"This can be caused by a missing database file: {ex.Message}");
+                                });
                             }
                         }
                     });
@@ -59,58 +64,53 @@ namespace WorkLifeBalance.HandlerClasses
             }
         }
 
-        public static async Task<WLBSettings> ReadDay(WLBSettings res)
+        public static async Task<WLBSettings> ReadSettings()
         {
             WLBSettings retrivedSettings = new();
+            //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
+            //if no one writes to db continue
+
             try
             {
-                Console.WriteLine("Writing To FavResidences Table");
                 using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                 {
-                    //open connection
+                    //start connection
                     await connection.OpenAsync();
-                    //if no one writes continue
-                    await Task.Run(async () =>
+
+                    //gets total number
+                    try
                     {
-                        using (SQLiteTransaction transaction = connection.BeginTransaction())
+                        string sql = "SELECT COUNT(*) FROM TotalResidences;";
+                        retrivedSettings = connection.QueryFirstOrDefault<WLBSettings>(sql);
+                    }
+                    catch (Exception ex)
+                    {
+                        MainWindow.MainDispatcher.Invoke(() =>
                         {
-                            try
-                            {
-                                string sql = @"INSERT INTO FavResidences (Url)
-                                             VALUES (@Url)";
-
-                                connection.Execute(sql, res);
-                                await transaction.CommitAsync();
-                            }
-                            catch (Exception e)
-                            {
-                                //rols back if failed
-                                Console.WriteLine($"Error writing to FavResidences Table: {e.Message}");
-                                await transaction.RollbackAsync();
-                            }
-                        }
-                    });
-
+                            MainWindow.ShowErrorBox("Failed to write to database", $"This can be caused by a missing database file: {ex.Message}");
+                        });
+                    }
                     //close connection
                     await connection.CloseAsync();
                 }
             }
             finally
             {
-                //free semaphore so other methods can run
+                //release sempahore so other methods can run
                 _semaphore.Release();
             }
+            //returns count
             return retrivedSettings;
         }
 
-        public static async Task WriteDay(DayData res)
+        public static async Task WriteDay(DayData day)
         {
             //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
+
             try
             {
-                Console.WriteLine("Writing To FavResidences Table");
                 using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                 {
                     //open connection
@@ -122,17 +122,21 @@ namespace WorkLifeBalance.HandlerClasses
                         {
                             try
                             {
-                                string sql = @"INSERT INTO FavResidences (Url)
-                                             VALUES (@Url)";
+                                //write data
+                                string sql = @"INSERT OR REPLACE INTO Days (Date,WorkedAmmount,RestedAmmount,StudiedAmmount)
+                                             VALUES (@Date,@WorkedAmmount,@RestedAmmount,@StudiedAmmount)";
 
-                                connection.Execute(sql, res);
+                                await connection.ExecuteAsync(sql, day);
                                 await transaction.CommitAsync();
                             }
-                            catch (Exception e)
+                            catch (Exception ex)
                             {
                                 //rols back if failed
-                                Console.WriteLine($"Error writing to FavResidences Table: {e.Message}");
                                 await transaction.RollbackAsync();
+                                MainWindow.MainDispatcher.Invoke(() => 
+                                {
+                                    MainWindow.ShowErrorBox("Failed to write to database",$"This can be caused by a missing database file: {ex.Message}");
+                                });
                             }
                         }
                     });
@@ -148,48 +152,50 @@ namespace WorkLifeBalance.HandlerClasses
             }
         }
 
-        public static async Task<DayData> ReadDay(DayData res)
+        public static async Task<DayData> ReadDay(string Date)
         {
-            DayData retrivedDay = new();
+            DayData? retrivedDay = null;
+            //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
+            //if no one writes to db continue
+
             try
             {
-                Console.WriteLine("Writing To FavResidences Table");
                 using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
                 {
-                    //open connection
+                    //start connection
                     await connection.OpenAsync();
-                    //if no one writes continue
-                    await Task.Run(async () =>
+
+                    //execute the sql to get the day
+                    try
                     {
-                        using (SQLiteTransaction transaction = connection.BeginTransaction())
+                        string sql = @$"SELECT * FROM Days 
+                                      WHERE Date = '{Date}'";
+                        retrivedDay = connection.QueryFirstOrDefault<DayData>(sql);
+                    }
+                    catch (Exception ex)
+                    {
+                        //close app if failed
+                        MainWindow.MainDispatcher.Invoke(() =>
                         {
-                            try
-                            {
-                                string sql = @"INSERT INTO FavResidences (Url)
-                                             VALUES (@Url)";
-
-                                connection.Execute(sql, res);
-                                await transaction.CommitAsync();
-                            }
-                            catch (Exception e)
-                            {
-                                //rols back if failed
-                                Console.WriteLine($"Error writing to FavResidences Table: {e.Message}");
-                                await transaction.RollbackAsync();
-                            }
-                        }
-                    });
-
+                            MainWindow.ShowErrorBox("Failed to read from database", $"This can be caused by a missing database file: {ex.Message}");
+                        });
+                    }
                     //close connection
                     await connection.CloseAsync();
                 }
             }
             finally
             {
-                //free semaphore so other methods can run
+                //release sempahore so other methods can run
                 _semaphore.Release();
             }
+
+            if(retrivedDay == null)
+            {
+                retrivedDay = new();
+            }
+
             return retrivedDay;
         }
     }

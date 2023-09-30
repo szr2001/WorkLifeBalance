@@ -123,7 +123,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
 
-            <TextBlock Text="Today: 00/00/0000"
+            <TextBlock Text="Loading Data..."
                        TextAlignment="Center"
                        Name="DateT"
                        FontWeight="Bold"

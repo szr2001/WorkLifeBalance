@@ -1,25 +1,15 @@
-﻿using Microsoft.VisualBasic;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System;
 using System.IO;
-using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using System.Security.AccessControl;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Threading;
+using WorkLifeBalance.Data;
+using WorkLifeBalance.HandlerClasses;
 
 namespace WorkLifeBalance
 {
@@ -34,13 +24,15 @@ namespace WorkLifeBalance
 
         bool IsClosingApp = false;
         bool IsTimmerActive = true;
-        bool IsWorking = false;
-        DateTime Today = DateTime.Now;
-        TimeOnly WorkTimeElapsed = new TimeOnly(0,0,0);
-        TimeOnly BreakTimeElapsed = new TimeOnly(0,0,0);
+        bool IsSaveTimmerActive = false;
+        bool IsAppReady = false;
 
-        DayData TodayData = new();
-        WLBSettings AppSettings = new();
+        TimmerState AppTimmerState = TimmerState.Resting;
+
+        public static Dispatcher MainDispatcher = Dispatcher.CurrentDispatcher;
+
+        DayData? TodayData = null;
+        WLBSettings? AppSettings = null;
 
         ImageSource? RestImg;
         ImageSource? WorkImg;
@@ -53,13 +45,10 @@ namespace WorkLifeBalance
         public MainWindow()
         {
             InitializeComponent();
+            Topmost = true;
             AllocConsole();
             LoadStyleInfo();
-            LoadTodayData();
-            this.Topmost = true;
-            DateT.Text = $"Today: {Today.Date.ToString("MM/dd/yyyy")}";
-            _ = TimmerLoop();
-            _ = SetWindowLocation();
+            _ = LoadData();
         }
 
         private void LoadStyleInfo()
@@ -73,9 +62,28 @@ namespace WorkLifeBalance
             BreakBtnColorHighlight = FindResource("WLFBLightPurple") as SolidColorBrush;
         }
 
-        private void LoadTodayData()
+        private async Task LoadData()
         {
+            TodayData = await DataBaseHandler.ReadDay(DateOnly.FromDateTime(DateTime.Now).ToString("MMddyyyy"));
+            //AppSettings = await DataBaseHandler.ReadSettings();
 
+            try
+            {
+                TodayData.ConvertSaveDataToUsableData();
+                //AppSettings.ConvertSaveDataToUsableData();
+            }
+            catch (Exception ex)
+            {
+                ShowErrorBox("Failed to convert data", $"This can be caused by a a missing or corupted database file. {ex.Message}");
+            }
+
+            _ = TimmerLoop();
+            _ = SetWindowLocation();
+
+            IsAppReady = true;
+
+
+            DateT.Text = $"Today: {TodayData.DateC.ToString("MM/dd/yyyy")}";
         }
 
         private async Task SetWindowLocation()
@@ -83,7 +91,6 @@ namespace WorkLifeBalance
             await Task.Delay(300);
             Vector2 UserScreen = new Vector2((float)SystemParameters.PrimaryScreenWidth, (float)SystemParameters.PrimaryScreenHeight);
             IntPtr TargetWindow = WindowPlacementHelper.GetWindow(null, "WorkLifeBalance");
-            Console.WriteLine(TargetWindow);
             
             //Todo: switch statement to set the window start corner based on user settings
             WindowPlacementHelper.SetWindowLocation(TargetWindow, 0, (int)UserScreen.Y - 180);
@@ -91,24 +98,35 @@ namespace WorkLifeBalance
 
         private void ToggleRecording(object sender, RoutedEventArgs e)
         {
-            if (IsWorking)
+            if (!IsAppReady) return;
+            if (IsClosingApp) return;
+
+            switch (AppTimmerState)
             {
-                ToggleBtn.Background = WorkingBtnColor;
-                ToggleRecordingImage.Source = RestImg;
-                IsWorking = false;
-            }
-            else
-            {
-                ToggleBtn.Background = BreakBtnColorHighlight;
-                ToggleRecordingImage.Source = WorkImg;
-                IsWorking = true;
+                case TimmerState.Working:
+                    ToggleBtn.Background = WorkingBtnColor;
+                    ToggleRecordingImage.Source = RestImg;
+                    AppTimmerState = TimmerState.Resting;
+                    break;
+
+                case TimmerState.Resting:
+                    ToggleBtn.Background = BreakBtnColorHighlight;
+                    ToggleRecordingImage.Source = WorkImg;
+                    AppTimmerState = TimmerState.Working;
+                    break;
+
+                case TimmerState.Studying:
+                    break;
+
+                default:
+                    break;
             }
         }
 
         private void UpdateUiText()
         {
-            ElapsedWorkT.Text = WorkTimeElapsed.ToString("HH:mm:ss");
-            ElapsedBreakT.Text = BreakTimeElapsed.ToString("HH:mm:ss");
+            ElapsedWorkT.Text = TodayData.WorkedAmmountC.ToString("HH:mm:ss");
+            ElapsedBreakT.Text = TodayData.RestedAmmountC.ToString("HH:mm:ss");
         }
 
         private async Task TimmerLoop()
@@ -117,13 +135,21 @@ namespace WorkLifeBalance
             
             while (IsTimmerActive)
             {
-                if (IsWorking)
+                switch (AppTimmerState)
                 {
-                    WorkTimeElapsed = WorkTimeElapsed.Add(OneSec);
-                }
-                else
-                {
-                    BreakTimeElapsed = BreakTimeElapsed.Add(OneSec);
+                    case TimmerState.Working:
+                        TodayData.WorkedAmmountC = TodayData.WorkedAmmountC.Add(OneSec);
+                        break;
+
+                    case TimmerState.Resting:
+                        TodayData.RestedAmmountC = TodayData.RestedAmmountC.Add(OneSec);
+                        break;
+
+                    case TimmerState.Studying:
+                        break;
+
+                    default:
+                        break;
                 }
 
                 UpdateUiText();
@@ -134,10 +160,12 @@ namespace WorkLifeBalance
 
         private async Task WriteData()
         {
-            IsTimmerActive = false;
+            DateT.Text = $"Saving data...";
 
-            //simulate writing data
-            await Task.Delay(3000);
+            TodayData.ConvertUsableDataToSaveData();
+            await DataBaseHandler.WriteDay(TodayData);
+
+            DateT.Text = $"Today: {TodayData.DateC.ToString("MM/dd/yyyy")}";
         }
 
         private void ViewData(object sender, RoutedEventArgs e)
@@ -154,6 +182,7 @@ namespace WorkLifeBalance
         {
             if (IsClosingApp) return;
 
+            IsTimmerActive = false;
             IsClosingApp = true;
 
             DateT.Text = "Closing, waiting for database";
@@ -173,13 +202,24 @@ namespace WorkLifeBalance
 
         private void ToggleRecordingBtnMouseEnter(object sender, MouseEventArgs e)
         {
-            if (IsWorking)
+            if (!IsAppReady) return;
+            if (IsClosingApp) return;
+
+            switch (AppTimmerState)
             {
-                ToggleBtn.Background = BreakBtnColorHighlight;
-            }
-            else
-            {
-                ToggleBtn.Background = WorkingBtnColorHighlight;
+                case TimmerState.Working:
+                    ToggleBtn.Background = BreakBtnColorHighlight;
+                    break;
+
+                case TimmerState.Resting:
+                    ToggleBtn.Background = WorkingBtnColorHighlight;
+                    break;
+
+                case TimmerState.Studying:
+                    break;
+
+                default:
+                    break;
             }
             ToggleBtn.Width = ToggleBtnSize + 5;
             ToggleBtn.Height = ToggleBtnSize + 5;
@@ -187,28 +227,67 @@ namespace WorkLifeBalance
 
         private void ToggleRecordingBtnMouseLeave(object sender, MouseEventArgs e)
         {
-            if (IsWorking)
+            if (!IsAppReady) return;
+            if (IsClosingApp) return;
+
+            switch (AppTimmerState)
             {
-                ToggleBtn.Background = BreakBtnColor;
+                case TimmerState.Working:
+                    ToggleBtn.Background = BreakBtnColor;
+                    break;
+
+                case TimmerState.Resting:
+                    ToggleBtn.Background = WorkingBtnColor;
+                    break;
+
+                case TimmerState.Studying:
+                    break;
+
+                default:
+                    break;
             }
-            else
-            {
-                ToggleBtn.Background = WorkingBtnColor;
-            }
+
             ToggleBtn.Width = ToggleBtnSize;
             ToggleBtn.Height = ToggleBtnSize;
         }
 
         private void OptionMenuMouseEnter(object sender, MouseEventArgs e)
         {
+            if (!IsAppReady) return;
+            if (IsClosingApp) return;
+
             OptionMenuVisibility.Width = new GridLength(35,GridUnitType.Pixel);
             OptionsPannel.Visibility = Visibility.Visible;
         }
 
         private void OptionMenuMouseLeave(object sender, MouseEventArgs e)
         {
+            if (!IsAppReady) return;
+            if (IsClosingApp) return;
+
             OptionMenuVisibility.Width = new GridLength(15, GridUnitType.Pixel);
             OptionsPannel.Visibility = Visibility.Collapsed;
         }
+
+        public static void ShowErrorBox(string action, string messageBoxText, bool ForceShutdown = true)
+        {
+            MessageBoxButton button = MessageBoxButton.OK;
+            MessageBoxImage icon = MessageBoxImage.Error;
+            MessageBoxResult result;
+
+            result = MessageBox.Show(messageBoxText, action, button, icon, MessageBoxResult.Yes);
+
+            if (ForceShutdown)
+            {
+                Application.Current.Shutdown();
+            }
+        }
+    }
+
+    public enum TimmerState
+    {
+        Working,
+        Resting,
+        Studying
     }
 }
