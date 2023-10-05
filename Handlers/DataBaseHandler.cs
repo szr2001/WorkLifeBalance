@@ -5,8 +5,12 @@ using System.Data.SQLite;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Policy;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Media;
 using WorkLifeBalance.Data;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -206,5 +210,121 @@ namespace WorkLifeBalance.HandlerClasses
 
             return retrivedDay;
         }
+
+        public static async Task<List<DayData>> ReadMonth(int Month,int year)
+        {
+            //wait for a time when no methods writes now to the database
+            await _semaphore.WaitAsync();
+            //if no one writes continue
+
+            //list of filtered residences
+            List<DayData> ReturnDays = new();
+
+            try
+            {
+                //write to console it started reading database
+                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+                {
+                    //open connection
+                    await connection.OpenAsync();
+
+                    try
+                    {
+                        //depending on passed arguments chose between 2 sql statements
+                        string sql = @$"SELECT * from Days 
+                                        WHERE Date Like '%{Month}{year}'";
+
+
+                        //wait for return, and pass the return to a Residence class
+                        var res = await connection.QueryAsync<DayData>(sql);
+                        //set the return as a list
+                        ReturnDays = res.ToList();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //close app if failed
+                        MainWindow.MainDispatcher.Invoke(() =>
+                        {
+                            MainWindow.ShowErrorBox("Failed to read from database", $"This can be caused by a missing database file: {ex.Message}");
+                        });
+                    }
+                    //close connection
+                    await connection.CloseAsync();
+                }
+            }
+            finally
+            {
+                //release semaphore so other methods could run
+                _semaphore.Release();
+            }
+            //return filtered res
+            return ReturnDays;
+        }
+
+        public static async Task<DayData> GetMaxValue(string Value,int Month = -1, int year = -1)
+        {
+            DayData? retrivedDay = null;
+            //wait for a time when no methods writes now to the database
+            await _semaphore.WaitAsync();
+            //if no one writes to db continue
+
+            try
+            {
+                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+                {
+                    //start connection
+                    await connection.OpenAsync();
+
+                    //execute the sql to get the day
+                    try
+                    {
+                        string sql;
+                        if (Month == -1 || year == -1)
+                        {
+                            sql = @$"SELECT * FROM Days 
+                                     WHERE {Value} = 
+                                    (SELECT MAX({Value}) FROM Days)";
+                        }
+                        else
+                        {
+
+                            sql = @$"SELECT * FROM Days 
+                                     WHERE {Value} = 
+                                     (SELECT MAX({Value}) FROM Days
+                                     WHERE Date Like '{Month}%{year}')";
+                        }
+                        retrivedDay = connection.QueryFirstOrDefault<DayData>(sql);
+                    }
+                    catch (Exception ex)
+                    {
+                        //close app if failed
+                        MainWindow.MainDispatcher.Invoke(() =>
+                        {
+                            MainWindow.ShowErrorBox("Failed to read from database", $"This can be caused by a missing database file: {ex.Message}");
+                        });
+                    }
+                    //close connection
+                    await connection.CloseAsync();
+                }
+            }
+            finally
+            {
+                //release sempahore so other methods can run
+                _semaphore.Release();
+            }
+
+            if (retrivedDay == null)
+            {
+                Console.WriteLine("Day returned NUlld");
+                Console.WriteLine(Value);
+                Console.WriteLine(year);
+                Console.WriteLine(Month);
+                retrivedDay = new();
+            }
+
+            return retrivedDay;
+        }
+
     }
 }

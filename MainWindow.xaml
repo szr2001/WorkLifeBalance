@@ -26,8 +26,8 @@
         </Grid.ColumnDefinitions>
                 <Border Grid.Row="0"
                         Grid.Column="0"
-                        MouseEnter="OptionMenuMouseEnter" 
-                        MouseLeave="OptionMenuMouseLeave">
+                        MouseEnter="OpenSideBar" 
+                        MouseLeave="CloseSideBar">
                 
                     <Border Margin="3,10,3,10"
                             CornerRadius="5"
@@ -50,7 +50,7 @@
                                 Margin="0,2,0,0"
                                 ToolTip="Options"
                                 Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
-                                Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}" Click="Options">
+                                Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}" Click="OpenOptionsWindow">
                             <Image Margin="2"
                                    Source="Assets/Settings.png"/>
                         </Button>
@@ -59,7 +59,7 @@
                                 Margin="0,2,0,0"
                                 ToolTip="View Data"
                                 Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
-                                Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}" Click="ViewData">
+                                Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}" Click="OpenViewDataWindow">
                             <Image Margin="2"
                                    Source="Assets/DataSheet.png"/>
                         </Button>
@@ -107,9 +107,7 @@
                             Height="45" 
                             Click="ToggleRecording"
                             Template="{Binding Source={StaticResource RoundedBtnTemp}}"
-                            Style="{Binding Source={StaticResource RoundedBtnStyle}}" 
-                            MouseEnter="ToggleRecordingBtnMouseEnter" 
-                            MouseLeave="ToggleRecordingBtnMouseLeave">
+                            Style="{Binding Source={StaticResource RoundedBtnStyle}}">
                         <Image Margin="5"
                                Source="Assets/Rest.png"
                                Name="ToggleRecordingImage"/>

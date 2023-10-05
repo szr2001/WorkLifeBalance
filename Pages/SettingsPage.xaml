@@ -1,0 +1,132 @@
+﻿<local:SecondWindowPageBase x:Class="WorkLifeBalance.Pages.SettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WorkLifeBalance.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="270" d:DesignWidth="200"
+      Title="SettingsPage">
+
+    <Border Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
+            CornerRadius="15">
+
+        <Border Margin="10">
+            <ScrollViewer VerticalScrollBarVisibility="Disabled">
+                <StackPanel>
+                    
+                    <Border Height="55"
+                            Margin="0,5,0,5"
+                            CornerRadius="15"
+                            Background="{Binding Source={StaticResource WLFBOceanBlue}}">
+
+                        <StackPanel Orientation="Vertical">
+
+                            <TextBlock Text="Start With Windows?"
+                                       TextAlignment="Center"
+                                       FontWeight="Bold"
+                                       FontSize="15"
+                                       Foreground="White"/>
+                            <ToggleButton Height="25"
+                                          Width="25"
+                                          Name="StartWithWInBtn"
+                                          Margin="0,5,0,0"
+                                          Style="{Binding Source={StaticResource RoundedToggleBtnStyle}}"
+                                          Template="{Binding Source= {StaticResource RoundedToggleBtnTemp}}" Click="SetStartWithWin">
+
+                            </ToggleButton>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Height="85"
+                            Margin="0,5,0,5"
+                            CornerRadius="15"
+                            Background="{Binding Source={StaticResource WLFBOceanBlue}}">
+
+                        <StackPanel Orientation="Vertical">
+
+                            <TextBlock Text="Start Up Corner"
+                                       TextAlignment="Center"
+                                       FontWeight="Bold"
+                                       FontSize="15"
+                                       Foreground="White"/>
+                            <Border Width="50"
+                                    Height="50"
+                                    CornerRadius="5"
+                                    Margin="0,5,0,0"
+                                    Background="{Binding Source={StaticResource WLFBLightBlue}}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <ToggleButton Grid.Row="0"
+                                                  Grid.Column="0"
+                                                  Name="TopLeftBtn"
+                                                  Style="{Binding Source={StaticResource CornerToggleBtnStyle}}"
+                                                  Template="{Binding Source= {StaticResource CornerToggleBtnTemp}}" Click="SetUpLeftStartup"/>
+                                    <ToggleButton Grid.Row="0"
+                                                  Grid.Column="1"
+                                                  Name="TopRightBtn"
+                                                  Style="{Binding Source={StaticResource CornerToggleBtnStyle}}"
+                                                  Template="{Binding Source= {StaticResource CornerToggleBtnTemp}}" Click="SetUpRightStartup"/>
+                                    <ToggleButton Grid.Row="1"
+                                                  Name="BottomLeftBtn"
+                                                  Grid.Column="0"
+                                                  Style="{Binding Source={StaticResource CornerToggleBtnStyle}}"
+                                                  Template="{Binding Source= {StaticResource CornerToggleBtnTemp}}" Click="SetBotLeftStartup"/>
+                                    <ToggleButton Grid.Row="1"
+                                                  Grid.Column="1"
+                                                  Name="BottomRightBtn"
+                                                  Style="{Binding Source={StaticResource CornerToggleBtnStyle}}"
+                                                  Template="{Binding Source= {StaticResource CornerToggleBtnTemp}}" Click="SetBotRightStartup"/>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Height="55"
+                            Margin="0,5,0,5"
+                            CornerRadius="15"
+                            Background="{Binding Source={StaticResource WLFBOceanBlue}}">
+
+                        <StackPanel Orientation="Vertical">
+
+                            <TextBlock Text="Autosave In Minutes"
+                                       TextAlignment="Center"
+                                       FontWeight="Bold"
+                                       FontSize="15"
+                                       Foreground="White"/>
+                            <TextBox Width="35"
+                                     Height="25"
+                                     Text="5"
+                                     Name="AutosaveT"
+                                     TextAlignment="Center"
+                                     FontSize="20"
+                                     FontWeight="Bold"
+                                     Padding="0,-2,0,0"
+                                     Margin="0,5,0,0" TextChanged="ChangeAutosaveDelay"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Button Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
+                            Template="{Binding Source= {StaticResource SlightRoundedBtnTemp}}"
+                            Width="80"
+                            Height="23"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            FontSize="17"
+                            Name="SaveBtn"
+                            TextBlock.TextAlignment="Center"
+                            Content="Save" Click="SaveSettings"/>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+    
+    </Border>
+</local:SecondWindowPageBase>

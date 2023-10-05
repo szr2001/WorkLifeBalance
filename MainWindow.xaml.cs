@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using WorkLifeBalance.Data;
 using WorkLifeBalance.HandlerClasses;
+using WorkLifeBalance.Windows;
 
 namespace WorkLifeBalance
 {
@@ -22,24 +23,23 @@ namespace WorkLifeBalance
         [DllImport("kernel32.dll")]
         public static extern bool AllocConsole();
 
-        bool IsClosingApp = false;
-        bool IsAppReady = false;
-
-        TimmerState AppTimmerState = TimmerState.Resting;
+        public SecondWindow? SecondWindow;
 
         public static Dispatcher MainDispatcher = Dispatcher.CurrentDispatcher;
 
-        DayData? TodayData = null;
-        WLBSettings AppSettings = new();
+        private bool IsClosingApp = false;
+        private bool IsAppReady = false;
 
-        ImageSource? RestImg;
-        ImageSource? WorkImg;
+        private TimmerState AppTimmerState = TimmerState.Resting;
 
-        SolidColorBrush ? WorkingBtnColor;
-        SolidColorBrush? WorkingBtnColorHighlight;
-        SolidColorBrush? BreakBtnColor;
-        SolidColorBrush? BreakBtnColorHighlight;
-        int ToggleBtnSize = 50;
+        public DayData? TodayData = null;
+        public WLBSettings AppSettings = new();
+
+        private ImageSource? RestImg;
+        private ImageSource? WorkImg;
+
+        private SolidColorBrush ? WorkingBtnColor;
+        private SolidColorBrush? BreakBtnColorHighlight;
 
         public MainWindow()
         {
@@ -52,12 +52,9 @@ namespace WorkLifeBalance
 
         private void LoadStyleInfo()
         {
-            ToggleBtnSize = (int)ToggleBtn.Width;
             RestImg = new BitmapImage(new Uri($"{Directory.GetCurrentDirectory()}/Assets/Rest.png"));
             WorkImg = new BitmapImage(new Uri($"{Directory.GetCurrentDirectory()}/Assets/Work.png"));
             WorkingBtnColor = FindResource("WLFBLigherBlue") as SolidColorBrush;
-            WorkingBtnColorHighlight = FindResource("WLFBLightBlue") as SolidColorBrush;
-            BreakBtnColor = FindResource("WLFBLighterPurple") as SolidColorBrush;
             BreakBtnColorHighlight = FindResource("WLFBLightPurple") as SolidColorBrush;
         }
 
@@ -136,6 +133,11 @@ namespace WorkLifeBalance
             }
         }
 
+        private void OpenSecondWindow(SecondWindowType Page)
+        {
+
+        }
+
         private void UpdateUiText()
         {
             ElapsedWorkT.Text = TodayData.WorkedAmmountC.ToString("HH:mm:ss");
@@ -180,7 +182,7 @@ namespace WorkLifeBalance
             }
         }
 
-        private async Task WriteData()
+        public async Task WriteData()
         {
             DateT.Text = $"Saving data...";
 
@@ -193,21 +195,36 @@ namespace WorkLifeBalance
             DateT.Text = $"Today: {TodayData.DateC.ToString("MM/dd/yyyy")}";
         }
 
-        private void ViewData(object sender, RoutedEventArgs e)
+        private void OpenViewDataWindow(object sender, RoutedEventArgs e)
         {
-
+            if(SecondWindow != null && SecondWindow.WindowType == SecondWindowType.ViewData)
+            {
+                SecondWindow.Close();
+                SecondWindow = null;
+                return;
+            }
+            SecondWindow = new SecondWindow(this,SecondWindowType.ViewData);
+            SecondWindow.Show();
         }
 
-        private void Options(object sender, RoutedEventArgs e)
+        private void OpenOptionsWindow(object sender, RoutedEventArgs e)
         {
-
+            //replace with static method
+            if (SecondWindow != null && SecondWindow.WindowType == SecondWindowType.Settings)
+            {
+                SecondWindow.Close();
+                SecondWindow = null;
+                return;
+            }
+            SecondWindow = new SecondWindow(this,SecondWindowType.Settings);
+            SecondWindow.Show();
         }
 
         private async void CloseApp(object sender, RoutedEventArgs e)
         {
             if (IsClosingApp) return;
 
-            OptionMenuMouseLeave(sender,null);
+            CloseSideBar(null,null);
 
             IsClosingApp = true;
 
@@ -226,58 +243,7 @@ namespace WorkLifeBalance
             }
         }
 
-        private void ToggleRecordingBtnMouseEnter(object sender, MouseEventArgs e)
-        {
-            if (!IsAppReady) return;
-            if (IsClosingApp) return;
-
-            switch (AppTimmerState)
-            {
-                case TimmerState.Working:
-                    ToggleBtn.Background = BreakBtnColorHighlight;
-                    break;
-
-                case TimmerState.Resting:
-                    ToggleBtn.Background = WorkingBtnColorHighlight;
-                    break;
-
-                case TimmerState.Studying:
-                    break;
-
-                default:
-                    break;
-            }
-            ToggleBtn.Width = ToggleBtnSize + 5;
-            ToggleBtn.Height = ToggleBtnSize + 5;
-        }
-
-        private void ToggleRecordingBtnMouseLeave(object sender, MouseEventArgs e)
-        {
-            if (!IsAppReady) return;
-            if (IsClosingApp) return;
-
-            switch (AppTimmerState)
-            {
-                case TimmerState.Working:
-                    ToggleBtn.Background = BreakBtnColor;
-                    break;
-
-                case TimmerState.Resting:
-                    ToggleBtn.Background = WorkingBtnColor;
-                    break;
-
-                case TimmerState.Studying:
-                    break;
-
-                default:
-                    break;
-            }
-
-            ToggleBtn.Width = ToggleBtnSize;
-            ToggleBtn.Height = ToggleBtnSize;
-        }
-
-        private void OptionMenuMouseEnter(object sender, MouseEventArgs e)
+        private void OpenSideBar(object sender, MouseEventArgs e)
         {
             if (!IsAppReady) return;
             if (IsClosingApp) return;
@@ -286,7 +252,7 @@ namespace WorkLifeBalance
             OptionsPannel.Visibility = Visibility.Visible;
         }
 
-        private void OptionMenuMouseLeave(object sender, MouseEventArgs e)
+        private void CloseSideBar(object sender, MouseEventArgs e)
         {
             if (!IsAppReady) return;
             if (IsClosingApp) return;
