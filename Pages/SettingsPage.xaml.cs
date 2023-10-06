@@ -25,7 +25,7 @@ namespace WorkLifeBalance.Pages
     public partial class SettingsPage : SecondWindowPageBase
     {
         int interval = 5;
-        public SettingsPage(SecondWindow secondwindow) : base(secondwindow)
+        public SettingsPage(SecondWindow secondwindow, object? args) : base(secondwindow,args)
         {
             InitializeComponent();
             RequiredWindowSize = new Vector2(250,340);

@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WorkLifeBalance.Data;
 using WorkLifeBalance.Windows;
 
 namespace WorkLifeBalance.Pages
@@ -22,11 +23,46 @@ namespace WorkLifeBalance.Pages
     /// </summary>
     public partial class ViewDaysPage : SecondWindowPageBase
     {
-        public ViewDaysPage(SecondWindow secondwindow) : base(secondwindow)
+        List<DayData> LoadedData = new();
+        public ViewDaysPage(SecondWindow secondwindow, object? args) : base(secondwindow, args)
         {
             InitializeComponent();
             RequiredWindowSize = new Vector2(700, 500);
             pageNme = "Days Viewer";
+
+            if(args != null)
+            {
+                if(args is int loadedpagetype)
+                {
+                    _ = RequiestData(loadedpagetype);
+                    return;
+                }
+            }
+
+            ParentWindow.Close();
+        }
+
+        private async Task RequiestData(int requiestedDataType)
+        {
+            switch (requiestedDataType)
+            {
+                //call database
+                case 0:
+
+                    break;
+                case 1:
+
+                    break;
+                case 2:
+
+                    break;
+            }
+            LoadUi();
+        }
+        
+        private void LoadUi()
+        {
+
         }
     }
 }

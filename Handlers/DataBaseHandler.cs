@@ -210,8 +210,49 @@ namespace WorkLifeBalance.HandlerClasses
 
             return retrivedDay;
         }
+        public static async Task<int> ReadCountInMonth(string month)
+        {
+            int returncount = 0;
+            //wait for a time when no methods writes now to the database
+            await _semaphore.WaitAsync();
+            //if no one writes to db continue
 
-        public static async Task<List<DayData>> ReadMonth(int Month,int year)
+            try
+            {
+                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+                {
+                    //start connection
+                    await connection.OpenAsync();
+
+                    //execute the sql to get the day
+                    try
+                    {
+                        string sql = @$"SELECT COUNT(*) AS row_count
+                                        FROM Days WHERE date LIKE '{month}%%'";
+                        returncount = await connection.QueryFirstOrDefaultAsync<int>(sql);
+                    }
+                    catch (Exception ex)
+                    {
+                        //close app if failed
+                        MainWindow.MainDispatcher.Invoke(() =>
+                        {
+                            MainWindow.ShowErrorBox("Failed to read from database", $"This can be caused by a missing database file: {ex.Message}");
+                        });
+                    }
+                    //close connection
+                    await connection.CloseAsync();
+                }
+            }
+            finally
+            {
+                //release sempahore so other methods can run
+                _semaphore.Release();
+            }
+            Console.WriteLine(returncount);
+            return returncount;
+        }
+
+        public static async Task<List<DayData>> ReadMonth(string Month,string year)
         {
             //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
@@ -262,8 +303,9 @@ namespace WorkLifeBalance.HandlerClasses
             return ReturnDays;
         }
 
-        public static async Task<DayData> GetMaxValue(string Value,int Month = -1, int year = -1)
+        public static async Task<DayData> GetMaxValue(string Value,string Month = "", string year = "")
         {
+            Console.WriteLine($"{Month}/{year}");
             DayData? retrivedDay = null;
             //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
@@ -280,7 +322,7 @@ namespace WorkLifeBalance.HandlerClasses
                     try
                     {
                         string sql;
-                        if (Month == -1 || year == -1)
+                        if (string.IsNullOrEmpty(Month) || string.IsNullOrEmpty(year))
                         {
                             sql = @$"SELECT * FROM Days 
                                      WHERE {Value} = 

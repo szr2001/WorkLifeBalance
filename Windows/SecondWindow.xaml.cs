@@ -1,18 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using WorkLifeBalance.Pages;
 
 namespace WorkLifeBalance.Windows
@@ -28,7 +16,7 @@ namespace WorkLifeBalance.Windows
         public MainWindow MainWindowParent;
 
         private SecondWindowPageBase? WindowPage;
-        public SecondWindow(MainWindow parent,SecondWindowType Windowtype)
+        public SecondWindow(MainWindow parent,SecondWindowType Windowtype,object? args)
         {
             if(Instance == null)
             {
@@ -42,22 +30,29 @@ namespace WorkLifeBalance.Windows
             MainWindowParent = parent;
             InitializeComponent();
             WindowType = Windowtype;
-            InitializeWindowType();
+            InitializeWindowType(args);
         }
-        private void InitializeWindowType()
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            MainWindowParent.SecondWindow = null;
+        }
+
+        private void InitializeWindowType(object? args)
         {
             switch (WindowType)
             {
                 case SecondWindowType.Settings:
-                    WindowPage = new SettingsPage(this);
+                    WindowPage = new SettingsPage(this, args);
                     break;
 
                 case SecondWindowType.ViewData:
-                    WindowPage = new ViewDataPage(this);
+                    WindowPage = new ViewDataPage(this, args);
                     break;
 
                 case SecondWindowType.ViewDays:
-                    WindowPage = new ViewDaysPage(this);
+                    WindowPage = new ViewDaysPage(this, args);
                     break;
             }
 

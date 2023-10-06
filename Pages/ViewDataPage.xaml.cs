@@ -33,7 +33,7 @@ namespace WorkLifeBalance.Pages
         TimeOnly RecordMostRested;
         DateOnly RecordMostRestedDate;
 
-        int CurrentMonthWorkRestRatio = 0;
+        float CurrentMonthWorkRestRatio = 0;
         int CurrentMonthTotalDays = 0;
         TimeOnly CurrentMonthMostWorked;
         DateOnly CurrentMonthMostWorkedDate;
@@ -41,14 +41,14 @@ namespace WorkLifeBalance.Pages
         TimeOnly CurrentMonthMostRested;
         DateOnly CurrentMonthMostRestedDate;
 
-        int PreviousMonthWorkRestRatio = 0;
+        float PreviousMonthWorkRestRatio = 0;
         int PreviousMonthTotalDays = 0;
         TimeOnly PreviousMonthMostWorked;
         DateOnly PreviousMonthMostWorkedDate;
 
         TimeOnly PreviousMonthMostRested;
         DateOnly PreviousMonthMostRestedDate;
-        public ViewDataPage(SecondWindow secondwindow) : base(secondwindow)
+        public ViewDataPage(SecondWindow secondwindow, object? args) : base(secondwindow, args)
         {
             InitializeComponent();
             RequiredWindowSize = new Vector2(750, 580);
@@ -58,11 +58,14 @@ namespace WorkLifeBalance.Pages
 
         private async Task CalculateData()
         {
-            //using int will not allow numbers like 09,use strings
-            int CurrentMonth = ParentWindow.MainWindowParent.TodayData.DateC.Month;
-            int CurrentYear = ParentWindow.MainWindowParent.TodayData.DateC.Year;
+            //get today date
+            DateOnly currentDate = ParentWindow.MainWindowParent.TodayData.DateC;
 
+            //create temporary daydata to load each day and reuse it
             DayData TempDay;
+
+
+            //calculate current month records
 
             TempDay = await DataBaseHandler.GetMaxValue("WorkedAmmount");
             TempDay.ConvertSaveDataToUsableData();
@@ -76,43 +79,65 @@ namespace WorkLifeBalance.Pages
             RecordMostRested = TempDay.RestedAmmountC;
             RecordMostRestedDate = TempDay.DateC;
 
-            TempDay = await DataBaseHandler.GetMaxValue("WorkedAmmount", CurrentMonth, CurrentYear);
+            TempDay = await DataBaseHandler.GetMaxValue("WorkedAmmount", currentDate.ToString("MM"), currentDate.ToString("yyyy"));
             TempDay.ConvertSaveDataToUsableData();
 
             CurrentMonthMostWorked = TempDay.WorkedAmmountC;
             CurrentMonthMostWorkedDate = TempDay.DateC;
 
-            TempDay = await DataBaseHandler.GetMaxValue("RestedAmmount", CurrentMonth, CurrentYear);
+            TempDay = await DataBaseHandler.GetMaxValue("RestedAmmount", currentDate.ToString("MM"), currentDate.ToString("yyyy"));
             TempDay.ConvertSaveDataToUsableData();
 
             CurrentMonthMostRested= TempDay.RestedAmmountC;
             CurrentMonthMostRestedDate = TempDay.DateC;
 
-            int PreviousMonth = -1;
-            int PreviousYear = -1;
+            //calculate previous month records
 
-            if (CurrentMonth == 1)
-            {
-                PreviousMonth = 12;
-                PreviousYear = CurrentYear - 1;
-            }
-            else
-            {
-                PreviousMonth = CurrentMonth - 1;
-                PreviousYear = CurrentYear;
-            }
+            DateTime previousMonthDateTime = currentDate.ToDateTime(new TimeOnly(0,0,0)).AddMonths(-1);
+            DateOnly previousDate = DateOnly.FromDateTime(previousMonthDateTime);
 
-            TempDay = await DataBaseHandler.GetMaxValue("WorkedAmmount", PreviousMonth,PreviousYear);
+            TempDay = await DataBaseHandler.GetMaxValue("WorkedAmmount", previousDate.ToString("MM"), previousDate.ToString("yyyy"));
             TempDay.ConvertSaveDataToUsableData();
 
             PreviousMonthMostWorked = TempDay.WorkedAmmountC;
             PreviousMonthMostWorkedDate = TempDay.DateC;
 
-            TempDay = await DataBaseHandler.GetMaxValue("RestedAmmount", PreviousMonth, PreviousYear);
+            TempDay = await DataBaseHandler.GetMaxValue("RestedAmmount", previousDate.ToString("MM"), previousDate.ToString("yyyy"));
             TempDay.ConvertSaveDataToUsableData();
 
             PreviousMonthMostRested= TempDay.RestedAmmountC;
             PreviousMonthMostRestedDate = TempDay.DateC;
+
+
+            //calculate total days in current and previous months
+            CurrentMonthTotalDays = await DataBaseHandler.ReadCountInMonth(currentDate.ToString("MM"));
+            PreviousMonthTotalDays = await DataBaseHandler.ReadCountInMonth(previousDate.ToString("MM"));
+
+            //calculate rest/work ratio in current and previous months
+            float MonthTotalWorkedSeconds = 0;
+            float MonthTotalRestedSeconds = 0;
+
+            MonthTotalWorkedSeconds += PreviousMonthMostWorked.Second;
+            MonthTotalWorkedSeconds += PreviousMonthMostWorked.Minute * 60;
+            MonthTotalWorkedSeconds += (PreviousMonthMostWorked.Hour * 60) * 60;
+
+            MonthTotalRestedSeconds += PreviousMonthMostRested.Second;
+            MonthTotalRestedSeconds += PreviousMonthMostRested.Minute * 60;
+            MonthTotalRestedSeconds += (PreviousMonthMostRested.Hour * 60) * 60;
+
+            PreviousMonthWorkRestRatio = MonthTotalRestedSeconds / MonthTotalWorkedSeconds;
+
+            MonthTotalWorkedSeconds = 0;
+            MonthTotalRestedSeconds = 0;
+            MonthTotalWorkedSeconds += CurrentMonthMostWorked.Second;
+            MonthTotalWorkedSeconds += CurrentMonthMostWorked.Minute * 60;
+            MonthTotalWorkedSeconds += (CurrentMonthMostWorked.Hour * 60) * 60;
+
+            MonthTotalRestedSeconds += CurrentMonthMostRested.Second;
+            MonthTotalRestedSeconds += CurrentMonthMostRested.Minute * 60;
+            MonthTotalRestedSeconds += (CurrentMonthMostRested.Hour * 60) * 60;
+
+            CurrentMonthWorkRestRatio = MonthTotalRestedSeconds / MonthTotalWorkedSeconds;
 
             UpdateUi();
         }
@@ -139,13 +164,28 @@ namespace WorkLifeBalance.Pages
 
             PRWRRatio.Text = RecordWorkRestRatio.ToString();
 
-            PMMRTRatio.Text = PreviousMonthWorkRestRatio.ToString();
+            PMMRTRatio.Text = PreviousMonthWorkRestRatio.ToString("0.00");
 
             PMRDays.Text = PreviousMonthTotalDays.ToString();
 
-            CMMRTRatio.Text = CurrentMonthWorkRestRatio.ToString();
+            CMMRTRatio.Text = CurrentMonthWorkRestRatio.ToString("0.00");
 
-            CMRDays.Text = PreviousMonthTotalDays.ToString();
+            CMRDays.Text = CurrentMonthTotalDays.ToString();
+        }
+
+        private void SeePreviousMonth(object sender, RoutedEventArgs e)
+        {
+            ParentWindow.MainWindowParent.OpenSecondWindow(SecondWindowType.ViewDays,0);
+        }
+
+        private void SeeCurrentMonth(object sender, RoutedEventArgs e)
+        {
+            ParentWindow.MainWindowParent.OpenSecondWindow(SecondWindowType.ViewDays, 1);
+        }
+
+        private void SeeAllDays(object sender, RoutedEventArgs e)
+        {
+            ParentWindow.MainWindowParent.OpenSecondWindow(SecondWindowType.ViewDays, 2);
         }
     }
 }

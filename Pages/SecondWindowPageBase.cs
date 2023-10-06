@@ -14,7 +14,7 @@ namespace WorkLifeBalance.Pages
         public SecondWindow ParentWindow;
         public Vector2 RequiredWindowSize = new Vector2(250,300);
         public string pageNme = "Page";
-        public SecondWindowPageBase(SecondWindow secondwindow)
+        public SecondWindowPageBase(SecondWindow secondwindow, object? args)
         {
             ParentWindow = secondwindow;
         }

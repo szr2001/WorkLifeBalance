@@ -133,9 +133,16 @@ namespace WorkLifeBalance
             }
         }
 
-        private void OpenSecondWindow(SecondWindowType Page)
+        public void OpenSecondWindow(SecondWindowType Page,object? args = null)
         {
-
+            if (SecondWindow != null && SecondWindow.WindowType == Page)
+            {
+                SecondWindow.Close();
+                SecondWindow = null;
+                return;
+            }
+            SecondWindow = new SecondWindow(this, Page, args);
+            SecondWindow.Show();
         }
 
         private void UpdateUiText()
@@ -197,27 +204,12 @@ namespace WorkLifeBalance
 
         private void OpenViewDataWindow(object sender, RoutedEventArgs e)
         {
-            if(SecondWindow != null && SecondWindow.WindowType == SecondWindowType.ViewData)
-            {
-                SecondWindow.Close();
-                SecondWindow = null;
-                return;
-            }
-            SecondWindow = new SecondWindow(this,SecondWindowType.ViewData);
-            SecondWindow.Show();
+            OpenSecondWindow(SecondWindowType.ViewData);
         }
 
         private void OpenOptionsWindow(object sender, RoutedEventArgs e)
         {
-            //replace with static method
-            if (SecondWindow != null && SecondWindow.WindowType == SecondWindowType.Settings)
-            {
-                SecondWindow.Close();
-                SecondWindow = null;
-                return;
-            }
-            SecondWindow = new SecondWindow(this,SecondWindowType.Settings);
-            SecondWindow.Show();
+            OpenSecondWindow(SecondWindowType.Settings);
         }
 
         private async void CloseApp(object sender, RoutedEventArgs e)
