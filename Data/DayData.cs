@@ -17,10 +17,10 @@ namespace WorkLifeBalance.Data
         public string StudiedAmmount { get; set; } = "";
 
 
-        public DateOnly DateC = DateOnly.FromDateTime(DateTime.Now);
-        public TimeOnly WorkedAmmountC = new TimeOnly(0, 0, 0);
-        public TimeOnly RestedAmmountC = new TimeOnly(0, 0, 0);
-        public TimeOnly StudiedAmmountC = new TimeOnly(0, 0, 0);
+        public DateOnly DateC { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+        public TimeOnly WorkedAmmountC { get; set; } = new TimeOnly(0, 0, 0);
+        public TimeOnly RestedAmmountC { get; set; } = new TimeOnly(0, 0, 0);
+        public TimeOnly StudiedAmmountC { get; set; } = new TimeOnly(0, 0, 0);
 
         public void ConvertSaveDataToUsableData()
         {

@@ -112,6 +112,12 @@ namespace WorkLifeBalance.HandlerClasses
                 _semaphore.Release();
             }
 
+            if(retrivedSettings == null)
+            {
+                retrivedSettings = new();
+            }
+
+            retrivedSettings.ConvertSaveDataToUsableData();
             //returns count
             return retrivedSettings;
         }
@@ -207,9 +213,12 @@ namespace WorkLifeBalance.HandlerClasses
             {
                 retrivedDay = new();
             }
+            
+            retrivedDay.ConvertSaveDataToUsableData();
 
             return retrivedDay;
         }
+
         public static async Task<int> ReadCountInMonth(string month)
         {
             int returncount = 0;
@@ -252,7 +261,7 @@ namespace WorkLifeBalance.HandlerClasses
             return returncount;
         }
 
-        public static async Task<List<DayData>> ReadMonth(string Month,string year)
+        public static async Task<List<DayData>> ReadMonth(string Month = "",string year = "")
         {
             //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
@@ -272,8 +281,16 @@ namespace WorkLifeBalance.HandlerClasses
                     try
                     {
                         //depending on passed arguments chose between 2 sql statements
-                        string sql = @$"SELECT * from Days 
-                                        WHERE Date Like '%{Month}{year}'";
+                        string sql;
+                        if(string.IsNullOrEmpty(Month) || string.IsNullOrWhiteSpace(year))
+                        {
+                            sql = @$"SELECT * from Days";
+                        }
+                        else
+                        {
+                            sql = @$"SELECT * from Days 
+                                     WHERE Date Like '{Month}%{year}'";
+                        }
 
 
                         //wait for return, and pass the return to a Residence class
@@ -299,13 +316,16 @@ namespace WorkLifeBalance.HandlerClasses
                 //release semaphore so other methods could run
                 _semaphore.Release();
             }
+            foreach(DayData day in ReturnDays)
+            {
+                day.ConvertSaveDataToUsableData();
+            }
             //return filtered res
             return ReturnDays;
         }
 
         public static async Task<DayData> GetMaxValue(string Value,string Month = "", string year = "")
         {
-            Console.WriteLine($"{Month}/{year}");
             DayData? retrivedDay = null;
             //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
@@ -358,12 +378,10 @@ namespace WorkLifeBalance.HandlerClasses
 
             if (retrivedDay == null)
             {
-                Console.WriteLine("Day returned NUlld");
-                Console.WriteLine(Value);
-                Console.WriteLine(year);
-                Console.WriteLine(Month);
                 retrivedDay = new();
             }
+
+            retrivedDay.ConvertSaveDataToUsableData();
 
             return retrivedDay;
         }

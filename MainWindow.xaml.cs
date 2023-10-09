@@ -63,16 +63,6 @@ namespace WorkLifeBalance
             TodayData = await DataBaseHandler.ReadDay(DateOnly.FromDateTime(DateTime.Now).ToString("MMddyyyy"));
             AppSettings = await DataBaseHandler.ReadSettings();
 
-            try
-            {
-                TodayData.ConvertSaveDataToUsableData();
-                AppSettings.ConvertSaveDataToUsableData();
-            }
-            catch (Exception ex)
-            {
-                ShowErrorBox("Failed to convert data", $"This can be caused by unexpected data inside the database. {ex.Message}");
-            }
-
             _ = SetWindowLocation();
 
             IsAppReady = true;
