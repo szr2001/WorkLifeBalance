@@ -52,10 +52,11 @@
                     </Border>
                     <Border Height="42"
                             Margin="15,5,10,5"
+                            ToolTip="Record Work To Day Ratio"
                             CornerRadius="15"
                             Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="Work/Rest Ratio"
+                            <TextBlock Text="Work Ratio"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="15"
@@ -72,6 +73,7 @@
                     <Border Height="57"
                             Margin="15,5,10,5"
                             CornerRadius="15"
+                            ToolTip="Record Most Worked Ever"
                             Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
                         <StackPanel Orientation="Vertical">
                             <TextBlock Text="Most Worked"
@@ -95,6 +97,7 @@
                         
                     </Border>
                     <Border Height="57"
+                            ToolTip="Record Most Rested Ever"
                             Margin="15,5,10,5"
                             CornerRadius="15"
                             Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
@@ -205,10 +208,11 @@
                     </Border>
                     <Border Height="42"
                             Margin="15,5,10,5"
+                            ToolTip="Previous Month Biggest Work To 24 hours Ratio. Smaller The Better"
                             CornerRadius="15"
                             Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="Work/Rest Ratio"
+                            <TextBlock Text="Work Ratio"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="15"
@@ -224,6 +228,7 @@
                     </Border>
                     <Border Height="57"
                             Margin="15,5,10,5"
+                            ToolTip="Previous Month Most Worked"
                             CornerRadius="15"
                             Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
                         <StackPanel Orientation="Vertical">
@@ -249,6 +254,7 @@
                     </Border>
                     <Border Height="57"
                             Margin="15,5,10,5"
+                            ToolTip="Previous Month Most Rested"
                             CornerRadius="15"
                             Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
                         <StackPanel Orientation="Vertical">
@@ -274,6 +280,7 @@
                     </Border>
                     <Border Height="42"
                             Margin="15,5,10,5"
+                            ToolTip="Previous Month Total Recorded Days"
                             CornerRadius="15"
                             Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
                         <StackPanel Orientation="Vertical">
@@ -313,11 +320,12 @@
                                    Foreground="White"/>
                     </Border>
                     <Border Height="42"
+                            ToolTip="Current Month Biggest Work To 24 hours Ratio. Smaller The Better"
                             Margin="15,5,10,5"
                             CornerRadius="15"
                             Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="Work/Rest Ratio"
+                            <TextBlock Text="Work Ratio"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="15"
@@ -333,6 +341,7 @@
                     </Border>
                     <Border Height="57"
                             Margin="15,5,10,5"
+                            ToolTip="Current Month Most Worked"
                             CornerRadius="15"
                             Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
                         <StackPanel Orientation="Vertical">
@@ -358,6 +367,7 @@
                     </Border>
                     <Border Height="57"
                             Margin="15,5,10,5"
+                            ToolTip="Current Month Most Rested"
                             CornerRadius="15"
                             Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
                         <StackPanel Orientation="Vertical">
@@ -383,6 +393,7 @@
                     </Border>
                     <Border Height="42"
                             Margin="15,5,10,5"
+                            ToolTip="Current Month Total Recorded Days"
                             CornerRadius="15"
                             Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
                         <StackPanel Orientation="Vertical">

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -108,9 +109,32 @@ namespace WorkLifeBalance.Pages
         private async void SaveSettings(object sender, RoutedEventArgs e)
         {
             SaveBtn.IsEnabled = false;
+            ApplyStartToWindows();
             ParentWindow.MainWindowParent.AppSettings.SaveInterval = interval;
             await ParentWindow.MainWindowParent.WriteData();
             SaveBtn.IsEnabled = true;
+        }
+
+        private void ApplyStartToWindows()
+        {
+            string appName = "WorlLifeBalance";
+            RegistryKey? registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+            if (ParentWindow.MainWindowParent.AppSettings.StartWithWindowsC)
+            {
+                if (registryKey.GetValue(appName) == null)
+                {
+                    registryKey.SetValue(appName, System.Reflection.Assembly.GetExecutingAssembly().Location);
+                }
+            }
+            else
+            {
+                if (registryKey.GetValue(appName) != null)
+                {
+                    registryKey.DeleteValue(appName, false);
+                }
+            }
+            registryKey.Close();
         }
     }
 }

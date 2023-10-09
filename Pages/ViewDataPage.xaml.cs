@@ -108,20 +108,17 @@ namespace WorkLifeBalance.Pages
             PreviousMonthTotalDays = await DataBaseHandler.ReadCountInMonth(previousDate.ToString("MM"));
 
             //calculate rest/work ratio in current and previous months
-            float MonthTotalWorkedSeconds = ConvertTimeOnlyToSeconds(PreviousMonthMostWorked);
-            float MonthTotalRestedSeconds = ConvertTimeOnlyToSeconds(PreviousMonthMostRested);
+            float MonthToporkedSeconds = ConvertTimeOnlyToSeconds(PreviousMonthMostWorked);
 
-            PreviousMonthWorkRestRatio = MonthTotalRestedSeconds / MonthTotalWorkedSeconds;
+            PreviousMonthWorkRestRatio = 86400 / MonthToporkedSeconds;
 
-            MonthTotalWorkedSeconds = ConvertTimeOnlyToSeconds(CurrentMonthMostWorked);
-            MonthTotalRestedSeconds = ConvertTimeOnlyToSeconds(CurrentMonthMostRested);
+            MonthToporkedSeconds = ConvertTimeOnlyToSeconds(CurrentMonthMostWorked);
 
-            CurrentMonthWorkRestRatio = MonthTotalRestedSeconds / MonthTotalWorkedSeconds;
+            CurrentMonthWorkRestRatio = 86400 / MonthToporkedSeconds;
 
-            MonthTotalWorkedSeconds = ConvertTimeOnlyToSeconds(RecordMostWorked);
-            MonthTotalRestedSeconds = ConvertTimeOnlyToSeconds(RecordMostRested);
+            MonthToporkedSeconds = ConvertTimeOnlyToSeconds(RecordMostWorked);
 
-            RecordWorkRestRatio = MonthTotalRestedSeconds / MonthTotalWorkedSeconds;
+            RecordWorkRestRatio = 86400 / MonthToporkedSeconds;
             UpdateUi();
         }
         private void UpdateUi()
