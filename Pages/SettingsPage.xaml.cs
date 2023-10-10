@@ -1,22 +1,17 @@
-﻿using Microsoft.Win32;
+﻿using IWshRuntimeLibrary;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using WorkLifeBalance.Data;
+using File = System.IO.File;
 using WorkLifeBalance.Windows;
+using Path = System.IO.Path;
 
 namespace WorkLifeBalance.Pages
 {
@@ -117,24 +112,40 @@ namespace WorkLifeBalance.Pages
 
         private void ApplyStartToWindows()
         {
-            string appName = "WorlLifeBalance";
-            RegistryKey? registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            string appName = "WorkLifeBalance";
+            string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string appPath = Path.Combine(appDirectory, $"{appName}.exe");
+
+            string startupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), $"{appName}.lnk");
 
             if (ParentWindow.MainWindowParent.AppSettings.StartWithWindowsC)
             {
-                if (registryKey.GetValue(appName) == null)
-                {
-                    registryKey.SetValue(appName, System.Reflection.Assembly.GetExecutingAssembly().Location);
-                }
+                CreateShortcut(appPath,appDirectory, startupFolderPath);
             }
             else
             {
-                if (registryKey.GetValue(appName) != null)
-                {
-                    registryKey.DeleteValue(appName, false);
-                }
+                DeleteShortcut(startupFolderPath);
             }
-            registryKey.Close();
         }
+        private void CreateShortcut(string appPath,string appdirectory, string startupfolder)
+        {
+            // Create a shortcut if it doesn't exist
+            if (!File.Exists(startupfolder))
+            {
+                WshShell shell = new WshShell();
+                IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(startupfolder);
+                shortcut.TargetPath = appPath;
+                shortcut.WorkingDirectory = appdirectory;
+                shortcut.Save();
+            }
+        }
+        private void DeleteShortcut(string startupfolder)
+        {
+            if (File.Exists(startupfolder))
+            {
+                File.Delete(startupfolder);
+            }
+        }
+
     }
 }
