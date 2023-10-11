@@ -5,14 +5,14 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WorkLifeBalance.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="270" d:DesignWidth="200"
+      d:DesignHeight="470" d:DesignWidth="200"
       Title="SettingsPage">
 
     <Border Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
             CornerRadius="15">
 
-        <Border Margin="10">
-            <ScrollViewer VerticalScrollBarVisibility="Disabled">
+        <Border Margin="8">
+            <ScrollViewer VerticalScrollBarVisibility="Hidden">
                 <StackPanel>
                     
                     <Border Height="55"
@@ -112,6 +112,64 @@
                                      Margin="0,5,0,0" TextChanged="ChangeAutosaveDelay"/>
                         </StackPanel>
                     </Border>
+                    
+                    <Border Margin="0,5,0,5"
+                            CornerRadius="15"
+                            Background="{Binding Source={StaticResource WLFBOceanBlue}}">
+
+                        <StackPanel Orientation="Vertical"
+                                    Margin="5">
+
+                            <TextBlock Text="Auto Detect Working"
+                                       TextAlignment="Center"
+                                       FontWeight="Bold"
+                                       FontSize="15"
+                                       Foreground="White"/>
+                            <ToggleButton Height="25"
+                                          Width="25"
+                                          Name="AutoDetectWorkingBtn"
+                                          Margin="0,5,0,0"
+                                          Style="{Binding Source={StaticResource RoundedToggleBtnStyle}}"
+                                          Template="{Binding Source= {StaticResource RoundedToggleBtnTemp}}" Click="ToggleAutoDetectWorking"/>
+                            <Border Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
+                                    CornerRadius="15"
+                                    Margin="5"
+                                    Name="AutoToggleWorkingPanel"
+                                    Height="0">
+                                <Border Background="{Binding Source={StaticResource WLFBOceanBlue}}"
+                                        Margin="4"
+                                        CornerRadius="15">
+                                    <StackPanel Margin="2">
+                                        <TextBlock Text="Auto Detect In Seconds"
+                                                   TextAlignment="Center"
+                                                   FontWeight="Bold"
+                                                   FontSize="10"
+                                                   Foreground="White"/>
+                                        <TextBox Width="30"
+                                                 Height="20"
+                                                 Text="5"
+                                                 Name="AutoDetectT"
+                                                 TextAlignment="Center"
+                                                 FontSize="15"
+                                                 FontWeight="Bold"
+                                                 Padding="0,-2,0,0"
+                                                 Margin="0,5,0,0" TextChanged="ChangeAutoDetectDelay"/>
+                                        <Button Style="{Binding Source={StaticResource OceanBlueRoundedBtnStyle}}"
+                                                Template="{Binding Source= {StaticResource SlightRoundedBtnTemp}}"
+                                                Width="110"
+                                                Margin="4"
+                                                Height="23"
+                                                Foreground="White"
+                                                FontWeight="Bold"
+                                                FontSize="15"
+                                                TextBlock.TextAlignment="Center"
+                                                Content="Configure" 
+                                                Click="ConfigureAutoDetectBtn"/>
+                                    </StackPanel>
+                                </Border>
+                            </Border>
+                        </StackPanel>
+                    </Border >
 
                     <Button Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
                             Template="{Binding Source= {StaticResource SlightRoundedBtnTemp}}"

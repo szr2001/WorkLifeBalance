@@ -54,6 +54,10 @@ namespace WorkLifeBalance.Windows
                 case SecondWindowType.ViewDays:
                     WindowPage = new ViewDaysPage(this, args);
                     break;
+
+                case SecondWindowType.BackgroundProcesses:
+                    WindowPage = new BackgroundWindowsViewPage(this, args);
+                    break;
             }
 
             
@@ -81,6 +85,7 @@ namespace WorkLifeBalance.Windows
     {
         Settings,
         ViewData,
-        ViewDays
+        ViewDays,
+        BackgroundProcesses
     }
 }

@@ -14,13 +14,10 @@ namespace WorkLifeBalance.Data
         public string Date { get; set; } = "";
         public string WorkedAmmount { get; set; } = "";
         public string RestedAmmount { get; set; } = "";
-        public string StudiedAmmount { get; set; } = "";
-
 
         public DateOnly DateC { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         public TimeOnly WorkedAmmountC { get; set; } = new TimeOnly(0, 0, 0);
         public TimeOnly RestedAmmountC { get; set; } = new TimeOnly(0, 0, 0);
-        public TimeOnly StudiedAmmountC { get; set; } = new TimeOnly(0, 0, 0);
 
         public void ConvertSaveDataToUsableData()
         {
@@ -49,13 +46,6 @@ namespace WorkLifeBalance.Data
                     int.Parse(RestedAmmount.Substring(2, 2)),
                     int.Parse(RestedAmmount.Substring(4, 2))
                 );
-
-            StudiedAmmountC = new TimeOnly
-                (
-                    int.Parse(StudiedAmmount.Substring(0, 2)),
-                    int.Parse(StudiedAmmount.Substring(2, 2)),
-                    int.Parse(StudiedAmmount.Substring(4, 2))
-                );
         }
         public void ConvertUsableDataToSaveData()
         {
@@ -64,8 +54,6 @@ namespace WorkLifeBalance.Data
             WorkedAmmount = WorkedAmmountC.ToString("HHmmss");
 
             RestedAmmount = RestedAmmountC.ToString("HHmmss");
-
-            StudiedAmmount = StudiedAmmountC.ToString("HHmmss");
         }
     }
 }

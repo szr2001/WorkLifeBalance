@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -32,15 +34,17 @@ namespace WorkLifeBalance
 
         private TimmerState AppTimmerState = TimmerState.Resting;
 
+        public TimeOnly CurrentProcessSpentTime = new();
         public DayData? TodayData = null;
         public WLBSettings AppSettings = new();
 
-        private ImageSource? RestImg;
-        private ImageSource? WorkImg;
+        private ImageSource AutomaticImg = new BitmapImage();
+        private ImageSource RestImg = new BitmapImage();
+        private ImageSource WorkImg = new BitmapImage();
 
-        private SolidColorBrush ? WorkingBtnColor;
-        private SolidColorBrush? BreakBtnColorHighlight;
-
+        private SolidColorBrush LightBlueColor = new();
+        private SolidColorBrush LightPurpleColor = new();
+        private SolidColorBrush OceanBlue = new();
         public MainWindow()
         {
             InitializeComponent();
@@ -54,8 +58,10 @@ namespace WorkLifeBalance
         {
             RestImg = new BitmapImage(new Uri($"{Directory.GetCurrentDirectory()}/Assets/Rest.png"));
             WorkImg = new BitmapImage(new Uri($"{Directory.GetCurrentDirectory()}/Assets/Work.png"));
-            WorkingBtnColor = FindResource("WLFBLigherBlue") as SolidColorBrush;
-            BreakBtnColorHighlight = FindResource("WLFBLightPurple") as SolidColorBrush;
+            AutomaticImg = new BitmapImage(new Uri($"{Directory.GetCurrentDirectory()}/Assets/Automat.png"));
+            LightBlueColor = (SolidColorBrush)FindResource("WLFBLigherBlue");
+            LightPurpleColor = (SolidColorBrush)FindResource("WLFBLightPurple");
+            OceanBlue = (SolidColorBrush)FindResource("WLFBOceanBlue");
         }
 
         private async Task LoadData()
@@ -70,55 +76,53 @@ namespace WorkLifeBalance
             _ = TimmerLoop();
             _ = SaveLoop();
 
+            SetAutoDetect(AppSettings.AutoDetectWorkingC);
+
             DateT.Text = $"Today: {TodayData.DateC.ToString("MM/dd/yyyy")}";
         }
-
+        
         private async Task SetWindowLocation()
         {
             await Task.Delay(300);
             Vector2 UserScreen = new Vector2((float)SystemParameters.PrimaryScreenWidth, (float)SystemParameters.PrimaryScreenHeight);
-            IntPtr TargetWindow = WindowPlacementHelper.GetWindow(null, "WorkLifeBalance");
+            IntPtr TargetWindow = WindowOptionsHelper.GetWindow(null, "WorkLifeBalance");
 
             switch (AppSettings.StartUpCornerC)
             {
                 case AnchorCorner.TopLeft:
-                    WindowPlacementHelper.SetWindowLocation(TargetWindow,0, 0);
+                    WindowOptionsHelper.SetWindowLocation(TargetWindow,0, 0);
                     break;
                 case AnchorCorner.TopRight:
-                    WindowPlacementHelper.SetWindowLocation(TargetWindow, (int)UserScreen.X - 220, 0);
+                    WindowOptionsHelper.SetWindowLocation(TargetWindow, (int)UserScreen.X - 220, 0);
                     break;
                 case AnchorCorner.BootomLeft:
-                    WindowPlacementHelper.SetWindowLocation(TargetWindow, 0, (int)UserScreen.Y - 180);
+                    WindowOptionsHelper.SetWindowLocation(TargetWindow, 0, (int)UserScreen.Y - 180);
                     break;
                 case AnchorCorner.BottomRight:
-                    WindowPlacementHelper.SetWindowLocation(TargetWindow, (int)UserScreen.X - 220, (int)UserScreen.Y - 180);
+                    WindowOptionsHelper.SetWindowLocation(TargetWindow, (int)UserScreen.X - 220, (int)UserScreen.Y - 180);
                     break;
             }
         }
 
-        private void ToggleRecording(object sender, RoutedEventArgs e)
+        public void SetAppState(SolidColorBrush backgroundcolor, ImageSource image,TimmerState state)
         {
-            if (!IsAppReady) return;
-            if (IsClosingApp) return;
+            ToggleBtn.Background = backgroundcolor;
+            ToggleRecordingImage.Source = image;
+            AppTimmerState = state;
+        }
+
+        private void ToggleState(object sender, RoutedEventArgs e)
+        {
+            if (!IsAppReady || IsClosingApp) return;
 
             switch (AppTimmerState)
             {
                 case TimmerState.Working:
-                    ToggleBtn.Background = WorkingBtnColor;
-                    ToggleRecordingImage.Source = RestImg;
-                    AppTimmerState = TimmerState.Resting;
+                    SetAppState(LightBlueColor, RestImg,TimmerState.Resting);
                     break;
 
                 case TimmerState.Resting:
-                    ToggleBtn.Background = BreakBtnColorHighlight;
-                    ToggleRecordingImage.Source = WorkImg;
-                    AppTimmerState = TimmerState.Working;
-                    break;
-
-                case TimmerState.Studying:
-                    break;
-
-                default:
+                    SetAppState(LightPurpleColor, WorkImg, TimmerState.Working);
                     break;
             }
         }
@@ -135,7 +139,7 @@ namespace WorkLifeBalance
             SecondWindow.Show();
         }
 
-        private void UpdateUiText()
+        private void UpdateUI()
         {
             ElapsedWorkT.Text = TodayData.WorkedAmmountC.ToString("HH:mm:ss");
             ElapsedBreakT.Text = TodayData.RestedAmmountC.ToString("HH:mm:ss");
@@ -156,15 +160,23 @@ namespace WorkLifeBalance
                     case TimmerState.Resting:
                         TodayData.RestedAmmountC = TodayData.RestedAmmountC.Add(OneSec);
                         break;
-
-                    case TimmerState.Studying:
-                        break;
-
-                    default:
-                        break;
                 }
 
-                UpdateUiText();
+                //temp
+                try
+                {
+                    IntPtr foregroundWindowHandle = WindowOptionsHelper.GetForegroundWindow();
+                    string applicationName = WindowOptionsHelper.GetApplicationName(foregroundWindowHandle);
+
+                    Console.WriteLine($"Application: {applicationName}");
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                //temp
+
+                UpdateUI();
 
                 await Task.Delay(1000);
             }
@@ -176,6 +188,29 @@ namespace WorkLifeBalance
             {
                 await Task.Delay(AppSettings.SaveInterval * 60000);
                 await WriteData();
+            }
+        }
+
+        private async Task AutoDetectWorkLoop()
+        {
+            while (IsAppReady && !IsClosingApp)
+            {
+                await Task.Delay(5000);
+
+            }
+        }
+
+        public void SetAutoDetect(bool value)
+        {
+            ToggleBtn.IsEnabled = !value;
+
+            if (value)
+            {
+                SetAppState(OceanBlue,AutomaticImg,TimmerState.Resting);
+            }
+            else
+            {
+                SetAppState(LightBlueColor, RestImg, TimmerState.Resting);
             }
         }
 
@@ -261,7 +296,6 @@ namespace WorkLifeBalance
     public enum TimmerState
     {
         Working,
-        Resting,
-        Studying
+        Resting
     }
 }

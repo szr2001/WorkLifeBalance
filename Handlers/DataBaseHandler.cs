@@ -43,8 +43,10 @@ namespace WorkLifeBalance.HandlerClasses
                                 string sql = @"UPDATE Settings 
                                               SET LastTimeOpened = @LastTimeOpened,
                                               StartWithWindows = @StartWithWindows,
+                                              AutoDetectWorking = @AutoDetectWorking,
                                               StartUpCorner = @StartUpCorner,
-                                              SaveInterval = @SaveInterval
+                                              SaveInterval = @SaveInterval,
+                                              AutoDetectInterval = @AutoDetectInterval
                                               LIMIT 1";
 
                                 connection.Execute(sql, sett);
@@ -141,8 +143,8 @@ namespace WorkLifeBalance.HandlerClasses
                             try
                             {
                                 //write data
-                                string sql = @"INSERT OR REPLACE INTO Days (Date,WorkedAmmount,RestedAmmount,StudiedAmmount)
-                                             VALUES (@Date,@WorkedAmmount,@RestedAmmount,@StudiedAmmount)";
+                                string sql = @"INSERT OR REPLACE INTO Days (Date,WorkedAmmount,RestedAmmount)
+                                             VALUES (@Date,@WorkedAmmount,@RestedAmmount)";
 
                                 await connection.ExecuteAsync(sql, day);
                                 await transaction.CommitAsync();

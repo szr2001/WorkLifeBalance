@@ -12,15 +12,12 @@
             Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
 
         <StackPanel Orientation="Vertical">
-            <Border Grid.Column="0"
-                    Grid.Row="0"
-                    Height="430"
-                    Grid.ColumnSpan="3"
-                    Grid.RowSpan="3"
+            <Border Height="430"
                     CornerRadius="20"
                     Margin="15,15,15,0"
                     Background="{Binding Source={StaticResource WLFBOceanBlue}}">
-                <Grid>
+                <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                    <Grid>
                     <ItemsControl ItemsSource="{Binding LoadedData}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -31,7 +28,6 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <!-- Your inventory slot UI -->
                                 <Border Width="120"
                                         Margin="5"
                                         Height="110"
@@ -73,8 +69,8 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-
                 </Grid>
+                </ScrollViewer>
             </Border>
             <Grid Height="55"
                   Margin="15,0,15,0">

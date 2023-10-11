@@ -105,7 +105,7 @@
                             Name="ToggleBtn"
                             ToolTip="Toggle Work/Rest"
                             Height="45" 
-                            Click="ToggleRecording"
+                            Click="ToggleState"
                             Template="{Binding Source={StaticResource RoundedBtnTemp}}"
                             Style="{Binding Source={StaticResource RoundedBtnStyle}}">
                         <Image Margin="5"

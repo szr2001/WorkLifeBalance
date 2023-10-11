@@ -12,6 +12,7 @@ using WorkLifeBalance.Data;
 using File = System.IO.File;
 using WorkLifeBalance.Windows;
 using Path = System.IO.Path;
+using System.Windows.Controls.Primitives;
 
 namespace WorkLifeBalance.Pages
 {
@@ -20,7 +21,8 @@ namespace WorkLifeBalance.Pages
     /// </summary>
     public partial class SettingsPage : SecondWindowPageBase
     {
-        int interval = 5;
+        int Saveinterval = 5;
+        int AutoDetectInterval = 5;
         public SettingsPage(SecondWindow secondwindow, object? args) : base(secondwindow,args)
         {
             InitializeComponent();
@@ -42,8 +44,19 @@ namespace WorkLifeBalance.Pages
                     BottomRightBtn.IsChecked = true;
                     break;
             }
+
             AutosaveT.Text = secondwindow.MainWindowParent.AppSettings.SaveInterval.ToString();
+
+            AutoDetectT.Text = secondwindow.MainWindowParent.AppSettings.AutoDetectInterval.ToString();
+
             StartWithWInBtn.IsChecked = secondwindow.MainWindowParent.AppSettings.StartWithWindowsC;
+
+            AutoDetectWorkingBtn.IsChecked = secondwindow.MainWindowParent.AppSettings.AutoDetectWorkingC;
+
+            if (secondwindow.MainWindowParent.AppSettings.AutoDetectWorkingC)
+            {
+                ExpandAutoDetectArea();
+            }
         }
 
         private void ChangeAutosaveDelay(object sender, TextChangedEventArgs e)
@@ -51,19 +64,36 @@ namespace WorkLifeBalance.Pages
             if (string.IsNullOrEmpty(AutosaveT.Text) || int.Parse(AutosaveT.Text) == 0 )
             {
                 AutosaveT.Text = 5.ToString();
-                interval = 5;
+                Saveinterval = 5;
             }
             try
             {
-                interval = int.Parse(AutosaveT.Text);
+                Saveinterval = int.Parse(AutosaveT.Text);
             }
             catch
             {
                 AutosaveT.Text = 5.ToString();
-                interval = 5;
+                Saveinterval = 5;
             }
         }
+        private void ChangeAutoDetectDelay(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(AutosaveT.Text) || int.Parse(AutosaveT.Text) == 0)
+            {
+                AutoDetectT.Text = 5.ToString();
+                AutoDetectInterval = 5;
+            }
+            try
+            {
+                AutoDetectInterval = int.Parse(AutoDetectT.Text);
+            }
+            catch
+            {
+                AutoDetectT.Text = 5.ToString();
+                AutoDetectInterval = 5;
+            }
 
+        }
         private void SetBotLeftStartup(object sender, RoutedEventArgs e)
         {
             BottomRightBtn.IsChecked = false;
@@ -104,9 +134,15 @@ namespace WorkLifeBalance.Pages
         private async void SaveSettings(object sender, RoutedEventArgs e)
         {
             SaveBtn.IsEnabled = false;
+
             ApplyStartToWindows();
-            ParentWindow.MainWindowParent.AppSettings.SaveInterval = interval;
+
+            ParentWindow.MainWindowParent.AppSettings.SaveInterval = Saveinterval;
+
+            ParentWindow.MainWindowParent.AppSettings.AutoDetectInterval = AutoDetectInterval;
+
             await ParentWindow.MainWindowParent.WriteData();
+
             SaveBtn.IsEnabled = true;
         }
 
@@ -127,6 +163,7 @@ namespace WorkLifeBalance.Pages
                 DeleteShortcut(startupFolderPath);
             }
         }
+
         private void CreateShortcut(string appPath,string appdirectory, string startupfolder)
         {
             // Create a shortcut if it doesn't exist
@@ -139,6 +176,7 @@ namespace WorkLifeBalance.Pages
                 shortcut.Save();
             }
         }
+
         private void DeleteShortcut(string startupfolder)
         {
             if (File.Exists(startupfolder))
@@ -147,5 +185,33 @@ namespace WorkLifeBalance.Pages
             }
         }
 
+        private void ConfigureAutoDetectBtn(object sender, RoutedEventArgs e)
+        {
+            ParentWindow.MainWindowParent.OpenSecondWindow(SecondWindowType.BackgroundProcesses);
+        }
+
+        private void ToggleAutoDetectWorking(object sender, RoutedEventArgs e)
+        {
+            if (AutoDetectWorkingBtn.IsChecked == true)
+            {
+                ExpandAutoDetectArea();
+            }
+            else
+            {
+                ContractAutoDetectArea();
+            }
+        }
+        private void ExpandAutoDetectArea()
+        {
+                AutoToggleWorkingPanel.Height = 80;
+            ParentWindow.MainWindowParent.AppSettings.AutoDetectWorkingC = (bool)AutoDetectWorkingBtn.IsChecked;
+            ParentWindow.MainWindowParent.SetAutoDetect((bool)AutoDetectWorkingBtn.IsChecked);
+        }
+        private void ContractAutoDetectArea()
+        {
+                AutoToggleWorkingPanel.Height = 0;
+            ParentWindow.MainWindowParent.AppSettings.AutoDetectWorkingC = (bool)AutoDetectWorkingBtn.IsChecked;
+            ParentWindow.MainWindowParent.SetAutoDetect((bool)AutoDetectWorkingBtn.IsChecked);
+        }
     }
 }
