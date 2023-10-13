@@ -25,7 +25,7 @@ namespace WorkLifeBalance.Pages
     public partial class ViewDaysPage : SecondWindowPageBase
     {
         public DayData[] LoadedData { get; set; }
-        public ViewDaysPage(SecondWindow secondwindow, object? args) : base(secondwindow, args)
+        public ViewDaysPage(object? args) : base(args)
         {
             InitializeComponent();
             RequiredWindowSize = new Vector2(710, 570);
@@ -41,12 +41,12 @@ namespace WorkLifeBalance.Pages
                 }
             }
 
-            ParentWindow.Close();
+            SecondWindow.Instance.Close();
         }
 
         private async Task RequiestData(int requiestedDataType)
         {
-            DateOnly currentDate = ParentWindow.MainWindowParent.TodayData.DateC;
+            DateOnly currentDate = MainWindow.instance.TodayData.DateC;
             DateTime previousMonthDateTime = currentDate.ToDateTime(new TimeOnly(0, 0, 0)).AddMonths(-1);
             DateOnly previousDate = DateOnly.FromDateTime(previousMonthDateTime);
 
@@ -73,7 +73,7 @@ namespace WorkLifeBalance.Pages
 
         private void ReturnToPreviousPage(object sender, RoutedEventArgs e)
         {
-            ParentWindow.MainWindowParent.OpenSecondWindow(SecondWindowType.ViewData);
+            SecondWindow.OpenSecondWindow(SecondWindowType.ViewData);
         }
     }
 }

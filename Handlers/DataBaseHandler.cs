@@ -56,7 +56,7 @@ namespace WorkLifeBalance.HandlerClasses
                             {
                                 //rols back if failed
                                 await transaction.RollbackAsync();
-                                MainWindow.MainDispatcher.Invoke(() =>
+                                MainWindow.instance.MainDispatcher.Invoke(() =>
                                 {
                                     MainWindow.ShowErrorBox("Failed to write to database", $"This can be caused by a missing database file: {ex.Message}");
                                 });
@@ -99,7 +99,7 @@ namespace WorkLifeBalance.HandlerClasses
                     }
                     catch (Exception ex)
                     {
-                        MainWindow.MainDispatcher.Invoke(() =>
+                        MainWindow.instance.MainDispatcher.Invoke(() =>
                         {
                             MainWindow.ShowErrorBox("Failed to write to database", $"This can be caused by a missing database file: {ex.Message}");
                         });
@@ -153,7 +153,7 @@ namespace WorkLifeBalance.HandlerClasses
                             {
                                 //rols back if failed
                                 await transaction.RollbackAsync();
-                                MainWindow.MainDispatcher.Invoke(() => 
+                                MainWindow.instance.MainDispatcher.Invoke(() => 
                                 {
                                     MainWindow.ShowErrorBox("Failed to write to database",$"This can be caused by a missing database file: {ex.Message}");
                                 });
@@ -196,7 +196,7 @@ namespace WorkLifeBalance.HandlerClasses
                     catch (Exception ex)
                     {
                         //close app if failed
-                        MainWindow.MainDispatcher.Invoke(() =>
+                        MainWindow.instance.MainDispatcher.Invoke(() =>
                         {
                             MainWindow.ShowErrorBox("Failed to read from database", $"This can be caused by a missing database file: {ex.Message}");
                         });
@@ -245,7 +245,7 @@ namespace WorkLifeBalance.HandlerClasses
                     catch (Exception ex)
                     {
                         //close app if failed
-                        MainWindow.MainDispatcher.Invoke(() =>
+                        MainWindow.instance.MainDispatcher.Invoke(() =>
                         {
                             MainWindow.ShowErrorBox("Failed to read from database", $"This can be caused by a missing database file: {ex.Message}");
                         });
@@ -304,7 +304,7 @@ namespace WorkLifeBalance.HandlerClasses
                     catch (Exception ex)
                     {
                         //close app if failed
-                        MainWindow.MainDispatcher.Invoke(() =>
+                        MainWindow.instance.MainDispatcher.Invoke(() =>
                         {
                             MainWindow.ShowErrorBox("Failed to read from database", $"This can be caused by a missing database file: {ex.Message}");
                         });
@@ -363,7 +363,7 @@ namespace WorkLifeBalance.HandlerClasses
                     catch (Exception ex)
                     {
                         //close app if failed
-                        MainWindow.MainDispatcher.Invoke(() =>
+                        MainWindow.instance.MainDispatcher.Invoke(() =>
                         {
                             MainWindow.ShowErrorBox("Failed to read from database", $"This can be caused by a missing database file: {ex.Message}");
                         });

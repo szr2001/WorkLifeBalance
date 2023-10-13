@@ -2,10 +2,12 @@
 using System.Diagnostics;
 using System.IO;
 using System.Numerics;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -25,9 +27,9 @@ namespace WorkLifeBalance
         [DllImport("kernel32.dll")]
         public static extern bool AllocConsole();
 
-        public SecondWindow? SecondWindow;
+        public static MainWindow? instance;
 
-        public static Dispatcher MainDispatcher = Dispatcher.CurrentDispatcher;
+        public Dispatcher MainDispatcher = Dispatcher.CurrentDispatcher;
 
         private bool IsClosingApp = false;
         private bool IsAppReady = false;
@@ -47,6 +49,16 @@ namespace WorkLifeBalance
         private SolidColorBrush OceanBlue = new();
         public MainWindow()
         {
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                instance.Close();
+                instance = this;
+            }
+
             InitializeComponent();
             Topmost = true;
             AllocConsole();
@@ -125,18 +137,6 @@ namespace WorkLifeBalance
                     SetAppState(LightPurpleColor, WorkImg, TimmerState.Working);
                     break;
             }
-        }
-
-        public void OpenSecondWindow(SecondWindowType Page,object? args = null)
-        {
-            if (SecondWindow != null && SecondWindow.WindowType == Page)
-            {
-                SecondWindow.Close();
-                SecondWindow = null;
-                return;
-            }
-            SecondWindow = new SecondWindow(this, Page, args);
-            SecondWindow.Show();
         }
 
         private void UpdateUI()
@@ -229,12 +229,12 @@ namespace WorkLifeBalance
 
         private void OpenViewDataWindow(object sender, RoutedEventArgs e)
         {
-            OpenSecondWindow(SecondWindowType.ViewData);
+            SecondWindow.OpenSecondWindow(SecondWindowType.ViewData);
         }
 
         private void OpenOptionsWindow(object sender, RoutedEventArgs e)
         {
-            OpenSecondWindow(SecondWindowType.Settings);
+            SecondWindow.OpenSecondWindow(SecondWindowType.Settings);
         }
 
         private async void CloseApp(object sender, RoutedEventArgs e)

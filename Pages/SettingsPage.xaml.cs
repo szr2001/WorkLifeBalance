@@ -23,13 +23,13 @@ namespace WorkLifeBalance.Pages
     {
         int Saveinterval = 5;
         int AutoDetectInterval = 5;
-        public SettingsPage(SecondWindow secondwindow, object? args) : base(secondwindow,args)
+        public SettingsPage(object? args) : base(args)
         {
             InitializeComponent();
             RequiredWindowSize = new Vector2(250,340);
             pageNme = "Settings";
 
-            switch (secondwindow.MainWindowParent.AppSettings.StartUpCornerC)
+            switch (MainWindow.instance.AppSettings.StartUpCornerC)
             {
                 case AnchorCorner.TopLeft:
                     TopLeftBtn.IsChecked = true;
@@ -45,15 +45,15 @@ namespace WorkLifeBalance.Pages
                     break;
             }
 
-            AutosaveT.Text = secondwindow.MainWindowParent.AppSettings.SaveInterval.ToString();
+            AutosaveT.Text = MainWindow.instance.AppSettings.SaveInterval.ToString();
 
-            AutoDetectT.Text = secondwindow.MainWindowParent.AppSettings.AutoDetectInterval.ToString();
+            AutoDetectT.Text = MainWindow.instance.AppSettings.AutoDetectInterval.ToString();
 
-            StartWithWInBtn.IsChecked = secondwindow.MainWindowParent.AppSettings.StartWithWindowsC;
+            StartWithWInBtn.IsChecked = MainWindow.instance.AppSettings.StartWithWindowsC;
 
-            AutoDetectWorkingBtn.IsChecked = secondwindow.MainWindowParent.AppSettings.AutoDetectWorkingC;
+            AutoDetectWorkingBtn.IsChecked = MainWindow.instance.AppSettings.AutoDetectWorkingC;
 
-            if (secondwindow.MainWindowParent.AppSettings.AutoDetectWorkingC)
+            if (MainWindow.instance.AppSettings.AutoDetectWorkingC)
             {
                 ExpandAutoDetectArea();
             }
@@ -99,7 +99,7 @@ namespace WorkLifeBalance.Pages
             BottomRightBtn.IsChecked = false;
             TopRightBtn.IsChecked = false;
             TopLeftBtn.IsChecked = false;
-            ParentWindow.MainWindowParent.AppSettings.StartUpCornerC = AnchorCorner.BootomLeft;
+            MainWindow.instance.AppSettings.StartUpCornerC = AnchorCorner.BootomLeft;
         }
 
         private void SetBotRightStartup(object sender, RoutedEventArgs e)
@@ -107,7 +107,7 @@ namespace WorkLifeBalance.Pages
             BottomLeftBtn.IsChecked = false;
             TopRightBtn.IsChecked = false;
             TopLeftBtn.IsChecked = false;
-            ParentWindow.MainWindowParent.AppSettings.StartUpCornerC = AnchorCorner.BottomRight;
+            MainWindow.instance.AppSettings.StartUpCornerC = AnchorCorner.BottomRight;
         }
 
         private void SetUpRightStartup(object sender, RoutedEventArgs e)
@@ -115,7 +115,7 @@ namespace WorkLifeBalance.Pages
             BottomLeftBtn.IsChecked = false;
             BottomRightBtn.IsChecked = false;
             TopLeftBtn.IsChecked = false;
-            ParentWindow.MainWindowParent.AppSettings.StartUpCornerC = AnchorCorner.TopRight;
+            MainWindow.instance.AppSettings.StartUpCornerC = AnchorCorner.TopRight;
         }
 
         private void SetUpLeftStartup(object sender, RoutedEventArgs e)
@@ -123,12 +123,12 @@ namespace WorkLifeBalance.Pages
             BottomLeftBtn.IsChecked = false;
             BottomRightBtn.IsChecked = false;
             TopRightBtn.IsChecked = false;
-            ParentWindow.MainWindowParent.AppSettings.StartUpCornerC = AnchorCorner.TopLeft;
+            MainWindow.instance.AppSettings.StartUpCornerC = AnchorCorner.TopLeft;
         }
 
         private void SetStartWithWin(object sender, RoutedEventArgs e)
         {
-            ParentWindow.MainWindowParent.AppSettings.StartWithWindowsC = (bool)StartWithWInBtn.IsChecked;
+            MainWindow.instance.AppSettings.StartWithWindowsC = (bool)StartWithWInBtn.IsChecked;
         }
 
         private async void SaveSettings(object sender, RoutedEventArgs e)
@@ -137,11 +137,11 @@ namespace WorkLifeBalance.Pages
 
             ApplyStartToWindows();
 
-            ParentWindow.MainWindowParent.AppSettings.SaveInterval = Saveinterval;
+            MainWindow.instance.AppSettings.SaveInterval = Saveinterval;
 
-            ParentWindow.MainWindowParent.AppSettings.AutoDetectInterval = AutoDetectInterval;
+            MainWindow.instance.AppSettings.AutoDetectInterval = AutoDetectInterval;
 
-            await ParentWindow.MainWindowParent.WriteData();
+            await MainWindow.instance.WriteData();
 
             SaveBtn.IsEnabled = true;
         }
@@ -154,7 +154,7 @@ namespace WorkLifeBalance.Pages
 
             string startupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), $"{appName}.lnk");
 
-            if (ParentWindow.MainWindowParent.AppSettings.StartWithWindowsC)
+            if (MainWindow.instance.AppSettings.StartWithWindowsC)
             {
                 CreateShortcut(appPath,appDirectory, startupFolderPath);
             }
@@ -187,7 +187,7 @@ namespace WorkLifeBalance.Pages
 
         private void ConfigureAutoDetectBtn(object sender, RoutedEventArgs e)
         {
-            ParentWindow.MainWindowParent.OpenSecondWindow(SecondWindowType.BackgroundProcesses);
+            SecondWindow.OpenSecondWindow(SecondWindowType.BackgroundProcesses);
         }
 
         private void ToggleAutoDetectWorking(object sender, RoutedEventArgs e)
@@ -204,14 +204,14 @@ namespace WorkLifeBalance.Pages
         private void ExpandAutoDetectArea()
         {
                 AutoToggleWorkingPanel.Height = 80;
-            ParentWindow.MainWindowParent.AppSettings.AutoDetectWorkingC = (bool)AutoDetectWorkingBtn.IsChecked;
-            ParentWindow.MainWindowParent.SetAutoDetect((bool)AutoDetectWorkingBtn.IsChecked);
+            MainWindow.instance.AppSettings.AutoDetectWorkingC = (bool)AutoDetectWorkingBtn.IsChecked;
+            MainWindow.instance.SetAutoDetect((bool)AutoDetectWorkingBtn.IsChecked);
         }
         private void ContractAutoDetectArea()
         {
                 AutoToggleWorkingPanel.Height = 0;
-            ParentWindow.MainWindowParent.AppSettings.AutoDetectWorkingC = (bool)AutoDetectWorkingBtn.IsChecked;
-            ParentWindow.MainWindowParent.SetAutoDetect((bool)AutoDetectWorkingBtn.IsChecked);
+            MainWindow.instance.AppSettings.AutoDetectWorkingC = (bool)AutoDetectWorkingBtn.IsChecked;
+            MainWindow.instance.SetAutoDetect((bool)AutoDetectWorkingBtn.IsChecked);
         }
     }
 }

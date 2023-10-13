@@ -48,7 +48,7 @@ namespace WorkLifeBalance.Pages
 
         TimeOnly PreviousMonthMostRested;
         DateOnly PreviousMonthMostRestedDate;
-        public ViewDataPage(SecondWindow secondwindow, object? args) : base(secondwindow, args)
+        public ViewDataPage(object? args) : base(args)
         {
             InitializeComponent();
             RequiredWindowSize = new Vector2(750, 580);
@@ -59,7 +59,7 @@ namespace WorkLifeBalance.Pages
         private async Task CalculateData()
         {
             //get today date
-            DateOnly currentDate = ParentWindow.MainWindowParent.TodayData.DateC;
+            DateOnly currentDate = MainWindow.instance.TodayData.DateC;
 
             //create temporary daydata to load each day and reuse it
             DayData TempDay;
@@ -154,17 +154,17 @@ namespace WorkLifeBalance.Pages
 
         private void SeePreviousMonth(object sender, RoutedEventArgs e)
         {
-            ParentWindow.MainWindowParent.OpenSecondWindow(SecondWindowType.ViewDays,2);
+            SecondWindow.OpenSecondWindow(SecondWindowType.ViewDays,2);
         }
 
         private void SeeCurrentMonth(object sender, RoutedEventArgs e)
         {
-            ParentWindow.MainWindowParent.OpenSecondWindow(SecondWindowType.ViewDays, 1);
+            SecondWindow.OpenSecondWindow(SecondWindowType.ViewDays, 1);
         }
 
         private void SeeAllDays(object sender, RoutedEventArgs e)
         {
-            ParentWindow.MainWindowParent.OpenSecondWindow(SecondWindowType.ViewDays, 0);
+            SecondWindow.OpenSecondWindow(SecondWindowType.ViewDays, 0);
         }
         private int ConvertTimeOnlyToSeconds(TimeOnly time)
         {

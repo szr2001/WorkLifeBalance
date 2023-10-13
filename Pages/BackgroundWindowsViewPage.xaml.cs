@@ -22,7 +22,7 @@ namespace WorkLifeBalance.Pages
     /// </summary>
     public partial class BackgroundWindowsViewPage : SecondWindowPageBase
     {
-        public BackgroundWindowsViewPage(SecondWindow secondwindow, object? args) : base(secondwindow, args)
+        public BackgroundWindowsViewPage(object? args) : base(args)
         {
             RequiredWindowSize = new Vector2(710, 570);
             pageNme = "Automatic Customize";
@@ -31,7 +31,7 @@ namespace WorkLifeBalance.Pages
 
         private void ReturnToPreviousPage(object sender, RoutedEventArgs e)
         {
-            ParentWindow.MainWindowParent.OpenSecondWindow(SecondWindowType.Settings);
+           SecondWindow.OpenSecondWindow(SecondWindowType.Settings);
 
         }
     }

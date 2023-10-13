@@ -13,10 +13,9 @@ namespace WorkLifeBalance.Windows
         public static SecondWindow? Instance = null;
 
         public SecondWindowType WindowType;
-        public MainWindow MainWindowParent;
 
         private SecondWindowPageBase? WindowPage;
-        public SecondWindow(MainWindow parent,SecondWindowType Windowtype,object? args)
+        public SecondWindow(SecondWindowType Windowtype,object? args)
         {
             if(Instance == null)
             {
@@ -27,16 +26,25 @@ namespace WorkLifeBalance.Windows
                 Instance.Close();
                 Instance = this;
             }
-            MainWindowParent = parent;
             InitializeComponent();
             WindowType = Windowtype;
             InitializeWindowType(args);
         }
-
+        public static void OpenSecondWindow(SecondWindowType Page, object? args = null)
+        {
+            if (Instance != null && Instance.WindowType == Page)
+            {
+                Instance.Close();
+                Instance = null;
+                return;
+            }
+            Instance = new SecondWindow(Page, args);
+            Instance.Show();
+        }
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
-            MainWindowParent.SecondWindow = null;
+            Instance = null;
         }
 
         private void InitializeWindowType(object? args)
@@ -44,19 +52,19 @@ namespace WorkLifeBalance.Windows
             switch (WindowType)
             {
                 case SecondWindowType.Settings:
-                    WindowPage = new SettingsPage(this, args);
+                    WindowPage = new SettingsPage(args);
                     break;
 
                 case SecondWindowType.ViewData:
-                    WindowPage = new ViewDataPage(this, args);
+                    WindowPage = new ViewDataPage(args);
                     break;
 
                 case SecondWindowType.ViewDays:
-                    WindowPage = new ViewDaysPage(this, args);
+                    WindowPage = new ViewDaysPage(args);
                     break;
 
                 case SecondWindowType.BackgroundProcesses:
-                    WindowPage = new BackgroundWindowsViewPage(this, args);
+                    WindowPage = new BackgroundWindowsViewPage(args);
                     break;
             }
 
