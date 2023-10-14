@@ -15,30 +15,27 @@ namespace WorkLifeBalance.Windows
         public SecondWindowType WindowType;
 
         private SecondWindowPageBase? WindowPage;
-        public SecondWindow(SecondWindowType Windowtype,object? args)
+        public SecondWindow()
         {
-            if(Instance == null)
-            {
-                Instance = this;
-            }
-            else
+            if (Instance != null)
             {
                 Instance.Close();
                 Instance = this;
             }
             InitializeComponent();
-            WindowType = Windowtype;
-            InitializeWindowType(args);
         }
-        public static void OpenSecondWindow(SecondWindowType Page, object? args = null)
+        public static void OpenSecondWindow(SecondWindowType Type, object? args = null)
         {
-            if (Instance != null && Instance.WindowType == Page)
+            if (Instance != null && Instance.WindowType == Type)
             {
                 Instance.Close();
                 Instance = null;
                 return;
             }
-            Instance = new SecondWindow(Page, args);
+
+            Instance = new SecondWindow();
+            Instance.WindowType = Type;
+            Instance.InitializeWindowType(args);
             Instance.Show();
         }
         protected override void OnClosing(CancelEventArgs e)

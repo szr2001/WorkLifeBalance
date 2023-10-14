@@ -13,6 +13,7 @@ using File = System.IO.File;
 using WorkLifeBalance.Windows;
 using Path = System.IO.Path;
 using System.Windows.Controls.Primitives;
+using WorkLifeBalance.Handlers;
 
 namespace WorkLifeBalance.Pages
 {
@@ -29,7 +30,7 @@ namespace WorkLifeBalance.Pages
             RequiredWindowSize = new Vector2(250,340);
             pageNme = "Settings";
 
-            switch (MainWindow.instance.AppSettings.StartUpCornerC)
+            switch (DataHandler.Instance.AppSettings.StartUpCornerC)
             {
                 case AnchorCorner.TopLeft:
                     TopLeftBtn.IsChecked = true;
@@ -45,15 +46,15 @@ namespace WorkLifeBalance.Pages
                     break;
             }
 
-            AutosaveT.Text = MainWindow.instance.AppSettings.SaveInterval.ToString();
+            AutosaveT.Text = DataHandler.Instance.AppSettings.SaveInterval.ToString();
 
-            AutoDetectT.Text = MainWindow.instance.AppSettings.AutoDetectInterval.ToString();
+            AutoDetectT.Text = DataHandler.Instance.AppSettings.AutoDetectInterval.ToString();
 
-            StartWithWInBtn.IsChecked = MainWindow.instance.AppSettings.StartWithWindowsC;
+            StartWithWInBtn.IsChecked = DataHandler.Instance.AppSettings.StartWithWindowsC;
 
-            AutoDetectWorkingBtn.IsChecked = MainWindow.instance.AppSettings.AutoDetectWorkingC;
+            AutoDetectWorkingBtn.IsChecked = DataHandler.Instance.AppSettings.AutoDetectWorkingC;
 
-            if (MainWindow.instance.AppSettings.AutoDetectWorkingC)
+            if (DataHandler.Instance.AppSettings.AutoDetectWorkingC)
             {
                 ExpandAutoDetectArea();
             }
@@ -99,7 +100,7 @@ namespace WorkLifeBalance.Pages
             BottomRightBtn.IsChecked = false;
             TopRightBtn.IsChecked = false;
             TopLeftBtn.IsChecked = false;
-            MainWindow.instance.AppSettings.StartUpCornerC = AnchorCorner.BootomLeft;
+            DataHandler.Instance.AppSettings.StartUpCornerC = AnchorCorner.BootomLeft;
         }
 
         private void SetBotRightStartup(object sender, RoutedEventArgs e)
@@ -107,7 +108,7 @@ namespace WorkLifeBalance.Pages
             BottomLeftBtn.IsChecked = false;
             TopRightBtn.IsChecked = false;
             TopLeftBtn.IsChecked = false;
-            MainWindow.instance.AppSettings.StartUpCornerC = AnchorCorner.BottomRight;
+            DataHandler.Instance.AppSettings.StartUpCornerC = AnchorCorner.BottomRight;
         }
 
         private void SetUpRightStartup(object sender, RoutedEventArgs e)
@@ -115,7 +116,7 @@ namespace WorkLifeBalance.Pages
             BottomLeftBtn.IsChecked = false;
             BottomRightBtn.IsChecked = false;
             TopLeftBtn.IsChecked = false;
-            MainWindow.instance.AppSettings.StartUpCornerC = AnchorCorner.TopRight;
+            DataHandler.Instance.AppSettings.StartUpCornerC = AnchorCorner.TopRight;
         }
 
         private void SetUpLeftStartup(object sender, RoutedEventArgs e)
@@ -123,12 +124,12 @@ namespace WorkLifeBalance.Pages
             BottomLeftBtn.IsChecked = false;
             BottomRightBtn.IsChecked = false;
             TopRightBtn.IsChecked = false;
-            MainWindow.instance.AppSettings.StartUpCornerC = AnchorCorner.TopLeft;
+            DataHandler.Instance.AppSettings.StartUpCornerC = AnchorCorner.TopLeft;
         }
 
         private void SetStartWithWin(object sender, RoutedEventArgs e)
         {
-            MainWindow.instance.AppSettings.StartWithWindowsC = (bool)StartWithWInBtn.IsChecked;
+            DataHandler.Instance.AppSettings.StartWithWindowsC = (bool)StartWithWInBtn.IsChecked;
         }
 
         private async void SaveSettings(object sender, RoutedEventArgs e)
@@ -137,11 +138,11 @@ namespace WorkLifeBalance.Pages
 
             ApplyStartToWindows();
 
-            MainWindow.instance.AppSettings.SaveInterval = Saveinterval;
+            DataHandler.Instance.AppSettings.SaveInterval = Saveinterval;
 
-            MainWindow.instance.AppSettings.AutoDetectInterval = AutoDetectInterval;
+            DataHandler.Instance.AppSettings.AutoDetectInterval = AutoDetectInterval;
 
-            await MainWindow.instance.WriteData();
+            await DataHandler.Instance.SaveData();
 
             SaveBtn.IsEnabled = true;
         }
@@ -154,7 +155,7 @@ namespace WorkLifeBalance.Pages
 
             string startupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), $"{appName}.lnk");
 
-            if (MainWindow.instance.AppSettings.StartWithWindowsC)
+            if (DataHandler.Instance.AppSettings.StartWithWindowsC)
             {
                 CreateShortcut(appPath,appDirectory, startupFolderPath);
             }
@@ -204,13 +205,13 @@ namespace WorkLifeBalance.Pages
         private void ExpandAutoDetectArea()
         {
                 AutoToggleWorkingPanel.Height = 80;
-            MainWindow.instance.AppSettings.AutoDetectWorkingC = (bool)AutoDetectWorkingBtn.IsChecked;
+            DataHandler.Instance.AppSettings.AutoDetectWorkingC = (bool)AutoDetectWorkingBtn.IsChecked;
             MainWindow.instance.SetAutoDetect((bool)AutoDetectWorkingBtn.IsChecked);
         }
         private void ContractAutoDetectArea()
         {
                 AutoToggleWorkingPanel.Height = 0;
-            MainWindow.instance.AppSettings.AutoDetectWorkingC = (bool)AutoDetectWorkingBtn.IsChecked;
+            DataHandler.Instance.AppSettings.AutoDetectWorkingC = (bool)AutoDetectWorkingBtn.IsChecked;
             MainWindow.instance.SetAutoDetect((bool)AutoDetectWorkingBtn.IsChecked);
         }
     }

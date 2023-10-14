@@ -28,18 +28,7 @@ namespace WorkLifeBalance
 
         public Dispatcher MainDispatcher = Dispatcher.CurrentDispatcher;
 
-        private bool IsClosingApp = false;
-        private bool IsAppReady = false;
-
         private TimmerState AppTimmerState = TimmerState.Resting;
-
-        public TimeOnly CurrentProcessSpentTime = new();
-        public DayData? TodayData = null;
-        public WLBSettings AppSettings = new();
-
-        public DataHandler MainDataHandler;
-        public TimeHandler MainTimeHandler;
-        public AutomaticStateChangerHandler MainAutomaticStateHandler;
 
         private ImageSource AutomaticImg = new BitmapImage();
         private ImageSource RestImg = new BitmapImage();
@@ -49,7 +38,6 @@ namespace WorkLifeBalance
         private SolidColorBrush LightPurpleColor = new();
         private SolidColorBrush OceanBlue = new();
 
-        //use singleton as a get set proprety that returns a new instance if null
         public MainWindow()
         {
             if (instance == null)
@@ -65,13 +53,12 @@ namespace WorkLifeBalance
             InitializeComponent();
             Topmost = true;
             AllocConsole();
-
-            MainDataHandler = new();
-            MainTimeHandler = new();
-            MainAutomaticStateHandler = new();
-
             LoadStyleInfo();
-            _ = LoadData();
+
+            DataHandler.Instance.OnLoaded += InitializeApp;
+            DataHandler.Instance.OnSaving += ()=> { DateT.Text = $"Saving data..."; };
+            DataHandler.Instance.OnSaved += ()=> { DateT.Text = $"Today: {DataHandler.Instance.TodayData.DateC.ToString("MM/dd/yyyy")}"; };
+            _ = DataHandler.Instance.LoadData();
         }
 
         private void LoadStyleInfo()
@@ -84,21 +71,18 @@ namespace WorkLifeBalance
             OceanBlue = (SolidColorBrush)FindResource("WLFBOceanBlue");
         }
 
-        private async Task LoadData()
+        private void InitializeApp()
         {
-            TodayData = await DataBaseHandler.ReadDay(DateOnly.FromDateTime(DateTime.Now).ToString("MMddyyyy"));
-            AppSettings = await DataBaseHandler.ReadSettings();
-
             _ = SetWindowLocation();
 
-            IsAppReady = true;
+            DataHandler.Instance.IsAppReady = true;
 
             _ = TimmerLoop();
             _ = SaveLoop();
 
-            SetAutoDetect(AppSettings.AutoDetectWorkingC);
+            SetAutoDetect(DataHandler.Instance.AppSettings.AutoDetectWorkingC);
 
-            DateT.Text = $"Today: {TodayData.DateC.ToString("MM/dd/yyyy")}";
+            DateT.Text = $"Today: {DataHandler.Instance.TodayData.DateC.ToString("MM/dd/yyyy")}";
         }
         
         private async Task SetWindowLocation()
@@ -107,7 +91,7 @@ namespace WorkLifeBalance
             Vector2 UserScreen = new Vector2((float)SystemParameters.PrimaryScreenWidth, (float)SystemParameters.PrimaryScreenHeight);
             IntPtr TargetWindow = WindowOptionsHelper.GetWindow(null, "WorkLifeBalance");
 
-            switch (AppSettings.StartUpCornerC)
+            switch (DataHandler.Instance.AppSettings.StartUpCornerC)
             {
                 case AnchorCorner.TopLeft:
                     WindowOptionsHelper.SetWindowLocation(TargetWindow,0, 0);
@@ -133,7 +117,7 @@ namespace WorkLifeBalance
 
         private void ToggleState(object sender, RoutedEventArgs e)
         {
-            if (!IsAppReady || IsClosingApp) return;
+            if (!DataHandler.Instance.IsAppReady || DataHandler.Instance.IsClosingApp) return;
 
             switch (AppTimmerState)
             {
@@ -149,24 +133,24 @@ namespace WorkLifeBalance
 
         private void UpdateUI()
         {
-            ElapsedWorkT.Text = TodayData.WorkedAmmountC.ToString("HH:mm:ss");
-            ElapsedBreakT.Text = TodayData.RestedAmmountC.ToString("HH:mm:ss");
+            ElapsedWorkT.Text = DataHandler.Instance.TodayData.WorkedAmmountC.ToString("HH:mm:ss");
+            ElapsedBreakT.Text = DataHandler.Instance.TodayData.RestedAmmountC.ToString("HH:mm:ss");
         }
 
         private async Task TimmerLoop()
         {
             TimeSpan OneSec = new TimeSpan(0, 0, 1);
 
-            while (IsAppReady && !IsClosingApp)
+            while (DataHandler.Instance.IsAppReady && !DataHandler.Instance.IsClosingApp)
             {
                 switch (AppTimmerState)
                 {
                     case TimmerState.Working:
-                        TodayData.WorkedAmmountC = TodayData.WorkedAmmountC.Add(OneSec);
+                        DataHandler.Instance.TodayData.WorkedAmmountC = DataHandler.Instance.TodayData.WorkedAmmountC.Add(OneSec);
                         break;
 
                     case TimmerState.Resting:
-                        TodayData.RestedAmmountC = TodayData.RestedAmmountC.Add(OneSec);
+                        DataHandler.Instance.TodayData.RestedAmmountC = DataHandler.Instance.TodayData.RestedAmmountC.Add(OneSec);
                         break;
                 }
 
@@ -192,16 +176,16 @@ namespace WorkLifeBalance
 
         private async Task SaveLoop()
         {
-            while (IsAppReady && !IsClosingApp)
+            while (DataHandler.Instance.IsAppReady && !DataHandler.Instance.IsClosingApp)
             {
-                await Task.Delay(AppSettings.SaveInterval * 60000);
-                await WriteData();
+                await Task.Delay(DataHandler.Instance.AppSettings.SaveInterval * 60000);
+                await DataHandler.Instance.SaveData();
             }
         }
 
         private async Task AutoDetectWorkLoop()
         {
-            while (IsAppReady && !IsClosingApp)
+            while (DataHandler.Instance.IsAppReady && !DataHandler.Instance.IsClosingApp)
             {
                 await Task.Delay(5000);
 
@@ -222,16 +206,6 @@ namespace WorkLifeBalance
             }
         }
 
-        public async Task WriteData()
-        {
-            DateT.Text = $"Saving data...";
-
-            await DataBaseHandler.WriteDay(TodayData);
-            await DataBaseHandler.WriteSettings(AppSettings);
-
-            DateT.Text = $"Today: {TodayData.DateC.ToString("MM/dd/yyyy")}";
-        }
-
         private void OpenViewDataWindow(object sender, RoutedEventArgs e)
         {
             SecondWindow.OpenSecondWindow(SecondWindowType.ViewData);
@@ -244,15 +218,15 @@ namespace WorkLifeBalance
 
         private async void CloseApp(object sender, RoutedEventArgs e)
         {
-            if (IsClosingApp) return;
+            if (DataHandler.Instance.IsClosingApp) return;
 
             CloseSideBar(null,null);
 
-            IsClosingApp = true;
+            DataHandler.Instance.IsClosingApp = true;
 
             DateT.Text = "Closing, waiting for database";
 
-            await WriteData();
+            await DataHandler.Instance.SaveData();
 
             Application.Current.Shutdown();
         }
@@ -267,8 +241,8 @@ namespace WorkLifeBalance
 
         private void OpenSideBar(object sender, MouseEventArgs e)
         {
-            if (!IsAppReady) return;
-            if (IsClosingApp) return;
+            if (!DataHandler.Instance.IsAppReady) return;
+            if (DataHandler.Instance.IsClosingApp) return;
 
             OptionMenuVisibility.Width = new GridLength(35,GridUnitType.Pixel);
             OptionsPannel.Visibility = Visibility.Visible;
@@ -276,8 +250,8 @@ namespace WorkLifeBalance
 
         private void CloseSideBar(object sender, MouseEventArgs e)
         {
-            if (!IsAppReady) return;
-            if (IsClosingApp) return;
+            if (!DataHandler.Instance.IsAppReady) return;
+            if (DataHandler.Instance.IsClosingApp) return;
 
             OptionMenuVisibility.Width = new GridLength(15, GridUnitType.Pixel);
             OptionsPannel.Visibility = Visibility.Collapsed;

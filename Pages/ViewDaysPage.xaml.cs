@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WorkLifeBalance.Data;
 using WorkLifeBalance.HandlerClasses;
+using WorkLifeBalance.Handlers;
 using WorkLifeBalance.Windows;
 
 namespace WorkLifeBalance.Pages
@@ -46,7 +47,7 @@ namespace WorkLifeBalance.Pages
 
         private async Task RequiestData(int requiestedDataType)
         {
-            DateOnly currentDate = MainWindow.instance.TodayData.DateC;
+            DateOnly currentDate = DataHandler.Instance.TodayData.DateC;
             DateTime previousMonthDateTime = currentDate.ToDateTime(new TimeOnly(0, 0, 0)).AddMonths(-1);
             DateOnly previousDate = DateOnly.FromDateTime(previousMonthDateTime);
 

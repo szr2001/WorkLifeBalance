@@ -17,6 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WorkLifeBalance.Data;
 using WorkLifeBalance.HandlerClasses;
+using WorkLifeBalance.Handlers;
 using WorkLifeBalance.Windows;
 
 namespace WorkLifeBalance.Pages
@@ -59,7 +60,7 @@ namespace WorkLifeBalance.Pages
         private async Task CalculateData()
         {
             //get today date
-            DateOnly currentDate = MainWindow.instance.TodayData.DateC;
+            DateOnly currentDate = DataHandler.Instance.TodayData.DateC;
 
             //create temporary daydata to load each day and reuse it
             DayData TempDay;
