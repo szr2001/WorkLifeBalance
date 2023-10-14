@@ -27,6 +27,9 @@ namespace WorkLifeBalance.HandlerClasses
         {
             //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
+
+            sett.ConvertUsableDataToSaveData();
+
             try
             {
                 using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
@@ -128,6 +131,8 @@ namespace WorkLifeBalance.HandlerClasses
         {
             //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
+
+            day.ConvertUsableDataToSaveData();
 
             try
             {

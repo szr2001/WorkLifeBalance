@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Numerics;
-using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using WorkLifeBalance.Data;
 using WorkLifeBalance.HandlerClasses;
+using WorkLifeBalance.Handlers;
 using WorkLifeBalance.Windows;
 
 namespace WorkLifeBalance
@@ -40,6 +37,10 @@ namespace WorkLifeBalance
         public DayData? TodayData = null;
         public WLBSettings AppSettings = new();
 
+        public DataHandler MainDataHandler;
+        public TimeHandler MainTimeHandler;
+        public AutomaticStateChangerHandler MainAutomaticStateHandler;
+
         private ImageSource AutomaticImg = new BitmapImage();
         private ImageSource RestImg = new BitmapImage();
         private ImageSource WorkImg = new BitmapImage();
@@ -47,6 +48,8 @@ namespace WorkLifeBalance
         private SolidColorBrush LightBlueColor = new();
         private SolidColorBrush LightPurpleColor = new();
         private SolidColorBrush OceanBlue = new();
+
+        //use singleton as a get set proprety that returns a new instance if null
         public MainWindow()
         {
             if (instance == null)
@@ -62,6 +65,11 @@ namespace WorkLifeBalance
             InitializeComponent();
             Topmost = true;
             AllocConsole();
+
+            MainDataHandler = new();
+            MainTimeHandler = new();
+            MainAutomaticStateHandler = new();
+
             LoadStyleInfo();
             _ = LoadData();
         }
@@ -217,9 +225,6 @@ namespace WorkLifeBalance
         public async Task WriteData()
         {
             DateT.Text = $"Saving data...";
-
-            TodayData.ConvertUsableDataToSaveData();
-            AppSettings.ConvertUsableDataToSaveData();
 
             await DataBaseHandler.WriteDay(TodayData);
             await DataBaseHandler.WriteSettings(AppSettings);

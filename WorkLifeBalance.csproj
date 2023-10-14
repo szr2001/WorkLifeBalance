@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\**" />
+    <EmbeddedResource Remove="Features\**" />
+    <None Remove="Features\**" />
+    <Page Remove="Features\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Assets\Automat.png" />
     <None Remove="Assets\Cancel.png" />
     <None Remove="Assets\DataSheet.png" />
@@ -57,10 +64,6 @@
     <Content Include="RecordedData.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\" />
   </ItemGroup>
 
 </Project>
