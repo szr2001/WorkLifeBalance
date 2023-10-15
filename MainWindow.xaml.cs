@@ -3,6 +3,7 @@ using System.IO;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -27,8 +28,6 @@ namespace WorkLifeBalance
         public static MainWindow? instance;
 
         public Dispatcher MainDispatcher = Dispatcher.CurrentDispatcher;
-
-        private TimmerState AppTimmerState = TimmerState.Resting;
 
         private ImageSource AutomaticImg = new BitmapImage();
         private ImageSource RestImg = new BitmapImage();
@@ -58,6 +57,7 @@ namespace WorkLifeBalance
             DataHandler.Instance.OnLoaded += InitializeApp;
             DataHandler.Instance.OnSaving += ()=> { DateT.Text = $"Saving data..."; };
             DataHandler.Instance.OnSaved += ()=> { DateT.Text = $"Today: {DataHandler.Instance.TodayData.DateC.ToString("MM/dd/yyyy")}"; };
+
             _ = DataHandler.Instance.LoadData();
         }
 
@@ -77,8 +77,13 @@ namespace WorkLifeBalance
 
             DataHandler.Instance.IsAppReady = true;
 
-            _ = TimmerLoop();
-            _ = SaveLoop();
+
+            TimeHandler.Instance.OnTimerTick += TimeTrackerHandler.Instance.UpdateSpentTime;
+            TimeHandler.Instance.OnTimerTick += DataHandler.Instance.TriggerSaveData;
+
+            TimeTrackerHandler.Instance.OnSpentTimeChange += UpdateUI;
+
+            TimeHandler.Instance.StartTick();
 
             SetAutoDetect(DataHandler.Instance.AppSettings.AutoDetectWorkingC);
 
@@ -112,14 +117,14 @@ namespace WorkLifeBalance
         {
             ToggleBtn.Background = backgroundcolor;
             ToggleRecordingImage.Source = image;
-            AppTimmerState = state;
+            DataHandler.Instance.AppTimmerState = state;
         }
 
         private void ToggleState(object sender, RoutedEventArgs e)
         {
             if (!DataHandler.Instance.IsAppReady || DataHandler.Instance.IsClosingApp) return;
 
-            switch (AppTimmerState)
+            switch (DataHandler.Instance.AppTimmerState)
             {
                 case TimmerState.Working:
                     SetAppState(LightBlueColor, RestImg,TimmerState.Resting);
@@ -134,63 +139,63 @@ namespace WorkLifeBalance
         private void UpdateUI()
         {
             ElapsedWorkT.Text = DataHandler.Instance.TodayData.WorkedAmmountC.ToString("HH:mm:ss");
-            ElapsedBreakT.Text = DataHandler.Instance.TodayData.RestedAmmountC.ToString("HH:mm:ss");
+            ElapsedRestT.Text = DataHandler.Instance.TodayData.RestedAmmountC.ToString("HH:mm:ss");
         }
 
-        private async Task TimmerLoop()
-        {
-            TimeSpan OneSec = new TimeSpan(0, 0, 1);
+        //private async Task TimmerLoop()
+        //{
+        //    TimeSpan OneSec = new TimeSpan(0, 0, 1);
 
-            while (DataHandler.Instance.IsAppReady && !DataHandler.Instance.IsClosingApp)
-            {
-                switch (AppTimmerState)
-                {
-                    case TimmerState.Working:
-                        DataHandler.Instance.TodayData.WorkedAmmountC = DataHandler.Instance.TodayData.WorkedAmmountC.Add(OneSec);
-                        break;
+        //    while (DataHandler.Instance.IsAppReady && !DataHandler.Instance.IsClosingApp)
+        //    {
+        //        switch (AppTimmerState)
+        //        {
+        //            case TimmerState.Working:
+        //                DataHandler.Instance.TodayData.WorkedAmmountC = DataHandler.Instance.TodayData.WorkedAmmountC.Add(OneSec);
+        //                break;
 
-                    case TimmerState.Resting:
-                        DataHandler.Instance.TodayData.RestedAmmountC = DataHandler.Instance.TodayData.RestedAmmountC.Add(OneSec);
-                        break;
-                }
+        //            case TimmerState.Resting:
+        //                DataHandler.Instance.TodayData.RestedAmmountC = DataHandler.Instance.TodayData.RestedAmmountC.Add(OneSec);
+        //                break;
+        //        }
 
-                //temp
-                try
-                {
-                    IntPtr foregroundWindowHandle = WindowOptionsHelper.GetForegroundWindow();
-                    string applicationName = WindowOptionsHelper.GetApplicationName(foregroundWindowHandle);
+        //        //temp
+        //        try
+        //        {
+        //            IntPtr foregroundWindowHandle = WindowOptionsHelper.GetForegroundWindow();
+        //            string applicationName = WindowOptionsHelper.GetApplicationName(foregroundWindowHandle);
 
-                    Console.WriteLine($"Application: {applicationName}");
-                }
-                catch(Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                //temp
+        //            Console.WriteLine($"Application: {applicationName}");
+        //        }
+        //        catch(Exception ex)
+        //        {
+        //            Console.WriteLine(ex.Message);
+        //        }
+        //        //temp
 
-                UpdateUI();
+        //        UpdateUI();
 
-                await Task.Delay(1000);
-            }
-        }
+        //        await Task.Delay(1000);
+        //    }
+        //}
 
-        private async Task SaveLoop()
-        {
-            while (DataHandler.Instance.IsAppReady && !DataHandler.Instance.IsClosingApp)
-            {
-                await Task.Delay(DataHandler.Instance.AppSettings.SaveInterval * 60000);
-                await DataHandler.Instance.SaveData();
-            }
-        }
+        //private async Task SaveLoop()
+        //{
+        //    while (DataHandler.Instance.IsAppReady && !DataHandler.Instance.IsClosingApp)
+        //    {
+        //        await Task.Delay(DataHandler.Instance.AppSettings.SaveInterval * 60000);
+        //        await DataHandler.Instance.SaveData();
+        //    }
+        //}
 
-        private async Task AutoDetectWorkLoop()
-        {
-            while (DataHandler.Instance.IsAppReady && !DataHandler.Instance.IsClosingApp)
-            {
-                await Task.Delay(5000);
+        //private async Task AutoDetectWorkLoop()
+        //{
+        //    while (DataHandler.Instance.IsAppReady && !DataHandler.Instance.IsClosingApp)
+        //    {
+        //        await Task.Delay(5000);
 
-            }
-        }
+        //    }
+        //}
 
         public void SetAutoDetect(bool value)
         {
@@ -270,11 +275,5 @@ namespace WorkLifeBalance
                 Application.Current.Shutdown();
             }
         }
-    }
-
-    public enum TimmerState
-    {
-        Working,
-        Resting
     }
 }

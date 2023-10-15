@@ -95,7 +95,7 @@
                                    TextAlignment="Center"
                                    FontSize="18"/>
                         <TextBlock Text="00.00.00"
-                                   Name="ElapsedBreakT"
+                                   Name="ElapsedRestT"
                                    FontSize="15"
                                    TextAlignment="Center"/>
                     </StackPanel>

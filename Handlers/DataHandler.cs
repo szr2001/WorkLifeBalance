@@ -25,6 +25,7 @@ namespace WorkLifeBalance.Handlers
 
         public bool IsClosingApp = false;
         public bool IsAppReady = false;
+        public TimmerState AppTimmerState = TimmerState.Resting;
         public DayData? TodayData = null;
         public WLBSettings AppSettings = new();
 
@@ -37,10 +38,13 @@ namespace WorkLifeBalance.Handlers
         public async Task SaveData()
         {
             OnSaving?.Invoke();
+            Console.WriteLine("Saving day");
 
             await DataBaseHandler.WriteDay(TodayData);
+            Console.WriteLine("Saving settings");
             await DataBaseHandler.WriteSettings(AppSettings);
 
+            Console.WriteLine("Saved");
             OnSaved?.Invoke();
         }
 
@@ -52,6 +56,19 @@ namespace WorkLifeBalance.Handlers
             AppSettings = await DataBaseHandler.ReadSettings();
 
             OnLoaded?.Invoke();
+        }
+
+        private bool IsSaveTriggered = false;
+        public async void TriggerSaveData()
+        {
+            if (IsSaveTriggered) return;
+
+            IsSaveTriggered = true;
+
+            await Task.Delay(AppSettings.SaveInterval * 60000);
+            await SaveData();
+
+            IsSaveTriggered = false;
         }
     }
 }
