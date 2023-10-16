@@ -7,7 +7,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WorkLifeBalance.Data
 {
-    public class WLBSettings
+    public class AppSettings
     {
         public string LastTimeOpened { get; set; } = "";
         public int StartWithWindows { get; set; } = 0;

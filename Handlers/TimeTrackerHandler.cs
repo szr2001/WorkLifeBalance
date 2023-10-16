@@ -9,14 +9,6 @@ namespace WorkLifeBalance.Handlers
     public class TimeTrackerHandler
     {
         private static TimeTrackerHandler? _instance;
-        
-        public delegate void SpentTimeEvent();
-
-        public event SpentTimeEvent? OnSpentTimeChange;
-
-
-        private TimeSpan OneSec = new TimeSpan(0, 0, 1);
-        
         public static TimeTrackerHandler Instance
         {
             get
@@ -28,6 +20,12 @@ namespace WorkLifeBalance.Handlers
                 return _instance;
             }
         }
+        
+        public delegate void SpentTimeEvent();
+
+        public event SpentTimeEvent? OnSpentTimeChange;
+
+        private TimeSpan OneSec = new TimeSpan(0, 0, 1);
 
         public void UpdateSpentTime()
         {

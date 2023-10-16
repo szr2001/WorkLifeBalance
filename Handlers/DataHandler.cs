@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using WorkLifeBalance.Data;
 using WorkLifeBalance.HandlerClasses;
 
@@ -25,9 +26,14 @@ namespace WorkLifeBalance.Handlers
 
         public bool IsClosingApp = false;
         public bool IsAppReady = false;
+
+        DateOnly TodayDate = DateOnly.FromDateTime(DateTime.Now);
+
         public TimmerState AppTimmerState = TimmerState.Resting;
-        public DayData? TodayData = null;
-        public WLBSettings AppSettings = new();
+
+        public DayData TodayData = new();
+        public AppSettings Settings = new();
+        public AutoStateChangeData AutoChangeData = new();
 
         public delegate void DataEvent();
         public event DataEvent? OnLoading;
@@ -38,13 +44,15 @@ namespace WorkLifeBalance.Handlers
         public async Task SaveData()
         {
             OnSaving?.Invoke();
-            Console.WriteLine("Saving day");
 
+            Console.WriteLine("Saving day");
             await DataBaseHandler.WriteDay(TodayData);
             Console.WriteLine("Saving settings");
-            await DataBaseHandler.WriteSettings(AppSettings);
+            await DataBaseHandler.WriteSettings(Settings);
+            Console.WriteLine("Saving autostate");
+            await DataBaseHandler.WriteAutoSateData(AutoChangeData);
 
-            Console.WriteLine("Saved");
+            Console.WriteLine("Everything saved");
             OnSaved?.Invoke();
         }
 
@@ -52,8 +60,10 @@ namespace WorkLifeBalance.Handlers
         {
             OnLoading?.Invoke();
 
-            TodayData = await DataBaseHandler.ReadDay(DateOnly.FromDateTime(DateTime.Now).ToString("MMddyyyy"));
-            AppSettings = await DataBaseHandler.ReadSettings();
+            TodayData = await DataBaseHandler.ReadDay(TodayDate.ToString("MMddyyyy"));
+            Settings = await DataBaseHandler.ReadSettings();
+            AutoChangeData = await DataBaseHandler.ReadAutoStateData(TodayDate.ToString("MMddyyyy"));
+
 
             OnLoaded?.Invoke();
         }
@@ -65,7 +75,7 @@ namespace WorkLifeBalance.Handlers
 
             IsSaveTriggered = true;
 
-            await Task.Delay(AppSettings.SaveInterval * 60000);
+            await Task.Delay(Settings.SaveInterval * 60000);
             await SaveData();
 
             IsSaveTriggered = false;

@@ -30,7 +30,7 @@
                             <DataTemplate>
                                 <Border Width="120"
                                         Margin="5"
-                                        Height="110"
+                                        Height="135"
                                         Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
                                         CornerRadius="15">
                                     <Border Margin="5"
@@ -62,7 +62,16 @@
                                                        FontWeight="Bold"
                                                        FontSize="15"
                                                        Foreground="White"/>
-                                        </StackPanel>
+                                                <Button Margin="6"
+                                                        Width="50"
+                                                        Content="Info"
+                                                        TextBlock.FontSize="15"
+                                                        TextBlock.Foreground="White"
+                                                        TextBlock.FontWeight="Bold"
+                                                        Style="{Binding Source={StaticResource OceanBlueRoundedBtnStyle}}"
+                                                        Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}" 
+                                                        Click="ReturnToPreviousPage"/>
+                                            </StackPanel>
 
                                     </Border>
                                 </Border>

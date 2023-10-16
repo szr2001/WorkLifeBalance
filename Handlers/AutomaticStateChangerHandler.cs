@@ -8,5 +8,17 @@ namespace WorkLifeBalance.Handlers
 {
     public class AutomaticStateChangerHandler
     {
+        private static AutomaticStateChangerHandler? _instance;
+        public static AutomaticStateChangerHandler Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new AutomaticStateChangerHandler();
+                }
+                return _instance;
+            }
+        }
     }
 }

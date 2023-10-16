@@ -23,7 +23,115 @@ namespace WorkLifeBalance.HandlerClasses
         //connection string for the db
         private static readonly string ConnectionString = @$"Data Source={Directory.GetCurrentDirectory()}\RecordedData.db;Version=3;";
 
-        public static async Task WriteSettings(WLBSettings sett)
+        public static async Task WriteAutoSateData(AutoStateChangeData autod)
+        {
+            //wait for a time when no methods writes now to the database
+            await _semaphore.WaitAsync();
+
+            autod.ConvertUsableDataToSaveData();
+
+            try
+            {
+                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+                {
+                    //open connection
+                    await connection.OpenAsync();
+                    //if no one writes continue
+                    await Task.Run(async () =>
+                    {
+                        using (SQLiteTransaction transaction = connection.BeginTransaction())
+                        {
+                            try
+                            {
+                                string sql = @"INSERT OR REPLACE INTO WorkingWindows (WorkingStateWindows)
+                                             VALUES (@WindowValue)";
+
+                                await connection.ExecuteAsync(sql, autod.WorkingStateWindows.Select(value => new { WindowValue = value }));
+
+                                sql = @"INSERT OR REPLACE INTO Activity (Date,Process,TimeSpent)
+                                        VALUES (@Date,@Process,@TimeSpent)";
+
+                                await connection.ExecuteAsync(sql, autod.Activities);
+
+                                await transaction.CommitAsync();
+                            }
+                            catch (Exception ex)
+                            {
+                                //rols back if failed
+                                await transaction.RollbackAsync();
+                                MainWindow.instance.MainDispatcher.Invoke(() =>
+                                {
+                                    MainWindow.ShowErrorBox("Failed to write to database", $"This can be caused by a missing database file: {ex.Message}");
+                                });
+                            }
+                        }
+                    });
+
+                    //close connection
+                    await connection.CloseAsync();
+                }
+            }
+            finally
+            {
+                //free semaphore so other methods can run
+                _semaphore.Release();
+            }
+        }
+
+        public static async Task<AutoStateChangeData> ReadAutoStateData(string date)
+        {
+            AutoStateChangeData retrivedSettings = new();
+            //wait for a time when no methods writes now to the database
+            await _semaphore.WaitAsync();
+            //if no one writes to db continue
+
+            try
+            {
+                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+                {
+                    //start connection
+                    await connection.OpenAsync();
+
+                    //gets total number
+                    try
+                    {
+                        string sql = @$"SELECT * FROM Activity
+                                        WHERE Date = @Date";
+
+                        retrivedSettings.Activities = (await connection.QueryAsync<ProcessActivity>(sql, new { Date = date })).ToArray();
+
+                        sql = @$"SELECT * FROM WorkingWindows";
+
+                        retrivedSettings.WorkingStateWindows = (await connection.QueryAsync<string>(sql)).ToArray();
+                    }
+                    catch (Exception ex)
+                    {
+                        MainWindow.instance.MainDispatcher.Invoke(() =>
+                        {
+                            MainWindow.ShowErrorBox("Failed to write to database", $"This can be caused by a missing database file: {ex.Message}");
+                        });
+                    }
+                    //close connection
+                    await connection.CloseAsync();
+                }
+            }
+            finally
+            {
+                //release sempahore so other methods can run
+                _semaphore.Release();
+            }
+
+            if (retrivedSettings == null)
+            {
+                retrivedSettings = new();
+            }
+
+            retrivedSettings.ConvertSaveDataToUsableData();
+            //returns count
+            return retrivedSettings;
+        }
+
+        public static async Task WriteSettings(AppSettings sett)
         {
             //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
@@ -78,9 +186,9 @@ namespace WorkLifeBalance.HandlerClasses
             }
         }
 
-        public static async Task<WLBSettings> ReadSettings()
+        public static async Task<AppSettings> ReadSettings()
         {
-            WLBSettings retrivedSettings = new();
+            AppSettings retrivedSettings = new();
             //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
             //if no one writes to db continue
@@ -98,7 +206,7 @@ namespace WorkLifeBalance.HandlerClasses
                         string sql = @$"SELECT * FROM Settings
                                         LIMIT 1";
 
-                        retrivedSettings = connection.QueryFirstOrDefault<WLBSettings>(sql);
+                        retrivedSettings = connection.QueryFirstOrDefault<AppSettings>(sql);
                     }
                     catch (Exception ex)
                     {

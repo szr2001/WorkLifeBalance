@@ -85,7 +85,7 @@ namespace WorkLifeBalance
 
             TimeHandler.Instance.StartTick();
 
-            SetAutoDetect(DataHandler.Instance.AppSettings.AutoDetectWorkingC);
+            SetAutoDetect();
 
             DateT.Text = $"Today: {DataHandler.Instance.TodayData.DateC.ToString("MM/dd/yyyy")}";
         }
@@ -96,7 +96,7 @@ namespace WorkLifeBalance
             Vector2 UserScreen = new Vector2((float)SystemParameters.PrimaryScreenWidth, (float)SystemParameters.PrimaryScreenHeight);
             IntPtr TargetWindow = WindowOptionsHelper.GetWindow(null, "WorkLifeBalance");
 
-            switch (DataHandler.Instance.AppSettings.StartUpCornerC)
+            switch (DataHandler.Instance.Settings.StartUpCornerC)
             {
                 case AnchorCorner.TopLeft:
                     WindowOptionsHelper.SetWindowLocation(TargetWindow,0, 0);
@@ -142,63 +142,64 @@ namespace WorkLifeBalance
             ElapsedRestT.Text = DataHandler.Instance.TodayData.RestedAmmountC.ToString("HH:mm:ss");
         }
 
-        //private async Task TimmerLoop()
-        //{
-        //    TimeSpan OneSec = new TimeSpan(0, 0, 1);
-
-        //    while (DataHandler.Instance.IsAppReady && !DataHandler.Instance.IsClosingApp)
-        //    {
-        //        switch (AppTimmerState)
-        //        {
-        //            case TimmerState.Working:
-        //                DataHandler.Instance.TodayData.WorkedAmmountC = DataHandler.Instance.TodayData.WorkedAmmountC.Add(OneSec);
-        //                break;
-
-        //            case TimmerState.Resting:
-        //                DataHandler.Instance.TodayData.RestedAmmountC = DataHandler.Instance.TodayData.RestedAmmountC.Add(OneSec);
-        //                break;
-        //        }
-
-        //        //temp
-        //        try
-        //        {
-        //            IntPtr foregroundWindowHandle = WindowOptionsHelper.GetForegroundWindow();
-        //            string applicationName = WindowOptionsHelper.GetApplicationName(foregroundWindowHandle);
-
-        //            Console.WriteLine($"Application: {applicationName}");
-        //        }
-        //        catch(Exception ex)
-        //        {
-        //            Console.WriteLine(ex.Message);
-        //        }
-        //        //temp
-
-        //        UpdateUI();
-
-        //        await Task.Delay(1000);
-        //    }
-        //}
-
-        //private async Task SaveLoop()
-        //{
-        //    while (DataHandler.Instance.IsAppReady && !DataHandler.Instance.IsClosingApp)
-        //    {
-        //        await Task.Delay(DataHandler.Instance.AppSettings.SaveInterval * 60000);
-        //        await DataHandler.Instance.SaveData();
-        //    }
-        //}
-
-        //private async Task AutoDetectWorkLoop()
-        //{
-        //    while (DataHandler.Instance.IsAppReady && !DataHandler.Instance.IsClosingApp)
-        //    {
-        //        await Task.Delay(5000);
-
-        //    }
-        //}
-
-        public void SetAutoDetect(bool value)
+        private async Task TimmerLoop()
         {
+            TimeSpan OneSec = new TimeSpan(0, 0, 1);
+
+            while (DataHandler.Instance.IsAppReady && !DataHandler.Instance.IsClosingApp)
+            {
+                switch (DataHandler.Instance.AppTimmerState)
+                {
+                    case TimmerState.Working:
+                        DataHandler.Instance.TodayData.WorkedAmmountC = DataHandler.Instance.TodayData.WorkedAmmountC.Add(OneSec);
+                        break;
+
+                    case TimmerState.Resting:
+                        DataHandler.Instance.TodayData.RestedAmmountC = DataHandler.Instance.TodayData.RestedAmmountC.Add(OneSec);
+                        break;
+                }
+
+                //temp
+                try
+                {
+                    IntPtr foregroundWindowHandle = WindowOptionsHelper.GetForegroundWindow();
+                    string applicationName = WindowOptionsHelper.GetApplicationName(foregroundWindowHandle);
+
+                    Console.WriteLine($"Application: {applicationName}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                //temp
+
+                UpdateUI();
+
+                await Task.Delay(1000);
+            }
+        }
+
+        private async Task SaveLoop()
+        {
+            while (DataHandler.Instance.IsAppReady && !DataHandler.Instance.IsClosingApp)
+            {
+                await Task.Delay(DataHandler.Instance.Settings.SaveInterval * 60000);
+                await DataHandler.Instance.SaveData();
+            }
+        }
+
+        private async Task AutoDetectWorkLoop()
+        {
+            while (DataHandler.Instance.IsAppReady && !DataHandler.Instance.IsClosingApp)
+            {
+                await Task.Delay(5000);
+
+            }
+        }
+
+        public void SetAutoDetect()
+        {
+            bool value = DataHandler.Instance.Settings.AutoDetectWorkingC;
             ToggleBtn.IsEnabled = !value;
 
             if (value)
