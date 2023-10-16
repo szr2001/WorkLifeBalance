@@ -55,8 +55,8 @@ namespace WorkLifeBalance
             LoadStyleInfo();
 
             DataHandler.Instance.OnLoaded += InitializeApp;
-            DataHandler.Instance.OnSaving += ()=> { DateT.Text = $"Saving data..."; };
-            DataHandler.Instance.OnSaved += ()=> { DateT.Text = $"Today: {DataHandler.Instance.TodayData.DateC.ToString("MM/dd/yyyy")}"; };
+            DataHandler.Instance.OnSaving += ()=> { DateT.Text = $"Saving data...";};
+            DataHandler.Instance.OnSaved += ()=> { DateT.Text = $"Today: {DataHandler.Instance.TodayData.DateC.ToString("MM/dd/yyyy")}";};
 
             _ = DataHandler.Instance.LoadData();
         }
@@ -142,61 +142,6 @@ namespace WorkLifeBalance
             ElapsedRestT.Text = DataHandler.Instance.TodayData.RestedAmmountC.ToString("HH:mm:ss");
         }
 
-        private async Task TimmerLoop()
-        {
-            TimeSpan OneSec = new TimeSpan(0, 0, 1);
-
-            while (DataHandler.Instance.IsAppReady && !DataHandler.Instance.IsClosingApp)
-            {
-                switch (DataHandler.Instance.AppTimmerState)
-                {
-                    case TimmerState.Working:
-                        DataHandler.Instance.TodayData.WorkedAmmountC = DataHandler.Instance.TodayData.WorkedAmmountC.Add(OneSec);
-                        break;
-
-                    case TimmerState.Resting:
-                        DataHandler.Instance.TodayData.RestedAmmountC = DataHandler.Instance.TodayData.RestedAmmountC.Add(OneSec);
-                        break;
-                }
-
-                //temp
-                try
-                {
-                    IntPtr foregroundWindowHandle = WindowOptionsHelper.GetForegroundWindow();
-                    string applicationName = WindowOptionsHelper.GetApplicationName(foregroundWindowHandle);
-
-                    Console.WriteLine($"Application: {applicationName}");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                //temp
-
-                UpdateUI();
-
-                await Task.Delay(1000);
-            }
-        }
-
-        private async Task SaveLoop()
-        {
-            while (DataHandler.Instance.IsAppReady && !DataHandler.Instance.IsClosingApp)
-            {
-                await Task.Delay(DataHandler.Instance.Settings.SaveInterval * 60000);
-                await DataHandler.Instance.SaveData();
-            }
-        }
-
-        private async Task AutoDetectWorkLoop()
-        {
-            while (DataHandler.Instance.IsAppReady && !DataHandler.Instance.IsClosingApp)
-            {
-                await Task.Delay(5000);
-
-            }
-        }
-
         public void SetAutoDetect()
         {
             bool value = DataHandler.Instance.Settings.AutoDetectWorkingC;
@@ -226,11 +171,9 @@ namespace WorkLifeBalance
         {
             if (DataHandler.Instance.IsClosingApp) return;
 
-            CloseSideBar(null,null);
-
             DataHandler.Instance.IsClosingApp = true;
 
-            DateT.Text = "Closing, waiting for database";
+            CloseSideBar(null,null);
 
             await DataHandler.Instance.SaveData();
 
@@ -247,18 +190,12 @@ namespace WorkLifeBalance
 
         private void OpenSideBar(object sender, MouseEventArgs e)
         {
-            if (!DataHandler.Instance.IsAppReady) return;
-            if (DataHandler.Instance.IsClosingApp) return;
-
             OptionMenuVisibility.Width = new GridLength(35,GridUnitType.Pixel);
             OptionsPannel.Visibility = Visibility.Visible;
         }
 
         private void CloseSideBar(object sender, MouseEventArgs e)
         {
-            if (!DataHandler.Instance.IsAppReady) return;
-            if (DataHandler.Instance.IsClosingApp) return;
-
             OptionMenuVisibility.Width = new GridLength(15, GridUnitType.Pixel);
             OptionsPannel.Visibility = Visibility.Collapsed;
         }

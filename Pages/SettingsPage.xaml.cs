@@ -62,7 +62,7 @@ namespace WorkLifeBalance.Pages
 
         private void ChangeAutosaveDelay(object sender, TextChangedEventArgs e)
         {
-            if (string.IsNullOrEmpty(AutosaveT.Text) || int.Parse(AutosaveT.Text) == 0 )
+            if (string.IsNullOrEmpty(AutosaveT.Text) || !int.TryParse(AutosaveT.Text , out _) )
             {
                 AutosaveT.Text = 5.ToString();
                 Saveinterval = 5;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorkLifeBalance.HandlerClasses;
 
 namespace WorkLifeBalance.Handlers
 {
@@ -40,6 +41,20 @@ namespace WorkLifeBalance.Handlers
                     break;
             }
             OnSpentTimeChange?.Invoke();
+
+            //temp
+            try
+            {
+                IntPtr foregroundWindowHandle = WindowOptionsHelper.GetForegroundWindow();
+                string applicationName = WindowOptionsHelper.GetApplicationName(foregroundWindowHandle);
+
+                Console.WriteLine($"Application: {applicationName}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            //temp
         }
     }
 

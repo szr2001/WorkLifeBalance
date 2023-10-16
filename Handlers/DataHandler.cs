@@ -24,6 +24,9 @@ namespace WorkLifeBalance.Handlers
             }
         }
 
+        public bool IsAppSaving { get; private set; } = false;
+        public bool IsAppLoading { get; private set; } = false;
+
         public bool IsClosingApp = false;
         public bool IsAppReady = false;
 
@@ -43,6 +46,10 @@ namespace WorkLifeBalance.Handlers
 
         public async Task SaveData()
         {
+            if (IsAppSaving) return;
+
+            IsAppSaving = true;
+
             OnSaving?.Invoke();
 
             Console.WriteLine("Saving day");
@@ -52,20 +59,28 @@ namespace WorkLifeBalance.Handlers
             Console.WriteLine("Saving autostate");
             await DataBaseHandler.WriteAutoSateData(AutoChangeData);
 
-            Console.WriteLine("Everything saved");
             OnSaved?.Invoke();
+
+            IsAppSaving = false;
+
+            Console.WriteLine("Save Complete!");
         }
 
         public async Task LoadData()
         {
+            if(IsAppLoading) return;
+
+            IsAppLoading = true;
+
             OnLoading?.Invoke();
 
             TodayData = await DataBaseHandler.ReadDay(TodayDate.ToString("MMddyyyy"));
             Settings = await DataBaseHandler.ReadSettings();
             AutoChangeData = await DataBaseHandler.ReadAutoStateData(TodayDate.ToString("MMddyyyy"));
 
-
             OnLoaded?.Invoke();
+
+            IsAppLoading = false;
         }
 
         private bool IsSaveTriggered = false;

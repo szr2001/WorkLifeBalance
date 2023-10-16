@@ -46,12 +46,20 @@ namespace WorkLifeBalance.Handlers
         {
             while (!token.IsCancellationRequested)
             {
-                if (DataHandler.Instance.IsAppReady && !DataHandler.Instance.IsClosingApp) 
+                if (!DataHandler.Instance.IsAppReady && DataHandler.Instance.IsClosingApp) 
                 {
-                    await Task.Delay(1000);
-
-                    OnTimerTick?.Invoke();
+                    Stop();
                 }
+
+                if (DataHandler.Instance.IsAppSaving)
+                {
+                    await Task.Delay(500);
+                    continue;
+                }
+
+                await Task.Delay(1000);
+
+                OnTimerTick?.Invoke();
             }
         }
     }

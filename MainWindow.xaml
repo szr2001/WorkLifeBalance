@@ -121,7 +121,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
 
-            <TextBlock Text="Loading Data..."
+            <TextBlock Text="Saving data..."
                        TextAlignment="Center"
                        Name="DateT"
                        FontWeight="Bold"
