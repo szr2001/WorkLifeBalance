@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WorkLifeBalance.HandlerClasses;
 using WorkLifeBalance.Windows;
 
 namespace WorkLifeBalance.Pages
@@ -22,17 +23,35 @@ namespace WorkLifeBalance.Pages
     /// </summary>
     public partial class BackgroundWindowsViewPage : SecondWindowPageBase
     {
+        public List<string> DetectedWindows { get; set; } = new();
+        public List<string> SelectedWindows { get; set; } = new();
         public BackgroundWindowsViewPage(object? args) : base(args)
         {
             RequiredWindowSize = new Vector2(710, 570);
             pageNme = "Automatic Customize";
+            DetectBackgroundWindows();
+            DataContext = this;
             InitializeComponent();
         }
 
+        private void DetectBackgroundWindows()
+        {
+            DetectedWindows = WindowOptionsHelper.GetBackgroundApplicationsName();
+        }
         private void ReturnToPreviousPage(object sender, RoutedEventArgs e)
         {
            SecondWindow.OpenSecondWindow(SecondWindowType.Settings);
 
+        }
+
+        private void SelectProcess(object sender, RoutedEventArgs e)
+        {
+            //add to list
+        }
+
+        private void DeselectProcess(object sender, RoutedEventArgs e)
+        {
+            //remove from list
         }
     }
 }

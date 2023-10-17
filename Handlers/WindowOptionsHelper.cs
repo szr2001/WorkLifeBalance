@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -10,6 +12,16 @@ namespace WorkLifeBalance.HandlerClasses
         // Constants for the SetWindowLoc functions
         public const uint SWP_NOSIZE = 0x0001;
         public const uint SWP_NOZORDER = 0x0004;
+        
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
+        // Delegate for EnumWindows for callback
+        private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool IsWindowVisible(IntPtr hWnd);
 
         [DllImport("user32.dll")]
         private static extern IntPtr FindWindow(string? lpClassName, string lpWindowName);
@@ -65,6 +77,31 @@ namespace WorkLifeBalance.HandlerClasses
             string fileName = System.IO.Path.GetFileName(applicationName.ToString());
 
             return fileName;
+        }
+        public static List<string> GetBackgroundApplicationsName()
+        {
+            HashSet<string> Appnames = new();
+
+            List<IntPtr> windows = new List<IntPtr>();
+            EnumWindows(EnumWindowsCallback, GCHandle.ToIntPtr(GCHandle.Alloc(windows)));
+
+            foreach (IntPtr windowId in windows)
+            {
+                Appnames.Add(GetApplicationName(windowId));
+            }
+
+            return Appnames.ToList();
+        }
+        private static bool EnumWindowsCallback(IntPtr hWnd, IntPtr lParam)
+        {
+            List<IntPtr> windows = GCHandle.FromIntPtr(lParam).Target as List<IntPtr>;
+
+            if (IsWindowVisible(hWnd))
+            {
+                windows.Add(hWnd);
+            }
+
+            return true;
         }
     }
 }
