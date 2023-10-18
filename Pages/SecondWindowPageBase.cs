@@ -16,5 +16,10 @@ namespace WorkLifeBalance.Pages
         public SecondWindowPageBase(object? args)
         {
         }
+
+        public virtual Task ClosePageAsync() 
+        {
+            return Task.CompletedTask;
+        }
     }
 }

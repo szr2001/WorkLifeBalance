@@ -14,6 +14,7 @@ using WorkLifeBalance.Windows;
 using Path = System.IO.Path;
 using System.Windows.Controls.Primitives;
 using WorkLifeBalance.Handlers;
+using System.Threading.Tasks;
 
 namespace WorkLifeBalance.Pages
 {
@@ -27,7 +28,7 @@ namespace WorkLifeBalance.Pages
         public SettingsPage(object? args) : base(args)
         {
             InitializeComponent();
-            RequiredWindowSize = new Vector2(250,340);
+            RequiredWindowSize = new Vector2(250,320);
             pageNme = "Settings";
 
             switch (DataHandler.Instance.Settings.StartUpCornerC)
@@ -132,10 +133,8 @@ namespace WorkLifeBalance.Pages
             DataHandler.Instance.Settings.StartWithWindowsC = (bool)StartWithWInBtn.IsChecked;
         }
 
-        private async void SaveSettings(object sender, RoutedEventArgs e)
+        public override async Task ClosePageAsync()
         {
-            SaveBtn.IsEnabled = false;
-
             ApplyStartToWindows();
 
             DataHandler.Instance.Settings.SaveInterval = Saveinterval;
@@ -143,8 +142,6 @@ namespace WorkLifeBalance.Pages
             DataHandler.Instance.Settings.AutoDetectInterval = AutoDetectInterval;
 
             await DataHandler.Instance.SaveData();
-
-            SaveBtn.IsEnabled = true;
         }
 
         private void ApplyStartToWindows()

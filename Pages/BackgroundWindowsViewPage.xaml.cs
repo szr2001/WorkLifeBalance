@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WorkLifeBalance.HandlerClasses;
+using WorkLifeBalance.Handlers;
 using WorkLifeBalance.Windows;
 
 namespace WorkLifeBalance.Pages
@@ -38,10 +39,16 @@ namespace WorkLifeBalance.Pages
         {
             DetectedWindows = WindowOptionsHelper.GetBackgroundApplicationsName();
         }
+
         private void ReturnToPreviousPage(object sender, RoutedEventArgs e)
         {
            SecondWindow.OpenSecondWindow(SecondWindowType.Settings);
 
+        }
+
+        public override async Task ClosePageAsync()
+        {
+            await DataHandler.Instance.SaveData();
         }
 
         private void SelectProcess(object sender, RoutedEventArgs e)

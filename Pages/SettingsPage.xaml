@@ -171,17 +171,6 @@
                         </StackPanel>
                     </Border >
 
-                    <Button Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
-                            Template="{Binding Source= {StaticResource SlightRoundedBtnTemp}}"
-                            Width="80"
-                            Height="23"
-                            Foreground="White"
-                            FontWeight="Bold"
-                            FontSize="17"
-                            Name="SaveBtn"
-                            TextBlock.TextAlignment="Center"
-                            Content="Save" Click="SaveSettings"/>
-
                 </StackPanel>
             </ScrollViewer>
         </Border>

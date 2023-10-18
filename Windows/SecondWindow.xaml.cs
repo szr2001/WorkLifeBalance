@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using WorkLifeBalance.Pages;
@@ -14,7 +15,8 @@ namespace WorkLifeBalance.Windows
 
         public SecondWindowType WindowType;
 
-        private SecondWindowPageBase? WindowPage;
+        private SecondWindowPageBase WindowPage;
+
         public SecondWindow()
         {
             if (Instance != null)
@@ -24,20 +26,19 @@ namespace WorkLifeBalance.Windows
             }
             InitializeComponent();
         }
+
         public static void OpenSecondWindow(SecondWindowType Type, object? args = null)
         {
-            if (Instance != null && Instance.WindowType == Type)
-            {
-                Instance.Close();
-                Instance = null;
-                return;
-            }
-
-            Instance = new SecondWindow();
-            Instance.WindowType = Type;
-            Instance.InitializeWindowType(args);
-            Instance.Show();
+            _ = OpenWindow(Type,args);
         }
+
+        public void CloseWindowButton(object sender, RoutedEventArgs e)
+        {
+            CloseBtn.IsEnabled = false;
+
+            _ = CloseWindow();
+        }
+
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
@@ -72,8 +73,9 @@ namespace WorkLifeBalance.Windows
             WindowTitleT.Text = WindowPage.pageNme;
         }
 
-        public void CloseWindowButton(object sender, RoutedEventArgs e)
+        private async Task CloseWindow()
         {
+            await WindowPage.ClosePageAsync();
             Instance = null;
             Close();
         }
@@ -83,6 +85,24 @@ namespace WorkLifeBalance.Windows
             {
                 DragMove();
             }
+        }
+
+        private static async Task OpenWindow(SecondWindowType Type, object? args = null)
+        {
+            if (Instance != null && Instance.WindowType == Type)
+            {
+                await Instance.CloseWindow();
+                return;
+            }
+            if (Instance != null)
+            {
+                await Instance.CloseWindow();
+            }
+
+            Instance = new SecondWindow();
+            Instance.WindowType = Type;
+            Instance.InitializeWindowType(args);
+            Instance.Show();
         }
     }
 
