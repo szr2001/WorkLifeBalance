@@ -49,7 +49,7 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border Margin="5"
-                                            Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
+                                            Background="{Binding Source={StaticResource WLFBLightPurple}}"
                                             CornerRadius="15">
                                         <Button Margin="5"
                                                 Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"

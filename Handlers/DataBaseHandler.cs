@@ -35,9 +35,12 @@ namespace WorkLifeBalance.HandlerClasses
                     {
                         try
                         {
-                            string sql = @"INSERT OR REPLACE INTO WorkingWindows (WorkingStateWindows)
-                                           VALUES (@WindowValue)";
+                            string sql = @"DELETE FROM WorkingWindows";
 
+                            await connection.ExecuteAsync(sql);
+
+                            sql = @"INSERT OR REPLACE INTO WorkingWindows (WorkingStateWindows)
+                                           VALUES (@WindowValue)";
                             await connection.ExecuteAsync(sql, autod.WorkingStateWindows.Select(value => new { WindowValue = value }));
 
                             sql = @"INSERT OR REPLACE INTO Activity (Date,Process,TimeSpent)
@@ -405,9 +408,7 @@ namespace WorkLifeBalance.HandlerClasses
 
 
                         //wait for return, and pass the return to a Residence class
-                        var res = await connection.QueryAsync<DayData>(sql,new {Pattern = $"{Month}%{year}" });
-                        //set the return as a list
-                        ReturnDays = res.ToList();
+                        ReturnDays = (await connection.QueryAsync<DayData>(sql, new { Pattern = $"{Month}%{year}" })).ToList();
 
                     }
                     catch (Exception ex)

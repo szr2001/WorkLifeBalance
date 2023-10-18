@@ -155,17 +155,17 @@ namespace WorkLifeBalance.Pages
 
         private void SeePreviousMonth(object sender, RoutedEventArgs e)
         {
-            SecondWindow.OpenSecondWindow(SecondWindowType.ViewDays,2);
+            SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays,2);
         }
 
         private void SeeCurrentMonth(object sender, RoutedEventArgs e)
         {
-            SecondWindow.OpenSecondWindow(SecondWindowType.ViewDays, 1);
+            SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, 1);
         }
 
         private void SeeAllDays(object sender, RoutedEventArgs e)
         {
-            SecondWindow.OpenSecondWindow(SecondWindowType.ViewDays, 0);
+            SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, 0);
         }
         private int ConvertTimeOnlyToSeconds(TimeOnly time)
         {

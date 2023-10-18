@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -24,41 +25,58 @@ namespace WorkLifeBalance.Pages
     /// </summary>
     public partial class BackgroundWindowsViewPage : SecondWindowPageBase
     {
-        public List<string> DetectedWindows { get; set; } = new();
-        public List<string> SelectedWindows { get; set; } = new();
+        public ObservableCollection<string> DetectedWindows { get; set; } = new();
+        public ObservableCollection<string> SelectedWindows { get; set; } = new();
         public BackgroundWindowsViewPage(object? args) : base(args)
         {
-            RequiredWindowSize = new Vector2(710, 570);
+            RequiredWindowSize = new Vector2(700, 570);
             pageNme = "Automatic Customize";
-            DetectBackgroundWindows();
+            InitializeProcessNames();
             DataContext = this;
             InitializeComponent();
         }
 
-        private void DetectBackgroundWindows()
+        private void InitializeProcessNames()
         {
-            DetectedWindows = WindowOptionsHelper.GetBackgroundApplicationsName();
+            SelectedWindows = new ObservableCollection<string>(DataHandler.Instance.AutoChangeData.WorkingStateWindows);
+            DetectedWindows = new ObservableCollection<string>(WindowOptionsHelper.GetBackgroundApplicationsName());
+            DetectedWindows = new ObservableCollection<string>(DetectedWindows.Except(SelectedWindows));
         }
 
         private void ReturnToPreviousPage(object sender, RoutedEventArgs e)
         {
-           SecondWindow.OpenSecondWindow(SecondWindowType.Settings);
+           SecondWindow.RequestSecondWindow(SecondWindowType.Settings);
 
         }
 
         public override async Task ClosePageAsync()
         {
+            DataHandler.Instance.AutoChangeData.WorkingStateWindows = SelectedWindows.ToArray();
             await DataHandler.Instance.SaveData();
         }
 
         private void SelectProcess(object sender, RoutedEventArgs e)
         {
-            //add to list
+            Button button = (Button)sender;
+            TextBlock textBlock = (TextBlock)button.Content;
+
+            if (DetectedWindows.Contains(textBlock.Text))
+            {
+                DetectedWindows.Remove(textBlock.Text);
+                SelectedWindows.Add(textBlock.Text);
+            }
         }
 
         private void DeselectProcess(object sender, RoutedEventArgs e)
         {
-            //remove from list
+            Button button = (Button)sender;
+            TextBlock textBlock = (TextBlock)button.Content;
+
+            if (SelectedWindows.Contains(textBlock.Text))
+            {
+                SelectedWindows.Remove(textBlock.Text);
+                DetectedWindows.Add(textBlock.Text);
+            }
         }
     }
 }

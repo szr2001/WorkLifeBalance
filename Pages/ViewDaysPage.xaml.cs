@@ -74,7 +74,7 @@ namespace WorkLifeBalance.Pages
 
         private void ReturnToPreviousPage(object sender, RoutedEventArgs e)
         {
-            SecondWindow.OpenSecondWindow(SecondWindowType.ViewData);
+            SecondWindow.RequestSecondWindow(SecondWindowType.ViewData);
         }
     }
 }

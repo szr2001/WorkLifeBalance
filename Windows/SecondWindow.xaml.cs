@@ -27,7 +27,7 @@ namespace WorkLifeBalance.Windows
             InitializeComponent();
         }
 
-        public static void OpenSecondWindow(SecondWindowType Type, object? args = null)
+        public static void RequestSecondWindow(SecondWindowType Type, object? args = null)
         {
             _ = OpenWindow(Type,args);
         }

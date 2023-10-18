@@ -185,7 +185,7 @@ namespace WorkLifeBalance.Pages
 
         private void ConfigureAutoDetectBtn(object sender, RoutedEventArgs e)
         {
-            SecondWindow.OpenSecondWindow(SecondWindowType.BackgroundProcesses);
+            SecondWindow.RequestSecondWindow(SecondWindowType.BackgroundProcesses);
         }
 
         private void ToggleAutoDetectWorking(object sender, RoutedEventArgs e)

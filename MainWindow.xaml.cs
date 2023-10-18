@@ -159,12 +159,12 @@ namespace WorkLifeBalance
 
         private void OpenViewDataWindow(object sender, RoutedEventArgs e)
         {
-            SecondWindow.OpenSecondWindow(SecondWindowType.ViewData);
+            SecondWindow.RequestSecondWindow(SecondWindowType.ViewData);
         }
 
         private void OpenOptionsWindow(object sender, RoutedEventArgs e)
         {
-            SecondWindow.OpenSecondWindow(SecondWindowType.Settings);
+            SecondWindow.RequestSecondWindow(SecondWindowType.Settings);
         }
 
         private async void CloseApp(object sender, RoutedEventArgs e)
