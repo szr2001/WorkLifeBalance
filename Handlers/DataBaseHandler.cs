@@ -43,6 +43,7 @@ namespace WorkLifeBalance.HandlerClasses
                                            VALUES (@WindowValue)";
                             await connection.ExecuteAsync(sql, autod.WorkingStateWindows.Select(value => new { WindowValue = value }));
 
+                            //problem maybe
                             sql = @"INSERT OR REPLACE INTO Activity (Date,Process,TimeSpent)
                                     VALUES (@Date,@Process,@TimeSpent)";
 

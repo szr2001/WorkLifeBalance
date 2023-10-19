@@ -25,6 +25,7 @@ namespace WorkLifeBalance.Handlers
         public delegate void TickEvent();
 
         public event TickEvent? OnTimerTick;
+        public TimmerState AppTimmerState = TimmerState.Resting;
 
         private CancellationTokenSource CancelTick = new();
 

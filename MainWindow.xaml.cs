@@ -81,11 +81,17 @@ namespace WorkLifeBalance
             TimeHandler.Instance.OnTimerTick += TimeTrackerHandler.Instance.UpdateSpentTime;
             TimeHandler.Instance.OnTimerTick += DataHandler.Instance.TriggerSaveData;
 
+            if (DataHandler.Instance.Settings.AutoDetectWorkingC)
+            {
+                TimeHandler.Instance.OnTimerTick += AutomaticStateChangerHandler.Instance.TriggerWorkDetect;
+                TimeHandler.Instance.OnTimerTick += AutomaticStateChangerHandler.Instance.TickTime;
+            }
+
             TimeTrackerHandler.Instance.OnSpentTimeChange += UpdateUI;
 
             TimeHandler.Instance.StartTick();
 
-            SetAutoDetect();
+            CheckAutoDetectWorking();
 
             DateT.Text = $"Today: {DataHandler.Instance.TodayData.DateC.ToString("MM/dd/yyyy")}";
         }
@@ -113,25 +119,40 @@ namespace WorkLifeBalance
             }
         }
 
-        public void SetAppState(SolidColorBrush backgroundcolor, ImageSource image,TimmerState state)
+        public void SetAppState(TimmerState state)
         {
-            ToggleBtn.Background = backgroundcolor;
-            ToggleRecordingImage.Source = image;
-            DataHandler.Instance.AppTimmerState = state;
-        }
+            switch (state)
+            {
+                case TimmerState.Working:
+                    if (!DataHandler.Instance.Settings.AutoDetectWorkingC)
+                    {
+                        ToggleBtn.Background = LightPurpleColor;
+                        ToggleRecordingImage.Source = WorkImg;
+                    }
+                    break;
 
+                case TimmerState.Resting:
+                    if (!DataHandler.Instance.Settings.AutoDetectWorkingC)
+                    {
+                        ToggleBtn.Background = LightBlueColor;
+                        ToggleRecordingImage.Source = RestImg;
+                    }
+                    break;
+            }
+            TimeHandler.Instance.AppTimmerState = state;
+        }
         private void ToggleState(object sender, RoutedEventArgs e)
         {
             if (!DataHandler.Instance.IsAppReady || DataHandler.Instance.IsClosingApp) return;
 
-            switch (DataHandler.Instance.AppTimmerState)
+            switch (TimeHandler.Instance.AppTimmerState)
             {
                 case TimmerState.Working:
-                    SetAppState(LightBlueColor, RestImg,TimmerState.Resting);
+                    SetAppState(TimmerState.Resting);
                     break;
 
                 case TimmerState.Resting:
-                    SetAppState(LightPurpleColor, WorkImg, TimmerState.Working);
+                    SetAppState(TimmerState.Working);
                     break;
             }
         }
@@ -142,18 +163,20 @@ namespace WorkLifeBalance
             ElapsedRestT.Text = DataHandler.Instance.TodayData.RestedAmmountC.ToString("HH:mm:ss");
         }
 
-        public void SetAutoDetect()
+        public void CheckAutoDetectWorking()
         {
             bool value = DataHandler.Instance.Settings.AutoDetectWorkingC;
             ToggleBtn.IsEnabled = !value;
 
+            ToggleBtn.Background = OceanBlue;
+            ToggleRecordingImage.Source = AutomaticImg;
             if (value)
             {
-                SetAppState(OceanBlue,AutomaticImg,TimmerState.Resting);
+                SetAppState(TimmerState.Resting);
             }
             else
             {
-                SetAppState(LightBlueColor, RestImg, TimmerState.Resting);
+                SetAppState(TimmerState.Resting);
             }
         }
 
@@ -186,6 +209,11 @@ namespace WorkLifeBalance
             {
                 DragMove();
             }
+        }
+
+        private void HideWindow(object sender,MouseButtonEventArgs e)
+        {
+            Visibility = Visibility.Collapsed;
         }
 
         private void OpenSideBar(object sender, MouseEventArgs e)

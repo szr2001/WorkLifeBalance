@@ -203,13 +203,13 @@ namespace WorkLifeBalance.Pages
         {
                 AutoToggleWorkingPanel.Height = 80;
             DataHandler.Instance.Settings.AutoDetectWorkingC = (bool)AutoDetectWorkingBtn.IsChecked;
-            MainWindow.instance.SetAutoDetect();
+            MainWindow.instance.CheckAutoDetectWorking();
         }
         private void ContractAutoDetectArea()
         {
                 AutoToggleWorkingPanel.Height = 0;
             DataHandler.Instance.Settings.AutoDetectWorkingC = (bool)AutoDetectWorkingBtn.IsChecked;
-            MainWindow.instance.SetAutoDetect();
+            MainWindow.instance.CheckAutoDetectWorking();
         }
     }
 }

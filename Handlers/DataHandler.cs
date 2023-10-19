@@ -26,10 +26,6 @@ namespace WorkLifeBalance.Handlers
         public bool IsClosingApp = false;
         public bool IsAppReady = false;
 
-        DateOnly TodayDate = DateOnly.FromDateTime(DateTime.Now);
-
-        public TimmerState AppTimmerState = TimmerState.Resting;
-
         public DayData TodayData = new();
         public AppSettings Settings = new();
         public AutoStateChangeData AutoChangeData = new();
@@ -70,9 +66,10 @@ namespace WorkLifeBalance.Handlers
 
             OnLoading?.Invoke();
 
-            TodayData = await DataBaseHandler.ReadDay(TodayDate.ToString("MMddyyyy"));
+            //TodayData.DateC might not exist yet. if it gives an error try creating a new TodayDate.Now
+            TodayData = await DataBaseHandler.ReadDay(TodayData.DateC.ToString("MMddyyyy"));
             Settings = await DataBaseHandler.ReadSettings();
-            AutoChangeData = await DataBaseHandler.ReadAutoStateData(TodayDate.ToString("MMddyyyy"));
+            AutoChangeData = await DataBaseHandler.ReadAutoStateData(TodayData.DateC.ToString("MMddyyyy"));
 
             OnLoaded?.Invoke();
 

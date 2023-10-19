@@ -30,7 +30,7 @@ namespace WorkLifeBalance.Handlers
 
         public void UpdateSpentTime()
         {
-            switch (DataHandler.Instance.AppTimmerState)
+            switch (TimeHandler.Instance.AppTimmerState)
             {
                 case TimmerState.Working:
                     DataHandler.Instance.TodayData.WorkedAmmountC = DataHandler.Instance.TodayData.WorkedAmmountC.Add(OneSec);
@@ -41,20 +41,6 @@ namespace WorkLifeBalance.Handlers
                     break;
             }
             OnSpentTimeChange?.Invoke();
-
-            //temp
-            try
-            {
-                IntPtr foregroundWindowHandle = WindowOptionsHelper.GetForegroundWindow();
-                string applicationName = WindowOptionsHelper.GetApplicationName(foregroundWindowHandle);
-
-                Console.WriteLine($"Application: {applicationName}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            //temp
         }
     }
 

@@ -64,7 +64,7 @@ namespace WorkLifeBalance.HandlerClasses
             return windowTitle.ToString();
         }
 
-        public static string GetApplicationName(IntPtr hWnd)
+        public static string GetProcessname(IntPtr hWnd)
         {
             GetWindowThreadProcessId(hWnd, out uint processId);
             Process process = Process.GetProcessById((int)processId);
@@ -87,7 +87,7 @@ namespace WorkLifeBalance.HandlerClasses
 
             foreach (IntPtr windowId in windows)
             {
-                Appnames.Add(GetApplicationName(windowId));
+                Appnames.Add(GetProcessname(windowId));
             }
 
             return Appnames.ToList();
