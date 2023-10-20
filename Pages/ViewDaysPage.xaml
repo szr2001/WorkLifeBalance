@@ -17,11 +17,9 @@
                     Margin="15,15,15,0"
                     Background="{Binding Source={StaticResource WLFBOceanBlue}}">
                 <ScrollViewer VerticalScrollBarVisibility="Hidden">
-                    <Grid>
                     <ItemsControl ItemsSource="{Binding LoadedData}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <!-- Use a WrapPanel to automatically arrange items in rows -->
                                 <WrapPanel Orientation="Horizontal"
                                            Margin="5"/>
                             </ItemsPanelTemplate>
@@ -65,12 +63,13 @@
                                                 <Button Margin="6"
                                                         Width="50"
                                                         Content="Info"
+                                                        ToolTip="See Details"
                                                         TextBlock.FontSize="15"
                                                         TextBlock.Foreground="White"
                                                         TextBlock.FontWeight="Bold"
                                                         Style="{Binding Source={StaticResource OceanBlueRoundedBtnStyle}}"
                                                         Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}" 
-                                                        Click="ReturnToPreviousPage"/>
+                                                        Click="ViewDay"/>
                                             </StackPanel>
 
                                     </Border>
@@ -78,7 +77,6 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                </Grid>
                 </ScrollViewer>
             </Border>
             <Grid Height="55"

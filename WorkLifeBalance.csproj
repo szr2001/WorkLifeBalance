@@ -19,6 +19,7 @@
     <None Remove="Assets\Automat.png" />
     <None Remove="Assets\Cancel.png" />
     <None Remove="Assets\DataSheet.png" />
+    <None Remove="Assets\Minimize.png" />
     <None Remove="Assets\Rest.png" />
     <None Remove="Assets\Settings.png" />
     <None Remove="Assets\Work.png" />
@@ -50,6 +51,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\DataSheet.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Minimize.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Rest.png">

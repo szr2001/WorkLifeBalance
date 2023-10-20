@@ -26,23 +26,24 @@ namespace WorkLifeBalance.Pages
     public partial class ViewDaysPage : SecondWindowPageBase
     {
         public DayData[] LoadedData { get; set; }
+
+        //use this to request the correct page when leaving the DayActivity page
+        private int LoadedPageType = 0;
         public ViewDaysPage(object? args) : base(args)
         {
             InitializeComponent();
             RequiredWindowSize = new Vector2(710, 570);
-
             if(args != null)
             {
                 if(args is int loadedpagetype)
                 {
                     _ = RequiestData(loadedpagetype);
-
-                    DataContext = this;
+                    LoadedPageType = loadedpagetype;
                     return;
                 }
             }
 
-            SecondWindow.Instance.Close();
+           MainWindow.ShowErrorBox("Error ViewDaysPage", "Requested ViewDays Page with no/wrong arguments", true);
         }
 
         private async Task RequiestData(int requiestedDataType)
@@ -70,11 +71,17 @@ namespace WorkLifeBalance.Pages
                     break;
             }
             LoadedData = Days.ToArray();
+            DataContext = this;
         }
 
         private void ReturnToPreviousPage(object sender, RoutedEventArgs e)
         {
             SecondWindow.RequestSecondWindow(SecondWindowType.ViewData);
+        }
+
+        private void ViewDay(object sender, RoutedEventArgs e)
+        {
+            SecondWindow.RequestSecondWindow(SecondWindowType.ViewDayActivity,LoadedPageType);
         }
     }
 }

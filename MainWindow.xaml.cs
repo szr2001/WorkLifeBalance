@@ -211,9 +211,9 @@ namespace WorkLifeBalance
             }
         }
 
-        private void HideWindow(object sender,MouseButtonEventArgs e)
+        private void HideWindow(object sender, RoutedEventArgs e)
         {
-            Visibility = Visibility.Collapsed;
+            WindowState = WindowState.Minimized;
         }
 
         private void OpenSideBar(object sender, MouseEventArgs e)

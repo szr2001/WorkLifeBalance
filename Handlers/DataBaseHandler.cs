@@ -141,7 +141,60 @@ namespace WorkLifeBalance.HandlerClasses
             //returns count
             return retrivedSettings;
         }
+        public static async Task<List<ProcessActivity>> ReadDayActivity(string date)
+        {
+            //wait for a time when no methods writes now to the database
+            await _semaphore.WaitAsync();
+            //if no one writes continue
 
+            //list of filtered residences
+            List<ProcessActivity> ReturnActivity = new();
+
+            try
+            {
+                //write to console it started reading database
+                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+                {
+                    //open connection
+                    await connection.OpenAsync();
+
+                    try
+                    {
+                        //depending on passed arguments chose between 2 sql statements
+                        string sql = @$"SELECT * from Activity 
+                                     WHERE Date Like @Date";
+
+
+                        //wait for return, and pass the return to a Residence class
+                        ReturnActivity = (await connection.QueryAsync<ProcessActivity>(sql, new { Date = date })).ToList();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //close app if failed
+                        MainWindow.instance.MainDispatcher.Invoke(() =>
+                        {
+                            MainWindow.ShowErrorBox("Failed to read from database", $"This can be caused by a missing database file: {ex.Message}");
+                        });
+                    }
+                    finally
+                    {
+                        await connection.CloseAsync();
+                    }
+                }
+            }
+            finally
+            {
+                //release semaphore so other methods could run
+                _semaphore.Release();
+            }
+            foreach (ProcessActivity day in ReturnActivity)
+            {
+                day.ConvertSaveDataToUsableData();
+            }
+            //return filtered res
+            return ReturnActivity;
+        }
         public static async Task WriteSettings(AppSettings sett)
         {
             //wait for a time when no methods writes now to the database
@@ -416,6 +469,7 @@ namespace WorkLifeBalance.HandlerClasses
                         }
                         else
                         {
+                            //problem with Pattern
                             sql = @$"SELECT * from Days 
                                      WHERE Date Like Pattern";
                         }
