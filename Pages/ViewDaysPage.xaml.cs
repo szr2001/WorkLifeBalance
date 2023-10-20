@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Shell;
 using WorkLifeBalance.Data;
 using WorkLifeBalance.HandlerClasses;
 using WorkLifeBalance.Handlers;
@@ -53,7 +54,6 @@ namespace WorkLifeBalance.Pages
             DateOnly previousDate = DateOnly.FromDateTime(previousMonthDateTime);
 
             List<DayData> Days = new();
-
             switch (requiestedDataType)
             {
                 //call database
@@ -81,7 +81,34 @@ namespace WorkLifeBalance.Pages
 
         private void ViewDay(object sender, RoutedEventArgs e)
         {
-            SecondWindow.RequestSecondWindow(SecondWindowType.ViewDayActivity,LoadedPageType);
+            Button button = (Button)sender;
+            DayData ClickedDay = new();
+
+            StackPanel ButtonParent = FindParent<StackPanel>(button);
+
+            TextBlock tempblock = (TextBlock)ButtonParent.Children[1];
+            ClickedDay.WorkedAmmount = tempblock.Text.Replace(":","");
+
+            tempblock = (TextBlock)ButtonParent.Children[3];
+            ClickedDay.RestedAmmount = tempblock.Text.Replace(":", "");
+
+            tempblock = (TextBlock)ButtonParent.Children[4];
+            ClickedDay.Date = tempblock.Text.Replace("/","");
+
+            ClickedDay.ConvertSaveDataToUsableData();
+
+            SecondWindow.RequestSecondWindow(SecondWindowType.ViewDayActivity,(LoadedPageType,ClickedDay));
+        }
+
+        private T FindParent<T>(DependencyObject child) where T : DependencyObject
+        {
+            DependencyObject parentObject = VisualTreeHelper.GetParent(child);
+
+            if (parentObject == null)
+                return null;
+
+            T parent = parentObject as T;
+            return parent ?? FindParent<T>(parentObject);
         }
     }
 }

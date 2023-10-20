@@ -55,21 +55,21 @@
                                                        FontWeight="Bold"
                                                        FontSize="12"
                                                        Foreground="White"/>
-                                            <TextBlock Text="{Binding DateC}"
+                                            <TextBlock Text="{Binding DateC, StringFormat=MM/dd/yyyy}"
                                                        TextAlignment="Center"
                                                        FontWeight="Bold"
                                                        FontSize="15"
                                                        Foreground="White"/>
-                                                <Button Margin="6"
-                                                        Width="50"
-                                                        Content="Info"
-                                                        ToolTip="See Details"
-                                                        TextBlock.FontSize="15"
-                                                        TextBlock.Foreground="White"
-                                                        TextBlock.FontWeight="Bold"
-                                                        Style="{Binding Source={StaticResource OceanBlueRoundedBtnStyle}}"
-                                                        Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}" 
-                                                        Click="ViewDay"/>
+                                            <Button Margin="6"
+                                                    Width="50"
+                                                    Content="Info"
+                                                    ToolTip="See Details"
+                                                    TextBlock.FontSize="15"
+                                                    TextBlock.Foreground="White"
+                                                    TextBlock.FontWeight="Bold"
+                                                    Style="{Binding Source={StaticResource OceanBlueRoundedBtnStyle}}"
+                                                    Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}" 
+                                                    Click="ViewDay"/>
                                             </StackPanel>
 
                                     </Border>
@@ -85,6 +85,10 @@
                     <ColumnDefinition Width="130"/>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Button Margin="15,8,15,5"
                         Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
@@ -96,6 +100,52 @@
                                Margin="0,0,0,4"
                                Foreground="White"/>
                 </Button>
+                <StackPanel Orientation="Horizontal"
+                            Grid.Column="3"
+                            Grid.ColumnSpan="4">
+                    <TextBox Height="30"
+                             TextAlignment="Center"
+                             TextBlock.FontSize="20"
+                             MaxLength="2"
+                             TextBlock.FontWeight="Bold"
+                             Margin="15,0,15,0"
+                             Text="00"
+                             Width="50"
+                             Name="MonthB"/>
+
+                    <TextBox Height="30"
+                             TextAlignment="Center"
+                             TextBlock.FontSize="20"
+                             MaxLength="2"
+                             TextBlock.FontWeight="Bold"
+                             Margin="15,0,15,0"
+                             Text="00"
+                             Width="50"
+                             Name="DayB"/>
+                    
+                    <TextBox Height="30"
+                             TextAlignment="Center"
+                             TextBlock.FontSize="20"
+                             MaxLength="4"
+                             TextBlock.FontWeight="Bold"
+                             Margin="15,0,15,0"
+                             Width="50"
+                             Text="0000"
+                             Name="YearB"/>
+                    
+                    <Button Margin="5"
+                            Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
+                            Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}" Click="ReturnToPreviousPage">
+                        
+                        <TextBlock Text="Search"
+                                   TextAlignment="Center"
+                                   FontWeight="Bold"
+                                   FontSize="25"
+                                   Margin="5"
+                                   Foreground="White"/>
+                    </Button>
+                    
+                </StackPanel>
             </Grid>
         </StackPanel>
     </Border>

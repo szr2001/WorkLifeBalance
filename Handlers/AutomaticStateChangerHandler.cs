@@ -38,10 +38,6 @@ namespace WorkLifeBalance.Handlers
             {
                 TimeOnly IncreasedTimeSpan = DataHandler.Instance.AutoChangeData.ActivitiesC[ActiveWindow].Add(OneSec);
                 DataHandler.Instance.AutoChangeData.ActivitiesC[ActiveWindow] = IncreasedTimeSpan;
-
-                Console.WriteLine(DataHandler.Instance.AutoChangeData.ActivitiesC.Count);
-                Console.WriteLine(ActiveWindow);
-                Console.WriteLine(DataHandler.Instance.AutoChangeData.ActivitiesC[ActiveWindow].ToString("HHmmss"));
             }
             catch
             {
@@ -76,8 +72,6 @@ namespace WorkLifeBalance.Handlers
         private void CheckStateChange()
         {
             bool IsFocusingOnWorkingWindow = DataHandler.Instance.AutoChangeData.WorkingStateWindows.Contains(ActiveWindow);
-
-            Console.WriteLine(ActiveWindow);
 
             switch (TimeHandler.Instance.AppTimmerState)
             {

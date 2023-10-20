@@ -31,29 +31,33 @@ namespace WorkLifeBalance.Pages
         //use args to pass date
         DateOnly TodayDate = DataHandler.Instance.TodayData.DateC;
         private int LoadedPageType = 0;
+        private DayData LoadedDayData = new();
         public ViewDayDetailsPage(object? args) : base(args)
         {
             InitializeComponent();
-            pageNme = $"{TodayDate.ToString("MM/dd/yyyy")} Activity";
-            _ = RequiestData();
-            RequiredWindowSize = new Vector2(330, 440);
-
+            RequiredWindowSize = new Vector2(430, 440);
             if (args != null)
             {
-                if (args is int loadedpagetype)
+                if (args is (int loadedpagetype, DayData day))
                 {
-                    _ = RequiestData();
                     LoadedPageType = loadedpagetype;
+                    LoadedDayData = day;
+                    pageNme = $"{LoadedDayData.DateC.ToString("MM/dd/yyyy")} Activity";
+                    _ = RequiestData();
                     return;
                 }
             }
+
 
             MainWindow.ShowErrorBox("Error ViewDayDetails", "Requested ViewDayDetails Page with no/wrong arguments", true);
         }
 
         private async Task RequiestData()
         {
-            activities = (await DataBaseHandler.ReadDayActivity(TodayDate.ToString("MMddyyyy"))).ToArray();
+            activities = (await DataBaseHandler.ReadDayActivity(LoadedDayData.Date)).ToArray();
+
+            WorkedT.Text = LoadedDayData.WorkedAmmountC.ToString("HH:mm:ss");
+            RestedT.Text = LoadedDayData.RestedAmmountC.ToString("HH:mm:ss");
             DataContext = this;
         }
 

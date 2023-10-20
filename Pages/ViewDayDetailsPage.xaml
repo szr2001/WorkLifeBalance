@@ -5,74 +5,127 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WorkLifeBalance.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="370" d:DesignWidth="300"
+      d:DesignHeight="370" d:DesignWidth="400"
       Title="ViewDayDetailsPage">
 
     <Border CornerRadius="15"
             Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
-
-        <StackPanel Orientation="Vertical">
-            <Border Height="300"
-                    CornerRadius="20"
-                    Margin="10,10,10,0"
-                    Background="{Binding Source={StaticResource WLFBOceanBlue}}">
-                <ScrollViewer VerticalScrollBarVisibility="Hidden"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center">
-                        <ItemsControl ItemsSource="{Binding activities}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel Orientation="Vertical"
-                                               Margin="5"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Margin="5"
-                                            Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
-                                            CornerRadius="15">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Vertical"
+                        Grid.Row="0"
+                        Grid.RowSpan="6"
+                        Grid.Column="3"
+                        Grid.ColumnSpan="5">
+                <Border Height="300"
+                        CornerRadius="20"
+                        Margin="10,10,10,0"
+                        Background="{Binding Source={StaticResource WLFBOceanBlue}}">
+                    <ScrollViewer VerticalScrollBarVisibility="Hidden"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center">
+                            <ItemsControl ItemsSource="{Binding activities}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Vertical"
+                                                   Margin="5"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
                                         <Border Margin="5"
-                                                Background="{Binding Source={StaticResource WLFBOceanBlue}}"
+                                                Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
                                                 CornerRadius="15">
-                                            <StackPanel Orientation="Vertical">
-                                                <TextBlock Text="{Binding Process}"
-                                                           TextAlignment="Center"
-                                                           Margin="5"
-                                                           FontWeight="Bold"
-                                                           FontSize="20"
-                                                           Foreground="White"/>
-                                                <TextBlock Text="{Binding TimeSpentC, StringFormat=HH:mm:ss}"
-                                                           TextAlignment="Center"
-                                                           FontWeight="Bold"
-                                                           FontSize="18"
-                                                           Foreground="White"/>
-                                            </StackPanel>
+                                            <Border Margin="5"
+                                                    Background="{Binding Source={StaticResource WLFBOceanBlue}}"
+                                                    CornerRadius="15">
+                                                <StackPanel Orientation="Vertical">
+                                                    <TextBlock Text="{Binding Process}"
+                                                               TextAlignment="Center"
+                                                               Margin="5"
+                                                               FontWeight="Bold"
+                                                               FontSize="20"
+                                                               Foreground="White"/>
+                                                    <TextBlock Text="{Binding TimeSpentC, StringFormat=HH:mm:ss}"
+                                                               TextAlignment="Center"
+                                                               FontWeight="Bold"
+                                                               FontSize="18"
+                                                               Foreground="White"/>
+                                                </StackPanel>
 
+                                            </Border>
                                         </Border>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                </ScrollViewer>
-            </Border>
-            <Grid Height="55"
-                  Margin="15,0,15,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="130"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Button Margin="15,8,15,5"
-                        Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
-                        Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}" Click="BackToViewDaysPage" >
-                    <TextBlock Text="Back"
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+            </StackPanel>
+            <Border CornerRadius="20"
+                    Height="110"
+                    Margin="10,-20,10,0"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.RowSpan="3"
+                    Grid.ColumnSpan="3"
+                    Background="{Binding Source={StaticResource WLFBOceanBlue}}">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Worked:"
                                TextAlignment="Center"
                                FontWeight="Bold"
-                               FontSize="25"
-                               Margin="0,0,0,4"
+                               FontSize="23"
                                Foreground="White"/>
-                </Button>
-            </Grid>
-        </StackPanel>
+                    <TextBlock Text="00:00:00"
+                               Name="WorkedT"
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               FontSize="16"
+                               Foreground="White"/>
+                    <TextBlock Text="Rested:"
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               FontSize="23"
+                               Foreground="White"/>
+                    <TextBlock Text="00:00:00"
+                               Name="RestedT"
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               FontSize="16"
+                               Foreground="White"/>
+
+                </StackPanel>
+            </Border>
+            <Button Margin="15,8,15,5"
+                    Grid.Row="6"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
+                    Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}" Click="BackToViewDaysPage" >
+                    <TextBlock Text="Back"
+                                   TextAlignment="Center"
+                                   FontWeight="Bold"
+                                   FontSize="25"
+                                   Margin="0,0,0,4"
+                                   Foreground="White"/>
+            </Button>
+        </Grid>
     </Border>
 </local:SecondWindowPageBase>
