@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,16 +24,29 @@ namespace WorkLifeBalance.Handlers
             }
         }
 
-        public TimeOnly CurrentTime = new();
         public string ActiveWindow = "";
 
         private TimeSpan OneSec = new TimeSpan(0, 0, 1);
 
         private bool IsAutoWorkDetectionTriggered = false;
 
-        public void TickTime()
+        public void RecordActivity()
         {
-            CurrentTime  = CurrentTime.Add(OneSec);
+            if (string.IsNullOrEmpty(ActiveWindow)) return;
+
+            try
+            {
+                TimeOnly IncreasedTimeSpan = DataHandler.Instance.AutoChangeData.ActivitiesC[ActiveWindow].Add(OneSec);
+                DataHandler.Instance.AutoChangeData.ActivitiesC[ActiveWindow] = IncreasedTimeSpan;
+
+                Console.WriteLine(DataHandler.Instance.AutoChangeData.ActivitiesC.Count);
+                Console.WriteLine(ActiveWindow);
+                Console.WriteLine(DataHandler.Instance.AutoChangeData.ActivitiesC[ActiveWindow].ToString("HHmmss"));
+            }
+            catch
+            {
+                DataHandler.Instance.AutoChangeData.ActivitiesC.Add(ActiveWindow,new TimeOnly());
+            }
         }
         public async void TriggerWorkDetect()
         {
@@ -45,9 +59,10 @@ namespace WorkLifeBalance.Handlers
             try
             {
                 IntPtr foregroundWindowHandle = WindowOptionsHelper.GetForegroundWindow();
+                
                 ActiveWindow = WindowOptionsHelper.GetProcessname(foregroundWindowHandle);
 
-                CalculateAutomaticDetection();
+                CheckStateChange();
             }
             catch (Exception ex)
             {
@@ -58,7 +73,7 @@ namespace WorkLifeBalance.Handlers
             IsAutoWorkDetectionTriggered = false;
         }
 
-        private void CalculateAutomaticDetection()
+        private void CheckStateChange()
         {
             bool IsFocusingOnWorkingWindow = DataHandler.Instance.AutoChangeData.WorkingStateWindows.Contains(ActiveWindow);
 

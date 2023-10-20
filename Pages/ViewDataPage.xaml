@@ -145,8 +145,8 @@
                                    Foreground="White"/>
                     </Border>
                     <Border Height="130"
-                            Margin="15,0,10,5"
-                            CornerRadius="15"
+                            Margin="15,-1,10,5"
+                            CornerRadius="0,0,15,15"
                             Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
                         <StackPanel Orientation="Vertical">
                             <Button Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"

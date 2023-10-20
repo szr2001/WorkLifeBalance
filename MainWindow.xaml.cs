@@ -84,7 +84,7 @@ namespace WorkLifeBalance
             if (DataHandler.Instance.Settings.AutoDetectWorkingC)
             {
                 TimeHandler.Instance.OnTimerTick += AutomaticStateChangerHandler.Instance.TriggerWorkDetect;
-                TimeHandler.Instance.OnTimerTick += AutomaticStateChangerHandler.Instance.TickTime;
+                TimeHandler.Instance.OnTimerTick += AutomaticStateChangerHandler.Instance.RecordActivity;
             }
 
             TimeTrackerHandler.Instance.OnSpentTimeChange += UpdateUI;

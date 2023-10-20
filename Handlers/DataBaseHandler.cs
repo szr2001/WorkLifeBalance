@@ -39,15 +39,28 @@ namespace WorkLifeBalance.HandlerClasses
 
                             await connection.ExecuteAsync(sql);
 
-                            sql = @"INSERT OR REPLACE INTO WorkingWindows (WorkingStateWindows)
-                                           VALUES (@WindowValue)";
+                            sql = @"INSERT INTO WorkingWindows (WorkingStateWindows)
+                                    VALUES (@WindowValue)";
+
                             await connection.ExecuteAsync(sql, autod.WorkingStateWindows.Select(value => new { WindowValue = value }));
 
-                            //problem maybe
-                            sql = @"INSERT OR REPLACE INTO Activity (Date,Process,TimeSpent)
-                                    VALUES (@Date,@Process,@TimeSpent)";
+                            //problem
+                            string UpdateSql = @"UPDATE Activity
+                                                 SET TimeSpent = @TimeSpent
+                                                 WHERE Date = @Date AND Process = @Process";
 
-                            await connection.ExecuteAsync(sql, autod.Activities);
+                            string AddSql = @"INSERT INTO Activity (Date,Process,TimeSpent)
+                                              VALUES (@Date,@Process,@TimeSpent)";
+
+                            foreach (ProcessActivity activity in autod.Activities)
+                            {
+                                int affectedRows = await connection.ExecuteAsync(UpdateSql, activity);
+
+                                if(affectedRows == 0)
+                                {
+                                    await connection.ExecuteAsync(AddSql, activity);
+                                }
+                            }
 
                             await transaction.CommitAsync();
                         }

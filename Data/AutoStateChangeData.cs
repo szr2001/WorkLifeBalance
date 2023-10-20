@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorkLifeBalance.Handlers;
 
 namespace WorkLifeBalance.Data
 {
@@ -12,25 +13,35 @@ namespace WorkLifeBalance.Data
         public ProcessActivity[] Activities { get; set; } = new ProcessActivity[0];
         public string[] WorkingStateWindows { get; set; } = new string[0];
 
-        public List<ProcessActivity> ActivitiesC = new();
+        public Dictionary<string,TimeOnly> ActivitiesC = new();
 
         public void ConvertSaveDataToUsableData()
         {
-            ActivitiesC = Activities.ToList();
-
-            foreach(ProcessActivity activity in ActivitiesC)
+            foreach(ProcessActivity activity in Activities)
             {
                 activity.ConvertSaveDataToUsableData();
+                ActivitiesC.Add(activity.Process,activity.TimeSpentC);
             }
+
         }
         public void ConvertUsableDataToSaveData()
         {
-            Activities = ActivitiesC.ToArray();
+            List<ProcessActivity> processActivities = new();
 
-            foreach (ProcessActivity activity in Activities)
+
+            foreach (KeyValuePair<string,TimeOnly> activity in ActivitiesC)
             {
-                activity.ConvertUsableDataToSaveData();
+                ProcessActivity process = new();
+                process.DateC = DataHandler.Instance.TodayData.DateC;
+                process.Process = activity.Key;
+                process.TimeSpentC = activity.Value;
+
+                process.ConvertUsableDataToSaveData();
+
+                processActivities.Add(process);
             }
+
+            Activities = processActivities.ToArray();
         }
     }
 }
