@@ -80,11 +80,11 @@ namespace WorkLifeBalance
 
             TimeHandler.Instance.OnTimerTick += TimeTrackerHandler.Instance.UpdateSpentTime;
             TimeHandler.Instance.OnTimerTick += DataHandler.Instance.TriggerSaveData;
+            TimeHandler.Instance.OnTimerTick += AutomaticStateChangerHandler.Instance.RecordActivity;
 
             if (DataHandler.Instance.Settings.AutoDetectWorkingC)
             {
                 TimeHandler.Instance.OnTimerTick += AutomaticStateChangerHandler.Instance.TriggerWorkDetect;
-                TimeHandler.Instance.OnTimerTick += AutomaticStateChangerHandler.Instance.RecordActivity;
             }
 
             TimeTrackerHandler.Instance.OnSpentTimeChange += UpdateUI;
@@ -170,14 +170,7 @@ namespace WorkLifeBalance
 
             ToggleBtn.Background = OceanBlue;
             ToggleRecordingImage.Source = AutomaticImg;
-            if (value)
-            {
-                SetAppState(TimmerState.Resting);
-            }
-            else
-            {
-                SetAppState(TimmerState.Resting);
-            }
+            SetAppState(TimmerState.Resting);
         }
 
         private void OpenViewDataWindow(object sender, RoutedEventArgs e)

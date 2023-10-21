@@ -192,23 +192,25 @@ namespace WorkLifeBalance.Pages
         {
             if (AutoDetectWorkingBtn.IsChecked == true)
             {
+                TimeHandler.Instance.OnTimerTick += AutomaticStateChangerHandler.Instance.TriggerWorkDetect;
                 ExpandAutoDetectArea();
             }
             else
             {
+                TimeHandler.Instance.OnTimerTick -= AutomaticStateChangerHandler.Instance.TriggerWorkDetect;
                 ContractAutoDetectArea();
             }
         }
         private void ExpandAutoDetectArea()
         {
-                AutoToggleWorkingPanel.Height = 80;
-            DataHandler.Instance.Settings.AutoDetectWorkingC = (bool)AutoDetectWorkingBtn.IsChecked;
+            AutoToggleWorkingPanel.Height = 80;
+            DataHandler.Instance.Settings.AutoDetectWorkingC = true;
             MainWindow.instance.CheckAutoDetectWorking();
         }
         private void ContractAutoDetectArea()
         {
-                AutoToggleWorkingPanel.Height = 0;
-            DataHandler.Instance.Settings.AutoDetectWorkingC = (bool)AutoDetectWorkingBtn.IsChecked;
+            AutoToggleWorkingPanel.Height = 0;
+            DataHandler.Instance.Settings.AutoDetectWorkingC = false;
             MainWindow.instance.CheckAutoDetectWorking();
         }
     }

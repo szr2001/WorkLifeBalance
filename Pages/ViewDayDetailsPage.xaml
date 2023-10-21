@@ -30,6 +30,7 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
+            
             <StackPanel Orientation="Vertical"
                         Grid.Row="0"
                         Grid.RowSpan="6"
@@ -39,19 +40,20 @@
                         CornerRadius="20"
                         Margin="10,10,10,0"
                         Background="{Binding Source={StaticResource WLFBOceanBlue}}">
-                    <ScrollViewer VerticalScrollBarVisibility="Hidden"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Center">
+                    <ScrollViewer VerticalScrollBarVisibility="Hidden">
                             <ItemsControl ItemsSource="{Binding activities}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Vertical"
+                                                   HorizontalAlignment="Center"
                                                    Margin="5"/>
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Border Margin="5"
+                                                MinWidth="210"
+                                                HorizontalAlignment="Stretch"
                                                 Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
                                                 CornerRadius="15">
                                             <Border Margin="5"
@@ -62,12 +64,12 @@
                                                                TextAlignment="Center"
                                                                Margin="5"
                                                                FontWeight="Bold"
-                                                               FontSize="20"
+                                                               FontSize="16"
                                                                Foreground="White"/>
                                                     <TextBlock Text="{Binding TimeSpentC, StringFormat=HH:mm:ss}"
                                                                TextAlignment="Center"
                                                                FontWeight="Bold"
-                                                               FontSize="18"
+                                                               FontSize="14"
                                                                Foreground="White"/>
                                                 </StackPanel>
 
@@ -76,9 +78,11 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
+                        
                     </ScrollViewer>
                 </Border>
             </StackPanel>
+
             <Border CornerRadius="20"
                     Height="110"
                     Margin="10,-20,10,0"
@@ -113,6 +117,7 @@
 
                 </StackPanel>
             </Border>
+
             <Button Margin="15,8,15,5"
                     Grid.Row="6"
                     Grid.Column="0"

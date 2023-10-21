@@ -24,6 +24,10 @@ namespace WorkLifeBalance.Handlers
             }
         }
 
+        public delegate void ActiveProcess(string ActiveWindow);
+        public event ActiveProcess OnWindowChange;
+
+
         public string ActiveWindow = "";
 
         private TimeSpan OneSec = new TimeSpan(0, 0, 1);
@@ -32,7 +36,17 @@ namespace WorkLifeBalance.Handlers
 
         public void RecordActivity()
         {
-            if (string.IsNullOrEmpty(ActiveWindow)) return;
+            try
+            {
+                IntPtr foregroundWindowHandle = WindowOptionsHelper.GetForegroundWindow();
+                
+                ActiveWindow = WindowOptionsHelper.GetProcessname(foregroundWindowHandle);
+                OnWindowChange?.Invoke(ActiveWindow);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             try
             {
@@ -52,25 +66,15 @@ namespace WorkLifeBalance.Handlers
 
             await Task.Delay(DataHandler.Instance.Settings.AutoDetectInterval * 1000);
 
-            try
-            {
-                IntPtr foregroundWindowHandle = WindowOptionsHelper.GetForegroundWindow();
-                
-                ActiveWindow = WindowOptionsHelper.GetProcessname(foregroundWindowHandle);
-
-                CheckStateChange();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
+            CheckStateChange();
 
             IsAutoWorkDetectionTriggered = false;
         }
 
         private void CheckStateChange()
         {
+            if (string.IsNullOrEmpty(ActiveWindow)) return;
+
             bool IsFocusingOnWorkingWindow = DataHandler.Instance.AutoChangeData.WorkingStateWindows.Contains(ActiveWindow);
 
             switch (TimeHandler.Instance.AppTimmerState)

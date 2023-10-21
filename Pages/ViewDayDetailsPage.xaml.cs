@@ -48,7 +48,6 @@ namespace WorkLifeBalance.Pages
                 }
             }
 
-
             MainWindow.ShowErrorBox("Error ViewDayDetails", "Requested ViewDayDetails Page with no/wrong arguments", true);
         }
 

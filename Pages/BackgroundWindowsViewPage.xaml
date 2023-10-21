@@ -131,6 +131,30 @@
                            Margin="4"
                            Foreground="PapayaWhip"/>
             </Border>
+            <Border CornerRadius="20"
+                    Height="50"
+                    Margin="10,-20,10,0"
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.RowSpan="8"
+                    Grid.ColumnSpan="1"
+                    Background="{Binding Source={StaticResource WLFBOceanBlue}}">
+                <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Stretch">
+                    <TextBlock Text="Active Window"
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               FontSize="15"
+                               Foreground="White"/>
+                    <TextBlock Text="Test.exe"
+                               Name="ActiveWindowT"
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               FontSize="10"
+                               Foreground="White"/>
+                </StackPanel>
+            </Border>
             <Button Grid.Row="9" 
                     Margin="15,8,15,5"
                     Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"

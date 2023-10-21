@@ -34,6 +34,7 @@ namespace WorkLifeBalance.Pages
             InitializeProcessNames();
             DataContext = this;
             InitializeComponent();
+            AutomaticStateChangerHandler.Instance.OnWindowChange += UpdateActiveWindowUi;
         }
 
         private void InitializeProcessNames()
@@ -51,8 +52,15 @@ namespace WorkLifeBalance.Pages
 
         public override async Task ClosePageAsync()
         {
+            AutomaticStateChangerHandler.Instance.OnWindowChange -= UpdateActiveWindowUi;
             DataHandler.Instance.AutoChangeData.WorkingStateWindows = SelectedWindows.ToArray();
             await DataHandler.Instance.SaveData();
+        }
+
+        private void UpdateActiveWindowUi(string newwindow)
+        {
+            Console.WriteLine("D");
+            ActiveWindowT.Text = newwindow;
         }
 
         private void SelectProcess(object sender, RoutedEventArgs e)
