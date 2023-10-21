@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <PackageIcon>WorkLifeBalanceLogo.png</PackageIcon>
+    <ApplicationIcon>Assets\WorkLifeBalanceLogo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,6 +24,7 @@
     <None Remove="Assets\Rest.png" />
     <None Remove="Assets\Settings.png" />
     <None Remove="Assets\Work.png" />
+    <None Remove="Assets\WorkLifeBalanceLogo.png" />
     <None Remove="RecordedData.db" />
   </ItemGroup>
 
@@ -69,12 +70,12 @@
     <Content Include="RecordedData.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WorkLifeBalanceLogo.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Assets\WorkLifeBalanceLogo.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
+    <None Update="Assets\WorkLifeBalanceLogo.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
