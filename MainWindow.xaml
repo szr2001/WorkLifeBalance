@@ -108,11 +108,11 @@
                                    TextAlignment="Center"/>
                     </StackPanel>
                     <Button Grid.Column="1"
-                            Width="50"
+                            Width="45"
                             Margin="-10,0,0,0"
                             Name="ToggleBtn"
                             ToolTip="Toggle Work/Rest"
-                            Height="50" 
+                            Height="45" 
                             Click="ToggleState"
                             Template="{Binding Source={StaticResource RoundedBtnTemp}}"
                             Style="{Binding Source={StaticResource RoundedBtnStyle}}">

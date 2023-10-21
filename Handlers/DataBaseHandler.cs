@@ -141,6 +141,7 @@ namespace WorkLifeBalance.HandlerClasses
             //returns count
             return retrivedSettings;
         }
+
         public static async Task<List<ProcessActivity>> ReadDayActivity(string date)
         {
             //wait for a time when no methods writes now to the database
@@ -195,6 +196,7 @@ namespace WorkLifeBalance.HandlerClasses
             //return filtered res
             return ReturnActivity;
         }
+
         public static async Task WriteSettings(AppSettings sett)
         {
             //wait for a time when no methods writes now to the database
@@ -471,7 +473,7 @@ namespace WorkLifeBalance.HandlerClasses
                         {
                             //problem with Pattern
                             sql = @$"SELECT * from Days 
-                                     WHERE Date Like Pattern";
+                                     WHERE Date Like @Pattern";
                         }
 
 
@@ -563,6 +565,65 @@ namespace WorkLifeBalance.HandlerClasses
             if (retrivedDay == null)
             {
                 retrivedDay = new();
+            }
+
+            retrivedDay.ConvertSaveDataToUsableData();
+
+            return retrivedDay;
+        }
+
+        public static async Task<ProcessActivity> GetMostActiveActivity(string value, string Month = "", string year = "")
+        {
+            ProcessActivity? retrivedDay = null;
+            //wait for a time when no methods writes now to the database
+            await _semaphore.WaitAsync();
+            //if no one writes to db continue
+
+            try
+            {
+                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+                {
+                    //start connection
+                    await connection.OpenAsync();
+
+                    //execute the sql to get the day
+                    try
+                    {
+                        string sql;
+                        if (string.IsNullOrEmpty(Month) || string.IsNullOrEmpty(year))
+                        {
+                            sql = @$"SELECT * FROM Days 
+                                     WHERE @Value = 
+                                    (SELECT MAX(@Value) FROM Days)";
+                        }
+                        else
+                        {
+
+                            sql = @$"SELECT * FROM Days 
+                                     WHERE @Value = 
+                                     (SELECT MAX(@Value) FROM Days
+                                     WHERE Date Like @Pattern)";
+                        }
+                        retrivedDay = connection.QueryFirstOrDefault<ProcessActivity>(sql, new { Value = value, Pattern = $"{Month}%{year}" });
+                    }
+                    catch (Exception ex)
+                    {
+                        //close app if failed
+                        MainWindow.instance.MainDispatcher.Invoke(() =>
+                        {
+                            MainWindow.ShowErrorBox("Failed to read from database", $"This can be caused by a missing database file: {ex.Message}");
+                        });
+                    }
+                    finally
+                    {
+                        await connection.CloseAsync();
+                    }
+                }
+            }
+            finally
+            {
+                //release sempahore so other methods can run
+                _semaphore.Release();
             }
 
             retrivedDay.ConvertSaveDataToUsableData();

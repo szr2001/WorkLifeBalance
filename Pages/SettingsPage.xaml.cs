@@ -1,18 +1,12 @@
 ﻿using IWshRuntimeLibrary;
-using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Numerics;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using WorkLifeBalance.Data;
 using File = System.IO.File;
 using WorkLifeBalance.Windows;
 using Path = System.IO.Path;
-using System.Windows.Controls.Primitives;
 using WorkLifeBalance.Handlers;
 using System.Threading.Tasks;
 
