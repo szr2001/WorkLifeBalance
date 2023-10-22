@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WorkLifeBalance.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="470" d:DesignWidth="200"
+      d:DesignHeight="270" d:DesignWidth="200"
       Title="SettingsPage">
 
     <Border Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
@@ -14,9 +14,19 @@
         <Border Margin="8">
             <ScrollViewer VerticalScrollBarVisibility="Hidden">
                 <StackPanel>
-                    
+                    <Border Margin="35,5,35,5"
+                            CornerRadius="15"
+                            Background="{Binding Source={StaticResource WLFBOceanBlue}}">
+
+                        <TextBlock Text="Version: 1.0"
+                                   TextAlignment="Center"
+                                   FontWeight="Bold"
+                                   Margin="1,0,0,2"
+                                   FontSize="12"
+                                   Foreground="White"/>
+                    </Border>
                     <Border Height="55"
-                            Margin="0,5,0,5"
+                            Margin="0,0,0,5"
                             CornerRadius="15"
                             Background="{Binding Source={StaticResource WLFBOceanBlue}}">
 
