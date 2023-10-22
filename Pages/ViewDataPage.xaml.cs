@@ -98,15 +98,15 @@ namespace WorkLifeBalance.Pages
             //calculate rest/work ratio in current and previous months
             float MonthToporkedSeconds = ConvertTimeOnlyToSeconds(PreviousMonthMostWorked);
 
-            PreviousMonthWorkRestRatio = 86400 / MonthToporkedSeconds;
+            PreviousMonthWorkRestRatio = MonthToporkedSeconds == 0 ? 0 : MonthToporkedSeconds / 86400;
 
             MonthToporkedSeconds = ConvertTimeOnlyToSeconds(CurrentMonthMostWorked);
 
-            CurrentMonthWorkRestRatio = 86400 / MonthToporkedSeconds;
+            CurrentMonthWorkRestRatio = MonthToporkedSeconds == 0 ? 0 : MonthToporkedSeconds / 86400;
 
             MonthToporkedSeconds = ConvertTimeOnlyToSeconds(RecordMostWorked);
 
-            RecordWorkRestRatio = 86400 / MonthToporkedSeconds;
+            RecordWorkRestRatio = MonthToporkedSeconds == 0 ? 0 : MonthToporkedSeconds / 86400;
             UpdateUi();
         }
         private void UpdateUi()

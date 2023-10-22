@@ -33,10 +33,10 @@
             
             <StackPanel Orientation="Vertical"
                         Grid.Row="0"
-                        Grid.RowSpan="6"
+                        Grid.RowSpan="7"
                         Grid.Column="3"
                         Grid.ColumnSpan="5">
-                <Border Height="300"
+                <Border Height="350"
                         CornerRadius="20"
                         Margin="10,10,10,0"
                         Background="{Binding Source={StaticResource WLFBOceanBlue}}">
@@ -118,7 +118,7 @@
                 </StackPanel>
             </Border>
 
-            <Button Margin="15,8,15,5"
+            <Button Margin="15,6,15,9"
                     Grid.Row="6"
                     Grid.Column="0"
                     Grid.ColumnSpan="3"

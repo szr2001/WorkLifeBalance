@@ -52,7 +52,7 @@
                     </Border>
                     <Border Height="42"
                             Margin="15,5,10,5"
-                            ToolTip="Record Work To Day Ratio"
+                            ToolTip="Record Work Ratio"
                             CornerRadius="15"
                             Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
                         <StackPanel Orientation="Vertical">
@@ -208,7 +208,7 @@
                     </Border>
                     <Border Height="42"
                             Margin="15,5,10,5"
-                            ToolTip="Previous Month Biggest Work To 24 hours Ratio. Smaller The Better"
+                            ToolTip="Previous Month Work Ratio."
                             CornerRadius="15"
                             Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
                         <StackPanel Orientation="Vertical">
@@ -320,7 +320,7 @@
                                    Foreground="White"/>
                     </Border>
                     <Border Height="42"
-                            ToolTip="Current Month Biggest Work To 24 hours Ratio. Smaller The Better"
+                            ToolTip="Current Month Work Ratio."
                             Margin="15,5,10,5"
                             CornerRadius="15"
                             Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">

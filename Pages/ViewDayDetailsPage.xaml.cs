@@ -17,7 +17,6 @@ namespace WorkLifeBalance.Pages
         public ProcessActivity[] activities { get; set; } = new ProcessActivity[0];
 
         //use args to pass date
-        DateOnly TodayDate = DataHandler.Instance.TodayData.DateC;
         private int LoadedPageType = 0;
         private DayData LoadedDayData = new();
         public ViewDayDetailsPage(object? args) : base(args)
