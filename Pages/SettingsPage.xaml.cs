@@ -68,7 +68,7 @@ namespace WorkLifeBalance.Pages
         }
         private void ChangeAutoDetectDelay(object sender, TextChangedEventArgs e)
         {
-            if (string.IsNullOrEmpty(AutoDetectT.Text) || int.TryParse(AutoDetectT.Text, out _))
+            if (string.IsNullOrEmpty(AutoDetectT.Text) || !int.TryParse(AutoDetectT.Text, out _))
             {
                 AutoDetectT.Text = 5.ToString();
                 AutoDetectInterval = 5;
