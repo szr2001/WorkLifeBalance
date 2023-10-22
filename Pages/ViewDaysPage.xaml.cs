@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,10 +20,14 @@ namespace WorkLifeBalance.Pages
     /// </summary>
     public partial class ViewDaysPage : SecondWindowPageBase
     {
-        public DayData[] LoadedData { get; set; }
+        public ObservableCollection<DayData> LoadedData { get; set; } = new();
 
+        private DayData[] backupdata;
         //use this to request the correct page when leaving the DayActivity page
         private int LoadedPageType = 0;
+        private string FilterMonth = "00";
+        private string FilterDay = "00";
+        private string FilterYear = "0000";
         public ViewDaysPage(object? args) : base(args)
         {
             InitializeComponent();
@@ -61,7 +68,9 @@ namespace WorkLifeBalance.Pages
                     pageNme = "Previous Month Days";
                     break;
             }
-            LoadedData = Days.ToArray();
+            LoadedData = new ObservableCollection<DayData>(Days);
+
+            backupdata = LoadedData.ToArray();
             DataContext = this;
         }
 
@@ -91,6 +100,41 @@ namespace WorkLifeBalance.Pages
             SecondWindow.RequestSecondWindow(SecondWindowType.ViewDayActivity,(LoadedPageType,ClickedDay));
         }
 
+        private void ApplyFilters(object sender, RoutedEventArgs e)
+        {
+            if (FilterMonth == "00" && FilterDay == "00" && FilterYear == "0000")
+            {
+                LoadedData.Clear();
+
+                foreach (DayData day in backupdata)
+                {
+                    LoadedData.Add(day);
+                }
+                return;
+            }
+
+            DayData[] tempdata = backupdata;
+            if (FilterMonth != "00")
+            {
+                tempdata = tempdata.Where(daydata => daydata.DateC.ToString("MM") == FilterMonth).ToArray();
+            }
+            if (FilterDay != "00")
+            {
+                tempdata = tempdata.Where(daydata => daydata.DateC.ToString("dd") == FilterDay).ToArray();
+            }
+            if (FilterYear != "0000")
+            {
+                tempdata = tempdata.Where(daydata => daydata.DateC.ToString("yyyy") == FilterYear).ToArray();
+            }
+
+            LoadedData.Clear();
+
+            foreach(DayData day in tempdata)
+            {
+                LoadedData.Add(day);
+            }
+        }
+
         private T FindParent<T>(DependencyObject child) where T : DependencyObject
         {
             DependencyObject parentObject = VisualTreeHelper.GetParent(child);
@@ -100,6 +144,42 @@ namespace WorkLifeBalance.Pages
 
             T parent = parentObject as T;
             return parent ?? FindParent<T>(parentObject);
+        }
+
+        private void UpdateFilterMonth(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(MonthB.Text) || !int.TryParse(MonthB.Text, out _))
+            {
+                MonthB.Text = "00";
+                FilterMonth = "00";
+                return;
+            }
+
+            FilterMonth = MonthB.Text;
+        }
+
+        private void UpdateFilterDay(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(DayB.Text) || !int.TryParse(DayB.Text, out _))
+            {
+                DayB.Text = "00";
+                FilterDay = "00";
+                return;
+            }
+
+            FilterDay = DayB.Text;
+        }
+
+        private void UpdateFilterYear(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(YearB.Text) || !int.TryParse(YearB.Text, out _))
+            {
+                YearB.Text = "0000";
+                FilterYear = "0000";
+                return;
+            }
+
+            FilterYear = YearB.Text;
         }
     }
 }

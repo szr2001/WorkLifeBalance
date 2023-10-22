@@ -61,34 +61,21 @@ namespace WorkLifeBalance.Pages
             {
                 AutosaveT.Text = 5.ToString();
                 Saveinterval = 5;
+                return;
             }
-            try
-            {
-                Saveinterval = int.Parse(AutosaveT.Text);
-            }
-            catch
-            {
-                AutosaveT.Text = 5.ToString();
-                Saveinterval = 5;
-            }
+            
+            Saveinterval = int.Parse(AutosaveT.Text);
         }
         private void ChangeAutoDetectDelay(object sender, TextChangedEventArgs e)
         {
-            if (string.IsNullOrEmpty(AutosaveT.Text) || int.Parse(AutosaveT.Text) == 0)
+            if (string.IsNullOrEmpty(AutoDetectT.Text) || int.TryParse(AutoDetectT.Text, out _))
             {
                 AutoDetectT.Text = 5.ToString();
                 AutoDetectInterval = 5;
-            }
-            try
-            {
-                AutoDetectInterval = int.Parse(AutoDetectT.Text);
-            }
-            catch
-            {
-                AutoDetectT.Text = 5.ToString();
-                AutoDetectInterval = 5;
+                return;
             }
 
+            AutoDetectInterval = int.Parse(AutoDetectT.Text);
         }
         private void SetBotLeftStartup(object sender, RoutedEventArgs e)
         {

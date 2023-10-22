@@ -51,7 +51,7 @@ namespace WorkLifeBalance
 
             InitializeComponent();
             Topmost = true;
-            //AllocConsole();
+            AllocConsole();
             LoadStyleInfo();
 
             DataHandler.Instance.OnLoaded += InitializeApp;

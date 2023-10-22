@@ -100,52 +100,75 @@
                                Margin="0,0,0,4"
                                Foreground="White"/>
                 </Button>
-                <StackPanel Orientation="Horizontal"
-                            Grid.Column="3"
-                            Grid.ColumnSpan="4">
-                    <TextBox Height="30"
-                             TextAlignment="Center"
-                             TextBlock.FontSize="20"
-                             MaxLength="2"
-                             TextBlock.FontWeight="Bold"
-                             Margin="15,0,15,0"
-                             Text="00"
-                             Width="50"
-                             Name="MonthB"/>
-
-                    <TextBox Height="30"
-                             TextAlignment="Center"
-                             TextBlock.FontSize="20"
-                             MaxLength="2"
-                             TextBlock.FontWeight="Bold"
-                             Margin="15,0,15,0"
-                             Text="00"
-                             Width="50"
-                             Name="DayB"/>
+                <Border Grid.Column="2"
+                        Grid.ColumnSpan="6"
+                        Background="{Binding Source={StaticResource WLFBOceanBlue}}"
+                        CornerRadius="15"
+                        Margin="5,5,0,5">
                     
+                    <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Month:"
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               FontSize="20"
+                               Margin="12,8,0,0"
+                               Foreground="White"/>
+                        
+                    <TextBox Height="30"
+                             TextAlignment="Center"
+                             TextBlock.FontSize="20"
+                             MaxLength="2"
+                             TextBlock.FontWeight="Bold"
+                             Text="00"
+                             Width="35"
+                             Name="MonthB" TextChanged="UpdateFilterMonth"/>
+                        
+                    <TextBlock Text="Day:"
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               FontSize="20"
+                               Margin="12,8,0,0"
+                               Foreground="White"/>
+                        
+                    <TextBox Height="30"
+                             TextAlignment="Center"
+                             TextBlock.FontSize="20"
+                             MaxLength="2"
+                             TextBlock.FontWeight="Bold"
+                             Text="00"
+                             Width="35"
+                             Name="DayB" TextChanged="UpdateFilterDay"/>
+                        
+                    <TextBlock Text="Year:"
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               FontSize="20"
+                               Margin="12,8,0,0"
+                               Foreground="White"/>
+                        
                     <TextBox Height="30"
                              TextAlignment="Center"
                              TextBlock.FontSize="20"
                              MaxLength="4"
                              TextBlock.FontWeight="Bold"
-                             Margin="15,0,15,0"
                              Width="50"
                              Text="0000"
-                             Name="YearB"/>
+                             Name="YearB" TextChanged="UpdateFilterYear"/>
                     
-                    <Button Margin="5"
-                            Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
-                            Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}" Click="ReturnToPreviousPage">
+                    <Button Margin="15,5,0,5"
+                            Style="{Binding Source={StaticResource LightblueRoundedBtnHoverStyle}}"
+                            Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}" Click="ApplyFilters">
                         
                         <TextBlock Text="Search"
                                    TextAlignment="Center"
                                    FontWeight="Bold"
-                                   FontSize="25"
+                                   FontSize="20"
                                    Margin="5"
                                    Foreground="White"/>
                     </Button>
                     
                 </StackPanel>
+                </Border>
             </Grid>
         </StackPanel>
     </Border>
