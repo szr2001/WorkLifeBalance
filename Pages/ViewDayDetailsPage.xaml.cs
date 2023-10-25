@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows;
@@ -40,7 +42,8 @@ namespace WorkLifeBalance.Pages
 
         private async Task RequiestData()
         {
-            activities = (await DataBaseHandler.ReadDayActivity(LoadedDayData.Date)).ToArray();
+            List<ProcessActivity> RequestedActivity = (await DataBaseHandler.ReadDayActivity(LoadedDayData.Date));
+            activities = RequestedActivity.OrderByDescending(data => data.TimeSpentC).ToArray();
 
             WorkedT.Text = LoadedDayData.WorkedAmmountC.ToString("HH:mm:ss");
             RestedT.Text = LoadedDayData.RestedAmmountC.ToString("HH:mm:ss");
