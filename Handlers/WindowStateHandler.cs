@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Text;
 
 namespace WorkLifeBalance.HandlerClasses
 {
-    public class WindowOptionsHelper
+    public class WindowStateHandler
     {
         // Constants for the SetWindowLoc functions
         public const uint SWP_NOSIZE = 0x0001;
@@ -92,6 +93,15 @@ namespace WorkLifeBalance.HandlerClasses
 
             return Appnames.ToList();
         }
+
+        public static bool IsRunningAsAdmin()
+        {
+            WindowsIdentity identity = WindowsIdentity.GetCurrent();
+            WindowsPrincipal principal = new WindowsPrincipal(identity);
+
+            return principal.IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
         private static bool EnumWindowsCallback(IntPtr hWnd, IntPtr lParam)
         {
             List<IntPtr> windows = GCHandle.FromIntPtr(lParam).Target as List<IntPtr>;

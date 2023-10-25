@@ -31,7 +31,7 @@ namespace WorkLifeBalance.Pages
         private void InitializeProcessNames()
         {
             SelectedWindows = new ObservableCollection<string>(DataHandler.Instance.AutoChangeData.WorkingStateWindows);
-            DetectedWindows = new ObservableCollection<string>(WindowOptionsHelper.GetBackgroundApplicationsName());
+            DetectedWindows = new ObservableCollection<string>(WindowStateHandler.GetBackgroundApplicationsName());
             DetectedWindows = new ObservableCollection<string>(DetectedWindows.Except(SelectedWindows));
         }
 

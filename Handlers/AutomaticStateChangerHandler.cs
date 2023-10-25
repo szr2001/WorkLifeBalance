@@ -34,9 +34,9 @@ namespace WorkLifeBalance.Handlers
         {
             try
             {
-                IntPtr foregroundWindowHandle = WindowOptionsHelper.GetForegroundWindow();
+                IntPtr foregroundWindowHandle = WindowStateHandler.GetForegroundWindow();
                 
-                ActiveWindow = WindowOptionsHelper.GetProcessname(foregroundWindowHandle);
+                ActiveWindow = WindowStateHandler.GetProcessname(foregroundWindowHandle);
                 OnWindowChange?.Invoke(ActiveWindow);
             }
             catch (Exception ex)

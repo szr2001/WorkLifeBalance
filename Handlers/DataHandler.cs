@@ -20,6 +20,11 @@ namespace WorkLifeBalance.Handlers
             }
         }
 
+        public string AppVersion;
+        public string AppName;
+        public string AppDirectory;
+        public string AppExePath;
+
         public bool IsAppSaving { get; private set; } = false;
         public bool IsAppLoading { get; private set; } = false;
 
@@ -36,6 +41,13 @@ namespace WorkLifeBalance.Handlers
         public event DataEvent? OnSaving;
         public event DataEvent? OnSaved;
 
+        public DataHandler()
+        {
+            AppVersion = "1.0";
+            AppName = "WorkLifeBalance";
+            AppDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            AppExePath = $"{AppDirectory}/{AppName}.exe";
+        }
         public async Task SaveData()
         {
             if (IsAppSaving) return;

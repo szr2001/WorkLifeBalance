@@ -127,15 +127,11 @@ namespace WorkLifeBalance.Pages
 
         private void ApplyStartToWindows()
         {
-            string appName = "WorkLifeBalance";
-            string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string appPath = Path.Combine(appDirectory, $"{appName}.exe");
-
-            string startupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), $"{appName}.lnk");
+            string startupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), $"{DataHandler.Instance.AppName}.lnk");
 
             if (DataHandler.Instance.Settings.StartWithWindowsC)
             {
-                CreateShortcut(appPath,appDirectory, startupFolderPath);
+                CreateShortcut(startupFolderPath);
             }
             else
             {
@@ -143,15 +139,14 @@ namespace WorkLifeBalance.Pages
             }
         }
 
-        private void CreateShortcut(string appPath,string appdirectory, string startupfolder)
+        private void CreateShortcut(string startupfolder)
         {
-            // Create a shortcut if it doesn't exist
             if (!File.Exists(startupfolder))
             {
                 WshShell shell = new WshShell();
                 IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(startupfolder);
-                shortcut.TargetPath = appPath;
-                shortcut.WorkingDirectory = appdirectory;
+                shortcut.TargetPath = DataHandler.Instance.AppExePath;
+                shortcut.WorkingDirectory = DataHandler.Instance.AppDirectory;
                 shortcut.Save();
             }
         }

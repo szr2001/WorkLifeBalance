@@ -1,7 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
@@ -48,10 +51,10 @@ namespace WorkLifeBalance
                 instance.Close();
                 instance = this;
             }
-
+            CheckAdministratorPerms();
             InitializeComponent();
             Topmost = true;
-            AllocConsole();
+            //AllocConsole();
             LoadStyleInfo();
 
             DataHandler.Instance.OnLoaded += InitializeApp;
@@ -100,21 +103,21 @@ namespace WorkLifeBalance
         {
             await Task.Delay(300);
             Vector2 UserScreen = new Vector2((float)SystemParameters.PrimaryScreenWidth, (float)SystemParameters.PrimaryScreenHeight);
-            IntPtr TargetWindow = WindowOptionsHelper.GetWindow(null, "WorkLifeBalance");
+            IntPtr TargetWindow = WindowStateHandler.GetWindow(null, "WorkLifeBalance");
 
             switch (DataHandler.Instance.Settings.StartUpCornerC)
             {
                 case AnchorCorner.TopLeft:
-                    WindowOptionsHelper.SetWindowLocation(TargetWindow,0, 0);
+                    WindowStateHandler.SetWindowLocation(TargetWindow,0, 0);
                     break;
                 case AnchorCorner.TopRight:
-                    WindowOptionsHelper.SetWindowLocation(TargetWindow, (int)UserScreen.X - 220, 0);
+                    WindowStateHandler.SetWindowLocation(TargetWindow, (int)UserScreen.X - 220, 0);
                     break;
                 case AnchorCorner.BootomLeft:
-                    WindowOptionsHelper.SetWindowLocation(TargetWindow, 0, (int)UserScreen.Y - 180);
+                    WindowStateHandler.SetWindowLocation(TargetWindow, 0, (int)UserScreen.Y - 180);
                     break;
                 case AnchorCorner.BottomRight:
-                    WindowOptionsHelper.SetWindowLocation(TargetWindow, (int)UserScreen.X - 220, (int)UserScreen.Y - 180);
+                    WindowStateHandler.SetWindowLocation(TargetWindow, (int)UserScreen.X - 220, (int)UserScreen.Y - 180);
                     break;
             }
         }
@@ -181,6 +184,33 @@ namespace WorkLifeBalance
         private void OpenOptionsWindow(object sender, RoutedEventArgs e)
         {
             SecondWindow.RequestSecondWindow(SecondWindowType.Settings);
+        }
+
+        private void CheckAdministratorPerms()
+        {
+            if(!WindowStateHandler.IsRunningAsAdmin())
+            {
+                RestartApplicationWithAdmin();
+            }
+        }
+        private void RestartApplicationWithAdmin()
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = DataHandler.Instance.AppExePath,
+                UseShellExecute = true,
+                Verb = "runas" 
+            };
+
+            try
+            {
+                Process.Start(psi);
+                Application.Current.Shutdown();
+            }
+            catch (Exception ex)
+            {
+                ShowErrorBox("The application must be run as Administrator", $"Restart as Administrator Failed: {ex.Message}");
+            }
         }
 
         private async void CloseApp(object sender, RoutedEventArgs e)
