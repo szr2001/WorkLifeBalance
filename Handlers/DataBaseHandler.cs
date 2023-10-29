@@ -529,18 +529,25 @@ namespace WorkLifeBalance.HandlerClasses
                         if (string.IsNullOrEmpty(Month) || string.IsNullOrEmpty(year))
                         {
                             sql = @$"SELECT * FROM Days 
-                                     WHERE @Value = 
-                                    (SELECT MAX(@Value) FROM Days)";
+                             WHERE CAST({value} as INT) = 
+                            (SELECT MAX(CAST({value} as INT)) FROM Days)";
                         }
                         else
                         {
-
                             sql = @$"SELECT * FROM Days 
-                                     WHERE @Value = 
-                                     (SELECT MAX(@Value) FROM Days
-                                     WHERE Date Like @Pattern)";
+                             WHERE CAST({value} as INT) = 
+                             (SELECT MAX(CAST({value} as INT)) FROM Days
+                             WHERE Date LIKE '{Month}%{year}%')";
                         }
-                        retrivedDay = connection.QueryFirstOrDefault<DayData>(sql,new {Value = value, Pattern = $"{Month}%{year}" });
+
+                        //Removed Parameters, it breaks receiving data.
+
+                        //DynamicParameters parm = new();
+                        //parm.Add("Collum",value,System.Data.DbType.String);
+                        //parm.Add("template",$"{Month}%{year}",System.Data.DbType.String);
+
+                        retrivedDay = connection.QueryFirstOrDefault<DayData>(sql);
+
                     }
                     catch (Exception ex)
                     {
