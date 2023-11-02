@@ -68,6 +68,8 @@ namespace WorkLifeBalance.Pages
                     pageNme = "Previous Month Days";
                     break;
             }
+
+            Days.Reverse();
             LoadedData = new ObservableCollection<DayData>(Days);
 
             backupdata = LoadedData.ToArray();
