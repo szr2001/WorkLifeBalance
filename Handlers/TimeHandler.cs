@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WorkLifeBalance.Handlers
@@ -20,8 +22,8 @@ namespace WorkLifeBalance.Handlers
 
         public delegate void TickEvent();
 
-        public event TickEvent? OnTimerTick;
-        public TimmerState AppTimmerState = TimmerState.Resting;
+        private event TickEvent OnTimerTick = delegate { };
+        public AppState AppTimmerState = AppState.Resting;
 
         private CancellationTokenSource CancelTick = new();
 
@@ -32,6 +34,22 @@ namespace WorkLifeBalance.Handlers
             CancelTick = new();
 
             _ = TimerLoop(CancelTick.Token);
+        }
+
+        public void Subscribe(TickEvent eventname)
+        {
+            if(!OnTimerTick.GetInvocationList().Contains(eventname))
+            {
+                OnTimerTick += eventname;
+            }
+        }
+
+        public void UnSubscribe(TickEvent eventname)
+        {
+            if(OnTimerTick.GetInvocationList().Contains(eventname))
+            {
+                OnTimerTick -= eventname;
+            }
         }
 
         public void Stop()

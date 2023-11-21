@@ -18,7 +18,8 @@ namespace WorkLifeBalance.Pages
     public partial class SettingsPage : SecondWindowPageBase
     {
         int Saveinterval = 5;
-        int AutoDetectInterval = 5;
+        int AutoDetectInterval = 1;
+        int AutoDetectIdleInterval = 1;
         public SettingsPage(object? args) : base(args)
         {
             InitializeComponent();
@@ -45,13 +46,21 @@ namespace WorkLifeBalance.Pages
 
             AutoDetectT.Text = DataHandler.Instance.Settings.AutoDetectInterval.ToString();
 
+            AutoDetectIdleT.Text = DataHandler.Instance.Settings.AutoDetectIdleInterval.ToString();
+
             StartWithWInBtn.IsChecked = DataHandler.Instance.Settings.StartWithWindowsC;
 
             AutoDetectWorkingBtn.IsChecked = DataHandler.Instance.Settings.AutoDetectWorkingC;
 
+            AutoDetectIdleBtn.IsChecked = DataHandler.Instance.Settings.AutoDetectIdleC;
+
             if (DataHandler.Instance.Settings.AutoDetectWorkingC)
             {
                 ExpandAutoDetectArea();
+            }
+            if (DataHandler.Instance.Settings.AutoDetectIdleC)
+            {
+                ExpandDetectMouseIdleArea();
             }
         }
 
@@ -122,6 +131,8 @@ namespace WorkLifeBalance.Pages
 
             DataHandler.Instance.Settings.AutoDetectInterval = AutoDetectInterval;
 
+            DataHandler.Instance.Settings.AutoDetectIdleInterval = AutoDetectIdleInterval;
+
             await DataHandler.Instance.SaveData();
         }
 
@@ -168,12 +179,12 @@ namespace WorkLifeBalance.Pages
         {
             if (AutoDetectWorkingBtn.IsChecked == true)
             {
-                TimeHandler.Instance.OnTimerTick += AutomaticStateChangerHandler.Instance.TriggerWorkDetect;
+                TimeHandler.Instance.Subscribe(AutomaticStateChangerHandler.Instance.TriggerWorkDetect);
                 ExpandAutoDetectArea();
             }
             else
             {
-                TimeHandler.Instance.OnTimerTick -= AutomaticStateChangerHandler.Instance.TriggerWorkDetect;
+                TimeHandler.Instance.UnSubscribe(AutomaticStateChangerHandler.Instance.TriggerWorkDetect);
                 ContractAutoDetectArea();
             }
         }
@@ -188,6 +199,41 @@ namespace WorkLifeBalance.Pages
             AutoToggleWorkingPanel.Height = 0;
             DataHandler.Instance.Settings.AutoDetectWorkingC = false;
             MainWindow.instance.CheckAutoDetectWorking();
+        }
+
+        private void ToggleDetectMouseIdle(object sender, RoutedEventArgs e)
+        {
+            if (AutoDetectIdleBtn.IsChecked == true)
+            {
+                ExpandDetectMouseIdleArea();
+            }
+            else
+            {
+                ContractDetectMouseIdleArea();
+            }
+        }
+
+        private void ChangeDetectMouseIdleDelay(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(AutoDetectIdleT.Text) || !int.TryParse(AutoDetectIdleT.Text, out _))
+            {
+                AutoDetectIdleT.Text = 1.ToString();
+                AutoDetectIdleInterval = 1;
+                return;
+            }
+
+            AutoDetectIdleInterval = int.Parse(AutoDetectIdleT.Text);
+        }
+
+        private void ExpandDetectMouseIdleArea()
+        {
+            AutoDetectIdlePanel.Height = 80;
+            DataHandler.Instance.Settings.AutoDetectIdleC = true;
+        }
+        private void ContractDetectMouseIdleArea()
+        {
+            AutoDetectIdlePanel.Height = 0;
+            DataHandler.Instance.Settings.AutoDetectIdleC = false;
         }
     }
 }

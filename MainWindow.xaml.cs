@@ -54,7 +54,7 @@ namespace WorkLifeBalance
             CheckAdministratorPerms();
             InitializeComponent();
             Topmost = true;
-            //AllocConsole();
+            AllocConsole();
             LoadStyleInfo();
 
             DataHandler.Instance.OnLoaded += InitializeApp;
@@ -80,14 +80,14 @@ namespace WorkLifeBalance
 
             DataHandler.Instance.IsAppReady = true;
 
-
-            TimeHandler.Instance.OnTimerTick += TimeTrackerHandler.Instance.UpdateSpentTime;
-            TimeHandler.Instance.OnTimerTick += DataHandler.Instance.TriggerSaveData;
-            TimeHandler.Instance.OnTimerTick += AutomaticStateChangerHandler.Instance.RecordActivity;
+            //make a method in every handler that returns a delegate like Get(methodname) and call that one so you can run code and also return the method
+            TimeHandler.Instance.Subscribe(TimeTrackerHandler.Instance.TriggerUpdateSpentTime);
+            TimeHandler.Instance.Subscribe(DataHandler.Instance.TriggerSaveData);
+            TimeHandler.Instance.Subscribe(AutomaticStateChangerHandler.Instance.TriggerRecordActivity);
 
             if (DataHandler.Instance.Settings.AutoDetectWorkingC)
             {
-                TimeHandler.Instance.OnTimerTick += AutomaticStateChangerHandler.Instance.TriggerWorkDetect;
+                TimeHandler.Instance.Subscribe(AutomaticStateChangerHandler.Instance.TriggerWorkDetect);
             }
 
             TimeTrackerHandler.Instance.OnSpentTimeChange += UpdateUI;
@@ -98,47 +98,60 @@ namespace WorkLifeBalance
 
             DateT.Text = $"Today: {DataHandler.Instance.TodayData.DateC.ToString("MM/dd/yyyy")}";
         }
-        
+
         private async Task SetWindowLocation()
         {
             await Task.Delay(300);
             Vector2 UserScreen = new Vector2((float)SystemParameters.PrimaryScreenWidth, (float)SystemParameters.PrimaryScreenHeight);
-            IntPtr TargetWindow = WindowStateHandler.GetWindow(null, "WorkLifeBalance");
+            IntPtr TargetWindow = LowLevelHandler.GetWindow(null, "WorkLifeBalance");
 
             switch (DataHandler.Instance.Settings.StartUpCornerC)
             {
                 case AnchorCorner.TopLeft:
-                    WindowStateHandler.SetWindowLocation(TargetWindow,0, 0);
+                    LowLevelHandler.SetWindowLocation(TargetWindow,0, 0);
                     break;
                 case AnchorCorner.TopRight:
-                    WindowStateHandler.SetWindowLocation(TargetWindow, (int)UserScreen.X - 220, 0);
+                    LowLevelHandler.SetWindowLocation(TargetWindow, (int)UserScreen.X - 220, 0);
                     break;
                 case AnchorCorner.BootomLeft:
-                    WindowStateHandler.SetWindowLocation(TargetWindow, 0, (int)UserScreen.Y - 180);
+                    LowLevelHandler.SetWindowLocation(TargetWindow, 0, (int)UserScreen.Y - 180);
                     break;
                 case AnchorCorner.BottomRight:
-                    WindowStateHandler.SetWindowLocation(TargetWindow, (int)UserScreen.X - 220, (int)UserScreen.Y - 180);
+                    LowLevelHandler.SetWindowLocation(TargetWindow, (int)UserScreen.X - 220, (int)UserScreen.Y - 180);
                     break;
             }
         }
 
-        public void SetAppState(TimmerState state)
+        public void SetAppState(AppState state)
         {
             switch (state)
             {
-                case TimmerState.Working:
+                case AppState.Working:
                     if (!DataHandler.Instance.Settings.AutoDetectWorkingC)
                     {
                         ToggleBtn.Background = LightPurpleColor;
                         ToggleRecordingImage.Source = WorkImg;
                     }
+
+                    if (DataHandler.Instance.Settings.AutoDetectIdleC)
+                    {
+                        TimeHandler.Instance.Subscribe(MouseIdleHandler.Instance.TriggerCheckIdle);
+                    }
                     break;
 
-                case TimmerState.Resting:
+                case AppState.Resting:
                     if (!DataHandler.Instance.Settings.AutoDetectWorkingC)
                     {
                         ToggleBtn.Background = LightBlueColor;
                         ToggleRecordingImage.Source = RestImg;
+                    }
+
+                    if (DataHandler.Instance.Settings.AutoDetectIdleC)
+                    {
+                        if(!AutomaticStateChangerHandler.Instance.IsFocusingOnWorkingWindow)
+                        {
+                            TimeHandler.Instance.UnSubscribe(MouseIdleHandler.Instance.TriggerCheckIdle);
+                        }
                     }
                     break;
             }
@@ -150,12 +163,12 @@ namespace WorkLifeBalance
 
             switch (TimeHandler.Instance.AppTimmerState)
             {
-                case TimmerState.Working:
-                    SetAppState(TimmerState.Resting);
+                case AppState.Working:
+                    SetAppState(AppState.Resting);
                     break;
 
-                case TimmerState.Resting:
-                    SetAppState(TimmerState.Working);
+                case AppState.Resting:
+                    SetAppState(AppState.Working);
                     break;
             }
         }
@@ -173,7 +186,7 @@ namespace WorkLifeBalance
 
             ToggleBtn.Background = OceanBlue;
             ToggleRecordingImage.Source = AutomaticImg;
-            SetAppState(TimmerState.Resting);
+            SetAppState(AppState.Resting);
         }
 
         private void OpenViewDataWindow(object sender, RoutedEventArgs e)
@@ -188,7 +201,7 @@ namespace WorkLifeBalance
 
         private void CheckAdministratorPerms()
         {
-            if(!WindowStateHandler.IsRunningAsAdmin())
+            if(!LowLevelHandler.IsRunningAsAdmin())
             {
                 RestartApplicationWithAdmin();
             }

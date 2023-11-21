@@ -21,22 +21,22 @@ namespace WorkLifeBalance.Handlers
         }
 
         public delegate void ActiveProcess(string ActiveWindow);
-        public event ActiveProcess OnWindowChange;
+        public event ActiveProcess? OnWindowChange;
 
+        public bool IsFocusingOnWorkingWindow = false;
 
         public string ActiveWindow = "";
 
         private TimeSpan OneSec = new TimeSpan(0, 0, 1);
 
-        private bool IsAutoWorkDetectionTriggered = false;
 
-        public void RecordActivity()
+        public void TriggerRecordActivity()
         {
             try
             {
-                IntPtr foregroundWindowHandle = WindowStateHandler.GetForegroundWindow();
+                IntPtr foregroundWindowHandle = LowLevelHandler.GetForegroundWindow();
                 
-                ActiveWindow = WindowStateHandler.GetProcessname(foregroundWindowHandle);
+                ActiveWindow = LowLevelHandler.GetProcessname(foregroundWindowHandle);
                 OnWindowChange?.Invoke(ActiveWindow);
             }
             catch (Exception ex)
@@ -54,6 +54,8 @@ namespace WorkLifeBalance.Handlers
                 DataHandler.Instance.AutoChangeData.ActivitiesC.Add(ActiveWindow,new TimeOnly());
             }
         }
+
+        private bool IsAutoWorkDetectionTriggered = false;
         public async void TriggerWorkDetect()
         {
             if (IsAutoWorkDetectionTriggered) return;
@@ -71,30 +73,30 @@ namespace WorkLifeBalance.Handlers
         {
             if (string.IsNullOrEmpty(ActiveWindow)) return;
 
-            bool IsFocusingOnWorkingWindow = DataHandler.Instance.AutoChangeData.WorkingStateWindows.Contains(ActiveWindow);
+            IsFocusingOnWorkingWindow = DataHandler.Instance.AutoChangeData.WorkingStateWindows.Contains(ActiveWindow);
 
             switch (TimeHandler.Instance.AppTimmerState)
             {
-                case TimmerState.Working:
+                case AppState.Working:
                     if (IsFocusingOnWorkingWindow)
                     {
                         return;
                     }
                     else
                     {
-                        MainWindow.instance.SetAppState(TimmerState.Resting);
+                        MainWindow.instance.SetAppState(AppState.Resting);
                     }
 
                     break;
 
-                case TimmerState.Resting:
+                case AppState.Resting:
                     if (!IsFocusingOnWorkingWindow)
                     {
                         return;
                     }
                     else
                     {
-                        MainWindow.instance.SetAppState(TimmerState.Working);
+                        MainWindow.instance.SetAppState(AppState.Working);
                     }
                     break;
             }

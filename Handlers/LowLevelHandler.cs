@@ -2,18 +2,22 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
 
 namespace WorkLifeBalance.HandlerClasses
 {
-    public class WindowStateHandler
+    public class LowLevelHandler
     {
         // Constants for the SetWindowLoc functions
         public const uint SWP_NOSIZE = 0x0001;
         public const uint SWP_NOZORDER = 0x0004;
-        
+        //read mouse pos
+        [DllImport("user32.dll")]
+        private static extern bool GetCursorPos(out POINT lpPoint);
+
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
@@ -45,7 +49,13 @@ namespace WorkLifeBalance.HandlerClasses
         [DllImport("psapi.dll")]
         private static extern uint GetModuleFileNameEx(IntPtr hProcess, IntPtr hModule, StringBuilder lpBaseName, int nSize);
 
-
+        //create a point to store thelocation of a point on the screen
+        [StructLayout(LayoutKind.Sequential)]
+        private struct POINT
+        {
+            public int X;
+            public int Y;
+        }
         public static void SetWindowLocation(IntPtr windowHandle, int x, int y)
         {
             // Call SetWindowPos with the SWP_NOSIZE and SWP_NOZORDER flags
@@ -92,6 +102,14 @@ namespace WorkLifeBalance.HandlerClasses
             }
 
             return Appnames.ToList();
+        }
+
+        public static Vector2 GetMousePos()
+        {
+            GetCursorPos(out POINT p);
+            Vector2 pos = new Vector2(p.X, p.Y);
+
+            return pos;
         }
 
         public static bool IsRunningAsAdmin()

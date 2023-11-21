@@ -23,26 +23,33 @@ namespace WorkLifeBalance.Handlers
 
         private TimeSpan OneSec = new TimeSpan(0, 0, 1);
 
-        public void UpdateSpentTime()
+        public void TriggerUpdateSpentTime()
         {
             switch (TimeHandler.Instance.AppTimmerState)
             {
-                case TimmerState.Working:
+                case AppState.Working:
                     DataHandler.Instance.TodayData.WorkedAmmountC = DataHandler.Instance.TodayData.WorkedAmmountC.Add(OneSec);
                     break;
 
-                case TimmerState.Resting:
+                case AppState.Resting:
+                    DataHandler.Instance.TodayData.RestedAmmountC = DataHandler.Instance.TodayData.RestedAmmountC.Add(OneSec);
+                    break;
+
+                case AppState.Idle:
                     DataHandler.Instance.TodayData.RestedAmmountC = DataHandler.Instance.TodayData.RestedAmmountC.Add(OneSec);
                     break;
             }
             OnSpentTimeChange?.Invoke();
+
+            Console.WriteLine(TimeHandler.Instance.AppTimmerState);
         }
     }
 
 
-    public enum TimmerState
+    public enum AppState
     {
         Working,
-        Resting
+        Resting,
+        Idle
     }
 }

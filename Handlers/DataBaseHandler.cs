@@ -215,14 +215,16 @@ namespace WorkLifeBalance.HandlerClasses
                     {
                         try
                         {
-                            string sql = @"UPDATE Settings 
-                                              SET LastTimeOpened = @LastTimeOpened,
-                                              StartWithWindows = @StartWithWindows,
-                                              AutoDetectWorking = @AutoDetectWorking,
-                                              StartUpCorner = @StartUpCorner,
-                                              SaveInterval = @SaveInterval,
-                                              AutoDetectInterval = @AutoDetectInterval
-                                              LIMIT 1";
+                            string sql =    @"UPDATE Settings 
+                                            SET LastTimeOpened = @LastTimeOpened,
+                                            StartWithWindows = @StartWithWindows,
+                                            AutoDetectWorking = @AutoDetectWorking,
+                                            AutoDetectIdle = @AutoDetectIdle,
+                                            StartUpCorner = @StartUpCorner,
+                                            SaveInterval = @SaveInterval,
+                                            AutoDetectInterval = @AutoDetectInterval,
+                                            AutoDetectIdleInterval = @AutoDetectIdleInterval
+                                            LIMIT 1";
 
                             connection.Execute(sql, sett);
                             await transaction.CommitAsync();
