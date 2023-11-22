@@ -193,7 +193,7 @@ namespace WorkLifeBalance
 
         private void OpenOptionsWindow(object sender, RoutedEventArgs e)
         {
-            SecondWindow.RequestSecondWindow(SecondWindowType.Settings);
+            SecondWindow.RequestSecondWindow(SecondWindowType.Options);
         }
 
         private void CheckAdministratorPerms()

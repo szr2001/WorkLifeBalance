@@ -68,6 +68,10 @@ namespace WorkLifeBalance.Windows
                 case SecondWindowType.ViewDayActivity:
                     WindowPage = new ViewDayDetailsPage(args);
                     break;
+
+                case SecondWindowType.Options:
+                    WindowPage = new OptionsPage(args);
+                    break;
             }
 
             
@@ -116,6 +120,7 @@ namespace WorkLifeBalance.Windows
         ViewData,
         ViewDays,
         BackgroundProcesses,
-        ViewDayActivity
+        ViewDayActivity,
+        Options
     }
 }

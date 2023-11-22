@@ -21,7 +21,7 @@ namespace WorkLifeBalance.Handlers.Feature
             }
         }
 
-        public string AppVersion;
+        public readonly float AppVersion = 2;
         public string AppName;
         public string AppDirectory;
         public string AppExePath;
@@ -44,7 +44,6 @@ namespace WorkLifeBalance.Handlers.Feature
 
         public DataHandler()
         {
-            AppVersion = "1.0";
             AppName = "WorkLifeBalance";
             AppDirectory = AppDomain.CurrentDomain.BaseDirectory;
             AppExePath = $"{AppDirectory}/{AppName}.exe";

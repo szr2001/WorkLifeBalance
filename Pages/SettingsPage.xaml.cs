@@ -43,6 +43,8 @@ namespace WorkLifeBalance.Pages
                     break;
             }
 
+            VersionT.Text = $"Version: {DataHandler.Instance.AppVersion}";
+
             AutosaveT.Text = DataHandler.Instance.Settings.SaveInterval.ToString();
 
             AutoDetectT.Text = DataHandler.Instance.Settings.AutoDetectInterval.ToString();

@@ -17,7 +17,7 @@
         <Grid>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="45"/>
+                <RowDefinition Height="30"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
@@ -38,14 +38,14 @@
                                FontWeight="Bold"
                                Foreground="{ Binding Source={StaticResource WLFBOceanBlue}}"
                                Text="Window Name"/>
-                    <Button Width="35"
+                    <Button Width="28"
+                            Height="28" 
                             Grid.Column="1"
                             Template="{Binding Source={StaticResource RoundedBtnTemp}}"
                             Style="{Binding Source={StaticResource RedRoundedBtnHoverStyle}}" 
                             VerticalAlignment="Center"
                             HorizontalAlignment="Right"
                             Margin="0,0,5,0"
-                            Height="35" 
                             Name="CloseBtn"
                             Click="CloseWindowButton">
                             <Image Margin="2"

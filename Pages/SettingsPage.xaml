@@ -11,7 +11,7 @@
     <Border Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
             CornerRadius="15">
 
-        <Border Margin="8">
+        <Border Margin="8,0,8,8">
             <ScrollViewer VerticalScrollBarVisibility="Hidden">
                 <StackPanel>
                     <Border Margin="35,5,35,5"
@@ -21,6 +21,7 @@
                         <TextBlock Text="Version: 1.0"
                                    TextAlignment="Center"
                                    FontWeight="Bold"
+                                   Name="VersionT"
                                    Margin="1,0,0,2"
                                    FontSize="12"
                                    Foreground="White"/>
