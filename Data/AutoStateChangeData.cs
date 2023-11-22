@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using WorkLifeBalance.Handlers;
+using WorkLifeBalance.Handlers.Feature;
 
 namespace WorkLifeBalance.Data
 {

@@ -5,8 +5,8 @@ using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using WorkLifeBalance.HandlerClasses;
 using WorkLifeBalance.Handlers;
+using WorkLifeBalance.Handlers.Feature;
 using WorkLifeBalance.Windows;
 
 namespace WorkLifeBalance.Pages
@@ -25,7 +25,7 @@ namespace WorkLifeBalance.Pages
             InitializeProcessNames();
             DataContext = this;
             InitializeComponent();
-            AutomaticStateChangerHandler.Instance.OnWindowChange += UpdateActiveWindowUi;
+            ActivityTrackerHandler.Instance.OnWindowChange += UpdateActiveWindowUi;
         }
 
         private void InitializeProcessNames()
@@ -43,7 +43,7 @@ namespace WorkLifeBalance.Pages
 
         public override async Task ClosePageAsync()
         {
-            AutomaticStateChangerHandler.Instance.OnWindowChange -= UpdateActiveWindowUi;
+            ActivityTrackerHandler.Instance.OnWindowChange -= UpdateActiveWindowUi;
             DataHandler.Instance.AutoChangeData.WorkingStateWindows = SelectedWindows.ToArray();
             await DataHandler.Instance.SaveData();
         }

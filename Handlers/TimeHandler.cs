@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using WorkLifeBalance.Handlers.Feature;
 
 namespace WorkLifeBalance.Handlers
 {
@@ -66,13 +67,20 @@ namespace WorkLifeBalance.Handlers
                     Stop();
                 }
 
-                if (DataHandler.Instance.IsAppSaving)
+                try
                 {
-                    await Task.Delay(500);
-                    continue;
-                }
+                    if (DataHandler.Instance.IsAppSaving)
+                    {
+                        await Task.Delay(500);
+                        continue;
+                    }
 
-                await Task.Delay(1000);
+                    await Task.Delay(1000);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
 
                 OnTimerTick?.Invoke();
             }

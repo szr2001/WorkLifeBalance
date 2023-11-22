@@ -1,8 +1,9 @@
 ﻿using System;
+using static WorkLifeBalance.Handlers.TimeHandler;
 
-namespace WorkLifeBalance.Handlers
+namespace WorkLifeBalance.Handlers.Feature
 {
-    public class TimeTrackerHandler
+    public class TimeTrackerHandler : FeatureBase
     {
         private static TimeTrackerHandler? _instance;
         public static TimeTrackerHandler Instance
@@ -23,7 +24,12 @@ namespace WorkLifeBalance.Handlers
 
         private TimeSpan OneSec = new TimeSpan(0, 0, 1);
 
-        public void TriggerUpdateSpentTime()
+        protected override TickEvent ReturnFeatureMethod()
+        {
+            return TriggerUpdateSpentTime;
+        }
+
+        private void TriggerUpdateSpentTime()
         {
             switch (TimeHandler.Instance.AppTimmerState)
             {

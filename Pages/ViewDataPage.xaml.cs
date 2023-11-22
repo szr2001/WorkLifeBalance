@@ -3,8 +3,8 @@ using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows;
 using WorkLifeBalance.Data;
-using WorkLifeBalance.HandlerClasses;
 using WorkLifeBalance.Handlers;
+using WorkLifeBalance.Handlers.Feature;
 using WorkLifeBalance.Windows;
 
 namespace WorkLifeBalance.Pages

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using WorkLifeBalance.Data;
-using WorkLifeBalance.HandlerClasses;
+using WorkLifeBalance.Handlers;
+using static WorkLifeBalance.Handlers.TimeHandler;
 
-namespace WorkLifeBalance.Handlers
+namespace WorkLifeBalance.Handlers.Feature
 {
-    public class DataHandler
+    public class DataHandler : FeatureBase
     {
         private static DataHandler? _instance;
         public static DataHandler Instance 
@@ -88,14 +89,27 @@ namespace WorkLifeBalance.Handlers
             IsAppLoading = false;
         }
 
+        protected override TickEvent ReturnFeatureMethod()
+        {
+            return TriggerSaveData;
+        }
+
         private bool IsSaveTriggered = false;
-        public async void TriggerSaveData()
+        private async void TriggerSaveData()
         {
             if (IsSaveTriggered) return;
 
             IsSaveTriggered = true;
 
-            await Task.Delay(Settings.SaveInterval * 60000);
+            try
+            {
+                await Task.Delay(Settings.SaveInterval * 60000,CancelTokenS.Token);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
             await SaveData();
 
             IsSaveTriggered = false;

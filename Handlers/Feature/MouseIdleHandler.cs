@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
-using WorkLifeBalance.HandlerClasses;
+using WorkLifeBalance.Handlers;
+using static WorkLifeBalance.Handlers.TimeHandler;
 
-namespace WorkLifeBalance.Handlers
+namespace WorkLifeBalance.Handlers.Feature
 {
-    public class MouseIdleHandler
+    public class MouseIdleHandler : FeatureBase
     {
         private static MouseIdleHandler? _instance;
         private Vector2 _oldmousePosition = new Vector2(-1,-1);
@@ -22,9 +24,13 @@ namespace WorkLifeBalance.Handlers
             }
         }
 
-        private bool IsCheckingIdleTriggered = false;
+        protected override TickEvent ReturnFeatureMethod()
+        {
+            return TriggerCheckIdle;
+        }
 
-        public async void TriggerCheckIdle()
+        private bool IsCheckingIdleTriggered = false;
+        private async void TriggerCheckIdle()
         {
             if (IsCheckingIdleTriggered) return;
 
@@ -36,13 +42,19 @@ namespace WorkLifeBalance.Handlers
             }
             else
             {
-                //delay = DataHandler.Instance.Settings.AutoDetectIdle * 1000;
-                delay = 10000;
+                delay = (DataHandler.Instance.Settings.AutoDetectIdle * 60000)/2;
             }
 
             IsCheckingIdleTriggered = true;
 
-            await Task.Delay(delay);
+            try
+            {
+                await Task.Delay(delay, CancelTokenS.Token);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             CheckIdle();
 
@@ -56,6 +68,7 @@ namespace WorkLifeBalance.Handlers
             if(_oldmousePosition == new Vector2(-1,-1))
             {
                 _oldmousePosition = newpos;
+                return;
             }
 
             Console.WriteLine($"Old: {_oldmousePosition} New: {newpos}");

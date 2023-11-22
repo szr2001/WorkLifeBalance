@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
 
-namespace WorkLifeBalance.HandlerClasses
+namespace WorkLifeBalance.Handlers
 {
     public class LowLevelHandler
     {

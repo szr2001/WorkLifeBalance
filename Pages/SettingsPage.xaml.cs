@@ -9,6 +9,7 @@ using WorkLifeBalance.Windows;
 using Path = System.IO.Path;
 using WorkLifeBalance.Handlers;
 using System.Threading.Tasks;
+using WorkLifeBalance.Handlers.Feature;
 
 namespace WorkLifeBalance.Pages
 {
@@ -179,12 +180,12 @@ namespace WorkLifeBalance.Pages
         {
             if (AutoDetectWorkingBtn.IsChecked == true)
             {
-                TimeHandler.Instance.Subscribe(AutomaticStateChangerHandler.Instance.TriggerWorkDetect);
+                TimeHandler.Instance.Subscribe(StateChangerHandler.Instance.AddFeature());
                 ExpandAutoDetectArea();
             }
             else
             {
-                TimeHandler.Instance.UnSubscribe(AutomaticStateChangerHandler.Instance.TriggerWorkDetect);
+                TimeHandler.Instance.UnSubscribe(StateChangerHandler.Instance.AddFeature());
                 ContractAutoDetectArea();
             }
         }
@@ -227,7 +228,7 @@ namespace WorkLifeBalance.Pages
 
         private void ExpandDetectMouseIdleArea()
         {
-            AutoDetectIdlePanel.Height = 80;
+            AutoDetectIdlePanel.Height = 55;
             DataHandler.Instance.Settings.AutoDetectIdleC = true;
         }
         private void ContractDetectMouseIdleArea()

@@ -4,6 +4,7 @@ namespace WorkLifeBalance.Data
 {
     public class AppSettings
     {
+        public readonly int AppVersion = 2;
         public string LastTimeOpened { get; set; } = "";
         public int SaveInterval { get; set; } = 5;
         public int AutoDetectInterval { get; set; } = 1;

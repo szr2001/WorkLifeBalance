@@ -225,17 +225,6 @@
                                                  FontWeight="Bold"
                                                  Padding="0,-2,0,0"
                                                  Margin="0,5,0,0" TextChanged="ChangeDetectMouseIdleDelay"/>
-                                        <Button Style="{Binding Source={StaticResource OceanBlueRoundedBtnStyle}}"
-                                                Template="{Binding Source= {StaticResource SlightRoundedBtnTemp}}"
-                                                Width="110"
-                                                Margin="4"
-                                                Height="23"
-                                                Foreground="White"
-                                                FontWeight="Bold"
-                                                FontSize="15"
-                                                TextBlock.TextAlignment="Center"
-                                                Content="Configure" 
-                                                Click="ConfigureAutoDetectBtn"/>
                                     </StackPanel>
                                 </Border>
                             </Border>

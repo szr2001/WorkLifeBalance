@@ -1,20 +1,17 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using WorkLifeBalance.Data;
-using WorkLifeBalance.HandlerClasses;
 using WorkLifeBalance.Handlers;
+using WorkLifeBalance.Handlers.Feature;
 using WorkLifeBalance.Windows;
 
 namespace WorkLifeBalance
@@ -81,13 +78,13 @@ namespace WorkLifeBalance
             DataHandler.Instance.IsAppReady = true;
 
             //make a method in every handler that returns a delegate like Get(methodname) and call that one so you can run code and also return the method
-            TimeHandler.Instance.Subscribe(TimeTrackerHandler.Instance.TriggerUpdateSpentTime);
-            TimeHandler.Instance.Subscribe(DataHandler.Instance.TriggerSaveData);
-            TimeHandler.Instance.Subscribe(AutomaticStateChangerHandler.Instance.TriggerRecordActivity);
+            TimeHandler.Instance.Subscribe(TimeTrackerHandler.Instance.AddFeature());
+            TimeHandler.Instance.Subscribe(DataHandler.Instance.AddFeature());
+            TimeHandler.Instance.Subscribe(ActivityTrackerHandler.Instance.AddFeature());
 
             if (DataHandler.Instance.Settings.AutoDetectWorkingC)
             {
-                TimeHandler.Instance.Subscribe(AutomaticStateChangerHandler.Instance.TriggerWorkDetect);
+                TimeHandler.Instance.Subscribe(StateChangerHandler.Instance.AddFeature());
             }
 
             TimeTrackerHandler.Instance.OnSpentTimeChange += UpdateUI;
@@ -135,7 +132,7 @@ namespace WorkLifeBalance
 
                     if (DataHandler.Instance.Settings.AutoDetectIdleC)
                     {
-                        TimeHandler.Instance.Subscribe(MouseIdleHandler.Instance.TriggerCheckIdle);
+                        TimeHandler.Instance.Subscribe(MouseIdleHandler.Instance.AddFeature());
                     }
                     break;
 
@@ -148,9 +145,9 @@ namespace WorkLifeBalance
 
                     if (DataHandler.Instance.Settings.AutoDetectIdleC)
                     {
-                        if(!AutomaticStateChangerHandler.Instance.IsFocusingOnWorkingWindow)
+                        if(!StateChangerHandler.Instance.IsFocusingOnWorkingWindow)
                         {
-                            TimeHandler.Instance.UnSubscribe(MouseIdleHandler.Instance.TriggerCheckIdle);
+                            TimeHandler.Instance.UnSubscribe(MouseIdleHandler.Instance.RemoveFeature());
                         }
                     }
                     break;

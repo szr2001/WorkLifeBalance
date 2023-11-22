@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WorkLifeBalance.Data;
 
-namespace WorkLifeBalance.HandlerClasses
+namespace WorkLifeBalance.Handlers
 {
     public static class DataBaseHandler
     {
