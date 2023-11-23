@@ -21,6 +21,11 @@ namespace WorkLifeBalance.Pages
         int Saveinterval = 5;
         int AutoDetectInterval = 1;
         int AutoDetectIdleInterval = 1;
+
+        bool AutoDetectWork = false;
+        bool AutoDetectIdle = false;
+        bool StartWithWin = false;
+
         public SettingsPage(object? args) : base(args)
         {
             InitializeComponent();
@@ -57,11 +62,14 @@ namespace WorkLifeBalance.Pages
 
             AutoDetectIdleT.Text = DataHandler.Instance.Settings.AutoDetectIdleInterval.ToString();
 
-            StartWithWInBtn.IsChecked = DataHandler.Instance.Settings.StartWithWindowsC;
+            StartWithWin = DataHandler.Instance.Settings.StartWithWindowsC;
+            StartWithWInBtn.IsChecked = StartWithWin;
 
-            AutoDetectWorkingBtn.IsChecked = DataHandler.Instance.Settings.AutoDetectWorkingC;
+            AutoDetectWork = DataHandler.Instance.Settings.AutoDetectWorkingC;
+            AutoDetectWorkingBtn.IsChecked = AutoDetectWork;
 
-            AutoDetectIdleBtn.IsChecked = DataHandler.Instance.Settings.AutoDetectIdleC;
+            AutoDetectIdle = DataHandler.Instance.Settings.AutoDetectIdleC;
+            AutoDetectIdleBtn.IsChecked = AutoDetectIdle;
 
             if (DataHandler.Instance.Settings.AutoDetectWorkingC)
             {
@@ -129,22 +137,30 @@ namespace WorkLifeBalance.Pages
 
         private void SetStartWithWin(object sender, RoutedEventArgs e)
         {
-            DataHandler.Instance.Settings.StartWithWindowsC = (bool)StartWithWInBtn.IsChecked;
+            StartWithWin = (bool)StartWithWInBtn.IsChecked;
         }
 
         //Each page has a close page so the second window can await the page specific cleanups stuff
-        //here we wait for the saving of data
+        //here we wait set the changed values,apply changes and wait for the save to db
         public override async Task ClosePageAsync()
         {
-            ApplyStartToWindows();
-
             DataHandler.Instance.Settings.SaveInterval = Saveinterval;
 
             DataHandler.Instance.Settings.AutoDetectInterval = AutoDetectInterval;
 
             DataHandler.Instance.Settings.AutoDetectIdleInterval = AutoDetectIdleInterval;
 
+            DataHandler.Instance.Settings.AutoDetectIdleC = AutoDetectIdle;
+
+            DataHandler.Instance.Settings.AutoDetectWorkingC = AutoDetectWork;
+
+            DataHandler.Instance.Settings.StartWithWindowsC = StartWithWin;
+
             await DataHandler.Instance.SaveData();
+
+            ApplyStartToWindows();
+
+            MainWindow.instance.CheckAutoDetectWorking();
         }
 
         private void ApplyStartToWindows()
@@ -202,14 +218,12 @@ namespace WorkLifeBalance.Pages
         private void ExpandAutoDetectArea()
         {
             AutoToggleWorkingPanel.Height = 80;
-            DataHandler.Instance.Settings.AutoDetectWorkingC = true;
-            MainWindow.instance.CheckAutoDetectWorking();
+            AutoDetectWork = true;
         }
         private void ContractAutoDetectArea()
         {
             AutoToggleWorkingPanel.Height = 0;
-            DataHandler.Instance.Settings.AutoDetectWorkingC = false;
-            MainWindow.instance.CheckAutoDetectWorking();
+            AutoDetectWork = false;
         }
 
         private void ToggleDetectMouseIdle(object sender, RoutedEventArgs e)
@@ -240,12 +254,12 @@ namespace WorkLifeBalance.Pages
         private void ExpandDetectMouseIdleArea()
         {
             AutoDetectIdlePanel.Height = 55;
-            DataHandler.Instance.Settings.AutoDetectIdleC = true;
+            AutoDetectIdle = true;
         }
         private void ContractDetectMouseIdleArea()
         {
             AutoDetectIdlePanel.Height = 0;
-            DataHandler.Instance.Settings.AutoDetectIdleC = false;
+            AutoDetectIdle = false;
         }
     }
 }
