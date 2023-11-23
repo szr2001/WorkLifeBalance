@@ -45,6 +45,8 @@ namespace WorkLifeBalance.Windows
             Instance = null;
         }
 
+        //create the specific requested page and args is used to box specific pages data
+        //the unboxing of the args is made in every page that is expected to receive some data
         private void InitializeWindowType(object? args)
         {
             switch (WindowType)
@@ -95,6 +97,7 @@ namespace WorkLifeBalance.Windows
             }
         }
 
+        //open a new window with the specified page, wait for the closing of any existing page
         private static async Task OpenWindow(SecondWindowType Type, object? args = null)
         {
             if (Instance != null && Instance.WindowType == Type)

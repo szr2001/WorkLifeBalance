@@ -8,6 +8,7 @@ namespace WorkLifeBalance.Handlers
 {
     public class TimeHandler
     {
+        //Main timer that runs once a second, other features can subscribe to it and have their own run interval
         private static TimeHandler? _instance;
         public static TimeHandler Instance
         {
@@ -62,6 +63,7 @@ namespace WorkLifeBalance.Handlers
         {
             while (!token.IsCancellationRequested)
             {
+                //stop the timer if the app is not ready or is closing
                 if (!DataHandler.Instance.IsAppReady && DataHandler.Instance.IsClosingApp) 
                 {
                     Stop();
@@ -69,6 +71,8 @@ namespace WorkLifeBalance.Handlers
 
                 try
                 {
+                    //Delay the triggering of the main event to pause every feature from being
+                    //triggered while saving, so data is not updated while is saving
                     if (DataHandler.Instance.IsAppSaving)
                     {
                         await Task.Delay(500);

@@ -39,6 +39,7 @@ namespace WorkLifeBalance
 
         public MainWindow()
         {
+            //initialize singleton
             if (instance == null)
             {
                 instance = this;
@@ -54,15 +55,18 @@ namespace WorkLifeBalance
             AllocConsole();
             LoadStyleInfo();
 
+            //subscribe events for triggering app when data loaded and updaing Ui on save/load
             DataHandler.Instance.OnLoaded += InitializeApp;
             DataHandler.Instance.OnSaving += ()=> { DateT.Text = $"Saving data...";};
             DataHandler.Instance.OnSaved += ()=> { DateT.Text = $"Today: {DataHandler.Instance.TodayData.DateC.ToString("MM/dd/yyyy")}";};
 
+            //load data
             _ = DataHandler.Instance.LoadData();
         }
 
         private void LoadStyleInfo()
         {
+            //load images and colors
             RestImg = new BitmapImage(new Uri($"{Directory.GetCurrentDirectory()}/Assets/Rest.png"));
             WorkImg = new BitmapImage(new Uri($"{Directory.GetCurrentDirectory()}/Assets/Work.png"));
             AutomaticImg = new BitmapImage(new Uri($"{Directory.GetCurrentDirectory()}/Assets/Automat.png"));
@@ -71,33 +75,42 @@ namespace WorkLifeBalance
             OceanBlue = (SolidColorBrush)FindResource("WLFBOceanBlue");
         }
 
+        //initialize app called when data was loaded
         private void InitializeApp()
         {
+            //call set window location and continue
             _ = SetWindowLocation();
 
+            //set app ready so timers can start
             DataHandler.Instance.IsAppReady = true;
 
-            //make a method in every handler that returns a delegate like Get(methodname) and call that one so you can run code and also return the method
+            //subscribe features to the main timer
             TimeHandler.Instance.Subscribe(TimeTrackerHandler.Instance.AddFeature());
             TimeHandler.Instance.Subscribe(DataHandler.Instance.AddFeature());
             TimeHandler.Instance.Subscribe(ActivityTrackerHandler.Instance.AddFeature());
 
+            //check settings to see if you need to add some features
             if (DataHandler.Instance.Settings.AutoDetectWorkingC)
             {
                 TimeHandler.Instance.Subscribe(StateChangerHandler.Instance.AddFeature());
             }
 
+            //asign update ui 
             TimeTrackerHandler.Instance.OnSpentTimeChange += UpdateUI;
 
+            //starts the main timer
             TimeHandler.Instance.StartTick();
 
+            //check if auto detect is enabled so you update ui
             CheckAutoDetectWorking();
 
+            //asign the todays date
             DateT.Text = $"Today: {DataHandler.Instance.TodayData.DateC.ToString("MM/dd/yyyy")}";
         }
 
         private async Task SetWindowLocation()
         {
+            //Moves app in the 4 posible corners based on settings
             await Task.Delay(300);
             Vector2 UserScreen = new Vector2((float)SystemParameters.PrimaryScreenWidth, (float)SystemParameters.PrimaryScreenHeight);
             IntPtr TargetWindow = LowLevelHandler.GetWindow(null, "WorkLifeBalance");
@@ -119,6 +132,8 @@ namespace WorkLifeBalance
             }
         }
 
+        //sets the app state and also enables/disables the mouse idle check feature based on settings so it will only run of 
+        //the app is in working stage, no need to check idle when the user is not working
         public void SetAppState(AppState state)
         {
             switch (state)
@@ -154,6 +169,7 @@ namespace WorkLifeBalance
             }
             TimeHandler.Instance.AppTimmerState = state;
         }
+
         private void ToggleState(object sender, RoutedEventArgs e)
         {
             if (!DataHandler.Instance.IsAppReady || DataHandler.Instance.IsClosingApp) return;
@@ -203,6 +219,8 @@ namespace WorkLifeBalance
                 RestartApplicationWithAdmin();
             }
         }
+
+        //restart app if it dosent have admin rights
         private void RestartApplicationWithAdmin()
         {
             var psi = new ProcessStartInfo

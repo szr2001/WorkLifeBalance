@@ -9,6 +9,7 @@ using System.Text;
 
 namespace WorkLifeBalance.Handlers
 {
+    //low level handling of windows and mouse
     public class LowLevelHandler
     {
         // Constants for the SetWindowLoc functions

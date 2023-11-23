@@ -103,15 +103,16 @@ namespace WorkLifeBalance.Handlers.Feature
             try
             {
                 await Task.Delay(Settings.SaveInterval * 60000,CancelTokenS.Token);
+                await SaveData();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-
-            await SaveData();
-
-            IsSaveTriggered = false;
+            finally
+            {
+                IsSaveTriggered = false;
+            }
         }
     }
 }

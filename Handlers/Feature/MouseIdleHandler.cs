@@ -50,15 +50,16 @@ namespace WorkLifeBalance.Handlers.Feature
             try
             {
                 await Task.Delay(delay, CancelTokenS.Token);
+                CheckIdle();
             }
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-
-            CheckIdle();
-
-            IsCheckingIdleTriggered = false;
+            finally
+            {
+                IsCheckingIdleTriggered = false;
+            }
         }
 
         private void CheckIdle()

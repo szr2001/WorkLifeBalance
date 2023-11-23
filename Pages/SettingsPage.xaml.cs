@@ -27,6 +27,12 @@ namespace WorkLifeBalance.Pages
             RequiredWindowSize = new Vector2(250,320);
             pageNme = "Settings";
 
+            ApplySettings();
+        }
+
+        //updates ui based on loaded settings
+        private void ApplySettings()
+        {
             switch (DataHandler.Instance.Settings.StartUpCornerC)
             {
                 case AnchorCorner.TopLeft:
@@ -126,6 +132,8 @@ namespace WorkLifeBalance.Pages
             DataHandler.Instance.Settings.StartWithWindowsC = (bool)StartWithWInBtn.IsChecked;
         }
 
+        //Each page has a close page so the second window can await the page specific cleanups stuff
+        //here we wait for the saving of data
         public override async Task ClosePageAsync()
         {
             ApplyStartToWindows();
@@ -213,6 +221,7 @@ namespace WorkLifeBalance.Pages
             else
             {
                 ContractDetectMouseIdleArea();
+                TimeHandler.Instance.UnSubscribe(MouseIdleHandler.Instance.RemoveFeature());
             }
         }
 

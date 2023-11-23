@@ -38,15 +38,16 @@ namespace WorkLifeBalance.Handlers.Feature
             try
             {
                 await Task.Delay(DataHandler.Instance.Settings.AutoDetectInterval * 1000,CancelTokenS.Token);
+                CheckStateChange();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-
-            CheckStateChange();
-
-            IsAutoWorkDetectionTriggered = false;
+            finally
+            {
+                IsAutoWorkDetectionTriggered = false;
+            }
         }
 
         private void CheckStateChange()
