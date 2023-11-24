@@ -172,7 +172,7 @@ namespace WorkLifeBalance.Pages
 
             ApplyStartToWindows();
 
-            MainWindow.instance.CheckAutoDetectWorking();
+            MainWindow.instance.ApplyAutoDetectWorking();
             Log.Information("Applied Settings");
         }
 
@@ -219,12 +219,10 @@ namespace WorkLifeBalance.Pages
         {
             if (AutoDetectWorkingBtn.IsChecked == true)
             {
-                TimeHandler.Subscribe(StateCheckerFeature.Instance.AddFeature());
                 ExpandAutoDetectArea();
             }
             else
             {
-                TimeHandler.UnSubscribe(StateCheckerFeature.Instance.AddFeature());
                 ContractAutoDetectArea();
             }
             Log.Information($"AutoDetectWorking changed to {AutoDetectWorkingBtn.IsChecked}");

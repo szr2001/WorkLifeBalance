@@ -38,9 +38,10 @@ namespace WorkLifeBalance
         private SolidColorBrush LightPurpleColor = new();
         private SolidColorBrush OceanBlue = new();
 
+        private readonly bool DebugMode = true;
         public MainWindow()
         {
-            //initialize singleton
+            //initialize singleton ?
             if (instance == null)
             {
                 instance = this;
@@ -50,14 +51,24 @@ namespace WorkLifeBalance
                 instance.Close();
                 instance = this;
             }
+
             CheckAdministratorPerms();
             InitializeComponent();
 
-            AllocConsole();//can be removed in release
-            Log.Logger = new LoggerConfiguration()
-            .WriteTo.Console()//Can be removed in release
-            .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
-            .CreateLogger();
+            if (DebugMode)
+            {
+                AllocConsole();
+                Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+            }
+            else
+            {
+                Log.Logger = new LoggerConfiguration()
+                .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+            }
 
             Topmost = true;
             LoadStyleInfo();
@@ -108,7 +119,8 @@ namespace WorkLifeBalance
             TimeHandler.StartTick();
 
             //check if auto detect is enabled so you update ui
-            CheckAutoDetectWorking();
+            SetAppState(AppState.Resting);
+            ApplyAutoDetectWorking();
 
             //asign the todays date
             DateT.Text = $"Today: {DataStorageFeature.Instance.TodayData.DateC.ToString("MM/dd/yyyy")}";
@@ -118,12 +130,23 @@ namespace WorkLifeBalance
         private async Task SetWindowLocation()
         {
             //Moves app in the 4 posible corners based on settings
+            //delay because why not ? (waiting for window to appear)
             await Task.Delay(300);
-            Vector2 UserScreen = new Vector2((float)SystemParameters.PrimaryScreenWidth, (float)SystemParameters.PrimaryScreenHeight);
-            IntPtr TargetWindow = LowLevelHandler.GetWindow(null, "WorkLifeBalance");
+            Vector2 UserScreen = Vector2.Zero;
+            IntPtr TargetWindow = IntPtr.Zero;
+            try
+            {
+                UserScreen = new Vector2((float)SystemParameters.PrimaryScreenWidth, (float)SystemParameters.PrimaryScreenHeight);
+                TargetWindow = LowLevelHandler.GetWindow(null, "WorkLifeBalance");
+            }
+            catch(Exception ex)
+            {
+                Log.Warning(ex,"Failed to find Window for seting StartupLocation");
+            }
 
             switch (DataStorageFeature.Instance.Settings.StartUpCornerC)
             {
+                //calculate corners based on user resolution
                 case AnchorCorner.TopLeft:
                     LowLevelHandler.SetWindowLocation(TargetWindow, 0, 0);
                     break;
@@ -202,14 +225,24 @@ namespace WorkLifeBalance
             ElapsedRestT.Text = DataStorageFeature.Instance.TodayData.RestedAmmountC.ToString("HH:mm:ss");
         }
 
-        public void CheckAutoDetectWorking()
+        public void ApplyAutoDetectWorking()
         {
             bool value = DataStorageFeature.Instance.Settings.AutoDetectWorkingC;
             ToggleBtn.IsEnabled = !value;
 
-            ToggleBtn.Background = OceanBlue;
-            ToggleRecordingImage.Source = AutomaticImg;
-            SetAppState(AppState.Resting);
+            if(value == true)
+            {
+                TimeHandler.Subscribe(StateCheckerFeature.Instance.AddFeature());
+                ToggleBtn.Background = OceanBlue;
+                ToggleRecordingImage.Source = AutomaticImg;
+            }
+            else
+            {
+                TimeHandler.UnSubscribe(StateCheckerFeature.Instance.AddFeature());
+                ToggleBtn.Background = LightBlueColor;
+                ToggleRecordingImage.Source = RestImg;
+                SetAppState(AppState.Resting);
+            }
         }
 
         private void OpenViewDataWindow(object sender, RoutedEventArgs e)
