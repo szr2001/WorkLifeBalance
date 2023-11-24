@@ -43,12 +43,12 @@ namespace WorkLifeBalance.Pages
                 }
             }
 
-           MainWindow.ShowErrorBox("Error ViewDaysPage", "Requested ViewDays Page with no/wrong arguments", true);
+           MainWindow.ShowErrorBox("Error ViewDaysPage", "Requested ViewDays Page with no/wrong arguments");
         }
 
         private async Task RequiestData(int requiestedDataType)
         {
-            DateOnly currentDate = DataHandler.Instance.TodayData.DateC;
+            DateOnly currentDate = DataStorageFeature.Instance.TodayData.DateC;
             DateTime previousMonthDateTime = currentDate.ToDateTime(new TimeOnly(0, 0, 0)).AddMonths(-1);
             DateOnly previousDate = DateOnly.FromDateTime(previousMonthDateTime);
 

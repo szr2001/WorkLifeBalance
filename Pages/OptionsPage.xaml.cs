@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,6 +25,8 @@ namespace WorkLifeBalance.Pages
         public OptionsPage(object? args) : base(args)
         {
             InitializeComponent();
+            RequiredWindowSize = new Vector2(250, 320);
+            pageNme = "Options";
         }
 
         private void OpenSettings(object sender, RoutedEventArgs e)

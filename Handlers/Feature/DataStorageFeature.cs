@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Threading.Tasks;
 using WorkLifeBalance.Data;
 using WorkLifeBalance.Handlers;
@@ -6,16 +7,16 @@ using static WorkLifeBalance.Handlers.TimeHandler;
 
 namespace WorkLifeBalance.Handlers.Feature
 {
-    public class DataHandler : FeatureBase
+    public class DataStorageFeature : FeatureBase
     {
-        private static DataHandler? _instance;
-        public static DataHandler Instance 
+        private static DataStorageFeature? _instance;
+        public static DataStorageFeature Instance 
         {
             get 
             {
                 if(_instance == null)
                 {
-                    _instance = new DataHandler();
+                    _instance = new DataStorageFeature();
                 }
                 return _instance;
             }
@@ -42,7 +43,7 @@ namespace WorkLifeBalance.Handlers.Feature
         public event DataEvent? OnSaving;
         public event DataEvent? OnSaved;
 
-        public DataHandler()
+        public DataStorageFeature()
         {
             AppName = "WorkLifeBalance";
             AppDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -56,18 +57,18 @@ namespace WorkLifeBalance.Handlers.Feature
 
             OnSaving?.Invoke();
 
-            Console.WriteLine("Saving day");
+            Log.Information($"Saving Day");
             await DataBaseHandler.WriteDay(TodayData);
-            Console.WriteLine("Saving settings");
+            Log.Information($"Saving Settings");
             await DataBaseHandler.WriteSettings(Settings);
-            Console.WriteLine("Saving autostate");
+            Log.Information($"Saving Activities");
             await DataBaseHandler.WriteAutoSateData(AutoChangeData);
 
             OnSaved?.Invoke();
 
             IsAppSaving = false;
 
-            Console.WriteLine("Save Complete!");
+            Log.Information($"Save Complete!");
         }
 
         public async Task LoadData()
@@ -78,14 +79,17 @@ namespace WorkLifeBalance.Handlers.Feature
 
             OnLoading?.Invoke();
 
-            //TodayData.DateC might not exist yet. if it gives an error try creating a new TodayDate.Now
+            Log.Information($"Loading Day");
             TodayData = await DataBaseHandler.ReadDay(TodayData.DateC.ToString("MMddyyyy"));
+            Log.Information($"Loading Settings");
             Settings = await DataBaseHandler.ReadSettings();
+            Log.Information($"Loading Activities");
             AutoChangeData = await DataBaseHandler.ReadAutoStateData(TodayData.DateC.ToString("MMddyyyy"));
 
             OnLoaded?.Invoke();
 
             IsAppLoading = false;
+            Log.Information($"Load Complete!");
         }
 
         protected override TickEvent ReturnFeatureMethod()
@@ -107,8 +111,9 @@ namespace WorkLifeBalance.Handlers.Feature
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Warning(ex, $"DataStorageFeature timer loop");
             }
+
             finally
             {
                 IsSaveTriggered = false;

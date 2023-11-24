@@ -14,31 +14,44 @@ namespace WorkLifeBalance.Data
 
         public void ConvertSaveDataToUsableData()
         {
-            foreach(ProcessActivity activity in Activities)
+            try
             {
-                activity.ConvertSaveDataToUsableData();
-                ActivitiesC.Add(activity.Process,activity.TimeSpentC);
+                foreach(ProcessActivity activity in Activities)
+                {
+                    activity.ConvertSaveDataToUsableData();
+                    ActivitiesC.Add(activity.Process,activity.TimeSpentC);
+                }
             }
-
+            catch (Exception ex)
+            {
+                MainWindow.ShowErrorBox("StateChangeData Error", "Failed to convert data to usable data", ex);
+            }
         }
         public void ConvertUsableDataToSaveData()
         {
-            List<ProcessActivity> processActivities = new();
+            try
+            { 
+                List<ProcessActivity> processActivities = new();
 
 
-            foreach (KeyValuePair<string,TimeOnly> activity in ActivitiesC)
-            {
-                ProcessActivity process = new();
-                process.DateC = DataHandler.Instance.TodayData.DateC;
-                process.Process = activity.Key;
-                process.TimeSpentC = activity.Value;
+                foreach (KeyValuePair<string,TimeOnly> activity in ActivitiesC)
+                {
+                    ProcessActivity process = new();
+                    process.DateC = DataStorageFeature.Instance.TodayData.DateC;
+                    process.Process = activity.Key;
+                    process.TimeSpentC = activity.Value;
 
-                process.ConvertUsableDataToSaveData();
+                    process.ConvertUsableDataToSaveData();
 
-                processActivities.Add(process);
+                    processActivities.Add(process);
+                }
+
+                Activities = processActivities.ToArray();
             }
-
-            Activities = processActivities.ToArray();
+            catch (Exception ex)
+            {
+                MainWindow.ShowErrorBox("StateChangeData Error", "Failed to convert usable data to save data", ex);
+            }
         }
     }
 }

@@ -13,7 +13,7 @@ namespace WorkLifeBalance.Handlers
     public static class DataBaseHandler
     {
         //semaphore to ensure only one method can write to the database at once
-        private static SemaphoreSlim _semaphore = new(1);
+        private static readonly SemaphoreSlim _semaphore = new(1);
         //connection string for the db
         private static readonly string ConnectionString = @$"Data Source={Directory.GetCurrentDirectory()}\RecordedData.db;Version=3;";
 
@@ -442,7 +442,6 @@ namespace WorkLifeBalance.Handlers
                 //release sempahore so other methods can run
                 _semaphore.Release();
             }
-            Console.WriteLine(returncount);
             return returncount;
         }
 

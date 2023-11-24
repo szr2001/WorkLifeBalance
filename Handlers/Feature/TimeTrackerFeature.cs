@@ -3,16 +3,16 @@ using static WorkLifeBalance.Handlers.TimeHandler;
 
 namespace WorkLifeBalance.Handlers.Feature
 {
-    public class TimeTrackerHandler : FeatureBase
+    public class TimeTrackerFeature : FeatureBase
     {
-        private static TimeTrackerHandler? _instance;
-        public static TimeTrackerHandler Instance
+        private static TimeTrackerFeature? _instance;
+        public static TimeTrackerFeature Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new TimeTrackerHandler();
+                    _instance = new TimeTrackerFeature();
                 }
                 return _instance;
             }
@@ -31,23 +31,21 @@ namespace WorkLifeBalance.Handlers.Feature
 
         private void TriggerUpdateSpentTime()
         {
-            switch (TimeHandler.Instance.AppTimmerState)
+            switch (TimeHandler.AppTimmerState)
             {
                 case AppState.Working:
-                    DataHandler.Instance.TodayData.WorkedAmmountC = DataHandler.Instance.TodayData.WorkedAmmountC.Add(OneSec);
+                    DataStorageFeature.Instance.TodayData.WorkedAmmountC = DataStorageFeature.Instance.TodayData.WorkedAmmountC.Add(OneSec);
                     break;
 
                 case AppState.Resting:
-                    DataHandler.Instance.TodayData.RestedAmmountC = DataHandler.Instance.TodayData.RestedAmmountC.Add(OneSec);
+                    DataStorageFeature.Instance.TodayData.RestedAmmountC = DataStorageFeature.Instance.TodayData.RestedAmmountC.Add(OneSec);
                     break;
 
                 case AppState.Idle:
-                    DataHandler.Instance.TodayData.RestedAmmountC = DataHandler.Instance.TodayData.RestedAmmountC.Add(OneSec);
+                    DataStorageFeature.Instance.TodayData.RestedAmmountC = DataStorageFeature.Instance.TodayData.RestedAmmountC.Add(OneSec);
                     break;
             }
             OnSpentTimeChange?.Invoke();
-
-            Console.WriteLine(TimeHandler.Instance.AppTimmerState);
         }
     }
 

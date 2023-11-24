@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Diagnostics;
 using System.Numerics;
 using System.Threading;
@@ -8,17 +9,17 @@ using static WorkLifeBalance.Handlers.TimeHandler;
 
 namespace WorkLifeBalance.Handlers.Feature
 {
-    public class MouseIdleHandler : FeatureBase
+    public class IdleCheckerFeature : FeatureBase
     {
-        private static MouseIdleHandler? _instance;
+        private static IdleCheckerFeature? _instance;
         private Vector2 _oldmousePosition = new Vector2(-1,-1);
-        public static MouseIdleHandler Instance
+        public static IdleCheckerFeature Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new MouseIdleHandler();
+                    _instance = new IdleCheckerFeature();
                 }
                 return _instance;
             }
@@ -36,13 +37,13 @@ namespace WorkLifeBalance.Handlers.Feature
 
             int delay;
 
-            if(TimeHandler.Instance.AppTimmerState == AppState.Idle)
+            if(TimeHandler.AppTimmerState == AppState.Idle)
             {
-                delay = 1500;
+                delay = 3000;
             }
             else
             {
-                delay = (DataHandler.Instance.Settings.AutoDetectIdle * 60000)/2;
+                delay = (DataStorageFeature.Instance.Settings.AutoDetectIdle * 60000)/2;
             }
 
             IsCheckingIdleTriggered = true;
@@ -54,7 +55,7 @@ namespace WorkLifeBalance.Handlers.Feature
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Warning(ex,$"IdleCheckerFeature timer loop");
             }
             finally
             {
@@ -64,7 +65,16 @@ namespace WorkLifeBalance.Handlers.Feature
 
         private void CheckIdle()
         {
-            Vector2 newpos = LowLevelHandler.GetMousePos();
+            Vector2 newpos = Vector2.Zero;
+
+            try
+            {
+                newpos = LowLevelHandler.GetMousePos();
+            }
+            catch(Exception ex)
+            {
+                Log.Warning(ex,"IdleChecker failed to get mouse pos");
+            }
 
             if(_oldmousePosition == new Vector2(-1,-1))
             {
@@ -72,17 +82,15 @@ namespace WorkLifeBalance.Handlers.Feature
                 return;
             }
 
-            Console.WriteLine($"Old: {_oldmousePosition} New: {newpos}");
-
             if(newpos == _oldmousePosition)
             {
                 MainWindow.instance.SetAppState(AppState.Idle);
-                Console.WriteLine("Mouse not moving");
+                Log.Information($"Mouse not moving, Old: {_oldmousePosition} New: {newpos}");
             }
             else
             {
                 MainWindow.instance.SetAppState(AppState.Working);
-                Console.WriteLine("Mouse Moved");
+                Log.Information($"Mouse Moved, Old: {_oldmousePosition} New: {newpos}");
             }
 
             _oldmousePosition = newpos;

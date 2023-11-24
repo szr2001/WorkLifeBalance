@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using WorkLifeBalance.Handlers;
@@ -6,16 +7,16 @@ using static WorkLifeBalance.Handlers.TimeHandler;
 
 namespace WorkLifeBalance.Handlers.Feature
 {
-    public class StateChangerHandler : FeatureBase
+    public class StateCheckerFeature : FeatureBase
     {
-        private static StateChangerHandler? _instance;
-        public static StateChangerHandler Instance
+        private static StateCheckerFeature? _instance;
+        public static StateCheckerFeature Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new StateChangerHandler();
+                    _instance = new StateCheckerFeature();
                 }
                 return _instance;
             }
@@ -37,12 +38,12 @@ namespace WorkLifeBalance.Handlers.Feature
 
             try
             {
-                await Task.Delay(DataHandler.Instance.Settings.AutoDetectInterval * 1000,CancelTokenS.Token);
+                await Task.Delay(DataStorageFeature.Instance.Settings.AutoDetectInterval * 1000,CancelTokenS.Token);
                 CheckStateChange();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Warning(ex,"StateCheckerFeature timer loop");
             }
             finally
             {
@@ -52,11 +53,11 @@ namespace WorkLifeBalance.Handlers.Feature
 
         private void CheckStateChange()
         {
-            if (string.IsNullOrEmpty(ActivityTrackerHandler.Instance.ActiveWindow)) return;
+            if (string.IsNullOrEmpty(ActivityTrackerFeature.Instance.ActiveWindow)) return;
 
-            IsFocusingOnWorkingWindow = DataHandler.Instance.AutoChangeData.WorkingStateWindows.Contains(ActivityTrackerHandler.Instance.ActiveWindow);
+            IsFocusingOnWorkingWindow = DataStorageFeature.Instance.AutoChangeData.WorkingStateWindows.Contains(ActivityTrackerFeature.Instance.ActiveWindow);
 
-            switch (TimeHandler.Instance.AppTimmerState)
+            switch (TimeHandler.AppTimmerState)
             {
                 case AppState.Working:
                     if (!IsFocusingOnWorkingWindow)

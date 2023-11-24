@@ -37,7 +37,7 @@ namespace WorkLifeBalance.Pages
                 }
             }
 
-            MainWindow.ShowErrorBox("Error ViewDayDetails", "Requested ViewDayDetails Page with no/wrong arguments", true);
+            MainWindow.ShowErrorBox("Error ViewDayDetails", "Requested ViewDayDetails Page with no/wrong arguments");
         }
 
         private async Task RequiestData()

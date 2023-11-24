@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,16 +8,16 @@ using static WorkLifeBalance.Handlers.TimeHandler;
 
 namespace WorkLifeBalance.Handlers.Feature
 {
-    public class ActivityTrackerHandler : FeatureBase
+    public class ActivityTrackerFeature : FeatureBase
     {
-        private static ActivityTrackerHandler? _instance;
-        public static ActivityTrackerHandler Instance
+        private static ActivityTrackerFeature? _instance;
+        public static ActivityTrackerFeature Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new ActivityTrackerHandler();
+                    _instance = new ActivityTrackerFeature();
                 }
                 return _instance;
             }
@@ -45,17 +46,17 @@ namespace WorkLifeBalance.Handlers.Feature
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Warning(ex,"Failed to get process of window");
             }
 
             try
             {
-                TimeOnly IncreasedTimeSpan = DataHandler.Instance.AutoChangeData.ActivitiesC[ActiveWindow].Add(OneSec);
-                DataHandler.Instance.AutoChangeData.ActivitiesC[ActiveWindow] = IncreasedTimeSpan;
+                TimeOnly IncreasedTimeSpan = DataStorageFeature.Instance.AutoChangeData.ActivitiesC[ActiveWindow].Add(OneSec);
+                DataStorageFeature.Instance.AutoChangeData.ActivitiesC[ActiveWindow] = IncreasedTimeSpan;
             }
             catch
             {
-                DataHandler.Instance.AutoChangeData.ActivitiesC.Add(ActiveWindow, new TimeOnly());
+                DataStorageFeature.Instance.AutoChangeData.ActivitiesC.Add(ActiveWindow, new TimeOnly());
             }
         }
     }

@@ -10,7 +10,7 @@ using System.Text;
 namespace WorkLifeBalance.Handlers
 {
     //low level handling of windows and mouse
-    public class LowLevelHandler
+    public static class LowLevelHandler
     {
         // Constants for the SetWindowLoc functions
         public const uint SWP_NOSIZE = 0x0001;

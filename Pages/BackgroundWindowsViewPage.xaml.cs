@@ -25,12 +25,12 @@ namespace WorkLifeBalance.Pages
             InitializeProcessNames();
             DataContext = this;
             InitializeComponent();
-            ActivityTrackerHandler.Instance.OnWindowChange += UpdateActiveWindowUi;
+            ActivityTrackerFeature.Instance.OnWindowChange += UpdateActiveWindowUi;
         }
 
         private void InitializeProcessNames()
         {
-            SelectedWindows = new ObservableCollection<string>(DataHandler.Instance.AutoChangeData.WorkingStateWindows);
+            SelectedWindows = new ObservableCollection<string>(DataStorageFeature.Instance.AutoChangeData.WorkingStateWindows);
             DetectedWindows = new ObservableCollection<string>(LowLevelHandler.GetBackgroundApplicationsName());
             DetectedWindows = new ObservableCollection<string>(DetectedWindows.Except(SelectedWindows));
         }
@@ -43,14 +43,13 @@ namespace WorkLifeBalance.Pages
 
         public override async Task ClosePageAsync()
         {
-            ActivityTrackerHandler.Instance.OnWindowChange -= UpdateActiveWindowUi;
-            DataHandler.Instance.AutoChangeData.WorkingStateWindows = SelectedWindows.ToArray();
-            await DataHandler.Instance.SaveData();
+            ActivityTrackerFeature.Instance.OnWindowChange -= UpdateActiveWindowUi;
+            DataStorageFeature.Instance.AutoChangeData.WorkingStateWindows = SelectedWindows.ToArray();
+            await DataStorageFeature.Instance.SaveData();
         }
 
         private void UpdateActiveWindowUi(string newwindow)
         {
-            Console.WriteLine("D");
             ActiveWindowT.Text = newwindow;
         }
 

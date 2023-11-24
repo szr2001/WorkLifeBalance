@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Numerics;
@@ -23,7 +24,7 @@ namespace WorkLifeBalance
     public partial class MainWindow : Window
     {
         [DllImport("kernel32.dll")]
-        public static extern bool AllocConsole();
+        private static extern bool AllocConsole();
 
         public static MainWindow? instance;
 
@@ -51,17 +52,22 @@ namespace WorkLifeBalance
             }
             CheckAdministratorPerms();
             InitializeComponent();
+
+            AllocConsole();//can be removed in release
+            Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()//Can be removed in release
+            .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+            .CreateLogger();
+
             Topmost = true;
-            AllocConsole();
             LoadStyleInfo();
 
             //subscribe events for triggering app when data loaded and updaing Ui on save/load
-            DataHandler.Instance.OnLoaded += InitializeApp;
-            DataHandler.Instance.OnSaving += ()=> { DateT.Text = $"Saving data...";};
-            DataHandler.Instance.OnSaved += ()=> { DateT.Text = $"Today: {DataHandler.Instance.TodayData.DateC.ToString("MM/dd/yyyy")}";};
-
+            DataStorageFeature.Instance.OnLoaded += InitializeApp;
+            DataStorageFeature.Instance.OnSaving += () => { DateT.Text = $"Saving data..."; };
+            DataStorageFeature.Instance.OnSaved += () => { DateT.Text = $"Today: {DataStorageFeature.Instance.TodayData.DateC.ToString("MM/dd/yyyy")}"; };
             //load data
-            _ = DataHandler.Instance.LoadData();
+            _ = DataStorageFeature.Instance.LoadData();
         }
 
         private void LoadStyleInfo()
@@ -82,30 +88,31 @@ namespace WorkLifeBalance
             _ = SetWindowLocation();
 
             //set app ready so timers can start
-            DataHandler.Instance.IsAppReady = true;
+            DataStorageFeature.Instance.IsAppReady = true;
 
             //subscribe features to the main timer
-            TimeHandler.Instance.Subscribe(TimeTrackerHandler.Instance.AddFeature());
-            TimeHandler.Instance.Subscribe(DataHandler.Instance.AddFeature());
-            TimeHandler.Instance.Subscribe(ActivityTrackerHandler.Instance.AddFeature());
+            TimeHandler.Subscribe(TimeTrackerFeature.Instance.AddFeature());
+            TimeHandler.Subscribe(DataStorageFeature.Instance.AddFeature());
+            TimeHandler.Subscribe(ActivityTrackerFeature.Instance.AddFeature());
 
             //check settings to see if you need to add some features
-            if (DataHandler.Instance.Settings.AutoDetectWorkingC)
+            if (DataStorageFeature.Instance.Settings.AutoDetectWorkingC)
             {
-                TimeHandler.Instance.Subscribe(StateChangerHandler.Instance.AddFeature());
+                TimeHandler.Subscribe(StateCheckerFeature.Instance.AddFeature());
             }
 
             //asign update ui 
-            TimeTrackerHandler.Instance.OnSpentTimeChange += UpdateUI;
+            TimeTrackerFeature.Instance.OnSpentTimeChange += UpdateUI;
 
             //starts the main timer
-            TimeHandler.Instance.StartTick();
+            TimeHandler.StartTick();
 
             //check if auto detect is enabled so you update ui
             CheckAutoDetectWorking();
 
             //asign the todays date
-            DateT.Text = $"Today: {DataHandler.Instance.TodayData.DateC.ToString("MM/dd/yyyy")}";
+            DateT.Text = $"Today: {DataStorageFeature.Instance.TodayData.DateC.ToString("MM/dd/yyyy")}";
+            Log.Information("------------------App Initialized------------------");
         }
 
         private async Task SetWindowLocation()
@@ -115,10 +122,10 @@ namespace WorkLifeBalance
             Vector2 UserScreen = new Vector2((float)SystemParameters.PrimaryScreenWidth, (float)SystemParameters.PrimaryScreenHeight);
             IntPtr TargetWindow = LowLevelHandler.GetWindow(null, "WorkLifeBalance");
 
-            switch (DataHandler.Instance.Settings.StartUpCornerC)
+            switch (DataStorageFeature.Instance.Settings.StartUpCornerC)
             {
                 case AnchorCorner.TopLeft:
-                    LowLevelHandler.SetWindowLocation(TargetWindow,0, 0);
+                    LowLevelHandler.SetWindowLocation(TargetWindow, 0, 0);
                     break;
                 case AnchorCorner.TopRight:
                     LowLevelHandler.SetWindowLocation(TargetWindow, (int)UserScreen.X - 220, 0);
@@ -136,45 +143,48 @@ namespace WorkLifeBalance
         //the app is in working stage, no need to check idle when the user is not working
         public void SetAppState(AppState state)
         {
+            if (TimeHandler.AppTimmerState == state) return;
+
             switch (state)
             {
                 case AppState.Working:
-                    if (!DataHandler.Instance.Settings.AutoDetectWorkingC)
+                    if (!DataStorageFeature.Instance.Settings.AutoDetectWorkingC)
                     {
                         ToggleBtn.Background = LightPurpleColor;
                         ToggleRecordingImage.Source = WorkImg;
                     }
 
-                    if (DataHandler.Instance.Settings.AutoDetectIdleC)
+                    if (DataStorageFeature.Instance.Settings.AutoDetectIdleC)
                     {
-                        TimeHandler.Instance.Subscribe(MouseIdleHandler.Instance.AddFeature());
+                        TimeHandler.Subscribe(IdleCheckerFeature.Instance.AddFeature());
                     }
                     break;
 
                 case AppState.Resting:
-                    if (!DataHandler.Instance.Settings.AutoDetectWorkingC)
+                    if (!DataStorageFeature.Instance.Settings.AutoDetectWorkingC)
                     {
                         ToggleBtn.Background = LightBlueColor;
                         ToggleRecordingImage.Source = RestImg;
                     }
 
-                    if (DataHandler.Instance.Settings.AutoDetectIdleC)
+                    if (DataStorageFeature.Instance.Settings.AutoDetectIdleC)
                     {
-                        if(!StateChangerHandler.Instance.IsFocusingOnWorkingWindow)
+                        if (!StateCheckerFeature.Instance.IsFocusingOnWorkingWindow)
                         {
-                            TimeHandler.Instance.UnSubscribe(MouseIdleHandler.Instance.RemoveFeature());
+                            TimeHandler.UnSubscribe(IdleCheckerFeature.Instance.RemoveFeature());
                         }
                     }
                     break;
             }
-            TimeHandler.Instance.AppTimmerState = state;
+            TimeHandler.AppTimmerState = state;
+            Log.Information($"App state changed to {state}");
         }
 
         private void ToggleState(object sender, RoutedEventArgs e)
         {
-            if (!DataHandler.Instance.IsAppReady || DataHandler.Instance.IsClosingApp) return;
+            if (!DataStorageFeature.Instance.IsAppReady || DataStorageFeature.Instance.IsClosingApp) return;
 
-            switch (TimeHandler.Instance.AppTimmerState)
+            switch (TimeHandler.AppTimmerState)
             {
                 case AppState.Working:
                     SetAppState(AppState.Resting);
@@ -188,13 +198,13 @@ namespace WorkLifeBalance
 
         private void UpdateUI()
         {
-            ElapsedWorkT.Text = DataHandler.Instance.TodayData.WorkedAmmountC.ToString("HH:mm:ss");
-            ElapsedRestT.Text = DataHandler.Instance.TodayData.RestedAmmountC.ToString("HH:mm:ss");
+            ElapsedWorkT.Text = DataStorageFeature.Instance.TodayData.WorkedAmmountC.ToString("HH:mm:ss");
+            ElapsedRestT.Text = DataStorageFeature.Instance.TodayData.RestedAmmountC.ToString("HH:mm:ss");
         }
 
         public void CheckAutoDetectWorking()
         {
-            bool value = DataHandler.Instance.Settings.AutoDetectWorkingC;
+            bool value = DataStorageFeature.Instance.Settings.AutoDetectWorkingC;
             ToggleBtn.IsEnabled = !value;
 
             ToggleBtn.Background = OceanBlue;
@@ -214,7 +224,7 @@ namespace WorkLifeBalance
 
         private void CheckAdministratorPerms()
         {
-            if(!LowLevelHandler.IsRunningAsAdmin())
+            if (!LowLevelHandler.IsRunningAsAdmin())
             {
                 RestartApplicationWithAdmin();
             }
@@ -225,9 +235,9 @@ namespace WorkLifeBalance
         {
             var psi = new ProcessStartInfo
             {
-                FileName = DataHandler.Instance.AppExePath,
+                FileName = DataStorageFeature.Instance.AppExePath,
                 UseShellExecute = true,
-                Verb = "runas" 
+                Verb = "runas"
             };
 
             try
@@ -243,13 +253,17 @@ namespace WorkLifeBalance
 
         private async void CloseApp(object sender, RoutedEventArgs e)
         {
-            if (DataHandler.Instance.IsClosingApp) return;
+            if (DataStorageFeature.Instance.IsClosingApp) return;
 
-            DataHandler.Instance.IsClosingApp = true;
+            DataStorageFeature.Instance.IsClosingApp = true;
 
-            CloseSideBar(null,null);
+            CloseSideBar(null, null);
 
-            await DataHandler.Instance.SaveData();
+            await DataStorageFeature.Instance.SaveData();
+
+            Log.Information("------------------App Shuting Down------------------");
+            
+            await Log.CloseAndFlushAsync();
 
             Application.Current.Shutdown();
         }
@@ -269,7 +283,7 @@ namespace WorkLifeBalance
 
         private void OpenSideBar(object sender, MouseEventArgs e)
         {
-            OptionMenuVisibility.Width = new GridLength(35,GridUnitType.Pixel);
+            OptionMenuVisibility.Width = new GridLength(35, GridUnitType.Pixel);
             OptionsPannel.Visibility = Visibility.Visible;
         }
 
@@ -279,7 +293,9 @@ namespace WorkLifeBalance
             OptionsPannel.Visibility = Visibility.Collapsed;
         }
 
-        public static void ShowErrorBox(string action, string messageBoxText, bool ForceShutdown = true)
+
+        #region ShowErrorBox
+        public static void ShowErrorBox(string action, string messageBoxText, Exception ex, bool ForceShutdown)
         {
             MessageBoxButton button = MessageBoxButton.OK;
             MessageBoxImage icon = MessageBoxImage.Error;
@@ -289,8 +305,26 @@ namespace WorkLifeBalance
 
             if (ForceShutdown)
             {
+                Log.Error(ex,$"Show Error Box Triggered with message {action}:{messageBoxText}");
                 Application.Current.Shutdown();
             }
+            else
+            {
+                Log.Warning(ex,$"Show Error Box Triggered with message {action}:{messageBoxText}");
+            }
         }
+        public static void ShowErrorBox(string action, string messageBoxText, Exception ex)
+        {
+            ShowErrorBox(action, messageBoxText, ex, true);
+        }
+        public static void ShowErrorBox(string action, string messageBoxText, bool ForceShutdown)
+        {
+            ShowErrorBox(action, messageBoxText, null, ForceShutdown);
+        }
+        public static void ShowErrorBox(string action, string messageBoxText)
+        {
+            ShowErrorBox(action, messageBoxText, null, true);
+        }
+        #endregion
     }
-}
+}   

@@ -47,7 +47,7 @@ namespace WorkLifeBalance.Pages
         private async Task CalculateData()
         {
             //get today date
-            DateOnly currentDate = DataHandler.Instance.TodayData.DateC;
+            DateOnly currentDate = DataStorageFeature.Instance.TodayData.DateC;
 
             //create temporary daydata to load each day and reuse it
             DayData TempDay;
