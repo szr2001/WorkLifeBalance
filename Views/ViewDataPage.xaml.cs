@@ -2,10 +2,10 @@
 using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows;
-using WorkLifeBalance.Data;
-using WorkLifeBalance.Handlers;
-using WorkLifeBalance.Handlers.Feature;
-using WorkLifeBalance.Windows;
+using WorkLifeBalance.Models;
+using WorkLifeBalance.Services;
+using WorkLifeBalance.Services.Feature;
+using WorkLifeBalance.Views;
 
 namespace WorkLifeBalance.Pages
 {
@@ -72,12 +72,12 @@ namespace WorkLifeBalance.Pages
 
             TempDay = await DataBaseHandler.GetMaxValue("RestedAmmount", currentDate.ToString("MM"), currentDate.ToString("yyyy"));
 
-            CurrentMonthMostRested= TempDay.RestedAmmountC;
+            CurrentMonthMostRested = TempDay.RestedAmmountC;
             CurrentMonthMostRestedDate = TempDay.DateC;
 
             //calculate previous month records
 
-            DateTime previousMonthDateTime = currentDate.ToDateTime(new TimeOnly(0,0,0)).AddMonths(-1);
+            DateTime previousMonthDateTime = currentDate.ToDateTime(new TimeOnly(0, 0, 0)).AddMonths(-1);
             DateOnly previousDate = DateOnly.FromDateTime(previousMonthDateTime);
 
             TempDay = await DataBaseHandler.GetMaxValue("WorkedAmmount", previousDate.ToString("MM"), previousDate.ToString("yyyy"));
@@ -87,7 +87,7 @@ namespace WorkLifeBalance.Pages
 
             TempDay = await DataBaseHandler.GetMaxValue("RestedAmmount", previousDate.ToString("MM"), previousDate.ToString("yyyy"));
 
-            PreviousMonthMostRested= TempDay.RestedAmmountC;
+            PreviousMonthMostRested = TempDay.RestedAmmountC;
             PreviousMonthMostRestedDate = TempDay.DateC;
 
 
@@ -142,7 +142,7 @@ namespace WorkLifeBalance.Pages
 
         private void SeePreviousMonth(object sender, RoutedEventArgs e)
         {
-            SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays,2);
+            SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, 2);
         }
 
         private void SeeCurrentMonth(object sender, RoutedEventArgs e)

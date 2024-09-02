@@ -4,10 +4,9 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows;
-using WorkLifeBalance.Data;
-using WorkLifeBalance.Handlers;
-using WorkLifeBalance.Handlers;
-using WorkLifeBalance.Windows;
+using WorkLifeBalance.Models;
+using WorkLifeBalance.Services;
+using WorkLifeBalance.Views;
 
 namespace WorkLifeBalance.Pages
 {

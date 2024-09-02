@@ -1,7 +1,7 @@
 ﻿using System;
-using static WorkLifeBalance.Handlers.TimeHandler;
+using static WorkLifeBalance.Services.TimeHandler;
 
-namespace WorkLifeBalance.Handlers.Feature
+namespace WorkLifeBalance.Services.Feature
 {
     public class TimeTrackerFeature : FeatureBase
     {
@@ -17,7 +17,7 @@ namespace WorkLifeBalance.Handlers.Feature
                 return _instance;
             }
         }
-        
+
         public delegate void SpentTimeEvent();
 
         public event SpentTimeEvent? OnSpentTimeChange;
@@ -31,7 +31,7 @@ namespace WorkLifeBalance.Handlers.Feature
 
         private void TriggerUpdateSpentTime()
         {
-            switch (TimeHandler.AppTimmerState)
+            switch (AppTimmerState)
             {
                 case AppState.Working:
                     DataStorageFeature.Instance.TodayData.WorkedAmmountC = DataStorageFeature.Instance.TodayData.WorkedAmmountC.Add(OneSec);

@@ -3,8 +3,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using WorkLifeBalance.Pages;
+using WorkLifeBalance.ViewModels;
+using WorkLifeBalance.Views;
 
-namespace WorkLifeBalance.Windows
+namespace WorkLifeBalance
 {
     /// <summary>
     /// Interaction logic for SecondWindow.xaml
@@ -16,8 +18,8 @@ namespace WorkLifeBalance.Windows
         public SecondWindowType WindowType;
 
         private SecondWindowPageBase WindowPage;
-
-        public SecondWindow()
+        private SecondWindowVM secondWindowVM;
+        public SecondWindow(SecondWindowVM secondwindowVM)
         {
             if (Instance != null)
             {
@@ -25,11 +27,12 @@ namespace WorkLifeBalance.Windows
                 Instance = this;
             }
             InitializeComponent();
+            secondWindowVM = secondwindowVM;
         }
 
         public static void RequestSecondWindow(SecondWindowType Type, object? args = null)
         {
-            _ = OpenWindow(Type,args);
+            _ = OpenWindow(Type, args);
         }
 
         public void CloseWindowButton(object sender, RoutedEventArgs e)
@@ -76,7 +79,7 @@ namespace WorkLifeBalance.Windows
                     break;
             }
 
-            
+
             Width = WindowPage.RequiredWindowSize.X;
             Height = WindowPage.RequiredWindowSize.Y;
             WindowPageF.Content = WindowPage;

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
@@ -7,10 +6,10 @@ using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
 
-namespace WorkLifeBalance.Handlers
+namespace WorkLifeBalance.Services
 {
     //low level handling of windows and mouse
-    public static class LowLevelHandler
+    public class LowLevelHandler
     {
         // Constants for the SetWindowLoc functions
         public const uint SWP_NOSIZE = 0x0001;
@@ -19,36 +18,39 @@ namespace WorkLifeBalance.Handlers
         [DllImport("user32.dll")]
         private static extern bool GetCursorPos(out POINT lpPoint);
 
+        [DllImport("kernel32.dll")]
+        private static extern bool AllocConsole();
+
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
+        private static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, nint lParam);
         // Delegate for EnumWindows for callback
-        private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+        private delegate bool EnumWindowsProc(nint hWnd, nint lParam);
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool IsWindowVisible(IntPtr hWnd);
+        public static extern bool IsWindowVisible(nint hWnd);
 
         [DllImport("user32.dll")]
-        private static extern IntPtr FindWindow(string? lpClassName, string lpWindowName);
+        private static extern nint FindWindow(string? lpClassName, string lpWindowName);
 
         [DllImport("user32.dll")]
-        private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+        private static extern bool SetWindowPos(nint hWnd, nint hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
         [DllImport("user32.dll")]
-        public static extern IntPtr GetForegroundWindow();
+        public static extern nint GetForegroundWindow();
 
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        private static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+        private static extern int GetWindowText(nint hWnd, StringBuilder lpString, int nMaxCount);
 
 
         [DllImport("user32.dll", SetLastError = true)]
-        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+        private static extern uint GetWindowThreadProcessId(nint hWnd, out uint lpdwProcessId);
 
 
         [DllImport("psapi.dll")]
-        private static extern uint GetModuleFileNameEx(IntPtr hProcess, IntPtr hModule, StringBuilder lpBaseName, int nSize);
+        private static extern uint GetModuleFileNameEx(nint hProcess, nint hModule, StringBuilder lpBaseName, int nSize);
 
         //create a point to store thelocation of a point on the screen
         [StructLayout(LayoutKind.Sequential)]
@@ -57,18 +59,24 @@ namespace WorkLifeBalance.Handlers
             public int X;
             public int Y;
         }
-        public static void SetWindowLocation(IntPtr windowHandle, int x, int y)
+
+        public void EnableConsole()
         {
-            // Call SetWindowPos with the SWP_NOSIZE and SWP_NOZORDER flags
-            SetWindowPos(windowHandle, IntPtr.Zero, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+            AllocConsole();
         }
 
-        public static IntPtr GetWindow(string? lpClassName, string lpWindowName)
+        public void SetWindowLocation(nint windowHandle, int x, int y)
+        {
+            // Call SetWindowPos with the SWP_NOSIZE and SWP_NOZORDER flags
+            SetWindowPos(windowHandle, nint.Zero, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+        }
+
+        public nint GetWindow(string? lpClassName, string lpWindowName)
         {
             return FindWindow(lpClassName, lpWindowName);
         }
 
-        public static string GetWindowTitle(IntPtr hWnd)
+        public string GetWindowTitle(nint hWnd)
         {
             const int nChars = 256;
             StringBuilder windowTitle = new StringBuilder(nChars);
@@ -76,28 +84,29 @@ namespace WorkLifeBalance.Handlers
             return windowTitle.ToString();
         }
 
-        public static string GetProcessname(IntPtr hWnd)
+        public string GetProcessname(nint hWnd)
         {
             GetWindowThreadProcessId(hWnd, out uint processId);
             Process process = Process.GetProcessById((int)processId);
 
             const int nChars = 1024;
             StringBuilder applicationName = new StringBuilder(nChars);
-            GetModuleFileNameEx(process.Handle, IntPtr.Zero, applicationName, nChars);
+            GetModuleFileNameEx(process.Handle, nint.Zero, applicationName, nChars);
 
             // Get only the executable file name
             string fileName = System.IO.Path.GetFileName(applicationName.ToString());
 
             return fileName;
         }
-        public static List<string> GetBackgroundApplicationsName()
+
+        public List<string> GetBackgroundApplicationsName()
         {
             HashSet<string> Appnames = new();
 
-            List<IntPtr> windows = new List<IntPtr>();
+            List<nint> windows = new List<nint>();
             EnumWindows(EnumWindowsCallback, GCHandle.ToIntPtr(GCHandle.Alloc(windows)));
 
-            foreach (IntPtr windowId in windows)
+            foreach (nint windowId in windows)
             {
                 Appnames.Add(GetProcessname(windowId));
             }
@@ -105,7 +114,7 @@ namespace WorkLifeBalance.Handlers
             return Appnames.ToList();
         }
 
-        public static Vector2 GetMousePos()
+        public Vector2 GetMousePos()
         {
             GetCursorPos(out POINT p);
             Vector2 pos = new Vector2(p.X, p.Y);
@@ -113,7 +122,7 @@ namespace WorkLifeBalance.Handlers
             return pos;
         }
 
-        public static bool IsRunningAsAdmin()
+        public bool IsRunningAsAdmin()
         {
             WindowsIdentity identity = WindowsIdentity.GetCurrent();
             WindowsPrincipal principal = new WindowsPrincipal(identity);
@@ -121,9 +130,9 @@ namespace WorkLifeBalance.Handlers
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        private static bool EnumWindowsCallback(IntPtr hWnd, IntPtr lParam)
+        private bool EnumWindowsCallback(nint hWnd, nint lParam)
         {
-            List<IntPtr> windows = GCHandle.FromIntPtr(lParam).Target as List<IntPtr>;
+            List<nint> windows = GCHandle.FromIntPtr(lParam).Target as List<nint>;
 
             if (IsWindowVisible(hWnd))
             {

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using WorkLifeBalance.Handlers;
-using WorkLifeBalance.Handlers.Feature;
-using WorkLifeBalance.Windows;
+using WorkLifeBalance.Services;
+using WorkLifeBalance.Services.Feature;
+using WorkLifeBalance.Views;
 
 namespace WorkLifeBalance.Pages
 {
@@ -37,7 +36,7 @@ namespace WorkLifeBalance.Pages
 
         private void ReturnToPreviousPage(object sender, RoutedEventArgs e)
         {
-           SecondWindow.RequestSecondWindow(SecondWindowType.Settings);
+            SecondWindow.RequestSecondWindow(SecondWindowType.Settings);
 
         }
 

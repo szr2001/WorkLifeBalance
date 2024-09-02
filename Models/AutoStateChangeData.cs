@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using WorkLifeBalance.Handlers.Feature;
+using WorkLifeBalance.Services.Feature;
 
-namespace WorkLifeBalance.Data
+namespace WorkLifeBalance.Models
 {
     [Serializable]
     public class AutoStateChangeData
@@ -10,16 +10,16 @@ namespace WorkLifeBalance.Data
         public ProcessActivity[] Activities { get; set; } = new ProcessActivity[0];
         public string[] WorkingStateWindows { get; set; } = new string[0];
 
-        public Dictionary<string,TimeOnly> ActivitiesC = new();
+        public Dictionary<string, TimeOnly> ActivitiesC = new();
 
         public void ConvertSaveDataToUsableData()
         {
             try
             {
-                foreach(ProcessActivity activity in Activities)
+                foreach (ProcessActivity activity in Activities)
                 {
                     activity.ConvertSaveDataToUsableData();
-                    ActivitiesC.Add(activity.Process,activity.TimeSpentC);
+                    ActivitiesC.Add(activity.Process, activity.TimeSpentC);
                 }
             }
             catch (Exception ex)
@@ -30,11 +30,11 @@ namespace WorkLifeBalance.Data
         public void ConvertUsableDataToSaveData()
         {
             try
-            { 
+            {
                 List<ProcessActivity> processActivities = new();
 
 
-                foreach (KeyValuePair<string,TimeOnly> activity in ActivitiesC)
+                foreach (KeyValuePair<string, TimeOnly> activity in ActivitiesC)
                 {
                     ProcessActivity process = new();
                     process.DateC = DataStorageFeature.Instance.TodayData.DateC;

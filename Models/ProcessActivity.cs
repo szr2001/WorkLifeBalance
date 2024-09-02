@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WorkLifeBalance.Data
+namespace WorkLifeBalance.Models
 {
     [Serializable]
     public class ProcessActivity

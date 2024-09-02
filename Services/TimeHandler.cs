@@ -3,21 +3,21 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using WorkLifeBalance.Handlers.Feature;
+using WorkLifeBalance.Services.Feature;
 
-namespace WorkLifeBalance.Handlers
+namespace WorkLifeBalance.Services
 {
-    public static class TimeHandler
+    public class TimeHandler
     {
         //Main timer that runs once a second, other features can subscribe to it and have their own run interval
         public delegate void TickEvent();
-        private static event TickEvent OnTimerTick = delegate { };
-        
-        public static AppState AppTimmerState = AppState.Resting;
+        private event TickEvent OnTimerTick = delegate { };
 
-        private static CancellationTokenSource CancelTick = new();
+        public AppState AppTimmerState = AppState.Resting;
 
-        public static void StartTick()
+        private CancellationTokenSource CancelTick = new();
+
+        public void StartTick()
         {
             CancelTick.Cancel();
 
@@ -26,35 +26,35 @@ namespace WorkLifeBalance.Handlers
             _ = TimerLoop(CancelTick.Token);
         }
 
-        public static void Subscribe(TickEvent eventname)
+        public void Subscribe(TickEvent eventname)
         {
-            if(!OnTimerTick.GetInvocationList().Contains(eventname))
+            if (!OnTimerTick.GetInvocationList().Contains(eventname))
             {
                 OnTimerTick += eventname;
                 Log.Information($"{eventname.Method.Name} Subscribed to Main Timer");
             }
         }
 
-        public static void UnSubscribe(TickEvent eventname)
+        public void UnSubscribe(TickEvent eventname)
         {
-            if(OnTimerTick.GetInvocationList().Contains(eventname))
+            if (OnTimerTick.GetInvocationList().Contains(eventname))
             {
                 OnTimerTick -= eventname;
                 Log.Information($"{eventname.Method.Name} UnSubscribed from Main Timer");
             }
         }
 
-        public static void Stop()
+        public void Stop()
         {
             CancelTick.Cancel();
         }
 
-        private static async Task TimerLoop(CancellationToken token)
+        private async Task TimerLoop(CancellationToken token)
         {
             while (!token.IsCancellationRequested)
             {
                 //stop the timer if the app is not ready or is closing
-                if (!DataStorageFeature.Instance.IsAppReady && DataStorageFeature.Instance.IsClosingApp) 
+                if (!DataStorageFeature.Instance.IsAppReady && DataStorageFeature.Instance.IsClosingApp)
                 {
                     Stop();
                 }
@@ -73,7 +73,7 @@ namespace WorkLifeBalance.Handlers
                 }
                 catch (Exception ex)
                 {
-                    Log.Warning(ex,"TimeHandler timer loop");
+                    Log.Warning(ex, "TimeHandler timer loop");
                 }
 
                 OnTimerTick?.Invoke();

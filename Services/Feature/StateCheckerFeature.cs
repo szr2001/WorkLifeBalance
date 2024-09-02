@@ -2,10 +2,9 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using WorkLifeBalance.Handlers;
-using static WorkLifeBalance.Handlers.TimeHandler;
+using static WorkLifeBalance.Services.TimeHandler;
 
-namespace WorkLifeBalance.Handlers.Feature
+namespace WorkLifeBalance.Services.Feature
 {
     public class StateCheckerFeature : FeatureBase
     {
@@ -38,12 +37,12 @@ namespace WorkLifeBalance.Handlers.Feature
 
             try
             {
-                await Task.Delay(DataStorageFeature.Instance.Settings.AutoDetectInterval * 1000,CancelTokenS.Token);
+                await Task.Delay(DataStorageFeature.Instance.Settings.AutoDetectInterval * 1000, CancelTokenS.Token);
                 CheckStateChange();
             }
             catch (Exception ex)
             {
-                Log.Warning(ex,"StateCheckerFeature timer loop");
+                Log.Warning(ex, "StateCheckerFeature timer loop");
             }
             finally
             {
@@ -57,7 +56,7 @@ namespace WorkLifeBalance.Handlers.Feature
 
             IsFocusingOnWorkingWindow = DataStorageFeature.Instance.AutoChangeData.WorkingStateWindows.Contains(ActivityTrackerFeature.Instance.ActiveWindow);
 
-            switch (TimeHandler.AppTimmerState)
+            switch (AppTimmerState)
             {
                 case AppState.Working:
                     if (!IsFocusingOnWorkingWindow)
@@ -74,7 +73,7 @@ namespace WorkLifeBalance.Handlers.Feature
                     break;
 
                 case AppState.Idle:
-                    if(!IsFocusingOnWorkingWindow)
+                    if (!IsFocusingOnWorkingWindow)
                     {
                         MainWindow.instance.SetAppState(AppState.Resting);
                     }

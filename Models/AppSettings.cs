@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WorkLifeBalance.Data
+namespace WorkLifeBalance.Models
 {
     public class AppSettings
     {
@@ -18,7 +18,7 @@ namespace WorkLifeBalance.Data
         public bool AutoDetectWorkingC = false;
         public bool AutoDetectIdleC = false;
         public AnchorCorner StartUpCornerC = AnchorCorner.BootomLeft;
-        
+
         public void ConvertSaveDataToUsableData()
         {
             try
@@ -30,7 +30,7 @@ namespace WorkLifeBalance.Data
                         int.Parse(LastTimeOpened.Substring(6, 2)),
                         int.Parse(LastTimeOpened.Substring(0, 2)),
                         int.Parse(LastTimeOpened.Substring(2, 2)),
-                        0 
+                        0
                     );
                 StartWithWindowsC = StartWithWindows == 1;
 

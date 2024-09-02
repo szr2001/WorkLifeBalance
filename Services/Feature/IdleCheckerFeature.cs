@@ -1,18 +1,15 @@
 ﻿using Serilog;
 using System;
-using System.Diagnostics;
 using System.Numerics;
-using System.Threading;
 using System.Threading.Tasks;
-using WorkLifeBalance.Handlers;
-using static WorkLifeBalance.Handlers.TimeHandler;
+using static WorkLifeBalance.Services.TimeHandler;
 
-namespace WorkLifeBalance.Handlers.Feature
+namespace WorkLifeBalance.Services.Feature
 {
     public class IdleCheckerFeature : FeatureBase
     {
         private static IdleCheckerFeature? _instance;
-        private Vector2 _oldmousePosition = new Vector2(-1,-1);
+        private Vector2 _oldmousePosition = new Vector2(-1, -1);
         public static IdleCheckerFeature Instance
         {
             get
@@ -37,13 +34,13 @@ namespace WorkLifeBalance.Handlers.Feature
 
             int delay;
 
-            if(TimeHandler.AppTimmerState == AppState.Idle)
+            if (AppTimmerState == AppState.Idle)
             {
                 delay = 3000;
             }
             else
             {
-                delay = (DataStorageFeature.Instance.Settings.AutoDetectIdle * 60000)/2;
+                delay = DataStorageFeature.Instance.Settings.AutoDetectIdle * 60000 / 2;
             }
 
             IsCheckingIdleTriggered = true;
@@ -53,9 +50,9 @@ namespace WorkLifeBalance.Handlers.Feature
                 await Task.Delay(delay, CancelTokenS.Token);
                 CheckIdle();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Log.Warning(ex,$"IdleCheckerFeature timer loop");
+                Log.Warning(ex, $"IdleCheckerFeature timer loop");
             }
             finally
             {
@@ -71,18 +68,18 @@ namespace WorkLifeBalance.Handlers.Feature
             {
                 newpos = LowLevelHandler.GetMousePos();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Log.Warning(ex,"IdleChecker failed to get mouse pos");
+                Log.Warning(ex, "IdleChecker failed to get mouse pos");
             }
 
-            if(_oldmousePosition == new Vector2(-1,-1))
+            if (_oldmousePosition == new Vector2(-1, -1))
             {
                 _oldmousePosition = newpos;
                 return;
             }
 
-            if(newpos == _oldmousePosition)
+            if (newpos == _oldmousePosition)
             {
                 MainWindow.instance.SetAppState(AppState.Idle);
                 Log.Information($"Mouse not moving, Old: {_oldmousePosition} New: {newpos}");

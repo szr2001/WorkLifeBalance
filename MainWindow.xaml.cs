@@ -1,19 +1,17 @@
 ﻿using Serilog;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Numerics;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using WorkLifeBalance.Data;
-using WorkLifeBalance.Handlers;
-using WorkLifeBalance.Handlers.Feature;
-using WorkLifeBalance.Windows;
+using WorkLifeBalance.Models;
+using WorkLifeBalance.Services;
+using WorkLifeBalance.Services.Feature;
+using WorkLifeBalance.ViewModels;
 
 namespace WorkLifeBalance
 {
@@ -23,9 +21,6 @@ namespace WorkLifeBalance
     /// 
     public partial class MainWindow : Window
     {
-        [DllImport("kernel32.dll")]
-        private static extern bool AllocConsole();
-
         public static MainWindow? instance;
 
         public Dispatcher MainDispatcher = Dispatcher.CurrentDispatcher;
@@ -39,7 +34,7 @@ namespace WorkLifeBalance
         private SolidColorBrush OceanBlue = new();
 
         private readonly bool DebugMode = true;
-        public MainWindow()
+        public MainWindow(MainMenuVM viewModel)
         {
             //initialize singleton ?
             if (instance == null)
@@ -48,16 +43,13 @@ namespace WorkLifeBalance
             }
             else
             {
-                instance.Close();
+                //instance.Close();
                 instance = this;
             }
-
-            CheckAdministratorPerms();
             InitializeComponent();
 
             if (DebugMode)
             {
-                AllocConsole();
                 Log.Logger = new LoggerConfiguration()
                 .WriteTo.Console()
                 .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
@@ -139,9 +131,9 @@ namespace WorkLifeBalance
                 UserScreen = new Vector2((float)SystemParameters.PrimaryScreenWidth, (float)SystemParameters.PrimaryScreenHeight);
                 TargetWindow = LowLevelHandler.GetWindow(null, "WorkLifeBalance");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Log.Warning(ex,"Failed to find Window for seting StartupLocation");
+                Log.Warning(ex, "Failed to find Window for seting StartupLocation");
             }
 
             switch (DataStorageFeature.Instance.Settings.StartUpCornerC)
@@ -230,7 +222,7 @@ namespace WorkLifeBalance
             bool value = DataStorageFeature.Instance.Settings.AutoDetectWorkingC;
             ToggleBtn.IsEnabled = !value;
 
-            if(value == true)
+            if (value == true)
             {
                 TimeHandler.Subscribe(StateCheckerFeature.Instance.AddFeature());
                 ToggleBtn.Background = OceanBlue;
@@ -255,35 +247,6 @@ namespace WorkLifeBalance
             SecondWindow.RequestSecondWindow(SecondWindowType.Options);
         }
 
-        private void CheckAdministratorPerms()
-        {
-            if (!LowLevelHandler.IsRunningAsAdmin())
-            {
-                RestartApplicationWithAdmin();
-            }
-        }
-
-        //restart app if it dosent have admin rights
-        private void RestartApplicationWithAdmin()
-        {
-            var psi = new ProcessStartInfo
-            {
-                FileName = DataStorageFeature.Instance.AppExePath,
-                UseShellExecute = true,
-                Verb = "runas"
-            };
-
-            try
-            {
-                Process.Start(psi);
-                Application.Current.Shutdown();
-            }
-            catch (Exception ex)
-            {
-                ShowErrorBox("The application must be run as Administrator", $"Restart as Administrator Failed: {ex.Message}");
-            }
-        }
-
         private async void CloseApp(object sender, RoutedEventArgs e)
         {
             if (DataStorageFeature.Instance.IsClosingApp) return;
@@ -295,7 +258,7 @@ namespace WorkLifeBalance
             await DataStorageFeature.Instance.SaveData();
 
             Log.Information("------------------App Shuting Down------------------");
-            
+
             await Log.CloseAndFlushAsync();
 
             Application.Current.Shutdown();
@@ -338,12 +301,12 @@ namespace WorkLifeBalance
 
             if (ForceShutdown)
             {
-                Log.Error(ex,$"Show Error Box Triggered with message {action}:{messageBoxText}");
+                Log.Error(ex, $"Show Error Box Triggered with message {action}:{messageBoxText}");
                 Application.Current.Shutdown();
             }
             else
             {
-                Log.Warning(ex,$"Show Error Box Triggered with message {action}:{messageBoxText}");
+                Log.Warning(ex, $"Show Error Box Triggered with message {action}:{messageBoxText}");
             }
         }
         public static void ShowErrorBox(string action, string messageBoxText, Exception ex)
@@ -360,4 +323,4 @@ namespace WorkLifeBalance
         }
         #endregion
     }
-}   
+}

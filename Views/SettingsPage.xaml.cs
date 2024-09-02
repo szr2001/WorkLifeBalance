@@ -1,16 +1,16 @@
 ﻿using IWshRuntimeLibrary;
+using Serilog;
 using System;
 using System.Numerics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using WorkLifeBalance.Data;
+using WorkLifeBalance.Models;
+using WorkLifeBalance.Services;
+using WorkLifeBalance.Services.Feature;
+using WorkLifeBalance.Views;
 using File = System.IO.File;
-using WorkLifeBalance.Windows;
 using Path = System.IO.Path;
-using WorkLifeBalance.Handlers;
-using System.Threading.Tasks;
-using WorkLifeBalance.Handlers.Feature;
-using Serilog;
 
 namespace WorkLifeBalance.Pages
 {
@@ -30,7 +30,7 @@ namespace WorkLifeBalance.Pages
         public SettingsPage(object? args) : base(args)
         {
             InitializeComponent();
-            RequiredWindowSize = new Vector2(250,320);
+            RequiredWindowSize = new Vector2(250, 320);
             pageNme = "Settings";
 
             ApplySettings();
@@ -84,7 +84,7 @@ namespace WorkLifeBalance.Pages
 
         private void ChangeAutosaveDelay(object sender, TextChangedEventArgs e)
         {
-            if (string.IsNullOrEmpty(AutosaveT.Text) || !int.TryParse(AutosaveT.Text , out _) )
+            if (string.IsNullOrEmpty(AutosaveT.Text) || !int.TryParse(AutosaveT.Text, out _))
             {
                 AutosaveT.Text = 5.ToString();
                 Saveinterval = 5;

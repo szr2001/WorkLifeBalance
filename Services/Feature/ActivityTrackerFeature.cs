@@ -1,12 +1,8 @@
 ﻿using Serilog;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static WorkLifeBalance.Handlers.TimeHandler;
+using static WorkLifeBalance.Services.TimeHandler;
 
-namespace WorkLifeBalance.Handlers.Feature
+namespace WorkLifeBalance.Services.Feature
 {
     public class ActivityTrackerFeature : FeatureBase
     {
@@ -39,14 +35,14 @@ namespace WorkLifeBalance.Handlers.Feature
         {
             try
             {
-                IntPtr foregroundWindowHandle = LowLevelHandler.GetForegroundWindow();
+                nint foregroundWindowHandle = LowLevelHandler.GetForegroundWindow();
 
                 ActiveWindow = LowLevelHandler.GetProcessname(foregroundWindowHandle);
                 OnWindowChange?.Invoke(ActiveWindow);
             }
             catch (Exception ex)
             {
-                Log.Warning(ex,"Failed to get process of window");
+                Log.Warning(ex, "Failed to get process of window");
             }
 
             try

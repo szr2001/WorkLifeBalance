@@ -1,20 +1,19 @@
 ﻿using Serilog;
 using System;
 using System.Threading.Tasks;
-using WorkLifeBalance.Data;
-using WorkLifeBalance.Handlers;
-using static WorkLifeBalance.Handlers.TimeHandler;
+using WorkLifeBalance.Models;
+using static WorkLifeBalance.Services.TimeHandler;
 
-namespace WorkLifeBalance.Handlers.Feature
+namespace WorkLifeBalance.Services.Feature
 {
     public class DataStorageFeature : FeatureBase
     {
         private static DataStorageFeature? _instance;
-        public static DataStorageFeature Instance 
+        public static DataStorageFeature Instance
         {
-            get 
+            get
             {
-                if(_instance == null)
+                if (_instance == null)
                 {
                     _instance = new DataStorageFeature();
                 }
@@ -73,7 +72,7 @@ namespace WorkLifeBalance.Handlers.Feature
 
         public async Task LoadData()
         {
-            if(IsAppLoading) return;
+            if (IsAppLoading) return;
 
             IsAppLoading = true;
 
@@ -106,7 +105,7 @@ namespace WorkLifeBalance.Handlers.Feature
 
             try
             {
-                await Task.Delay(Settings.SaveInterval * 60000,CancelTokenS.Token);
+                await Task.Delay(Settings.SaveInterval * 60000, CancelTokenS.Token);
                 await SaveData();
             }
             catch (Exception ex)

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using static WorkLifeBalance.Handlers.TimeHandler;
+﻿using System.Threading;
+using static WorkLifeBalance.Services.TimeHandler;
 
-namespace WorkLifeBalance.Handlers.Feature
+namespace WorkLifeBalance.Services.Feature
 {
     public abstract class FeatureBase
     {
@@ -17,7 +12,7 @@ namespace WorkLifeBalance.Handlers.Feature
         protected CancellationTokenSource CancelTokenS = new();
 
         //used to add the current feature and create a new canceltoken,returns overrided method
-        public TickEvent AddFeature() 
+        public TickEvent AddFeature()
         {
             CancelTokenS = new();
             return ReturnFeatureMethod();
@@ -25,7 +20,7 @@ namespace WorkLifeBalance.Handlers.Feature
 
         //used to remove the feature, cancels the features and returns the specific method
         //that needs to be removed from main timer
-        public TickEvent RemoveFeature() 
+        public TickEvent RemoveFeature()
         {
             CancelToken();
             return ReturnFeatureMethod();

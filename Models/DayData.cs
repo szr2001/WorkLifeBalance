@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WorkLifeBalance.Data
+namespace WorkLifeBalance.Models
 {
     [Serializable]
     public class DayData
@@ -43,9 +43,9 @@ namespace WorkLifeBalance.Data
                         int.Parse(RestedAmmount.Substring(4, 2))
                     );
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                MainWindow.ShowErrorBox("DayData Error", "Failed to convert data to usable data",ex);
+                MainWindow.ShowErrorBox("DayData Error", "Failed to convert data to usable data", ex);
             }
         }
         public void ConvertUsableDataToSaveData()

@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -8,11 +7,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using WorkLifeBalance.Data;
-using WorkLifeBalance.Handlers;
-using WorkLifeBalance.Handlers;
-using WorkLifeBalance.Handlers.Feature;
-using WorkLifeBalance.Windows;
+using WorkLifeBalance.Models;
+using WorkLifeBalance.Services;
+using WorkLifeBalance.Services.Feature;
+using WorkLifeBalance.Views;
 
 namespace WorkLifeBalance.Pages
 {
@@ -33,9 +31,9 @@ namespace WorkLifeBalance.Pages
         {
             InitializeComponent();
             RequiredWindowSize = new Vector2(710, 570);
-            if(args != null)
+            if (args != null)
             {
-                if(args is int loadedpagetype)
+                if (args is int loadedpagetype)
                 {
                     _ = RequiestData(loadedpagetype);
                     LoadedPageType = loadedpagetype;
@@ -43,7 +41,7 @@ namespace WorkLifeBalance.Pages
                 }
             }
 
-           MainWindow.ShowErrorBox("Error ViewDaysPage", "Requested ViewDays Page with no/wrong arguments");
+            MainWindow.ShowErrorBox("Error ViewDaysPage", "Requested ViewDays Page with no/wrong arguments");
         }
 
         private async Task RequiestData(int requiestedDataType)
@@ -90,17 +88,17 @@ namespace WorkLifeBalance.Pages
             StackPanel ButtonParent = FindParent<StackPanel>(button);
 
             TextBlock tempblock = (TextBlock)ButtonParent.Children[1];
-            ClickedDay.WorkedAmmount = tempblock.Text.Replace(":","");
+            ClickedDay.WorkedAmmount = tempblock.Text.Replace(":", "");
 
             tempblock = (TextBlock)ButtonParent.Children[3];
             ClickedDay.RestedAmmount = tempblock.Text.Replace(":", "");
 
             tempblock = (TextBlock)ButtonParent.Children[4];
-            ClickedDay.Date = tempblock.Text.Replace("/","");
+            ClickedDay.Date = tempblock.Text.Replace("/", "");
 
             ClickedDay.ConvertSaveDataToUsableData();
 
-            SecondWindow.RequestSecondWindow(SecondWindowType.ViewDayActivity,(LoadedPageType,ClickedDay));
+            SecondWindow.RequestSecondWindow(SecondWindowType.ViewDayActivity, (LoadedPageType, ClickedDay));
         }
 
         private void ApplyFilters(object sender, RoutedEventArgs e)
@@ -132,7 +130,7 @@ namespace WorkLifeBalance.Pages
 
             LoadedData.Clear();
 
-            foreach(DayData day in tempdata)
+            foreach (DayData day in tempdata)
             {
                 LoadedData.Add(day);
             }

@@ -6,18 +6,20 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using WorkLifeBalance.Data;
+using WorkLifeBalance.Models;
 
-namespace WorkLifeBalance.Handlers
+namespace WorkLifeBalance.Services
 {
-    public static class DataBaseHandler
+    //rewrite it to use the correct way of using dapper
+    //like make 2 methods, write <T> and read <T> passing the sql from the specific class
+    public class DataBaseHandler
     {
         //semaphore to ensure only one method can write to the database at once
-        private static readonly SemaphoreSlim _semaphore = new(1);
+        private readonly SemaphoreSlim _semaphore = new(1);
         //connection string for the db
-        private static readonly string ConnectionString = @$"Data Source={Directory.GetCurrentDirectory()}\RecordedData.db;Version=3;";
+        private readonly string ConnectionString = @$"Data Source={Directory.GetCurrentDirectory()}\RecordedData.db;Version=3;";
 
-        public static async Task WriteAutoSateData(AutoStateChangeData autod)
+        public async Task WriteAutoSateData(AutoStateChangeData autod)
         {
             //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
@@ -56,7 +58,7 @@ namespace WorkLifeBalance.Handlers
                             {
                                 int affectedRows = await connection.ExecuteAsync(UpdateSql, activity);
 
-                                if(affectedRows == 0)
+                                if (affectedRows == 0)
                                 {
                                     await connection.ExecuteAsync(AddSql, activity);
                                 }
@@ -87,7 +89,7 @@ namespace WorkLifeBalance.Handlers
             }
         }
 
-        public static async Task<AutoStateChangeData> ReadAutoStateData(string date)
+        public async Task<AutoStateChangeData> ReadAutoStateData(string date)
         {
             AutoStateChangeData retrivedSettings = new();
             //wait for a time when no methods writes now to the database
@@ -142,7 +144,7 @@ namespace WorkLifeBalance.Handlers
             return retrivedSettings;
         }
 
-        public static async Task<List<ProcessActivity>> ReadDayActivity(string date)
+        public async Task<List<ProcessActivity>> ReadDayActivity(string date)
         {
             //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
@@ -197,7 +199,7 @@ namespace WorkLifeBalance.Handlers
             return ReturnActivity;
         }
 
-        public static async Task WriteSettings(AppSettings sett)
+        public async Task WriteSettings(AppSettings sett)
         {
             //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
@@ -215,7 +217,7 @@ namespace WorkLifeBalance.Handlers
                     {
                         try
                         {
-                            string sql =    @"UPDATE Settings 
+                            string sql = @"UPDATE Settings 
                                             SET LastTimeOpened = @LastTimeOpened,
                                             StartWithWindows = @StartWithWindows,
                                             AutoDetectWorking = @AutoDetectWorking,
@@ -252,7 +254,7 @@ namespace WorkLifeBalance.Handlers
             }
         }
 
-        public static async Task<AppSettings> ReadSettings()
+        public async Task<AppSettings> ReadSettings()
         {
             AppSettings retrivedSettings = new();
             //wait for a time when no methods writes now to the database
@@ -293,7 +295,7 @@ namespace WorkLifeBalance.Handlers
                 _semaphore.Release();
             }
 
-            if(retrivedSettings == null)
+            if (retrivedSettings == null)
             {
                 retrivedSettings = new();
             }
@@ -303,7 +305,7 @@ namespace WorkLifeBalance.Handlers
             return retrivedSettings;
         }
 
-        public static async Task WriteDay(DayData day)
+        public async Task WriteDay(DayData day)
         {
             //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
@@ -351,7 +353,7 @@ namespace WorkLifeBalance.Handlers
             }
         }
 
-        public static async Task<DayData> ReadDay(string date)
+        public async Task<DayData> ReadDay(string date)
         {
             DayData? retrivedDay = null;
             //wait for a time when no methods writes now to the database
@@ -370,7 +372,7 @@ namespace WorkLifeBalance.Handlers
                     {
                         string sql = @$"SELECT * FROM Days
                                       WHERE Date = @Date";
-                        retrivedDay = connection.QueryFirstOrDefault<DayData>(sql,new {Date = date });
+                        retrivedDay = connection.QueryFirstOrDefault<DayData>(sql, new { Date = date });
                     }
                     catch (Exception ex)
                     {
@@ -392,17 +394,17 @@ namespace WorkLifeBalance.Handlers
                 _semaphore.Release();
             }
 
-            if(retrivedDay == null)
+            if (retrivedDay == null)
             {
                 retrivedDay = new();
             }
-            
+
             retrivedDay.ConvertSaveDataToUsableData();
 
             return retrivedDay;
         }
 
-        public static async Task<int> ReadCountInMonth(string month)
+        public async Task<int> ReadCountInMonth(string month)
         {
             int returncount = 0;
             //wait for a time when no methods writes now to the database
@@ -421,7 +423,7 @@ namespace WorkLifeBalance.Handlers
                     {
                         string sql = @$"SELECT COUNT(*) AS row_count
                                         FROM Days WHERE date LIKE @Pattern";
-                        returncount = await connection.QueryFirstOrDefaultAsync<int>(sql,new {Pattern = $"{month}%%" });
+                        returncount = await connection.QueryFirstOrDefaultAsync<int>(sql, new { Pattern = $"{month}%%" });
                     }
                     catch (Exception ex)
                     {
@@ -445,7 +447,7 @@ namespace WorkLifeBalance.Handlers
             return returncount;
         }
 
-        public static async Task<List<DayData>> ReadMonth(string Month = "",string year = "")
+        public async Task<List<DayData>> ReadMonth(string Month = "", string year = "")
         {
             //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
@@ -466,7 +468,7 @@ namespace WorkLifeBalance.Handlers
                     {
                         //depending on passed arguments chose between 2 sql statements
                         string sql;
-                        if(string.IsNullOrEmpty(Month) || string.IsNullOrWhiteSpace(year))
+                        if (string.IsNullOrEmpty(Month) || string.IsNullOrWhiteSpace(year))
                         {
                             sql = @$"SELECT * from Days";
                         }
@@ -501,7 +503,7 @@ namespace WorkLifeBalance.Handlers
                 //release semaphore so other methods could run
                 _semaphore.Release();
             }
-            foreach(DayData day in ReturnDays)
+            foreach (DayData day in ReturnDays)
             {
                 day.ConvertSaveDataToUsableData();
             }
@@ -509,7 +511,7 @@ namespace WorkLifeBalance.Handlers
             return ReturnDays;
         }
 
-        public static async Task<DayData> GetMaxValue(string value,string Month = "", string year = "")
+        public async Task<DayData> GetMaxValue(string value, string Month = "", string year = "")
         {
             DayData? retrivedDay = null;
             //wait for a time when no methods writes now to the database
@@ -580,7 +582,7 @@ namespace WorkLifeBalance.Handlers
             return retrivedDay;
         }
 
-        public static async Task<ProcessActivity> GetMostActiveActivity(string value, string Month = "", string year = "")
+        public async Task<ProcessActivity> GetMostActiveActivity(string value, string Month = "", string year = "")
         {
             ProcessActivity? retrivedDay = null;
             //wait for a time when no methods writes now to the database
