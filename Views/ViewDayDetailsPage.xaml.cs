@@ -4,23 +4,25 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using WorkLifeBalance.Models;
 using WorkLifeBalance.Services;
-using WorkLifeBalance.Views;
+using WorkLifeBalance.ViewModels;
 
 namespace WorkLifeBalance.Pages
 {
     /// <summary>
     /// Interaction logic for ViewDayDetailsPage.xaml
     /// </summary>
-    public partial class ViewDayDetailsPage : SecondWindowPageBase
+    public partial class ViewDayDetailsPage : Page
     {
-        public ProcessActivity[] activities { get; set; } = new ProcessActivity[0];
+        public ProcessActivityData[] activities { get; set; } = new ProcessActivityData[0];
 
         //use args to pass date
         private int LoadedPageType = 0;
         private DayData LoadedDayData = new();
-        public ViewDayDetailsPage(object? args) : base(args)
+        private ViewDaysDetailsPageVM viewDaysDetailsPageVM;
+        public ViewDayDetailsPage(ViewDaysDetailsPageVM viewDaysDetailsPageVM)
         {
             InitializeComponent();
             RequiredWindowSize = new Vector2(430, 440);
@@ -37,11 +39,12 @@ namespace WorkLifeBalance.Pages
             }
 
             MainWindow.ShowErrorBox("Error ViewDayDetails", "Requested ViewDayDetails Page with no/wrong arguments");
+            this.viewDaysDetailsPageVM = viewDaysDetailsPageVM;
         }
 
         private async Task RequiestData()
         {
-            List<ProcessActivity> RequestedActivity = (await DataBaseHandler.ReadDayActivity(LoadedDayData.Date));
+            List<ProcessActivityData> RequestedActivity = (await DataBaseHandler.ReadDayActivity(LoadedDayData.Date));
             activities = RequestedActivity.OrderByDescending(data => data.TimeSpentC).ToArray();
 
             WorkedT.Text = LoadedDayData.WorkedAmmountC.ToString("HH:mm:ss");

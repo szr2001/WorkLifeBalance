@@ -2,7 +2,7 @@
 
 namespace WorkLifeBalance.Models
 {
-    public class AppSettings
+    public class AppSettingsData
     {
         public string LastTimeOpened { get; set; } = "";
         public int SaveInterval { get; set; } = 5;

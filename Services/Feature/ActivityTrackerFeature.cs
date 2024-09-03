@@ -1,24 +1,11 @@
 ﻿using Serilog;
 using System;
-using static WorkLifeBalance.Services.TimeHandler;
+using static WorkLifeBalance.Services.AppTimer;
 
 namespace WorkLifeBalance.Services.Feature
 {
     public class ActivityTrackerFeature : FeatureBase
     {
-        private static ActivityTrackerFeature? _instance;
-        public static ActivityTrackerFeature Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new ActivityTrackerFeature();
-                }
-                return _instance;
-            }
-        }
-
         public delegate void ActiveProcess(string ActiveWindow);
         public event ActiveProcess? OnWindowChange;
 

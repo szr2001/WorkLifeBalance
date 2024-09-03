@@ -2,25 +2,12 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using static WorkLifeBalance.Services.TimeHandler;
+using static WorkLifeBalance.Services.AppTimer;
 
 namespace WorkLifeBalance.Services.Feature
 {
     public class StateCheckerFeature : FeatureBase
     {
-        private static StateCheckerFeature? _instance;
-        public static StateCheckerFeature Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new StateCheckerFeature();
-                }
-                return _instance;
-            }
-        }
-
         public bool IsFocusingOnWorkingWindow = false;
 
         protected override TickEvent ReturnFeatureMethod()

@@ -10,14 +10,14 @@ using System.Windows.Media;
 using WorkLifeBalance.Models;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
-using WorkLifeBalance.Views;
+using WorkLifeBalance.ViewModels;
 
 namespace WorkLifeBalance.Pages
 {
     /// <summary>
     /// Interaction logic for ViewDaysPage.xaml
     /// </summary>
-    public partial class ViewDaysPage : SecondWindowPageBase
+    public partial class ViewDaysPage : Page
     {
         public ObservableCollection<DayData> LoadedData { get; set; } = new();
 
@@ -27,7 +27,8 @@ namespace WorkLifeBalance.Pages
         private string FilterMonth = "00";
         private string FilterDay = "00";
         private string FilterYear = "0000";
-        public ViewDaysPage(object? args) : base(args)
+        private ViewDaysPageVM viewDaysPageVM;
+        public ViewDaysPage(ViewDaysPageVM viewDaysPageVM)
         {
             InitializeComponent();
             RequiredWindowSize = new Vector2(710, 570);
@@ -42,6 +43,7 @@ namespace WorkLifeBalance.Pages
             }
 
             MainWindow.ShowErrorBox("Error ViewDaysPage", "Requested ViewDays Page with no/wrong arguments");
+            this.viewDaysPageVM = viewDaysPageVM;
         }
 
         private async Task RequiestData(int requiestedDataType)

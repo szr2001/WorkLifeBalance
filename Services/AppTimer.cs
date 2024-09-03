@@ -7,14 +7,25 @@ using WorkLifeBalance.Services.Feature;
 
 namespace WorkLifeBalance.Services
 {
-    public class TimeHandler
+    //Main timer that runs once a second, other features can subscribe to it and have their own run interval
+    public class AppTimer
     {
-        //Main timer that runs once a second, other features can subscribe to it and have their own run interval
-        public delegate void TickEvent();
-        private event TickEvent OnTimerTick = delegate { };
+        public event Action<AppState> OnStateChanges = delegate { };
+        public AppState AppTimerState 
+        {
+            get 
+            {
+                return appTimerState;
+            }
+            set
+            {
+                appTimerState = value;
+                OnStateChanges?.Invoke(appTimerState);
+            }
+        }
 
-        public AppState AppTimmerState = AppState.Resting;
-
+        private AppState appTimerState = AppState.Resting;
+        private event Action OnTimerTick = delegate { };
         private CancellationTokenSource CancelTick = new();
 
         public void StartTick()
@@ -26,7 +37,7 @@ namespace WorkLifeBalance.Services
             _ = TimerLoop(CancelTick.Token);
         }
 
-        public void Subscribe(TickEvent eventname)
+        public void Subscribe(Action eventname)
         {
             if (!OnTimerTick.GetInvocationList().Contains(eventname))
             {
@@ -35,7 +46,7 @@ namespace WorkLifeBalance.Services
             }
         }
 
-        public void UnSubscribe(TickEvent eventname)
+        public void UnSubscribe(Action eventname)
         {
             if (OnTimerTick.GetInvocationList().Contains(eventname))
             {

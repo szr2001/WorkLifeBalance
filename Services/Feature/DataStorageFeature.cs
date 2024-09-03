@@ -2,25 +2,12 @@
 using System;
 using System.Threading.Tasks;
 using WorkLifeBalance.Models;
-using static WorkLifeBalance.Services.TimeHandler;
+using static WorkLifeBalance.Services.AppTimer;
 
 namespace WorkLifeBalance.Services.Feature
 {
     public class DataStorageFeature : FeatureBase
     {
-        private static DataStorageFeature? _instance;
-        public static DataStorageFeature Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new DataStorageFeature();
-                }
-                return _instance;
-            }
-        }
-
         public readonly float AppVersion = 2;
         public string AppName;
         public string AppDirectory;
@@ -33,7 +20,7 @@ namespace WorkLifeBalance.Services.Feature
         public bool IsAppReady = false;
 
         public DayData TodayData = new();
-        public AppSettings Settings = new();
+        public AppSettingsData Settings = new();
         public AutoStateChangeData AutoChangeData = new();
 
         public delegate void DataEvent();

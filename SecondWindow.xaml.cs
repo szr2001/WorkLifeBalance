@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Input;
 using WorkLifeBalance.Pages;
 using WorkLifeBalance.ViewModels;
-using WorkLifeBalance.Views;
 
 namespace WorkLifeBalance
 {
@@ -19,7 +18,7 @@ namespace WorkLifeBalance
 
         private SecondWindowPageBase WindowPage;
         private SecondWindowVM secondWindowVM;
-        public SecondWindow(SecondWindowVM secondwindowVM)
+        public SecondWindow(SecondWindowVM secondWindowVM)
         {
             if (Instance != null)
             {
@@ -27,7 +26,7 @@ namespace WorkLifeBalance
                 Instance = this;
             }
             InitializeComponent();
-            secondWindowVM = secondwindowVM;
+            this.secondWindowVM = secondWindowVM;
         }
 
         public static void RequestSecondWindow(SecondWindowType Type, object? args = null)

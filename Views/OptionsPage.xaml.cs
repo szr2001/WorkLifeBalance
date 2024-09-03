@@ -1,19 +1,22 @@
 ﻿using System.Numerics;
 using System.Windows;
-using WorkLifeBalance.Views;
+using System.Windows.Controls;
+using WorkLifeBalance.ViewModels;
 
 namespace WorkLifeBalance.Pages
 {
     /// <summary>
     /// Interaction logic for OptionsPage.xaml
     /// </summary>
-    public partial class OptionsPage : SecondWindowPageBase
+    public partial class OptionsPage : Page
     {
-        public OptionsPage(object? args) : base(args)
+        private OptionsPageVM optionsPageVM;
+        public OptionsPage(OptionsPageVM optionsPageVM)
         {
             InitializeComponent();
             RequiredWindowSize = new Vector2(250, 320);
             pageNme = "Options";
+            this.optionsPageVM = optionsPageVM;
         }
 
         private void OpenSettings(object sender, RoutedEventArgs e)

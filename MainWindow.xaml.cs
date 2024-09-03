@@ -24,7 +24,7 @@ namespace WorkLifeBalance
         public static MainWindow? instance;
 
         public Dispatcher MainDispatcher = Dispatcher.CurrentDispatcher;
-
+        //use binding ifs to bind to colors and sprites directly in the xaml
         private ImageSource AutomaticImg = new BitmapImage();
         private ImageSource RestImg = new BitmapImage();
         private ImageSource WorkImg = new BitmapImage();
@@ -34,43 +34,18 @@ namespace WorkLifeBalance
         private SolidColorBrush OceanBlue = new();
 
         private readonly bool DebugMode = true;
-        public MainWindow(MainMenuVM viewModel)
+        private MainMenuVM mainMenuVM;
+        public MainWindow(MainMenuVM mainMenuVM)
         {
-            //initialize singleton ?
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else
-            {
-                //instance.Close();
-                instance = this;
-            }
-            InitializeComponent();
+            this.mainMenuVM = mainMenuVM;
+            DataContext = this.mainMenuVM;
 
-            if (DebugMode)
-            {
-                Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console()
-                .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
-                .CreateLogger();
-            }
-            else
-            {
-                Log.Logger = new LoggerConfiguration()
-                .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
-                .CreateLogger();
-            }
 
             Topmost = true;
             LoadStyleInfo();
 
-            //subscribe events for triggering app when data loaded and updaing Ui on save/load
-            DataStorageFeature.Instance.OnLoaded += InitializeApp;
-            DataStorageFeature.Instance.OnSaving += () => { DateT.Text = $"Saving data..."; };
-            DataStorageFeature.Instance.OnSaved += () => { DateT.Text = $"Today: {DataStorageFeature.Instance.TodayData.DateC.ToString("MM/dd/yyyy")}"; };
-            //load data
-            _ = DataStorageFeature.Instance.LoadData();
+            InitializeComponent();
+            _ = SetWindowLocation();
         }
 
         private void LoadStyleInfo()
@@ -82,41 +57,6 @@ namespace WorkLifeBalance
             LightBlueColor = (SolidColorBrush)FindResource("WLFBLigherBlue");
             LightPurpleColor = (SolidColorBrush)FindResource("WLFBLightPurple");
             OceanBlue = (SolidColorBrush)FindResource("WLFBOceanBlue");
-        }
-
-        //initialize app called when data was loaded
-        private void InitializeApp()
-        {
-            //call set window location and continue
-            _ = SetWindowLocation();
-
-            //set app ready so timers can start
-            DataStorageFeature.Instance.IsAppReady = true;
-
-            //subscribe features to the main timer
-            TimeHandler.Subscribe(TimeTrackerFeature.Instance.AddFeature());
-            TimeHandler.Subscribe(DataStorageFeature.Instance.AddFeature());
-            TimeHandler.Subscribe(ActivityTrackerFeature.Instance.AddFeature());
-
-            //check settings to see if you need to add some features
-            if (DataStorageFeature.Instance.Settings.AutoDetectWorkingC)
-            {
-                TimeHandler.Subscribe(StateCheckerFeature.Instance.AddFeature());
-            }
-
-            //asign update ui 
-            TimeTrackerFeature.Instance.OnSpentTimeChange += UpdateUI;
-
-            //starts the main timer
-            TimeHandler.StartTick();
-
-            //check if auto detect is enabled so you update ui
-            SetAppState(AppState.Resting);
-            ApplyAutoDetectWorking();
-
-            //asign the todays date
-            DateT.Text = $"Today: {DataStorageFeature.Instance.TodayData.DateC.ToString("MM/dd/yyyy")}";
-            Log.Information("------------------App Initialized------------------");
         }
 
         private async Task SetWindowLocation()
@@ -158,7 +98,7 @@ namespace WorkLifeBalance
         //the app is in working stage, no need to check idle when the user is not working
         public void SetAppState(AppState state)
         {
-            if (TimeHandler.AppTimmerState == state) return;
+            if (AppTimer.AppTimerState == state) return;
 
             switch (state)
             {
@@ -171,7 +111,7 @@ namespace WorkLifeBalance
 
                     if (DataStorageFeature.Instance.Settings.AutoDetectIdleC)
                     {
-                        TimeHandler.Subscribe(IdleCheckerFeature.Instance.AddFeature());
+                        AppTimer.Subscribe(IdleCheckerFeature.Instance.AddFeature());
                     }
                     break;
 
@@ -186,12 +126,12 @@ namespace WorkLifeBalance
                     {
                         if (!StateCheckerFeature.Instance.IsFocusingOnWorkingWindow)
                         {
-                            TimeHandler.UnSubscribe(IdleCheckerFeature.Instance.RemoveFeature());
+                            AppTimer.UnSubscribe(IdleCheckerFeature.Instance.RemoveFeature());
                         }
                     }
                     break;
             }
-            TimeHandler.AppTimmerState = state;
+            AppTimer.AppTimerState = state;
             Log.Information($"App state changed to {state}");
         }
 
@@ -199,7 +139,7 @@ namespace WorkLifeBalance
         {
             if (!DataStorageFeature.Instance.IsAppReady || DataStorageFeature.Instance.IsClosingApp) return;
 
-            switch (TimeHandler.AppTimmerState)
+            switch (AppTimer.AppTimerState)
             {
                 case AppState.Working:
                     SetAppState(AppState.Resting);
@@ -211,12 +151,6 @@ namespace WorkLifeBalance
             }
         }
 
-        private void UpdateUI()
-        {
-            ElapsedWorkT.Text = DataStorageFeature.Instance.TodayData.WorkedAmmountC.ToString("HH:mm:ss");
-            ElapsedRestT.Text = DataStorageFeature.Instance.TodayData.RestedAmmountC.ToString("HH:mm:ss");
-        }
-
         public void ApplyAutoDetectWorking()
         {
             bool value = DataStorageFeature.Instance.Settings.AutoDetectWorkingC;
@@ -224,44 +158,17 @@ namespace WorkLifeBalance
 
             if (value == true)
             {
-                TimeHandler.Subscribe(StateCheckerFeature.Instance.AddFeature());
+                AppTimer.Subscribe(StateCheckerFeature.Instance.AddFeature());
                 ToggleBtn.Background = OceanBlue;
                 ToggleRecordingImage.Source = AutomaticImg;
             }
             else
             {
-                TimeHandler.UnSubscribe(StateCheckerFeature.Instance.AddFeature());
+                AppTimer.UnSubscribe(StateCheckerFeature.Instance.AddFeature());
                 ToggleBtn.Background = LightBlueColor;
                 ToggleRecordingImage.Source = RestImg;
                 SetAppState(AppState.Resting);
             }
-        }
-
-        private void OpenViewDataWindow(object sender, RoutedEventArgs e)
-        {
-            SecondWindow.RequestSecondWindow(SecondWindowType.ViewData);
-        }
-
-        private void OpenOptionsWindow(object sender, RoutedEventArgs e)
-        {
-            SecondWindow.RequestSecondWindow(SecondWindowType.Options);
-        }
-
-        private async void CloseApp(object sender, RoutedEventArgs e)
-        {
-            if (DataStorageFeature.Instance.IsClosingApp) return;
-
-            DataStorageFeature.Instance.IsClosingApp = true;
-
-            CloseSideBar(null, null);
-
-            await DataStorageFeature.Instance.SaveData();
-
-            Log.Information("------------------App Shuting Down------------------");
-
-            await Log.CloseAndFlushAsync();
-
-            Application.Current.Shutdown();
         }
 
         private void MoveWindow(object sender, MouseButtonEventArgs e)
@@ -288,39 +195,5 @@ namespace WorkLifeBalance
             OptionMenuVisibility.Width = new GridLength(15, GridUnitType.Pixel);
             OptionsPannel.Visibility = Visibility.Collapsed;
         }
-
-
-        #region ShowErrorBox
-        public static void ShowErrorBox(string action, string messageBoxText, Exception ex, bool ForceShutdown)
-        {
-            MessageBoxButton button = MessageBoxButton.OK;
-            MessageBoxImage icon = MessageBoxImage.Error;
-            MessageBoxResult result;
-
-            result = MessageBox.Show(messageBoxText, action, button, icon, MessageBoxResult.Yes);
-
-            if (ForceShutdown)
-            {
-                Log.Error(ex, $"Show Error Box Triggered with message {action}:{messageBoxText}");
-                Application.Current.Shutdown();
-            }
-            else
-            {
-                Log.Warning(ex, $"Show Error Box Triggered with message {action}:{messageBoxText}");
-            }
-        }
-        public static void ShowErrorBox(string action, string messageBoxText, Exception ex)
-        {
-            ShowErrorBox(action, messageBoxText, ex, true);
-        }
-        public static void ShowErrorBox(string action, string messageBoxText, bool ForceShutdown)
-        {
-            ShowErrorBox(action, messageBoxText, null, ForceShutdown);
-        }
-        public static void ShowErrorBox(string action, string messageBoxText)
-        {
-            ShowErrorBox(action, messageBoxText, null, true);
-        }
-        #endregion
     }
 }

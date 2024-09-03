@@ -54,7 +54,7 @@ namespace WorkLifeBalance.Services
                             string AddSql = @"INSERT INTO Activity (Date,Process,TimeSpent)
                                               VALUES (@Date,@Process,@TimeSpent)";
 
-                            foreach (ProcessActivity activity in autod.Activities)
+                            foreach (ProcessActivityData activity in autod.Activities)
                             {
                                 int affectedRows = await connection.ExecuteAsync(UpdateSql, activity);
 
@@ -109,7 +109,7 @@ namespace WorkLifeBalance.Services
                         string sql = @$"SELECT * FROM Activity
                                         WHERE Date = @Date";
 
-                        retrivedSettings.Activities = (await connection.QueryAsync<ProcessActivity>(sql, new { Date = date })).ToArray();
+                        retrivedSettings.Activities = (await connection.QueryAsync<ProcessActivityData>(sql, new { Date = date })).ToArray();
 
                         sql = @$"SELECT * FROM WorkingWindows";
 
@@ -144,14 +144,14 @@ namespace WorkLifeBalance.Services
             return retrivedSettings;
         }
 
-        public async Task<List<ProcessActivity>> ReadDayActivity(string date)
+        public async Task<List<ProcessActivityData>> ReadDayActivity(string date)
         {
             //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
             //if no one writes continue
 
             //list of filtered residences
-            List<ProcessActivity> ReturnActivity = new();
+            List<ProcessActivityData> ReturnActivity = new();
 
             try
             {
@@ -169,7 +169,7 @@ namespace WorkLifeBalance.Services
 
 
                         //wait for return, and pass the return to a Residence class
-                        ReturnActivity = (await connection.QueryAsync<ProcessActivity>(sql, new { Date = date })).ToList();
+                        ReturnActivity = (await connection.QueryAsync<ProcessActivityData>(sql, new { Date = date })).ToList();
 
                     }
                     catch (Exception ex)
@@ -191,7 +191,7 @@ namespace WorkLifeBalance.Services
                 //release semaphore so other methods could run
                 _semaphore.Release();
             }
-            foreach (ProcessActivity day in ReturnActivity)
+            foreach (ProcessActivityData day in ReturnActivity)
             {
                 day.ConvertSaveDataToUsableData();
             }
@@ -199,7 +199,7 @@ namespace WorkLifeBalance.Services
             return ReturnActivity;
         }
 
-        public async Task WriteSettings(AppSettings sett)
+        public async Task WriteSettings(AppSettingsData sett)
         {
             //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
@@ -254,9 +254,9 @@ namespace WorkLifeBalance.Services
             }
         }
 
-        public async Task<AppSettings> ReadSettings()
+        public async Task<AppSettingsData> ReadSettings()
         {
-            AppSettings retrivedSettings = new();
+            AppSettingsData retrivedSettings = new();
             //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
             //if no one writes to db continue
@@ -274,7 +274,7 @@ namespace WorkLifeBalance.Services
                         string sql = @$"SELECT * FROM Settings
                                         LIMIT 1";
 
-                        retrivedSettings = connection.QueryFirstOrDefault<AppSettings>(sql);
+                        retrivedSettings = connection.QueryFirstOrDefault<AppSettingsData>(sql);
                     }
                     catch (Exception ex)
                     {
@@ -582,9 +582,9 @@ namespace WorkLifeBalance.Services
             return retrivedDay;
         }
 
-        public async Task<ProcessActivity> GetMostActiveActivity(string value, string Month = "", string year = "")
+        public async Task<ProcessActivityData> GetMostActiveActivity(string value, string Month = "", string year = "")
         {
-            ProcessActivity? retrivedDay = null;
+            ProcessActivityData? retrivedDay = null;
             //wait for a time when no methods writes now to the database
             await _semaphore.WaitAsync();
             //if no one writes to db continue
@@ -614,7 +614,7 @@ namespace WorkLifeBalance.Services
                                      (SELECT MAX(@Value) FROM Days
                                      WHERE Date Like @Pattern)";
                         }
-                        retrivedDay = connection.QueryFirstOrDefault<ProcessActivity>(sql, new { Value = value, Pattern = $"{Month}%{year}" });
+                        retrivedDay = connection.QueryFirstOrDefault<ProcessActivityData>(sql, new { Value = value, Pattern = $"{Month}%{year}" });
                     }
                     catch (Exception ex)
                     {

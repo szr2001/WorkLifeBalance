@@ -1,14 +1,13 @@
 ﻿using IWshRuntimeLibrary;
 using Serilog;
 using System;
-using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using WorkLifeBalance.Models;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
-using WorkLifeBalance.Views;
+using WorkLifeBalance.ViewModels;
 using File = System.IO.File;
 using Path = System.IO.Path;
 
@@ -17,7 +16,7 @@ namespace WorkLifeBalance.Pages
     /// <summary>
     /// Interaction logic for SettingsPage.xaml
     /// </summary>
-    public partial class SettingsPage : SecondWindowPageBase
+    public partial class SettingsPage : Page
     {
         int Saveinterval = 5;
         int AutoDetectInterval = 1;
@@ -26,14 +25,15 @@ namespace WorkLifeBalance.Pages
         bool AutoDetectWork = false;
         bool AutoDetectIdle = false;
         bool StartWithWin = false;
-
-        public SettingsPage(object? args) : base(args)
+        private SettingsPageVM settingsPageVM;
+        public SettingsPage(SettingsPageVM settingsPageVM)
         {
             InitializeComponent();
             RequiredWindowSize = new Vector2(250, 320);
             pageNme = "Settings";
 
             ApplySettings();
+            this.settingsPageVM = settingsPageVM;
         }
 
         //updates ui based on loaded settings
@@ -247,7 +247,7 @@ namespace WorkLifeBalance.Pages
             else
             {
                 ContractDetectMouseIdleArea();
-                TimeHandler.UnSubscribe(IdleCheckerFeature.Instance.RemoveFeature());
+                AppTimer.UnSubscribe(IdleCheckerFeature.Instance.RemoveFeature());
             }
             Log.Information($"AutoDetectIdle changed to {AutoDetectIdleBtn.IsChecked}");
         }

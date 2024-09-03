@@ -2,17 +2,18 @@
 using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using WorkLifeBalance.Models;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
-using WorkLifeBalance.Views;
+using WorkLifeBalance.ViewModels;
 
 namespace WorkLifeBalance.Pages
 {
     /// <summary>
     /// Interaction logic for ViewDataPage.xaml
     /// </summary>
-    public partial class ViewDataPage : SecondWindowPageBase
+    public partial class ViewDataPage : Page
     {
         float RecordWorkRestRatio = 0;
         TimeOnly RecordMostWorked;
@@ -36,12 +37,15 @@ namespace WorkLifeBalance.Pages
 
         TimeOnly PreviousMonthMostRested;
         DateOnly PreviousMonthMostRestedDate;
-        public ViewDataPage(object? args) : base(args)
+
+        private ViewDataPageVM viewDataPageVM;
+        public ViewDataPage(ViewDataPageVM viewDataPageVM)
         {
             InitializeComponent();
             RequiredWindowSize = new Vector2(750, 580);
             pageNme = "View Data";
             _ = CalculateData();
+            this.viewDataPageVM = viewDataPageVM;
         }
 
         private async Task CalculateData()

@@ -1,23 +1,10 @@
 ﻿using System;
-using static WorkLifeBalance.Services.TimeHandler;
+using static WorkLifeBalance.Services.AppTimer;
 
 namespace WorkLifeBalance.Services.Feature
 {
     public class TimeTrackerFeature : FeatureBase
     {
-        private static TimeTrackerFeature? _instance;
-        public static TimeTrackerFeature Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new TimeTrackerFeature();
-                }
-                return _instance;
-            }
-        }
-
         public delegate void SpentTimeEvent();
 
         public event SpentTimeEvent? OnSpentTimeChange;

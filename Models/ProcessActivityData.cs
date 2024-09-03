@@ -3,7 +3,7 @@
 namespace WorkLifeBalance.Models
 {
     [Serializable]
-    public class ProcessActivity
+    public class ProcessActivityData
     {
         public string Date { get; set; } = "06062023";
         public string Process { get; set; } = "da";

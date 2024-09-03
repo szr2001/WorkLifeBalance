@@ -1,16 +1,13 @@
-﻿using System.Numerics;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Numerics;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 
-namespace WorkLifeBalance.Views
+namespace WorkLifeBalance.ViewModels
 {
-    public class SecondWindowPageBase : Page
+    public abstract class SecondWindowPageVMBase : ObservableObject
     {
         public Vector2 RequiredWindowSize = new Vector2(250, 300);
         public string pageNme = "Page";
-        public SecondWindowPageBase(object? args)
-        {
-        }
 
         public virtual Task ClosePageAsync()
         {

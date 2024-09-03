@@ -41,7 +41,8 @@
                                 Margin="0,1,0,0"
                                 ToolTip="Close App"
                                 Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
-                                Style="{Binding Source={StaticResource RedRoundedBtnHoverStyle}}" Click="CloseApp">
+                                Style="{Binding Source={StaticResource RedRoundedBtnHoverStyle}}" 
+                                Click="{Binding CloseApp}">
                             <Image Margin="1"
                                    Source="Assets/Cancel.png"/>
                         </Button>
@@ -50,7 +51,8 @@
                                 Margin="0,2,0,0"
                                 ToolTip="Minimize App"
                                 Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
-                                Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}" Click="HideWindow">
+                                Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}" 
+                                Click="HideWindow">
                             <Image Margin="2"
                                    Source="Assets/Minimize.png"/>
                         </Button>
@@ -59,14 +61,15 @@
                                 Margin="0,2,0,0"
                                 ToolTip="Options"
                                 Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
-                                Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}" Click="OpenOptionsWindow">
+                                Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}" 
+                                Click="{Binding OpenOptionsWindow}">
                             <Image Margin="2"
                                    Source="Assets/Settings.png"/>
                         </Button>
                         <Button Height="23"
                                 Width="24"
                                 Margin="0,2,0,0"
-                                ToolTip="View Data"
+                                ToolTip="{Binding OpenViewDataWindow}"
                                 Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
                                 Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}" Click="OpenViewDataWindow">
                             <Image Margin="2"
@@ -95,14 +98,14 @@
                         <TextBlock Text="Worked Amount:"
                                    FontSize="20"
                                    TextAlignment="Center"/>
-                        <TextBlock Text="00.00.00"
+                        <TextBlock Text="{Binding ElapsedWorkTime}"
                                    Name="ElapsedWorkT"
                                    FontSize="15"
                                    TextAlignment="Center"/>
                         <TextBlock Text="Break Amount"
                                    TextAlignment="Center"
                                    FontSize="20"/>
-                        <TextBlock Text="00.00.00"
+                        <TextBlock Text="{Binding ElapsedRestTime}"
                                    Name="ElapsedRestT"
                                    FontSize="15"
                                    TextAlignment="Center"/>
@@ -114,8 +117,16 @@
                             ToolTip="Toggle Work/Rest"
                             Height="45" 
                             Click="ToggleState"
-                            Template="{Binding Source={StaticResource RoundedBtnTemp}}"
-                            Style="{Binding Source={StaticResource RoundedBtnStyle}}">
+                            Template="{Binding Source={StaticResource RoundedBtnTemp}}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource RoundedBtnStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding AppState}" Value=" " >
+                                        <Setter Property="Background" Value=""/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
                         <Image Margin="5"
                                Source="Assets/Rest.png"
                                Name="ToggleRecordingImage"/>
@@ -129,7 +140,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
 
-            <TextBlock Text="Saving data..."
+            <TextBlock Text="{Binding DateText}"
                        TextAlignment="Center"
                        Name="DateT"
                        FontWeight="Bold"

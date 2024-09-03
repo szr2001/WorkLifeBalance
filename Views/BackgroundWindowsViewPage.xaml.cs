@@ -6,18 +6,19 @@ using System.Windows;
 using System.Windows.Controls;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
-using WorkLifeBalance.Views;
+using WorkLifeBalance.ViewModels;
 
 namespace WorkLifeBalance.Pages
 {
     /// <summary>
     /// Interaction logic for BackgroundWindowsViewPage.xaml
     /// </summary>
-    public partial class BackgroundWindowsViewPage : SecondWindowPageBase
+    public partial class BackgroundWindowsViewPage : Page
     {
         public ObservableCollection<string> DetectedWindows { get; set; } = new();
         public ObservableCollection<string> SelectedWindows { get; set; } = new();
-        public BackgroundWindowsViewPage(object? args) : base(args)
+        private BackgroundWindowsViewPageVM backgroundWindowsViewPageVM;
+        public BackgroundWindowsViewPage(BackgroundWindowsViewPageVM backgroundWindowsViewPageVM)
         {
             RequiredWindowSize = new Vector2(700, 570);
             pageNme = "Automatic Customize";
@@ -25,6 +26,7 @@ namespace WorkLifeBalance.Pages
             DataContext = this;
             InitializeComponent();
             ActivityTrackerFeature.Instance.OnWindowChange += UpdateActiveWindowUi;
+            this.backgroundWindowsViewPageVM = backgroundWindowsViewPageVM;
         }
 
         private void InitializeProcessNames()

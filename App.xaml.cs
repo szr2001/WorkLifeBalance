@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Windows;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
@@ -14,58 +14,105 @@ namespace WorkLifeBalance
     public partial class App : Application
     {
         private bool Debug = true;
-        
+
+        private DataStorageFeature? dataStorageFeature;
+        private ActivityTrackerFeature? activityTrackerFeature;
+        private IdleCheckerFeature? idleCheckerFeature;
+        private StateCheckerFeature? stateCheckerFeature;
+        private TimeTrackerFeature? timeTrackerFeature;
+        private DataBaseHandler? dataBaseHandler;
+        private AppTimer? mainTimer;
+        private LowLevelHandler? lowLevelHandler;
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
-            LowLevelHandler lowLevelHandler = new();
-            CheckAdministratorPerms(lowLevelHandler);
+            lowLevelHandler = new();
+            if (!lowLevelHandler.IsRunningAsAdmin())
+            {
+                RestartApplicationWithAdmin();
+                return;
+            }
 
             if (Debug)
             {
                 lowLevelHandler.EnableConsole();
+                Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+            }
+            else
+            {
+                Log.Logger = new LoggerConfiguration()
+                .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
             }
 
-            DataBaseHandler dataBaseHandler = new DataBaseHandler();
-            
-            TimeHandler mainTimer = new();
+            //app features, each handles a specific part of the app
+            //and can be subscribed to the AppTimer
+            dataStorageFeature = new();
+            activityTrackerFeature = new();
+            idleCheckerFeature = new();
+            stateCheckerFeature = new();
+            timeTrackerFeature = new();
+
+            dataBaseHandler = new DataBaseHandler();
+
+            mainTimer = new();
 
             SecondWindowVM secondWindowVM = new();
-            MainMenuVM mainMenuVM = new(mainTimer, lowLevelHandler);
+            MainMenuVM mainMenuVM = new(mainTimer, lowLevelHandler, dataStorageFeature, timeTrackerFeature);
 
             SecondWindow secondWindow = new(secondWindowVM);
             MainWindow mainWindow = new(mainMenuVM);
+
+            dataStorageFeature.OnLoaded += InitializeApp;
             mainWindow.Show();
+
+            _ = dataStorageFeature.LoadData();
         }
 
-
-        private void CheckAdministratorPerms(LowLevelHandler lowLevelHandler)
+        //initialize app called when data was loaded
+        private void InitializeApp()
         {
-            if (lowLevelHandler.IsRunningAsAdmin())
+            //set app ready so timers can start
+            dataStorageFeature!.IsAppReady = true;
+
+            //subscribe features to the main timer
+            mainTimer!.Subscribe(timeTrackerFeature!.AddFeature());
+            mainTimer.Subscribe(dataStorageFeature.AddFeature());
+            mainTimer.Subscribe(activityTrackerFeature!.AddFeature());
+
+            //check settings to see if you need to add some features
+            if (dataStorageFeature.Settings.AutoDetectWorkingC)
             {
-                RestartApplicationWithAdmin();
+                mainTimer.Subscribe(stateCheckerFeature!.AddFeature());
             }
+
+            //starts the main timer
+            mainTimer.StartTick();
+
+            //check if auto detect is enabled so you update ui
+            SetAppState(AppState.Resting);
+            ApplyAutoDetectWorking();
+
+            //asign the todays date
+            DateT.Text = $"Today: {DataStorageFeature.Instance.TodayData.DateC.ToString("MM/dd/yyyy")}";
+            Log.Information("------------------App Initialized------------------");
         }
 
         private void RestartApplicationWithAdmin()
         {
             var psi = new ProcessStartInfo
             {
-                FileName = DataStorageFeature.Instance.AppExePath,
+                FileName = dataStorageFeature?.AppExePath,
                 UseShellExecute = true,
                 Verb = "runas"
             };
 
-            try
-            {
-                Process.Start(psi);
-                Current.Shutdown();
-            }
-            catch (Exception ex)
-            {
-                WorkLifeBalance.MainWindow.ShowErrorBox("The application must be run as Administrator", $"Restart as Administrator Failed: {ex.Message}");
-            }
+            Process.Start(psi);
+            Current.Shutdown();
         }
     }
 }
