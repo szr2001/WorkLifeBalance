@@ -1,35 +1,39 @@
 ﻿using System;
-using static WorkLifeBalance.Services.AppTimer;
 
 namespace WorkLifeBalance.Services.Feature
 {
     public class TimeTrackerFeature : FeatureBase
     {
         public delegate void SpentTimeEvent();
-
         public event SpentTimeEvent? OnSpentTimeChange;
 
         private TimeSpan OneSec = new TimeSpan(0, 0, 1);
-
-        protected override TickEvent ReturnFeatureMethod()
+        private AppTimer appTimer;
+        private DataStorageFeature dataStorageFeature;
+        public TimeTrackerFeature(AppTimer appTimer, DataStorageFeature dataStorageFeature)
+        {
+            this.appTimer = appTimer;
+            this.dataStorageFeature = dataStorageFeature;
+        }
+        protected override Action ReturnFeatureMethod()
         {
             return TriggerUpdateSpentTime;
         }
 
         private void TriggerUpdateSpentTime()
         {
-            switch (AppTimmerState)
+            switch (appTimer.AppTimerState)
             {
                 case AppState.Working:
-                    DataStorageFeature.Instance.TodayData.WorkedAmmountC = DataStorageFeature.Instance.TodayData.WorkedAmmountC.Add(OneSec);
+                    dataStorageFeature.TodayData.WorkedAmmountC = dataStorageFeature.TodayData.WorkedAmmountC.Add(OneSec);
                     break;
 
                 case AppState.Resting:
-                    DataStorageFeature.Instance.TodayData.RestedAmmountC = DataStorageFeature.Instance.TodayData.RestedAmmountC.Add(OneSec);
+                    dataStorageFeature.TodayData.RestedAmmountC = dataStorageFeature.TodayData.RestedAmmountC.Add(OneSec);
                     break;
 
                 case AppState.Idle:
-                    DataStorageFeature.Instance.TodayData.RestedAmmountC = DataStorageFeature.Instance.TodayData.RestedAmmountC.Add(OneSec);
+                    dataStorageFeature.TodayData.RestedAmmountC = dataStorageFeature.TodayData.RestedAmmountC.Add(OneSec);
                     break;
             }
             OnSpentTimeChange?.Invoke();

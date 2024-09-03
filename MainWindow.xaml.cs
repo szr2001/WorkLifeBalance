@@ -1,15 +1,10 @@
-﻿using Serilog;
-using System;
+﻿using System;
 using System.IO;
-using System.Numerics;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using WorkLifeBalance.Models;
-using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
 using WorkLifeBalance.ViewModels;
 
@@ -40,12 +35,11 @@ namespace WorkLifeBalance
             this.mainMenuVM = mainMenuVM;
             DataContext = this.mainMenuVM;
 
-
             Topmost = true;
             LoadStyleInfo();
 
             InitializeComponent();
-            _ = SetWindowLocation();
+            SetWindowLocation();
         }
 
         private void LoadStyleInfo()
@@ -59,116 +53,71 @@ namespace WorkLifeBalance
             OceanBlue = (SolidColorBrush)FindResource("WLFBOceanBlue");
         }
 
-        private async Task SetWindowLocation()
+        private void SetWindowLocation()
         {
-            //Moves app in the 4 posible corners based on settings
-            //delay because why not ? (waiting for window to appear)
-            await Task.Delay(300);
-            Vector2 UserScreen = Vector2.Zero;
-            IntPtr TargetWindow = IntPtr.Zero;
-            try
-            {
-                UserScreen = new Vector2((float)SystemParameters.PrimaryScreenWidth, (float)SystemParameters.PrimaryScreenHeight);
-                TargetWindow = LowLevelHandler.GetWindow(null, "WorkLifeBalance");
-            }
-            catch (Exception ex)
-            {
-                Log.Warning(ex, "Failed to find Window for seting StartupLocation");
-            }
-
-            switch (DataStorageFeature.Instance.Settings.StartUpCornerC)
-            {
-                //calculate corners based on user resolution
-                case AnchorCorner.TopLeft:
-                    LowLevelHandler.SetWindowLocation(TargetWindow, 0, 0);
-                    break;
-                case AnchorCorner.TopRight:
-                    LowLevelHandler.SetWindowLocation(TargetWindow, (int)UserScreen.X - 220, 0);
-                    break;
-                case AnchorCorner.BootomLeft:
-                    LowLevelHandler.SetWindowLocation(TargetWindow, 0, (int)UserScreen.Y - 180);
-                    break;
-                case AnchorCorner.BottomRight:
-                    LowLevelHandler.SetWindowLocation(TargetWindow, (int)UserScreen.X - 220, (int)UserScreen.Y - 180);
-                    break;
-            }
+            //bind to the VM
+            //use the DataStorageFeature.Instance.Settings.StartUpCornerC 
         }
 
         //sets the app state and also enables/disables the mouse idle check feature based on settings so it will only run of 
         //the app is in working stage, no need to check idle when the user is not working
         public void SetAppState(AppState state)
         {
-            if (AppTimer.AppTimerState == state) return;
+            //if (AppTimer.AppTimerState == state) return;
 
-            switch (state)
-            {
-                case AppState.Working:
-                    if (!DataStorageFeature.Instance.Settings.AutoDetectWorkingC)
-                    {
-                        ToggleBtn.Background = LightPurpleColor;
-                        ToggleRecordingImage.Source = WorkImg;
-                    }
+            //switch (state)
+            //{
+            //    case AppState.Working:
+            //        if (!DataStorageFeature.Instance.Settings.AutoDetectWorkingC)
+            //        {
+            //            ToggleBtn.Background = LightPurpleColor;
+            //            ToggleRecordingImage.Source = WorkImg;
+            //        }
 
-                    if (DataStorageFeature.Instance.Settings.AutoDetectIdleC)
-                    {
-                        AppTimer.Subscribe(IdleCheckerFeature.Instance.AddFeature());
-                    }
-                    break;
+            //        if (DataStorageFeature.Instance.Settings.AutoDetectIdleC)
+            //        {
+            //            AppTimer.Subscribe(IdleCheckerFeature.Instance.AddFeature());
+            //        }
+            //        break;
 
-                case AppState.Resting:
-                    if (!DataStorageFeature.Instance.Settings.AutoDetectWorkingC)
-                    {
-                        ToggleBtn.Background = LightBlueColor;
-                        ToggleRecordingImage.Source = RestImg;
-                    }
+            //    case AppState.Resting:
+            //        if (!DataStorageFeature.Instance.Settings.AutoDetectWorkingC)
+            //        {
+            //            ToggleBtn.Background = LightBlueColor;
+            //            ToggleRecordingImage.Source = RestImg;
+            //        }
 
-                    if (DataStorageFeature.Instance.Settings.AutoDetectIdleC)
-                    {
-                        if (!StateCheckerFeature.Instance.IsFocusingOnWorkingWindow)
-                        {
-                            AppTimer.UnSubscribe(IdleCheckerFeature.Instance.RemoveFeature());
-                        }
-                    }
-                    break;
-            }
-            AppTimer.AppTimerState = state;
-            Log.Information($"App state changed to {state}");
-        }
-
-        private void ToggleState(object sender, RoutedEventArgs e)
-        {
-            if (!DataStorageFeature.Instance.IsAppReady || DataStorageFeature.Instance.IsClosingApp) return;
-
-            switch (AppTimer.AppTimerState)
-            {
-                case AppState.Working:
-                    SetAppState(AppState.Resting);
-                    break;
-
-                case AppState.Resting:
-                    SetAppState(AppState.Working);
-                    break;
-            }
+            //        if (DataStorageFeature.Instance.Settings.AutoDetectIdleC)
+            //        {
+            //            if (!StateCheckerFeature.Instance.IsFocusingOnWorkingWindow)
+            //            {
+            //                AppTimer.UnSubscribe(IdleCheckerFeature.Instance.RemoveFeature());
+            //            }
+            //        }
+            //        break;
+            //}
+            //AppTimer.AppTimerState = state;
+            //Log.Information($"App state changed to {state}");
         }
 
         public void ApplyAutoDetectWorking()
         {
-            bool value = DataStorageFeature.Instance.Settings.AutoDetectWorkingC;
-            ToggleBtn.IsEnabled = !value;
+            //bool value = DataStorageFeature.Instance.Settings.AutoDetectWorkingC;
+            //ToggleBtn.IsEnabled = !value;
 
-            if (value == true)
-            {
-                AppTimer.Subscribe(StateCheckerFeature.Instance.AddFeature());
-                ToggleBtn.Background = OceanBlue;
-                ToggleRecordingImage.Source = AutomaticImg;
-            }
-            else
-            {
-                AppTimer.UnSubscribe(StateCheckerFeature.Instance.AddFeature());
-                ToggleBtn.Background = LightBlueColor;
-                ToggleRecordingImage.Source = RestImg;
-                SetAppState(AppState.Resting);
-            }
+            //if (value == true)
+            //{
+            //    AppTimer.Subscribe(StateCheckerFeature.Instance.AddFeature());
+            //    ToggleBtn.Background = OceanBlue;
+            //    ToggleRecordingImage.Source = AutomaticImg;
+            //}
+            //else
+            //{
+            //    AppTimer.UnSubscribe(StateCheckerFeature.Instance.AddFeature());
+            //    ToggleBtn.Background = LightBlueColor;
+            //    ToggleRecordingImage.Source = RestImg;
+            //    SetAppState(AppState.Resting);
+            //}
         }
 
         private void MoveWindow(object sender, MouseButtonEventArgs e)

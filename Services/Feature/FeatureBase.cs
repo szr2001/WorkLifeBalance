@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using static WorkLifeBalance.Services.AppTimer;
 
 namespace WorkLifeBalance.Services.Feature
 {

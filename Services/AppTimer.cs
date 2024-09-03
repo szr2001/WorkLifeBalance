@@ -10,22 +10,29 @@ namespace WorkLifeBalance.Services
     //Main timer that runs once a second, other features can subscribe to it and have their own run interval
     public class AppTimer
     {
-        public event Action<AppState> OnStateChanges = delegate { };
-        public AppState AppTimerState 
+        public event Action<AppState>? OnStateChanges;
+
+        private DataStorageFeature dataStorageFeature;
+        public AppTimer(DataStorageFeature dataStorageFeature)
         {
-            get 
+            this.dataStorageFeature = dataStorageFeature;
+        }
+        public AppState AppTimerState
+        {
+            get
             {
                 return appTimerState;
             }
             set
             {
+                if (appTimerState == value) return;
                 appTimerState = value;
                 OnStateChanges?.Invoke(appTimerState);
             }
         }
 
         private AppState appTimerState = AppState.Resting;
-        private event Action OnTimerTick = delegate { };
+        private event Action? OnTimerTick;
         private CancellationTokenSource CancelTick = new();
 
         public void StartTick()
@@ -39,15 +46,18 @@ namespace WorkLifeBalance.Services
 
         public void Subscribe(Action eventname)
         {
-            if (!OnTimerTick.GetInvocationList().Contains(eventname))
+            if (OnTimerTick != null)
             {
-                OnTimerTick += eventname;
-                Log.Information($"{eventname.Method.Name} Subscribed to Main Timer");
+                if (OnTimerTick.GetInvocationList().Contains(eventname)) return;
             }
+            OnTimerTick += eventname;
+            Log.Information($"{eventname.Method.Name} Subscribed to Main Timer");
         }
 
         public void UnSubscribe(Action eventname)
         {
+            if (OnTimerTick == null) return;
+
             if (OnTimerTick.GetInvocationList().Contains(eventname))
             {
                 OnTimerTick -= eventname;
@@ -65,7 +75,7 @@ namespace WorkLifeBalance.Services
             while (!token.IsCancellationRequested)
             {
                 //stop the timer if the app is not ready or is closing
-                if (!DataStorageFeature.Instance.IsAppReady && DataStorageFeature.Instance.IsClosingApp)
+                if (!dataStorageFeature.IsAppReady && dataStorageFeature.IsClosingApp)
                 {
                     Stop();
                 }
@@ -74,7 +84,7 @@ namespace WorkLifeBalance.Services
                 {
                     //Delay the triggering of the main event to pause every feature from being
                     //triggered while saving, so data is not updated while is saving
-                    if (DataStorageFeature.Instance.IsAppSaving)
+                    if (dataStorageFeature.IsAppSaving)
                     {
                         await Task.Delay(500);
                         continue;
@@ -84,7 +94,7 @@ namespace WorkLifeBalance.Services
                 }
                 catch (Exception ex)
                 {
-                    Log.Warning(ex, "TimeHandler timer loop");
+                    Log.Information(ex, "TimeHandler timer loop");
                 }
 
                 OnTimerTick?.Invoke();

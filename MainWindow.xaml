@@ -116,7 +116,7 @@
                             Name="ToggleBtn"
                             ToolTip="Toggle Work/Rest"
                             Height="45" 
-                            Click="ToggleState"
+                            Click="{Binding ToggleState}"
                             Template="{Binding Source={StaticResource RoundedBtnTemp}}">
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource RoundedBtnStyle}">

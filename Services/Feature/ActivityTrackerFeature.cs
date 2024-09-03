@@ -1,6 +1,5 @@
 ﻿using Serilog;
 using System;
-using static WorkLifeBalance.Services.AppTimer;
 
 namespace WorkLifeBalance.Services.Feature
 {
@@ -13,7 +12,15 @@ namespace WorkLifeBalance.Services.Feature
 
         private TimeSpan OneSec = new TimeSpan(0, 0, 1);
 
-        protected override TickEvent ReturnFeatureMethod()
+        private LowLevelHandler lowLevelHandler;
+        private DataStorageFeature dataStorageFeature;
+        public ActivityTrackerFeature(LowLevelHandler lowLevelHandler, DataStorageFeature dataStorageFeature)
+        {
+            this.lowLevelHandler = lowLevelHandler;
+            this.dataStorageFeature = dataStorageFeature;
+        }
+
+        protected override Action ReturnFeatureMethod()
         {
             return TriggerRecordActivity;
         }
@@ -22,9 +29,9 @@ namespace WorkLifeBalance.Services.Feature
         {
             try
             {
-                nint foregroundWindowHandle = LowLevelHandler.GetForegroundWindow();
+                nint foregroundWindowHandle = lowLevelHandler.ReadForegroundWindow();
 
-                ActiveWindow = LowLevelHandler.GetProcessname(foregroundWindowHandle);
+                ActiveWindow = lowLevelHandler.GetProcessname(foregroundWindowHandle);
                 OnWindowChange?.Invoke(ActiveWindow);
             }
             catch (Exception ex)
@@ -34,12 +41,12 @@ namespace WorkLifeBalance.Services.Feature
 
             try
             {
-                TimeOnly IncreasedTimeSpan = DataStorageFeature.Instance.AutoChangeData.ActivitiesC[ActiveWindow].Add(OneSec);
-                DataStorageFeature.Instance.AutoChangeData.ActivitiesC[ActiveWindow] = IncreasedTimeSpan;
+                TimeOnly IncreasedTimeSpan = dataStorageFeature.AutoChangeData.ActivitiesC[ActiveWindow].Add(OneSec);
+                dataStorageFeature.AutoChangeData.ActivitiesC[ActiveWindow] = IncreasedTimeSpan;
             }
             catch
             {
-                DataStorageFeature.Instance.AutoChangeData.ActivitiesC.Add(ActiveWindow, new TimeOnly());
+                dataStorageFeature.AutoChangeData.ActivitiesC.Add(ActiveWindow, new TimeOnly());
             }
         }
     }

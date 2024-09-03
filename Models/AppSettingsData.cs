@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 
 namespace WorkLifeBalance.Models
 {
@@ -42,7 +43,7 @@ namespace WorkLifeBalance.Models
             }
             catch (Exception ex)
             {
-                MainWindow.ShowErrorBox("AppSettings Error", "Failed to convert data to usable data", ex);
+                Log.Error("AppSettings Error", "Failed to convert data to usable data", ex);
             }
 
         }
@@ -64,7 +65,7 @@ namespace WorkLifeBalance.Models
             }
             catch (Exception ex)
             {
-                MainWindow.ShowErrorBox("AppSettings Error", "Failed to convert usable data to save data", ex);
+                Log.Error("AppSettings Error", "Failed to convert usable data to save data", ex);
             }
         }
     }

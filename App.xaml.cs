@@ -1,5 +1,4 @@
 ﻿using Serilog;
-using System;
 using System.Diagnostics;
 using System.Windows;
 using WorkLifeBalance.Services;
@@ -21,7 +20,7 @@ namespace WorkLifeBalance
         private StateCheckerFeature? stateCheckerFeature;
         private TimeTrackerFeature? timeTrackerFeature;
         private DataBaseHandler? dataBaseHandler;
-        private AppTimer? mainTimer;
+        private AppTimer? appTimer;
         private LowLevelHandler? lowLevelHandler;
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -49,20 +48,21 @@ namespace WorkLifeBalance
                 .CreateLogger();
             }
 
-            //app features, each handles a specific part of the app
-            //and can be subscribed to the AppTimer
-            dataStorageFeature = new();
-            activityTrackerFeature = new();
-            idleCheckerFeature = new();
-            stateCheckerFeature = new();
-            timeTrackerFeature = new();
-
             dataBaseHandler = new DataBaseHandler();
 
-            mainTimer = new();
+            //app features, each handles a specific part of the app
+            //and can be subscribed to the AppTimer
+            dataStorageFeature = new(dataBaseHandler);
+            activityTrackerFeature = new(lowLevelHandler, dataStorageFeature);
+            idleCheckerFeature = new();
+            stateCheckerFeature = new();
+            appTimer = new(dataStorageFeature);
+            timeTrackerFeature = new(appTimer, dataStorageFeature);
+
+
 
             SecondWindowVM secondWindowVM = new();
-            MainMenuVM mainMenuVM = new(mainTimer, lowLevelHandler, dataStorageFeature, timeTrackerFeature);
+            MainMenuVM mainMenuVM = new(appTimer, lowLevelHandler, dataStorageFeature, timeTrackerFeature);
 
             SecondWindow secondWindow = new(secondWindowVM);
             MainWindow mainWindow = new(mainMenuVM);
@@ -80,25 +80,22 @@ namespace WorkLifeBalance
             dataStorageFeature!.IsAppReady = true;
 
             //subscribe features to the main timer
-            mainTimer!.Subscribe(timeTrackerFeature!.AddFeature());
-            mainTimer.Subscribe(dataStorageFeature.AddFeature());
-            mainTimer.Subscribe(activityTrackerFeature!.AddFeature());
+            appTimer!.Subscribe(timeTrackerFeature!.AddFeature());
+            appTimer.Subscribe(dataStorageFeature.AddFeature());
+            appTimer.Subscribe(activityTrackerFeature!.AddFeature());
 
             //check settings to see if you need to add some features
             if (dataStorageFeature.Settings.AutoDetectWorkingC)
             {
-                mainTimer.Subscribe(stateCheckerFeature!.AddFeature());
+                appTimer.Subscribe(stateCheckerFeature!.AddFeature());
             }
 
             //starts the main timer
-            mainTimer.StartTick();
+            appTimer.StartTick();
 
-            //check if auto detect is enabled so you update ui
-            SetAppState(AppState.Resting);
-            ApplyAutoDetectWorking();
+            //SetAppState(AppState.Resting);
+            //ApplyAutoDetectWorking();
 
-            //asign the todays date
-            DateT.Text = $"Today: {DataStorageFeature.Instance.TodayData.DateC.ToString("MM/dd/yyyy")}";
             Log.Information("------------------App Initialized------------------");
         }
 

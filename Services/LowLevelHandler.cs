@@ -38,7 +38,7 @@ namespace WorkLifeBalance.Services
         private static extern bool SetWindowPos(nint hWnd, nint hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
         [DllImport("user32.dll")]
-        public static extern nint GetForegroundWindow();
+        private static extern nint GetForegroundWindow();
 
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
@@ -63,6 +63,11 @@ namespace WorkLifeBalance.Services
         public void EnableConsole()
         {
             AllocConsole();
+        }
+
+        public nint ReadForegroundWindow()
+        {
+            return GetForegroundWindow();
         }
 
         public void SetWindowLocation(nint windowHandle, int x, int y)

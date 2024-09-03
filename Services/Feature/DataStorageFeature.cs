@@ -2,7 +2,6 @@
 using System;
 using System.Threading.Tasks;
 using WorkLifeBalance.Models;
-using static WorkLifeBalance.Services.AppTimer;
 
 namespace WorkLifeBalance.Services.Feature
 {
@@ -23,17 +22,17 @@ namespace WorkLifeBalance.Services.Feature
         public AppSettingsData Settings = new();
         public AutoStateChangeData AutoChangeData = new();
 
-        public delegate void DataEvent();
-        public event DataEvent? OnLoading;
-        public event DataEvent? OnLoaded;
-        public event DataEvent? OnSaving;
-        public event DataEvent? OnSaved;
-
-        public DataStorageFeature()
+        public event Action? OnLoading;
+        public event Action? OnLoaded;
+        public event Action? OnSaving;
+        public event Action? OnSaved;
+        private DataBaseHandler dataBaseHandler;
+        public DataStorageFeature(DataBaseHandler dataBaseHandler)
         {
             AppName = "WorkLifeBalance";
             AppDirectory = AppDomain.CurrentDomain.BaseDirectory;
             AppExePath = $"{AppDirectory}/{AppName}.exe";
+            this.dataBaseHandler = dataBaseHandler;
         }
         public async Task SaveData()
         {
@@ -44,11 +43,11 @@ namespace WorkLifeBalance.Services.Feature
             OnSaving?.Invoke();
 
             Log.Information($"Saving Day");
-            await DataBaseHandler.WriteDay(TodayData);
+            await dataBaseHandler.WriteDay(TodayData);
             Log.Information($"Saving Settings");
-            await DataBaseHandler.WriteSettings(Settings);
+            await dataBaseHandler.WriteSettings(Settings);
             Log.Information($"Saving Activities");
-            await DataBaseHandler.WriteAutoSateData(AutoChangeData);
+            await dataBaseHandler.WriteAutoSateData(AutoChangeData);
 
             OnSaved?.Invoke();
 
@@ -66,11 +65,11 @@ namespace WorkLifeBalance.Services.Feature
             OnLoading?.Invoke();
 
             Log.Information($"Loading Day");
-            TodayData = await DataBaseHandler.ReadDay(TodayData.DateC.ToString("MMddyyyy"));
+            TodayData = await dataBaseHandler.ReadDay(TodayData.DateC.ToString("MMddyyyy"));
             Log.Information($"Loading Settings");
-            Settings = await DataBaseHandler.ReadSettings();
+            Settings = await dataBaseHandler.ReadSettings();
             Log.Information($"Loading Activities");
-            AutoChangeData = await DataBaseHandler.ReadAutoStateData(TodayData.DateC.ToString("MMddyyyy"));
+            AutoChangeData = await dataBaseHandler.ReadAutoStateData(TodayData.DateC.ToString("MMddyyyy"));
 
             OnLoaded?.Invoke();
 
@@ -78,7 +77,7 @@ namespace WorkLifeBalance.Services.Feature
             Log.Information($"Load Complete!");
         }
 
-        protected override TickEvent ReturnFeatureMethod()
+        protected override Action ReturnFeatureMethod()
         {
             return TriggerSaveData;
         }

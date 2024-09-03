@@ -7,11 +7,8 @@ namespace WorkLifeBalance.ViewModels
     public abstract class SecondWindowPageVMBase : ObservableObject
     {
         public Vector2 RequiredWindowSize = new Vector2(250, 300);
-        public string pageNme = "Page";
+        public string WindowPageName = "Page";
 
-        public virtual Task ClosePageAsync()
-        {
-            return Task.CompletedTask;
-        }
+        public abstract Task ClosePageAsync();
     }
 }

@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using Serilog;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
 
@@ -13,10 +12,10 @@ namespace WorkLifeBalance.ViewModels
     {
         [ObservableProperty]
         private string? dateText;
-        
+
         [ObservableProperty]
         private string? elapsedWorkTime;
-        
+
         [ObservableProperty]
         private string? elapsedRestTime;
 
@@ -59,13 +58,30 @@ namespace WorkLifeBalance.ViewModels
         }
 
         [RelayCommand]
+        public void ToggleState()
+        {
+            if (!dataStorageFeature.IsAppReady || dataStorageFeature.IsClosingApp) return;
+
+            switch (mainTimer.AppTimerState)
+            {
+                case AppState.Working:
+                    mainTimer.AppTimerState = AppState.Resting;
+                    break;
+
+                case AppState.Resting:
+                    mainTimer.AppTimerState = AppState.Working;
+                    break;
+            }
+        }
+
+        [RelayCommand]
         public async Task CloseApp()
         {
             if (dataStorageFeature.IsClosingApp) return;
 
             dataStorageFeature.IsClosingApp = true;
 
-            CloseSideBar(null, null);
+            //CloseSideBar(null, null);
 
             await dataStorageFeature.SaveData();
 
