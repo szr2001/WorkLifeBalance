@@ -37,7 +37,16 @@ namespace WorkLifeBalance.ViewModels
         private bool autoDetectIdle = false;
 
         [ObservableProperty]
-        public AnchorCorner startUpCorner;
+        private bool startupAncorTopLeft = false;
+
+        [ObservableProperty]
+        private bool startupAncorTopRight = false;
+
+        [ObservableProperty]
+        private bool startupAncorBottomLeft = false;
+
+        [ObservableProperty]
+        private bool startupAncorBottomRight = false;
 
         private DataStorageFeature dataStorageFeature;
         public SettingsPageVM(DataStorageFeature dataStorageFeature)
@@ -49,10 +58,23 @@ namespace WorkLifeBalance.ViewModels
             ApplySettings();
         }
 
-        //updates ui based on loaded settings
         private void ApplySettings()
         {
-            StartUpCorner = dataStorageFeature.Settings.StartUpCornerC;
+            switch (dataStorageFeature.Settings.StartUpCornerC)
+            {
+                case AnchorCorner.TopLeft:
+                    StartupAncorTopLeft = true;
+                    break;
+                case AnchorCorner.TopRight:
+                    StartupAncorTopRight = true;
+                    break;
+                case AnchorCorner.BootomLeft:
+                    StartupAncorBottomLeft = true;
+                    break;
+                case AnchorCorner.BottomRight:
+                    StartupAncorBottomRight = true;
+                    break;
+            }
 
             Version = $"Version: {dataStorageFeature.AppVersion}";
 
@@ -68,50 +90,8 @@ namespace WorkLifeBalance.ViewModels
 
             AutoDetectIdle = dataStorageFeature.Settings.AutoDetectIdleC;
 
-            if (dataStorageFeature.Settings.AutoDetectWorkingC)
-            {
-                //ExpandAutoDetectArea();
-            }
-            if (dataStorageFeature.Settings.AutoDetectIdleC)
-            {
-                //ExpandDetectMouseIdleArea();
-            }
         }
 
-        [RelayCommand]
-        private void SetBotLeftStartup()
-        {
-            StartUpCorner = AnchorCorner.BootomLeft;
-            dataStorageFeature.Settings.StartUpCornerC = StartUpCorner;
-            Log.Information($"StartupPosition set to {StartUpCorner}");
-        }
-
-        [RelayCommand]
-        private void SetBotRightStartup()
-        {
-            StartUpCorner = AnchorCorner.BottomRight;
-            dataStorageFeature.Settings.StartUpCornerC = StartUpCorner;
-            Log.Information($"StartupPosition set to {StartUpCorner}");
-        }
-
-        [RelayCommand]
-        private void SetUpRightStartup()
-        {
-            StartUpCorner = AnchorCorner.TopRight;
-            dataStorageFeature.Settings.StartUpCornerC = StartUpCorner;
-            Log.Information($"StartupPosition set to {StartUpCorner}");
-        }
-
-        [RelayCommand]
-        private void SetUpLeftStartup()
-        {
-            StartUpCorner = AnchorCorner.TopLeft;
-            dataStorageFeature.Settings.StartUpCornerC = StartUpCorner;
-            Log.Information($"StartupPosition set to {StartUpCorner}");
-        }
-
-        //Each page has a close page so the second window can await the page specific cleanups stuff
-        //here we wait set the changed values,apply changes and wait for the save to db
         public override async Task ClosePageAsync()
         {
             dataStorageFeature.Settings.SaveInterval = AutoSaveInterval;
@@ -130,7 +110,6 @@ namespace WorkLifeBalance.ViewModels
 
             ApplyStartToWindows();
 
-            //MainWindow.instance.ApplyAutoDetectWorking();
             Log.Information("Applied Settings");
         }
 
@@ -168,70 +147,10 @@ namespace WorkLifeBalance.ViewModels
             }
         }
 
-        private void ConfigureAutoDetectBtn(object sender, RoutedEventArgs e)
+        [RelayCommand]
+        private void ConfigureAutoDetect()//needs more work, make a new class or pass the second window reff 
         {
             SecondWindow.RequestSecondWindow(SecondWindowType.BackgroundProcesses);
         }
-
-        //private void ToggleAutoDetectWorking(object sender, RoutedEventArgs e)
-        //{
-        //    if (AutoDetectWorkingBtn.IsChecked == true)
-        //    {
-        //        ExpandAutoDetectArea();
-        //    }
-        //    else
-        //    {
-        //        ContractAutoDetectArea();
-        //    }
-        //    Log.Information($"AutoDetectWorking changed to {AutoDetectWorkingBtn.IsChecked}");
-        //}
-        //private void ExpandAutoDetectArea()
-        //{
-        //    AutoToggleWorkingPanel.Height = 80;
-        //    AutoDetectWork = true;
-        //}
-        //private void ContractAutoDetectArea()
-        //{
-        //    AutoToggleWorkingPanel.Height = 0;
-        //    AutoDetectWork = false;
-        //}
-
-        //private void ToggleDetectMouseIdle(object sender, RoutedEventArgs e)
-        //{
-        //    if (AutoDetectIdleBtn.IsChecked == true)
-        //    {
-        //        ExpandDetectMouseIdleArea();
-        //    }
-        //    else
-        //    {
-        //        ContractDetectMouseIdleArea();
-        //        AppTimer.UnSubscribe(IdleCheckerFeature.Instance.RemoveFeature());
-        //    }
-        //    Log.Information($"AutoDetectIdle changed to {AutoDetectIdleBtn.IsChecked}");
-        //}
-
-        //private void ChangeDetectMouseIdleDelay(object sender, TextChangedEventArgs e)
-        //{
-        //    if (string.IsNullOrEmpty(AutoDetectIdleT.Text) || !int.TryParse(AutoDetectIdleT.Text, out _))
-        //    {
-        //        AutoDetectIdleT.Text = 1.ToString();
-        //        AutoDetectIdleInterval = 1;
-        //        return;
-        //    }
-
-        //    AutoDetectIdleInterval = int.Parse(AutoDetectIdleT.Text);
-        //    Log.Information($"AutoDetectIdleInterval set to {AutoDetectIdleInterval}");
-        //}
-
-        //private void ExpandDetectMouseIdleArea()
-        //{
-        //    AutoDetectIdlePanel.Height = 55;
-        //    AutoDetectIdle = true;
-        //}
-        //private void ContractDetectMouseIdleArea()
-        //{
-        //    AutoDetectIdlePanel.Height = 0;
-        //    AutoDetectIdle = false;
-        //}
     }
 }

@@ -44,7 +44,6 @@
                                        Foreground="White"/>
                             <ToggleButton Height="25"
                                           Width="25"
-                                          Name="StartWithWInBtn"
                                           IsChecked="{Binding StartWithWin, Mode=TwoWay}"
                                           Margin="0,5,0,0"
                                           Style="{Binding Source={StaticResource RoundedToggleBtnStyle}}"
@@ -82,31 +81,22 @@
                                     </Grid.RowDefinitions>
                                     <ToggleButton Grid.Row="0"
                                                   Grid.Column="0"
-                                                  Name="TopLeftBtn"
-                                                  Template="{Binding Source= {StaticResource CornerToggleBtnTemp}}"
-                                                  Command="{Binding SetUpLeftStartup}">
-                                        <ToggleButton.Style>
-                                            <Style TargetType="ToggleButton" BasedOn="{StaticResource CornerToggleBtnStyle}">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding StartUpCorner}" Value="TopLeft">
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </ToggleButton.Style>
+                                                  IsChecked="{Binding startupAncorTopLeft, Mode=TwoWay}"
+                                                  Template="{Binding Source= {StaticResource CornerToggleBtnTemp}}">
                                     </ToggleButton>
                                     <ToggleButton Grid.Row="0"
                                                   Grid.Column="1"
-                                                  Name="TopRightBtn"
+                                                  IsChecked="{Binding startupAncorTopRight, Mode=TwoWay}"
                                                   Style="{Binding Source={StaticResource CornerToggleBtnStyle}}"
                                                   Template="{Binding Source= {StaticResource CornerToggleBtnTemp}}"/>
                                     <ToggleButton Grid.Row="1"
-                                                  Name="BottomLeftBtn"
                                                   Grid.Column="0"
+                                                  IsChecked="{Binding startupAncorBottomLeft, Mode=TwoWay}"
                                                   Style="{Binding Source={StaticResource CornerToggleBtnStyle}}"
                                                   Template="{Binding Source= {StaticResource CornerToggleBtnTemp}}"/>
                                     <ToggleButton Grid.Row="1"
                                                   Grid.Column="1"
-                                                  Name="BottomRightBtn"
+                                                  IsChecked="{Binding startupAncorBottomRight, Mode=TwoWay}"
                                                   Style="{Binding Source={StaticResource CornerToggleBtnStyle}}"
                                                   Template="{Binding Source= {StaticResource CornerToggleBtnTemp}}"/>
                                 </Grid>
@@ -130,7 +120,6 @@
                                      Height="25"
                                      MaxLength="2"
                                      Text="{Binding AutoSaveInterval, Converter={StaticResource IntStringConverter}, Mode=TwoWay}"
-                                     Name="AutosaveT"
                                      TextAlignment="Center"
                                      FontSize="20"
                                      FontWeight="Bold"
@@ -153,15 +142,26 @@
                                        Foreground="White"/>
                             <ToggleButton Height="25"
                                           Width="25"
-                                          Name="AutoDetectWorkingBtn"
+                                          IsChecked="{Binding AutoDetectWork, Mode=TwoWay}"
                                           Margin="0,5,0,0"
                                           Style="{Binding Source={StaticResource RoundedToggleBtnStyle}}"
                                           Template="{Binding Source= {StaticResource RoundedToggleBtnTemp}}" />
                             <Border Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
                                     CornerRadius="15"
                                     Margin="5"
-                                    Name="AutoToggleWorkingPanel"
-                                    Height="0">
+                                    Height="00">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding AutoDetectWork}" Value="true">
+                                                <Setter Property="Height" Value="80"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding AutoDetectWork}" Value="false">
+                                                <Setter Property="Height" Value="0"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
                                 <Border Background="{Binding Source={StaticResource WLFBOceanBlue}}"
                                         Margin="4"
                                         CornerRadius="15">
@@ -173,9 +173,8 @@
                                                    Foreground="White"/>
                                         <TextBox Width="30"
                                                  Height="20"
-                                                 Text="1"
+                                                 Text="{Binding AutoDetectInterval, Converter={StaticResource IntStringConverter}, Mode=TwoWay}"
                                                  MaxLength="3"
-                                                 Name="AutoDetectT"
                                                  TextAlignment="Center"
                                                  FontSize="15"
                                                  FontWeight="Bold"
@@ -189,6 +188,7 @@
                                                 Foreground="White"
                                                 FontWeight="Bold"
                                                 FontSize="15"
+                                                Command="{Binding ConfigureAutoDetect}"
                                                 TextBlock.TextAlignment="Center"
                                                 Content="Configure" />
                                     </StackPanel>
@@ -211,15 +211,26 @@
                                        Foreground="White"/>
                             <ToggleButton Height="25"
                                           Width="25"
-                                          Name="AutoDetectIdleBtn"
+                                          IsChecked="{Binding AutoDetectIdle, Mode=TwoWay}"
                                           Margin="0,5,0,0"
                                           Style="{Binding Source={StaticResource RoundedToggleBtnStyle}}"
                                           Template="{Binding Source= {StaticResource RoundedToggleBtnTemp}}" />
                             <Border Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
                                     CornerRadius="15"
                                     Margin="5"
-                                    Name="AutoDetectIdlePanel"
                                     Height="0">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding AutoDetectIdle}" Value="true">
+                                                <Setter Property="Height" Value="55"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding AutoDetectIdle}" Value="false">
+                                                <Setter Property="Height" Value="0"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
                                 <Border Background="{Binding Source={StaticResource WLFBOceanBlue}}"
                                         Margin="4"
                                         CornerRadius="15">
@@ -231,9 +242,8 @@
                                                    Foreground="White"/>
                                         <TextBox Width="30"
                                                  Height="20"
-                                                 Text="1"
+                                                 Text="{Binding AutoDetectIdleInterval, Converter={StaticResource IntStringConverter}, Mode=TwoWay}"
                                                  MaxLength="3"
-                                                 Name="AutoDetectIdleT"
                                                  TextAlignment="Center"
                                                  FontSize="15"
                                                  FontWeight="Bold"
