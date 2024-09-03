@@ -1,14 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Numerics;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using WorkLifeBalance.Services;
-using WorkLifeBalance.Services.Feature;
 using WorkLifeBalance.ViewModels;
 
-namespace WorkLifeBalance.Pages
+namespace WorkLifeBalance.Views
 {
     /// <summary>
     /// Interaction logic for BackgroundWindowsViewPage.xaml
@@ -20,19 +16,19 @@ namespace WorkLifeBalance.Pages
         private BackgroundWindowsViewPageVM backgroundWindowsViewPageVM;
         public BackgroundWindowsViewPage(BackgroundWindowsViewPageVM backgroundWindowsViewPageVM)
         {
-            RequiredWindowSize = new Vector2(700, 570);
-            pageNme = "Automatic Customize";
+            //RequiredWindowSize = new Vector2(700, 570);
+            //pageNme = "Automatic Customize";
             InitializeProcessNames();
             DataContext = this;
             InitializeComponent();
-            ActivityTrackerFeature.Instance.OnWindowChange += UpdateActiveWindowUi;
+            //ActivityTrackerFeature.Instance.OnWindowChange += UpdateActiveWindowUi;
             this.backgroundWindowsViewPageVM = backgroundWindowsViewPageVM;
         }
 
         private void InitializeProcessNames()
         {
-            SelectedWindows = new ObservableCollection<string>(DataStorageFeature.Instance.AutoChangeData.WorkingStateWindows);
-            DetectedWindows = new ObservableCollection<string>(LowLevelHandler.GetBackgroundApplicationsName());
+            //SelectedWindows = new ObservableCollection<string>(DataStorageFeature.Instance.AutoChangeData.WorkingStateWindows);
+            //DetectedWindows = new ObservableCollection<string>(LowLevelHandler.GetBackgroundApplicationsName());
             DetectedWindows = new ObservableCollection<string>(DetectedWindows.Except(SelectedWindows));
         }
 
@@ -42,12 +38,12 @@ namespace WorkLifeBalance.Pages
 
         }
 
-        public override async Task ClosePageAsync()
-        {
-            ActivityTrackerFeature.Instance.OnWindowChange -= UpdateActiveWindowUi;
-            DataStorageFeature.Instance.AutoChangeData.WorkingStateWindows = SelectedWindows.ToArray();
-            await DataStorageFeature.Instance.SaveData();
-        }
+        //public override async Task ClosePageAsync()
+        //{
+        //    ActivityTrackerFeature.Instance.OnWindowChange -= UpdateActiveWindowUi;
+        //    DataStorageFeature.Instance.AutoChangeData.WorkingStateWindows = SelectedWindows.ToArray();
+        //    await DataStorageFeature.Instance.SaveData();
+        //}
 
         private void UpdateActiveWindowUi(string newwindow)
         {

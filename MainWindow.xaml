@@ -71,7 +71,7 @@
                                 Margin="0,2,0,0"
                                 ToolTip="{Binding OpenViewDataWindow}"
                                 Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
-                                Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}" Click="OpenViewDataWindow">
+                                Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}">
                             <Image Margin="2"
                                    Source="Assets/DataSheet.png"/>
                         </Button>
@@ -121,8 +121,7 @@
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource RoundedBtnStyle}">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding AppState}" Value=" " >
-                                        <Setter Property="Background" Value=""/>
+                                    <DataTrigger Binding="{Binding AppState}" Value="Working">
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>

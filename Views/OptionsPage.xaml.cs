@@ -1,9 +1,8 @@
-﻿using System.Numerics;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using WorkLifeBalance.ViewModels;
 
-namespace WorkLifeBalance.Pages
+namespace WorkLifeBalance.Views
 {
     /// <summary>
     /// Interaction logic for OptionsPage.xaml
@@ -14,8 +13,8 @@ namespace WorkLifeBalance.Pages
         public OptionsPage(OptionsPageVM optionsPageVM)
         {
             InitializeComponent();
-            RequiredWindowSize = new Vector2(250, 320);
-            pageNme = "Options";
+            //RequiredWindowSize = new Vector2(250, 320);
+            //pageNme = "Options";
             this.optionsPageVM = optionsPageVM;
         }
 

@@ -1,6 +1,6 @@
 ﻿namespace WorkLifeBalance.ViewModels
 {
-    internal class BackgroundWindowsViewPageVM
+    public class BackgroundWindowsViewPageVM
     {
     }
 }

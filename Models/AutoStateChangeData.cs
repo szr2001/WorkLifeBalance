@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using WorkLifeBalance.Services.Feature;
 
 namespace WorkLifeBalance.Models
 {
@@ -24,7 +23,7 @@ namespace WorkLifeBalance.Models
             }
             catch (Exception ex)
             {
-                MainWindow.ShowErrorBox("StateChangeData Error", "Failed to convert data to usable data", ex);
+                //MainWindow.ShowErrorBox("StateChangeData Error", "Failed to convert data to usable data", ex);
             }
         }
         public void ConvertUsableDataToSaveData()
@@ -37,7 +36,7 @@ namespace WorkLifeBalance.Models
                 foreach (KeyValuePair<string, TimeOnly> activity in ActivitiesC)
                 {
                     ProcessActivityData process = new();
-                    process.DateC = DataStorageFeature.Instance.TodayData.DateC;
+                    //process.DateC = DataStorageFeature.Instance.TodayData.DateC;
                     process.Process = activity.Key;
                     process.TimeSpentC = activity.Value;
 
@@ -50,7 +49,7 @@ namespace WorkLifeBalance.Models
             }
             catch (Exception ex)
             {
-                MainWindow.ShowErrorBox("StateChangeData Error", "Failed to convert usable data to save data", ex);
+                //MainWindow.ShowErrorBox("StateChangeData Error", "Failed to convert usable data to save data", ex);
             }
         }
     }

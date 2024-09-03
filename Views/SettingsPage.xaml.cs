@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 using WorkLifeBalance.ViewModels;
 
-namespace WorkLifeBalance.Pages
+namespace WorkLifeBalance.Views
 {
     /// <summary>
     /// Interaction logic for SettingsPage.xaml
@@ -18,7 +18,7 @@ namespace WorkLifeBalance.Pages
         private SettingsPageVM settingsPageVM;
         public SettingsPage(SettingsPageVM settingsPageVM)
         {
-            InitializeComponent();
+            //InitializeComponent();
             this.settingsPageVM = settingsPageVM;
             DataContext = settingsPageVM;
 

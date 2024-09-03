@@ -1,9 +1,9 @@
-﻿<Window x:Class="WorkLifeBalance.Windows.SecondWindow"
+﻿<Window x:Class="WorkLifeBalance.SecondWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WorkLifeBalance.Windows"
+        xmlns:local="clr-namespace:WorkLifeBalance"
         mc:Ignorable="d"
         Background="Transparent"
         ResizeMode="NoResize"
@@ -46,8 +46,7 @@
                             VerticalAlignment="Center"
                             HorizontalAlignment="Right"
                             Margin="0,0,5,0"
-                            Name="CloseBtn"
-                            Click="CloseWindowButton">
+                            Name="CloseBtn">
                             <Image Margin="2"
                                Source="pack://application:,,,/Assets/Cancel.png">
 

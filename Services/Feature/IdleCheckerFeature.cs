@@ -21,7 +21,7 @@ namespace WorkLifeBalance.Services.Feature
             }
         }
 
-        protected override TickEvent ReturnFeatureMethod()
+        protected override Action ReturnFeatureMethod()
         {
             return TriggerCheckIdle;
         }
@@ -31,16 +31,16 @@ namespace WorkLifeBalance.Services.Feature
         {
             if (IsCheckingIdleTriggered) return;
 
-            int delay;
+            int delay = 0;
 
-            if (AppTimmerState == AppState.Idle)
-            {
-                delay = 3000;
-            }
-            else
-            {
-                delay = DataStorageFeature.Instance.Settings.AutoDetectIdle * 60000 / 2;
-            }
+            //if (AppTimmerState == AppState.Idle)
+            //{
+            //    delay = 3000;
+            //}
+            //else
+            //{
+            //    delay = DataStorageFeature.Instance.Settings.AutoDetectIdle * 60000 / 2;
+            //}
 
             IsCheckingIdleTriggered = true;
 
@@ -65,7 +65,7 @@ namespace WorkLifeBalance.Services.Feature
 
             try
             {
-                newpos = LowLevelHandler.GetMousePos();
+                //newpos = LowLevelHandler.GetMousePos();
             }
             catch (Exception ex)
             {

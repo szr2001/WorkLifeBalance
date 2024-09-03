@@ -1,7 +1,5 @@
 ﻿using Serilog;
 using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WorkLifeBalance.Services.Feature
 {
@@ -9,7 +7,7 @@ namespace WorkLifeBalance.Services.Feature
     {
         public bool IsFocusingOnWorkingWindow = false;
 
-        protected override TickEvent ReturnFeatureMethod()
+        protected override Action ReturnFeatureMethod()
         {
             return TriggerWorkDetect;
         }
@@ -23,7 +21,7 @@ namespace WorkLifeBalance.Services.Feature
 
             try
             {
-                await Task.Delay(DataStorageFeature.Instance.Settings.AutoDetectInterval * 1000, CancelTokenS.Token);
+                //await Task.Delay(DataStorageFeature.Instance.Settings.AutoDetectInterval * 1000, CancelTokenS.Token);
                 CheckStateChange();
             }
             catch (Exception ex)
@@ -38,33 +36,33 @@ namespace WorkLifeBalance.Services.Feature
 
         private void CheckStateChange()
         {
-            if (string.IsNullOrEmpty(ActivityTrackerFeature.Instance.ActiveWindow)) return;
+            //if (string.IsNullOrEmpty(ActivityTrackerFeature.Instance.ActiveWindow)) return;
 
-            IsFocusingOnWorkingWindow = DataStorageFeature.Instance.AutoChangeData.WorkingStateWindows.Contains(ActivityTrackerFeature.Instance.ActiveWindow);
+            //IsFocusingOnWorkingWindow = DataStorageFeature.Instance.AutoChangeData.WorkingStateWindows.Contains(ActivityTrackerFeature.Instance.ActiveWindow);
 
-            switch (AppTimmerState)
-            {
-                case AppState.Working:
-                    if (!IsFocusingOnWorkingWindow)
-                    {
-                        MainWindow.instance.SetAppState(AppState.Resting);
-                    }
-                    break;
+            //switch (AppTimmerState)
+            //{
+            //    case AppState.Working:
+            //        if (!IsFocusingOnWorkingWindow)
+            //        {
+            //            MainWindow.instance.SetAppState(AppState.Resting);
+            //        }
+            //        break;
 
-                case AppState.Resting:
-                    if (IsFocusingOnWorkingWindow)
-                    {
-                        MainWindow.instance.SetAppState(AppState.Working);
-                    }
-                    break;
+            //    case AppState.Resting:
+            //        if (IsFocusingOnWorkingWindow)
+            //        {
+            //            MainWindow.instance.SetAppState(AppState.Working);
+            //        }
+            //        break;
 
-                case AppState.Idle:
-                    if (!IsFocusingOnWorkingWindow)
-                    {
-                        MainWindow.instance.SetAppState(AppState.Resting);
-                    }
-                    break;
-            }
+            //    case AppState.Idle:
+            //        if (!IsFocusingOnWorkingWindow)
+            //        {
+            //            MainWindow.instance.SetAppState(AppState.Resting);
+            //        }
+            //        break;
+            //}
         }
     }
 }

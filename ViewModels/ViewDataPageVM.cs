@@ -1,6 +1,6 @@
 ﻿namespace WorkLifeBalance.ViewModels
 {
-    internal class ViewDataPageVM
+    public class ViewDataPageVM
     {
     }
 }

@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using WorkLifeBalance.Models;
-using WorkLifeBalance.Services;
 using WorkLifeBalance.ViewModels;
 
-namespace WorkLifeBalance.Pages
+namespace WorkLifeBalance.Views
 {
     /// <summary>
     /// Interaction logic for ViewDayDetailsPage.xaml
@@ -25,27 +20,27 @@ namespace WorkLifeBalance.Pages
         public ViewDayDetailsPage(ViewDaysDetailsPageVM viewDaysDetailsPageVM)
         {
             InitializeComponent();
-            RequiredWindowSize = new Vector2(430, 440);
-            if (args != null)
-            {
-                if (args is (int loadedpagetype, DayData day))
-                {
-                    LoadedPageType = loadedpagetype;
-                    LoadedDayData = day;
-                    pageNme = $"{LoadedDayData.DateC.ToString("MM/dd/yyyy")} Activity";
-                    _ = RequiestData();
-                    return;
-                }
-            }
+            //RequiredWindowSize = new Vector2(430, 440);
+            //if (args != null)
+            //{
+            //    if (args is (int loadedpagetype, DayData day))
+            //    {
+            //        LoadedPageType = loadedpagetype;
+            //        LoadedDayData = day;
+            //        pageNme = $"{LoadedDayData.DateC.ToString("MM/dd/yyyy")} Activity";
+            //        _ = RequiestData();
+            //        return;
+            //    }
+            //}
 
-            MainWindow.ShowErrorBox("Error ViewDayDetails", "Requested ViewDayDetails Page with no/wrong arguments");
+            //MainWindow.ShowErrorBox("Error ViewDayDetails", "Requested ViewDayDetails Page with no/wrong arguments");
             this.viewDaysDetailsPageVM = viewDaysDetailsPageVM;
         }
 
         private async Task RequiestData()
         {
-            List<ProcessActivityData> RequestedActivity = (await DataBaseHandler.ReadDayActivity(LoadedDayData.Date));
-            activities = RequestedActivity.OrderByDescending(data => data.TimeSpentC).ToArray();
+            //List<ProcessActivityData> RequestedActivity = (await DataBaseHandler.ReadDayActivity(LoadedDayData.Date));
+            //activities = RequestedActivity.OrderByDescending(data => data.TimeSpentC).ToArray();
 
             WorkedT.Text = LoadedDayData.WorkedAmmountC.ToString("HH:mm:ss");
             RestedT.Text = LoadedDayData.RestedAmmountC.ToString("HH:mm:ss");

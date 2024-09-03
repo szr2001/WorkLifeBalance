@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using WorkLifeBalance.Models;
-using WorkLifeBalance.Services;
-using WorkLifeBalance.Services.Feature;
 using WorkLifeBalance.ViewModels;
 
-namespace WorkLifeBalance.Pages
+namespace WorkLifeBalance.Views
 {
     /// <summary>
     /// Interaction logic for ViewDataPage.xaml
@@ -42,8 +39,8 @@ namespace WorkLifeBalance.Pages
         public ViewDataPage(ViewDataPageVM viewDataPageVM)
         {
             InitializeComponent();
-            RequiredWindowSize = new Vector2(750, 580);
-            pageNme = "View Data";
+            //RequiredWindowSize = new Vector2(750, 580);
+            //pageNme = "View Data";
             _ = CalculateData();
             this.viewDataPageVM = viewDataPageVM;
         }
@@ -51,67 +48,67 @@ namespace WorkLifeBalance.Pages
         private async Task CalculateData()
         {
             //get today date
-            DateOnly currentDate = DataStorageFeature.Instance.TodayData.DateC;
+            //DateOnly currentDate = DataStorageFeature.Instance.TodayData.DateC;
 
             //create temporary daydata to load each day and reuse it
             DayData TempDay;
 
 
-            //calculate current month records
+            ////calculate current month records
 
-            TempDay = await DataBaseHandler.GetMaxValue("WorkedAmmount");
+            //TempDay = await DataBaseHandler.GetMaxValue("WorkedAmmount");
 
-            RecordMostWorked = TempDay.WorkedAmmountC;
-            RecordMostWorkedDate = TempDay.DateC;
+            //RecordMostWorked = TempDay.WorkedAmmountC;
+            //RecordMostWorkedDate = TempDay.DateC;
 
-            TempDay = await DataBaseHandler.GetMaxValue("RestedAmmount");
+            //TempDay = await DataBaseHandler.GetMaxValue("RestedAmmount");
 
-            RecordMostRested = TempDay.RestedAmmountC;
-            RecordMostRestedDate = TempDay.DateC;
+            //RecordMostRested = TempDay.RestedAmmountC;
+            //RecordMostRestedDate = TempDay.DateC;
 
-            TempDay = await DataBaseHandler.GetMaxValue("WorkedAmmount", currentDate.ToString("MM"), currentDate.ToString("yyyy"));
+            //TempDay = await DataBaseHandler.GetMaxValue("WorkedAmmount", currentDate.ToString("MM"), currentDate.ToString("yyyy"));
 
-            CurrentMonthMostWorked = TempDay.WorkedAmmountC;
-            CurrentMonthMostWorkedDate = TempDay.DateC;
+            //CurrentMonthMostWorked = TempDay.WorkedAmmountC;
+            //CurrentMonthMostWorkedDate = TempDay.DateC;
 
-            TempDay = await DataBaseHandler.GetMaxValue("RestedAmmount", currentDate.ToString("MM"), currentDate.ToString("yyyy"));
+            //TempDay = await DataBaseHandler.GetMaxValue("RestedAmmount", currentDate.ToString("MM"), currentDate.ToString("yyyy"));
 
-            CurrentMonthMostRested = TempDay.RestedAmmountC;
-            CurrentMonthMostRestedDate = TempDay.DateC;
+            //CurrentMonthMostRested = TempDay.RestedAmmountC;
+            //CurrentMonthMostRestedDate = TempDay.DateC;
 
-            //calculate previous month records
+            ////calculate previous month records
 
-            DateTime previousMonthDateTime = currentDate.ToDateTime(new TimeOnly(0, 0, 0)).AddMonths(-1);
-            DateOnly previousDate = DateOnly.FromDateTime(previousMonthDateTime);
+            //DateTime previousMonthDateTime = currentDate.ToDateTime(new TimeOnly(0, 0, 0)).AddMonths(-1);
+            //DateOnly previousDate = DateOnly.FromDateTime(previousMonthDateTime);
 
-            TempDay = await DataBaseHandler.GetMaxValue("WorkedAmmount", previousDate.ToString("MM"), previousDate.ToString("yyyy"));
+            //TempDay = await DataBaseHandler.GetMaxValue("WorkedAmmount", previousDate.ToString("MM"), previousDate.ToString("yyyy"));
 
-            PreviousMonthMostWorked = TempDay.WorkedAmmountC;
-            PreviousMonthMostWorkedDate = TempDay.DateC;
+            //PreviousMonthMostWorked = TempDay.WorkedAmmountC;
+            //PreviousMonthMostWorkedDate = TempDay.DateC;
 
-            TempDay = await DataBaseHandler.GetMaxValue("RestedAmmount", previousDate.ToString("MM"), previousDate.ToString("yyyy"));
+            //TempDay = await DataBaseHandler.GetMaxValue("RestedAmmount", previousDate.ToString("MM"), previousDate.ToString("yyyy"));
 
-            PreviousMonthMostRested = TempDay.RestedAmmountC;
-            PreviousMonthMostRestedDate = TempDay.DateC;
+            //PreviousMonthMostRested = TempDay.RestedAmmountC;
+            //PreviousMonthMostRestedDate = TempDay.DateC;
 
 
-            //calculate total days in current and previous months
-            CurrentMonthTotalDays = await DataBaseHandler.ReadCountInMonth(currentDate.ToString("MM"));
-            PreviousMonthTotalDays = await DataBaseHandler.ReadCountInMonth(previousDate.ToString("MM"));
+            ////calculate total days in current and previous months
+            //CurrentMonthTotalDays = await DataBaseHandler.ReadCountInMonth(currentDate.ToString("MM"));
+            //PreviousMonthTotalDays = await DataBaseHandler.ReadCountInMonth(previousDate.ToString("MM"));
 
-            //calculate rest/work ratio in current and previous months
-            float MonthToporkedSeconds = ConvertTimeOnlyToSeconds(PreviousMonthMostWorked);
+            ////calculate rest/work ratio in current and previous months
+            //float MonthToporkedSeconds = ConvertTimeOnlyToSeconds(PreviousMonthMostWorked);
 
-            PreviousMonthWorkRestRatio = MonthToporkedSeconds == 0 ? 0 : MonthToporkedSeconds / 86400;
+            //PreviousMonthWorkRestRatio = MonthToporkedSeconds == 0 ? 0 : MonthToporkedSeconds / 86400;
 
-            MonthToporkedSeconds = ConvertTimeOnlyToSeconds(CurrentMonthMostWorked);
+            //MonthToporkedSeconds = ConvertTimeOnlyToSeconds(CurrentMonthMostWorked);
 
-            CurrentMonthWorkRestRatio = MonthToporkedSeconds == 0 ? 0 : MonthToporkedSeconds / 86400;
+            //CurrentMonthWorkRestRatio = MonthToporkedSeconds == 0 ? 0 : MonthToporkedSeconds / 86400;
 
-            MonthToporkedSeconds = ConvertTimeOnlyToSeconds(RecordMostWorked);
+            //MonthToporkedSeconds = ConvertTimeOnlyToSeconds(RecordMostWorked);
 
-            RecordWorkRestRatio = MonthToporkedSeconds == 0 ? 0 : MonthToporkedSeconds / 86400;
-            UpdateUi();
+            //RecordWorkRestRatio = MonthToporkedSeconds == 0 ? 0 : MonthToporkedSeconds / 86400;
+            //UpdateUi();
         }
         private void UpdateUi()
         {

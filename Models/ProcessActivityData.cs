@@ -37,7 +37,7 @@ namespace WorkLifeBalance.Models
             }
             catch (Exception ex)
             {
-                MainWindow.ShowErrorBox("ProcessActivity Error", "Failed to convert data to usable data", ex);
+                //MainWindow.ShowErrorBox("ProcessActivity Error", "Failed to convert data to usable data", ex);
             }
         }
         public void ConvertUsableDataToSaveData()
@@ -50,7 +50,7 @@ namespace WorkLifeBalance.Models
             }
             catch (Exception ex)
             {
-                MainWindow.ShowErrorBox("ProcessActivity Error", "Failed to convert usable data to save data", ex);
+                //MainWindow.ShowErrorBox("ProcessActivity Error", "Failed to convert usable data to save data", ex);
             }
         }
     }

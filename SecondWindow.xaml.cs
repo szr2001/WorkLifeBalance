@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using WorkLifeBalance.Pages;
 using WorkLifeBalance.ViewModels;
 
 namespace WorkLifeBalance
@@ -16,7 +15,7 @@ namespace WorkLifeBalance
 
         public SecondWindowType WindowType;
 
-        private SecondWindowPageBase WindowPage;
+        //private SecondWindowPageBase WindowPage;
         private SecondWindowVM secondWindowVM;
         public SecondWindow(SecondWindowVM secondWindowVM)
         {
@@ -25,7 +24,7 @@ namespace WorkLifeBalance
                 Instance.Close();
                 Instance = this;
             }
-            InitializeComponent();
+            //InitializeComponent();
             this.secondWindowVM = secondWindowVM;
         }
 
@@ -36,7 +35,7 @@ namespace WorkLifeBalance
 
         public void CloseWindowButton(object sender, RoutedEventArgs e)
         {
-            CloseBtn.IsEnabled = false;
+            //CloseBtn.IsEnabled = false;
 
             _ = CloseWindow();
         }
@@ -51,43 +50,43 @@ namespace WorkLifeBalance
         //the unboxing of the args is made in every page that is expected to receive some data
         private void InitializeWindowType(object? args)
         {
-            switch (WindowType)
-            {
-                case SecondWindowType.Settings:
-                    WindowPage = new SettingsPage(args);
-                    break;
+            //switch (WindowType)
+            //{
+            //    case SecondWindowType.Settings:
+            //        WindowPage = new SettingsPage(args);
+            //        break;
 
-                case SecondWindowType.ViewData:
-                    WindowPage = new ViewDataPage(args);
-                    break;
+            //    case SecondWindowType.ViewData:
+            //        WindowPage = new ViewDataPage(args);
+            //        break;
 
-                case SecondWindowType.ViewDays:
-                    WindowPage = new ViewDaysPage(args);
-                    break;
+            //    case SecondWindowType.ViewDays:
+            //        WindowPage = new ViewDaysPage(args);
+            //        break;
 
-                case SecondWindowType.BackgroundProcesses:
-                    WindowPage = new BackgroundWindowsViewPage(args);
-                    break;
+            //    case SecondWindowType.BackgroundProcesses:
+            //        WindowPage = new BackgroundWindowsViewPage(args);
+            //        break;
 
-                case SecondWindowType.ViewDayActivity:
-                    WindowPage = new ViewDayDetailsPage(args);
-                    break;
+            //    case SecondWindowType.ViewDayActivity:
+            //        WindowPage = new ViewDayDetailsPage(args);
+            //        break;
 
-                case SecondWindowType.Options:
-                    WindowPage = new OptionsPage(args);
-                    break;
-            }
+            //    case SecondWindowType.Options:
+            //        WindowPage = new OptionsPage(args);
+            //        break;
+            //}
 
 
-            Width = WindowPage.RequiredWindowSize.X;
-            Height = WindowPage.RequiredWindowSize.Y;
-            WindowPageF.Content = WindowPage;
-            WindowTitleT.Text = WindowPage.pageNme;
+            //Width = WindowPage.RequiredWindowSize.X;
+            //Height = WindowPage.RequiredWindowSize.Y;
+            //WindowPageF.Content = WindowPage;
+            //WindowTitleT.Text = WindowPage.pageNme;
         }
 
         private async Task CloseWindow()
         {
-            await WindowPage.ClosePageAsync();
+            //await WindowPage.ClosePageAsync();
             Instance = null;
             Close();
         }
@@ -112,7 +111,7 @@ namespace WorkLifeBalance
                 await Instance.CloseWindow();
             }
 
-            Instance = new SecondWindow();
+            //Instance = new SecondWindow();
             Instance.WindowType = Type;
             Instance.InitializeWindowType(args);
             Instance.Show();
