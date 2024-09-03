@@ -1,4 +1,4 @@
-﻿<Page x:Class="WorkLifeBalance.Views.BackgroundWindowsViewPage"
+﻿<Page x:Class="WorkLifeBalance.Views.BackgroundProcessesViewPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -56,7 +56,9 @@
                                                 Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}"
                                                 FontWeight="Bold"
                                                 Foreground="White"
-                                                FontSize="15" Click="DeselectProcess">
+                                                FontSize="15"
+                                                Command="{Binding DeselectProcess}"
+                                                CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                                             <Button.Content>
                                                 <TextBlock Text="{Binding Path=.}" Padding="5"/>
                                             </Button.Content>
@@ -103,7 +105,9 @@
                                                     Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}"
                                                     FontWeight="Bold"
                                                     Foreground="White"
-                                                    FontSize="15" Click="SelectProcess">
+                                                    FontSize="15" Click="SelectProcess"
+                                                    Command="{Binding SelectProcess}"
+                                                    CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                                                 <Button.Content>
                                                     <TextBlock Text="{Binding Path=.}" Padding="5"/>
                                                 </Button.Content>
@@ -147,8 +151,7 @@
                                FontWeight="Bold"
                                FontSize="15"
                                Foreground="White"/>
-                    <TextBlock Text="Test.exe"
-                               Name="ActiveWindowT"
+                    <TextBlock Text="{Binding ActiveWindow}"
                                TextAlignment="Center"
                                FontWeight="Bold"
                                FontSize="10"
@@ -158,7 +161,8 @@
             <Button Grid.Row="9" 
                     Margin="15,8,15,5"
                     Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
-                    Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}" Click="ReturnToPreviousPage">
+                    Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}"
+                    Command="{Binding ReturnToPreviousPage}">
                 <TextBlock Text="Back"
                            TextAlignment="Center"
                            FontWeight="Bold"
