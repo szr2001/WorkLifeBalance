@@ -7,7 +7,7 @@ namespace WorkLifeBalance.Services.Feature
 {
     public class DataStorageFeature : FeatureBase
     {
-        public readonly float AppVersion = 2;
+        public readonly string AppVersion = "2.0.0";
         public string AppName;
         public string AppDirectory;
         public string AppExePath;

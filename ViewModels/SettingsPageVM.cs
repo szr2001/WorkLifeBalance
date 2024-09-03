@@ -5,7 +5,6 @@ using Serilog;
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
-using System.Windows;
 using WorkLifeBalance.Models;
 using WorkLifeBalance.Services.Feature;
 using File = System.IO.File;
@@ -16,7 +15,7 @@ namespace WorkLifeBalance.ViewModels
     public partial class SettingsPageVM : SecondWindowPageVMBase
     {
         [ObservableProperty]
-        private string version = "2.0.0";
+        private string version = "";
 
         [ObservableProperty]
         private int autoSaveInterval = 5;
