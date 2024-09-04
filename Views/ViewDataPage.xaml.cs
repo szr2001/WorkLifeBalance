@@ -39,10 +39,10 @@ namespace WorkLifeBalance.Views
         public ViewDataPage(ViewDataPageVM viewDataPageVM)
         {
             InitializeComponent();
-            //RequiredWindowSize = new Vector2(750, 580);
-            //pageNme = "View Data";
-            _ = CalculateData();
             this.viewDataPageVM = viewDataPageVM;
+            DataContext = viewDataPageVM;
+
+            _ = CalculateData();
         }
 
         private async Task CalculateData()

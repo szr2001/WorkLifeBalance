@@ -1,6 +1,189 @@
-﻿namespace WorkLifeBalance.ViewModels
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
+using System.Numerics;
+using System.Threading.Tasks;
+using System.Windows;
+using WorkLifeBalance.Models;
+using WorkLifeBalance.Services;
+using WorkLifeBalance.Services.Feature;
+
+namespace WorkLifeBalance.ViewModels
 {
-    public class ViewDataPageVM
+    public partial class ViewDataPageVM : SecondWindowPageVMBase
     {
+        [ObservableProperty]
+        private float recordWorkRestRatio = 0;
+        [ObservableProperty]
+        private TimeOnly recordMostWorked;
+        [ObservableProperty]
+        private DateOnly recordMostWorkedDate;
+        
+        [ObservableProperty]
+        private TimeOnly recordMostRested;
+        [ObservableProperty]
+        private DateOnly recordMostRestedDate;
+        
+        [ObservableProperty]
+        private float currentMonthWorkRestRatio = 0;
+        [ObservableProperty]
+        private int currentMonthTotalDays = 0;
+        [ObservableProperty]
+        private TimeOnly currentMonthMostWorked;
+        [ObservableProperty]
+        private DateOnly currentMonthMostWorkedDate;
+        
+        [ObservableProperty]
+        private TimeOnly currentMonthMostRested;
+        [ObservableProperty]
+        private DateOnly currentMonthMostRestedDate;
+        
+        [ObservableProperty]
+        private float previousMonthWorkRestRatio = 0;
+        [ObservableProperty]
+        private int previousMonthTotalDays = 0;
+        [ObservableProperty]
+        private TimeOnly previousMonthMostWorked;
+        [ObservableProperty]
+        private DateOnly previousMonthMostWorkedDate;
+        
+        [ObservableProperty]
+        private TimeOnly previousMonthMostRested;
+        [ObservableProperty]
+        private DateOnly previousMonthMostRestedDate;
+
+        private DataBaseHandler databaseHandler;
+        private DataStorageFeature dataStorageFeature;
+        public ViewDataPageVM(DataBaseHandler databaseHandler, DataStorageFeature dataStorageFeature)
+        {
+            RequiredWindowSize = new Vector2(750, 580);
+            WindowPageName = "View Data";
+            this.databaseHandler = databaseHandler;
+            this.dataStorageFeature = dataStorageFeature;
+
+            _ = CalculateData();
+        }
+
+        private async Task CalculateData()
+        {
+            DateOnly currentDate = dataStorageFeature.TodayData.DateC;
+
+            DayData TempDay;
+
+
+            //calculate current month records
+            TempDay = await databaseHandler.GetMaxValue("WorkedAmmount");
+
+            RecordMostWorked = TempDay.WorkedAmmountC;
+            RecordMostWorkedDate = TempDay.DateC;
+
+            TempDay = await databaseHandler.GetMaxValue("RestedAmmount");
+
+            RecordMostRested = TempDay.RestedAmmountC;
+            RecordMostRestedDate = TempDay.DateC;
+
+            TempDay = await databaseHandler.GetMaxValue("WorkedAmmount", currentDate.ToString("MM"), currentDate.ToString("yyyy"));
+
+            CurrentMonthMostWorked = TempDay.WorkedAmmountC;
+            CurrentMonthMostWorkedDate = TempDay.DateC;
+
+            TempDay = await databaseHandler.GetMaxValue("RestedAmmount", currentDate.ToString("MM"), currentDate.ToString("yyyy"));
+
+            CurrentMonthMostRested = TempDay.RestedAmmountC;
+            CurrentMonthMostRestedDate = TempDay.DateC;
+
+
+
+            //calculate previous month records
+            DateTime previousMonthDateTime = currentDate.ToDateTime(new TimeOnly(0, 0, 0)).AddMonths(-1);
+            DateOnly previousDate = DateOnly.FromDateTime(previousMonthDateTime);
+
+            TempDay = await databaseHandler.GetMaxValue("WorkedAmmount", previousDate.ToString("MM"), previousDate.ToString("yyyy"));
+
+            PreviousMonthMostWorked = TempDay.WorkedAmmountC;
+            PreviousMonthMostWorkedDate = TempDay.DateC;
+
+            TempDay = await databaseHandler.GetMaxValue("RestedAmmount", previousDate.ToString("MM"), previousDate.ToString("yyyy"));
+
+            PreviousMonthMostRested = TempDay.RestedAmmountC;
+            PreviousMonthMostRestedDate = TempDay.DateC;
+
+
+            //calculate total days in current and previous months
+            CurrentMonthTotalDays = await databaseHandler.ReadCountInMonth(currentDate.ToString("MM"));
+            PreviousMonthTotalDays = await databaseHandler.ReadCountInMonth(previousDate.ToString("MM"));
+
+            //calculate rest/work ratio in current and previous months
+            float MonthToporkedSeconds = ConvertTimeOnlyToSeconds(PreviousMonthMostWorked);
+
+            PreviousMonthWorkRestRatio = MonthToporkedSeconds == 0 ? 0 : MonthToporkedSeconds / 86400;
+
+            MonthToporkedSeconds = ConvertTimeOnlyToSeconds(CurrentMonthMostWorked);
+
+            CurrentMonthWorkRestRatio = MonthToporkedSeconds == 0 ? 0 : MonthToporkedSeconds / 86400;
+
+            MonthToporkedSeconds = ConvertTimeOnlyToSeconds(RecordMostWorked);
+
+            RecordWorkRestRatio = MonthToporkedSeconds == 0 ? 0 : MonthToporkedSeconds / 86400;
+            UpdateUi();
+        }
+        private void UpdateUi()
+        {
+            //PRMWAmount.Text = RecordMostWorked.ToString("HH:mm:ss");
+            //PRMWDate.Text = RecordMostWorkedDate.ToString("MM/dd/yyy");
+
+            //PRMRAmount.Text = RecordMostRested.ToString("HH:mm:ss");
+            //PRMRDate.Text = RecordMostRestedDate.ToString("MM/dd/yyy");
+
+            //PMMWAmount.Text = PreviousMonthMostWorked.ToString("HH:mm:ss");
+            //PMMWDate.Text = PreviousMonthMostWorkedDate.ToString("MM/dd/yyy");
+
+            //PMMRAmount.Text = PreviousMonthMostRested.ToString("HH:mm:ss");
+            //PMMRDate.Text = PreviousMonthMostRestedDate.ToString("MM/dd/yyy");
+
+            //CMMWAmount.Text = CurrentMonthMostWorked.ToString("HH:mm:ss");
+            //CMMWDate.Text = CurrentMonthMostWorkedDate.ToString("MM/dd/yyy");
+
+            //CMMRAmount.Text = CurrentMonthMostRested.ToString("HH:mm:ss");
+            //CMMRDate.Text = CurrentMonthMostRestedDate.ToString("MM/dd/yyy");
+
+            //PRWRRatio.Text = RecordWorkRestRatio.ToString("0.00");
+
+            //PMMRTRatio.Text = PreviousMonthWorkRestRatio.ToString("0.00");
+
+            //PMRDays.Text = PreviousMonthTotalDays.ToString();
+
+            //CMMRTRatio.Text = CurrentMonthWorkRestRatio.ToString("0.00");
+
+            //CMRDays.Text = CurrentMonthTotalDays.ToString();
+        }
+
+        private void SeePreviousMonth(object sender, RoutedEventArgs e)
+        {
+            SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, 2);
+        }
+
+        private void SeeCurrentMonth(object sender, RoutedEventArgs e)
+        {
+            SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, 1);
+        }
+
+        private void SeeAllDays(object sender, RoutedEventArgs e)
+        {
+            SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, 0);
+        }
+        private int ConvertTimeOnlyToSeconds(TimeOnly time)
+        {
+            int seconds = 0;
+            seconds += time.Second;
+            seconds += time.Minute * 60;
+            seconds += (time.Hour * 60) * 60;
+
+            return seconds;
+        }
+
+        public override Task ClosePageAsync()
+        {
+            return Task.CompletedTask;
+        }
     }
 }
