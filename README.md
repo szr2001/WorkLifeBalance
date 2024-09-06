@@ -1,4 +1,6 @@
 # WorkLifeBalance
+I'm currently re-writing the source code because it's horrible.
+I'm using this app a lot, so I want to improve it but the source code its.. like.. spaghetti... I made it a long time ago and it shows. 
 
 This is a productivity app that keeps track of time, it can automatically toggle based on what window is in focus and also keep tracks of how much time you spent in other applications.You can customize what applications are considerated "work" and the app will try its best to toggle from working to resting and vice versa.
 It has a window to compare current month productivity with last month productivity while also being able
