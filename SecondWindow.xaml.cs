@@ -9,6 +9,7 @@ namespace WorkLifeBalance
     /// <summary>
     /// Interaction logic for SecondWindow.xaml
     /// </summary>
+    /// //use it in dependency injection, make searate method for req windows
     public partial class SecondWindow : Window
     {
         public static SecondWindow? Instance = null;

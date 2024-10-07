@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
-using System.Windows;
 using WorkLifeBalance.Models;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
@@ -17,12 +17,12 @@ namespace WorkLifeBalance.ViewModels
         private TimeOnly recordMostWorked;
         [ObservableProperty]
         private DateOnly recordMostWorkedDate;
-        
+
         [ObservableProperty]
         private TimeOnly recordMostRested;
         [ObservableProperty]
         private DateOnly recordMostRestedDate;
-        
+
         [ObservableProperty]
         private float currentMonthWorkRestRatio = 0;
         [ObservableProperty]
@@ -31,12 +31,12 @@ namespace WorkLifeBalance.ViewModels
         private TimeOnly currentMonthMostWorked;
         [ObservableProperty]
         private DateOnly currentMonthMostWorkedDate;
-        
+
         [ObservableProperty]
         private TimeOnly currentMonthMostRested;
         [ObservableProperty]
         private DateOnly currentMonthMostRestedDate;
-        
+
         [ObservableProperty]
         private float previousMonthWorkRestRatio = 0;
         [ObservableProperty]
@@ -45,7 +45,7 @@ namespace WorkLifeBalance.ViewModels
         private TimeOnly previousMonthMostWorked;
         [ObservableProperty]
         private DateOnly previousMonthMostWorkedDate;
-        
+
         [ObservableProperty]
         private TimeOnly previousMonthMostRested;
         [ObservableProperty]
@@ -63,12 +63,11 @@ namespace WorkLifeBalance.ViewModels
             _ = CalculateData();
         }
 
-        private async Task CalculateData()
+        private async Task CalculateData() //break code up
         {
             DateOnly currentDate = dataStorageFeature.TodayData.DateC;
 
             DayData TempDay;
-
 
             //calculate current month records
             TempDay = await databaseHandler.GetMaxValue("WorkedAmmount");
@@ -124,53 +123,26 @@ namespace WorkLifeBalance.ViewModels
             MonthToporkedSeconds = ConvertTimeOnlyToSeconds(RecordMostWorked);
 
             RecordWorkRestRatio = MonthToporkedSeconds == 0 ? 0 : MonthToporkedSeconds / 86400;
-            UpdateUi();
-        }
-        private void UpdateUi()
-        {
-            //PRMWAmount.Text = RecordMostWorked.ToString("HH:mm:ss");
-            //PRMWDate.Text = RecordMostWorkedDate.ToString("MM/dd/yyy");
-
-            //PRMRAmount.Text = RecordMostRested.ToString("HH:mm:ss");
-            //PRMRDate.Text = RecordMostRestedDate.ToString("MM/dd/yyy");
-
-            //PMMWAmount.Text = PreviousMonthMostWorked.ToString("HH:mm:ss");
-            //PMMWDate.Text = PreviousMonthMostWorkedDate.ToString("MM/dd/yyy");
-
-            //PMMRAmount.Text = PreviousMonthMostRested.ToString("HH:mm:ss");
-            //PMMRDate.Text = PreviousMonthMostRestedDate.ToString("MM/dd/yyy");
-
-            //CMMWAmount.Text = CurrentMonthMostWorked.ToString("HH:mm:ss");
-            //CMMWDate.Text = CurrentMonthMostWorkedDate.ToString("MM/dd/yyy");
-
-            //CMMRAmount.Text = CurrentMonthMostRested.ToString("HH:mm:ss");
-            //CMMRDate.Text = CurrentMonthMostRestedDate.ToString("MM/dd/yyy");
-
-            //PRWRRatio.Text = RecordWorkRestRatio.ToString("0.00");
-
-            //PMMRTRatio.Text = PreviousMonthWorkRestRatio.ToString("0.00");
-
-            //PMRDays.Text = PreviousMonthTotalDays.ToString();
-
-            //CMMRTRatio.Text = CurrentMonthWorkRestRatio.ToString("0.00");
-
-            //CMRDays.Text = CurrentMonthTotalDays.ToString();
         }
 
-        private void SeePreviousMonth(object sender, RoutedEventArgs e)
+        [RelayCommand]
+        private void SeePreviousMonth()
         {
             SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, 2);
         }
 
-        private void SeeCurrentMonth(object sender, RoutedEventArgs e)
+        [RelayCommand]
+        private void SeeCurrentMonth()
         {
             SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, 1);
         }
 
-        private void SeeAllDays(object sender, RoutedEventArgs e)
+        [RelayCommand]
+        private void SeeAllDays()
         {
             SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, 0);
         }
+
         private int ConvertTimeOnlyToSeconds(TimeOnly time)
         {
             int seconds = 0;
@@ -179,11 +151,6 @@ namespace WorkLifeBalance.ViewModels
             seconds += (time.Hour * 60) * 60;
 
             return seconds;
-        }
-
-        public override Task ClosePageAsync()
-        {
-            return Task.CompletedTask;
         }
     }
 }

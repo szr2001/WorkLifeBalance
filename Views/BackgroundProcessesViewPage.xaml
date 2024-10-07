@@ -105,7 +105,7 @@
                                                     Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}"
                                                     FontWeight="Bold"
                                                     Foreground="White"
-                                                    FontSize="15" Click="SelectProcess"
+                                                    FontSize="15"
                                                     Command="{Binding SelectProcess}"
                                                     CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                                                 <Button.Content>

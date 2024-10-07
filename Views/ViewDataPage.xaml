@@ -3,11 +3,15 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:converters="clr-namespace:WorkLifeBalance.Converters"
       xmlns:local="clr-namespace:WorkLifeBalance.Views"
       mc:Ignorable="d" 
       d:DesignHeight="550" d:DesignWidth="750"
       Title="ViewDataPage">
-
+    <Page.Resources>
+        <converters:DateOnlyStringConverter x:Key="DateOnlyStringConverter"/>
+        <converters:TimeOnlyStringConverter x:Key="TimeOnlyStringConverter"/>
+    </Page.Resources>
     <Border CornerRadius="15"
             Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
 
@@ -61,11 +65,10 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="N/A"
+                            <TextBlock Text="{Binding recordWorkRestRatio}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
-                                       Name="PRWRRatio"
                                        Foreground="White"/>
                         </StackPanel>
 
@@ -81,14 +84,12 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="N/A"
+                            <TextBlock Text="{Binding recordMostWorked, Converter={StaticResource TimeOnlyStringConverter}}"
                                        TextAlignment="Center"
-                                       Name="PRMWAmount"
                                        FontWeight="Bold"
                                        FontSize="13"
                                        Foreground="White"/>
-                            <TextBlock Text="N/A"
-                                       Name="PRMWDate"
+                            <TextBlock Text="{Binding recordMostWorkedDate, Converter={StaticResource DateOnlyStringConverter}}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
@@ -107,17 +108,15 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="N/A"
+                            <TextBlock Text="{Binding recordMostRested, Converter={StaticResource TimeOnlyStringConverter}}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
-                                       Name="PRMRAmount"
                                        Foreground="White"/>
-                            <TextBlock Text="N/A"
+                            <TextBlock Text="{Binding recordMostRestedDate, Converter={StaticResource DateOnlyStringConverter}}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
-                                       Name="PRMRDate"
                                        Foreground="White"/>
                         </StackPanel>
 
@@ -151,6 +150,7 @@
                         <StackPanel Orientation="Vertical">
                             <Button Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
                                     Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}"
+                                    Command="{Binding SeePreviousMonth}"
                                     Height="30"
                                     Margin="25,5,25,0" Click="SeePreviousMonth">
                                 <TextBlock Text="Previous Month"
@@ -162,6 +162,7 @@
                             </Button>
                             <Button Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
                                     Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}"
+                                    Command="{Binding SeeCurrentMonth}"
                                     Height="30"
                                     Margin="25,8,25,0" Click="SeeCurrentMonth">
                                 <TextBlock Text="Curent Month"
@@ -173,6 +174,7 @@
                             </Button>
                             <Button Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
                                     Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}"
+                                    Command="{Binding SeeAllDays}"
                                     Height="30"
                                     Margin="25,8,25,0" Click="SeeAllDays">
                                 <TextBlock Text="All Days"
@@ -217,11 +219,10 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="N/A"
+                            <TextBlock Text="{Binding previousMonthWorkRestRatio}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
-                                       Name="PMMRTRatio"
                                        Foreground="White"/>
                         </StackPanel>
 
@@ -237,15 +238,13 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="N/A"
+                            <TextBlock Text="{Binding previousMonthMostWorked, Converter={StaticResource TimeOnlyStringConverter}}"
                                        TextAlignment="Center"
-                                       Name="PMMWAmount"
                                        FontWeight="Bold"
                                        FontSize="13"
                                        Foreground="White"/>
-                            <TextBlock Text="N/A"
+                            <TextBlock Text="{Binding previousMonthMostWorkedDate, Converter={StaticResource DateOnlyStringConverter}}"
                                        TextAlignment="Center"
-                                       Name="PMMWDate"
                                        FontWeight="Bold"
                                        FontSize="13"
                                        Foreground="White"/>
@@ -263,15 +262,13 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="N/A"
+                            <TextBlock Text="{Binding previousMonthMostRested, Converter={StaticResource TimeOnlyStringConverter}}"
                                        TextAlignment="Center"
-                                       Name="PMMRAmount"
                                        FontWeight="Bold"
                                        FontSize="13"
                                        Foreground="White"/>
-                            <TextBlock Text="N/A"
+                            <TextBlock Text="{Binding previousMonthMostRestedDate, Converter={StaticResource DateOnlyStringConverter}}"
                                        TextAlignment="Center"
-                                       Name="PMMRDate"
                                        FontWeight="Bold"
                                        FontSize="13"
                                        Foreground="White"/>
@@ -289,11 +286,10 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="N/A"
+                            <TextBlock Text="{Binding previousMonthTotalDays}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
-                                       Name="PMRDays"
                                        Foreground="White"/>
                         </StackPanel>
 
@@ -330,11 +326,10 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="N/A"
+                            <TextBlock Text="{Binding currentMonthWorkRestRatio}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
-                                       Name="CMMRTRatio"
                                        Foreground="White"/>
                         </StackPanel>
 
@@ -350,15 +345,13 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="N/A"
+                            <TextBlock Text="{Binding currentMonthMostWorked, Converter={StaticResource TimeOnlyStringConverter}}"
                                        TextAlignment="Center"
-                                       Name="CMMWAmount"
                                        FontWeight="Bold"
                                        FontSize="13"
                                        Foreground="White"/>
-                            <TextBlock Text="N/A"
+                            <TextBlock Text="{Binding currentMonthMostWorkedDate, Converter={StaticResource DateOnlyStringConverter}}"
                                        TextAlignment="Center"
-                                       Name="CMMWDate"
                                        FontWeight="Bold"
                                        FontSize="13"
                                        Foreground="White"/>
@@ -376,15 +369,13 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="N/A"
+                            <TextBlock Text="{Binding currentMonthMostRested, Converter={StaticResource TimeOnlyStringConverter}}"
                                        TextAlignment="Center"
-                                       Name="CMMRAmount"
                                        FontWeight="Bold"
                                        FontSize="13"
                                        Foreground="White"/>
-                            <TextBlock Text="N/A"
+                            <TextBlock Text="{Binding currentMonthMostRestedDate, Converter={StaticResource DateOnlyStringConverter}}"
                                        TextAlignment="Center"
-                                       Name="CMMRDate"
                                        FontWeight="Bold"
                                        FontSize="13"
                                        Foreground="White"/>
@@ -402,11 +393,10 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="N/A"
+                            <TextBlock Text="{Binding currentMonthTotalDays}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
-                                       Name="CMRDays"
                                        Foreground="White"/>
                         </StackPanel>
 

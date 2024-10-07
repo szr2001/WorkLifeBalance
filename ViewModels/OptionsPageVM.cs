@@ -5,7 +5,7 @@ namespace WorkLifeBalance.ViewModels
 {
     public class OptionsPageVM : SecondWindowPageVMBase
     {
-        public OptionsPageVM() 
+        public OptionsPageVM()
         {
             RequiredWindowSize = new Vector2(250, 320);
             WindowPageName = "Options";

@@ -1,13 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using System.Windows;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
-using CommunityToolkit.Mvvm.Input;
 
 namespace WorkLifeBalance.ViewModels
 {

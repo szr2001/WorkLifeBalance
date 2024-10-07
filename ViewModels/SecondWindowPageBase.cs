@@ -9,6 +9,9 @@ namespace WorkLifeBalance.ViewModels
         public Vector2 RequiredWindowSize = new Vector2(250, 300);
         public string WindowPageName = "Page";
 
-        public abstract Task ClosePageAsync();
+        public virtual Task ClosePageAsync()
+        {
+            return Task.CompletedTask;
+        }
     }
 }

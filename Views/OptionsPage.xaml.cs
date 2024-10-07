@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using System.Windows;
 using System.Windows.Controls;
 using WorkLifeBalance.ViewModels;
 
