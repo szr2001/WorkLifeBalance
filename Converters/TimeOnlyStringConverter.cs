@@ -8,20 +8,36 @@ namespace WorkLifeBalance.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is int intValue)
+            if (value is TimeOnly time)
             {
-                return intValue.ToString();
+                return time.ToString("HH:mm:ss");
             }
             return string.Empty;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (int.TryParse(value as string, out int result))
+            if (value is string time)
             {
-                return result;
+                TimeOnly newTime = TimeOnly.MinValue;
+                string[] timeData = time.Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
+                Console.WriteLine(timeData.Length);
+                foreach(string timer in timeData)
+                {
+                    Console.WriteLine(timer);
+                }
+                newTime = new
+                    (
+                        int.Parse(timeData[0]),
+                        int.Parse(timeData[1]),
+                        int.Parse(timeData[2])
+                    );
+                return newTime;
             }
-            return 0;
+            else
+            {
+                return TimeOnly.MinValue;
+            }
         }
     }
 }

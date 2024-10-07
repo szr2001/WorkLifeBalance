@@ -10,6 +10,7 @@ namespace WorkLifeBalance.ViewModels
 {
     public partial class MainMenuVM : ObservableObject
     {
+        //bind to dateOnly and timeOnly and use converters
         [ObservableProperty]
         private string? dateText;
 

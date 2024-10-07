@@ -8,20 +8,31 @@ namespace WorkLifeBalance.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is int intValue)
+            if (value is DateOnly date)
             {
-                return intValue.ToString();
+                return date.ToString("MM/dd/yyyy");
             }
             return string.Empty;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (int.TryParse(value as string, out int result))
+            if(value is string date)
             {
-                return result;
+                DateOnly newDate = DateOnly.MinValue;
+                string[] dateData = date.Split(new string[] { "-" }, StringSplitOptions.RemoveEmptyEntries);
+                newDate = new
+                    (
+                        int.Parse(dateData[2]),
+                        int.Parse(dateData[0]),
+                        int.Parse(dateData[1])
+                    );
+                return newDate;
             }
-            return 0;
+            else
+            {
+                return DateOnly.MinValue;
+            }
         }
     }
 }

@@ -152,7 +152,7 @@
                                     Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}"
                                     Command="{Binding SeePreviousMonth}"
                                     Height="30"
-                                    Margin="25,5,25,0" Click="SeePreviousMonth">
+                                    Margin="25,5,25,0">
                                 <TextBlock Text="Previous Month"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
@@ -164,7 +164,7 @@
                                     Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}"
                                     Command="{Binding SeeCurrentMonth}"
                                     Height="30"
-                                    Margin="25,8,25,0" Click="SeeCurrentMonth">
+                                    Margin="25,8,25,0">
                                 <TextBlock Text="Curent Month"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
@@ -176,7 +176,7 @@
                                     Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}"
                                     Command="{Binding SeeAllDays}"
                                     Height="30"
-                                    Margin="25,8,25,0" Click="SeeAllDays">
+                                    Margin="25,8,25,0">
                                 <TextBlock Text="All Days"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
