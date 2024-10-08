@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace WorkLifeBalance.ViewModels
 {
-    public abstract class SecondWindowPageVMBase : ObservableObject
+    public abstract class SecondWindowPageVMBase : ViewModelBase
     {
         public Vector2 RequiredWindowSize = new Vector2(250, 300);
         public string WindowPageName = "Page";

@@ -29,18 +29,17 @@ namespace WorkLifeBalance
         private SolidColorBrush OceanBlue = new();
 
         private readonly bool DebugMode = true;
-        private MainMenuVM mainMenuVM;
-        public MainWindow(MainMenuVM mainMenuVM)
-        {
-            this.mainMenuVM = mainMenuVM;
-            DataContext = this.mainMenuVM;
+        //public MainWindow(MainMenuVM mainMenuVM)
+        //{
+        //    this.mainMenuVM = mainMenuVM;
+        //    DataContext = this.mainMenuVM;
 
-            Topmost = true;
-            LoadStyleInfo();
+        //    Topmost = true;
+        //    LoadStyleInfo();
 
-            InitializeComponent();
-            SetWindowLocation();
-        }
+        //    InitializeComponent();
+        //    SetWindowLocation();
+        //}
 
         private void LoadStyleInfo()
         {

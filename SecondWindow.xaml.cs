@@ -18,16 +18,16 @@ namespace WorkLifeBalance
 
         //private SecondWindowPageBase WindowPage;
         private SecondWindowVM secondWindowVM;
-        public SecondWindow(SecondWindowVM secondWindowVM)
-        {
-            if (Instance != null)
-            {
-                Instance.Close();
-                Instance = this;
-            }
-            //InitializeComponent();
-            this.secondWindowVM = secondWindowVM;
-        }
+        //public SecondWindow(SecondWindowVM secondWindowVM)
+        //{
+        //    if (Instance != null)
+        //    {
+        //        Instance.Close();
+        //        Instance = this;
+        //    }
+        //    InitializeComponent();
+        //    this.secondWindowVM = secondWindowVM;
+        //}
 
         public static void RequestSecondWindow(SecondWindowType Type, object? args = null)
         {

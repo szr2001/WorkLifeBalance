@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using System;
 using System.Diagnostics;
 using System.Windows;
+using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
 using WorkLifeBalance.ViewModels;
@@ -20,8 +22,14 @@ namespace WorkLifeBalance
         {
             IServiceCollection services = new ServiceCollection();
 
-            services.AddSingleton<MainWindow>();
-            services.AddSingleton<SecondWindow>();
+            services.AddSingleton(provider => new MainWindow
+            {
+                DataContext = provider.GetRequiredService<MainMenuVM>()
+            });
+            services.AddSingleton(provider => new SecondWindow 
+            {
+                DataContext = provider.GetService<SecondWindowVM>()
+            });
             services.AddSingleton<DataStorageFeature>();
             services.AddSingleton<ActivityTrackerFeature>();
             services.AddSingleton<IdleCheckerFeature>();
@@ -30,6 +38,8 @@ namespace WorkLifeBalance
             services.AddSingleton<DataBaseHandler>();
             services.AddSingleton<LowLevelHandler>();
             services.AddSingleton<AppTimer>();
+            services.AddSingleton<INavigationService, NavigationService>();
+            services.AddSingleton<Func<Type, ViewModelBase>>(serviceProvider => viewModelType => (ViewModelBase)serviceProvider.GetRequiredService(viewModelType));
 
             services.AddSingleton<BackgroundProcessesViewPageVM>();
             services.AddSingleton<MainMenuVM>();
@@ -73,7 +83,8 @@ namespace WorkLifeBalance
 
             dataStorageFeature.OnLoaded += InitializeApp;
 
-            _servicesProvider.GetRequiredService<MainWindow>().Show();
+            var mainWindow = _servicesProvider.GetRequiredService<MainWindow>(); 
+            mainWindow.Show();
 
             _ = dataStorageFeature.LoadData();
         }
@@ -112,9 +123,10 @@ namespace WorkLifeBalance
 
         private void RestartApplicationWithAdmin()
         {
+            var DataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
             var psi = new ProcessStartInfo
             {
-                FileName = _servicesProvider.GetRequiredService<DataStorageFeature>().AppExePath,
+                FileName = DataStorageFeature.AppExePath,
                 UseShellExecute = true,
                 Verb = "runas"
             };
