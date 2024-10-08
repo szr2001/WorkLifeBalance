@@ -6,6 +6,8 @@
              xmlns:views="clr-namespace:WorkLifeBalance.Views">
     <Application.Resources>
 
+        <!--when we bind something to a SettingsPageVM, it will be displayed using the SettingsPage
+        like binding a Frame to a SettingsPageVM, it will be displayed using a SettingsPage view-->
         <DataTemplate DataType="{x:Type TypeName= viewModel:SettingsPageVM}">
             <views:SettingsPage/>
         </DataTemplate>

@@ -8,6 +8,6 @@ namespace WorkLifeBalance.Views
     /// </summary>
     public partial class SettingsPage : Page
     {
-        private SettingsPageVM settingsPageVM;
+        //remove datacontext cuz it will be added from app.xaml databindings
     }
 }

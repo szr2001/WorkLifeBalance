@@ -14,15 +14,6 @@ namespace WorkLifeBalance
     public partial class App : Application
     {
         private bool Debug = true;
-
-        private DataStorageFeature? dataStorageFeature;
-        private ActivityTrackerFeature? activityTrackerFeature;
-        private IdleCheckerFeature? idleCheckerFeature;
-        private StateCheckerFeature? stateCheckerFeature;
-        private TimeTrackerFeature? timeTrackerFeature;
-        private DataBaseHandler? dataBaseHandler;
-        private AppTimer? appTimer;
-        private LowLevelHandler? lowLevelHandler;
         private readonly ServiceProvider _servicesProvider;
 
         public App()
@@ -30,6 +21,24 @@ namespace WorkLifeBalance
             IServiceCollection services = new ServiceCollection();
 
             services.AddSingleton<MainWindow>();
+            services.AddSingleton<SecondWindow>();
+            services.AddSingleton<DataStorageFeature>();
+            services.AddSingleton<ActivityTrackerFeature>();
+            services.AddSingleton<IdleCheckerFeature>();
+            services.AddSingleton<StateCheckerFeature>();
+            services.AddSingleton<TimeTrackerFeature>();
+            services.AddSingleton<DataBaseHandler>();
+            services.AddSingleton<LowLevelHandler>();
+            services.AddSingleton<AppTimer>();
+
+            services.AddSingleton<BackgroundProcessesViewPageVM>();
+            services.AddSingleton<MainMenuVM>();
+            services.AddSingleton<OptionsPageVM>();
+            services.AddSingleton<SecondWindowVM>();
+            services.AddSingleton<SettingsPageVM>();
+            services.AddSingleton<ViewDataPageVM>();
+            services.AddSingleton<ViewDaysDetailsPageVM>();
+            services.AddSingleton<ViewDaysPageVM>();
 
             _servicesProvider = services.BuildServiceProvider();
         }
@@ -38,8 +47,10 @@ namespace WorkLifeBalance
         {
             base.OnStartup(e);
 
-            lowLevelHandler = new();
-            if (!lowLevelHandler.IsRunningAsAdmin())
+            LowLevelHandler lowHandler = _servicesProvider.GetRequiredService<LowLevelHandler>();
+            DataStorageFeature dataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
+
+            if (lowHandler.IsRunningAsAdmin())
             {
                 RestartApplicationWithAdmin();
                 return;
@@ -47,7 +58,7 @@ namespace WorkLifeBalance
 
             if (Debug)
             {
-                lowLevelHandler.EnableConsole();
+                 lowHandler.EnableConsole();
                 Log.Logger = new LoggerConfiguration()
                 .WriteTo.Console()
                 .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
@@ -60,27 +71,9 @@ namespace WorkLifeBalance
                 .CreateLogger();
             }
 
-            dataBaseHandler = new DataBaseHandler();
-
-            //app features, each handles a specific part of the app
-            //and can be subscribed to the AppTimer
-            dataStorageFeature = new(dataBaseHandler);
-            activityTrackerFeature = new(lowLevelHandler, dataStorageFeature);
-            idleCheckerFeature = new();
-            stateCheckerFeature = new();
-            appTimer = new(dataStorageFeature);
-            timeTrackerFeature = new(appTimer, dataStorageFeature);
-
-
-
-            SecondWindowVM secondWindowVM = new();
-            MainMenuVM mainMenuVM = new(appTimer, lowLevelHandler, dataStorageFeature, timeTrackerFeature);
-
-            SecondWindow secondWindow = new(secondWindowVM);
-            MainWindow mainWindow = new(mainMenuVM);
-
             dataStorageFeature.OnLoaded += InitializeApp;
-            mainWindow.Show();
+
+            _servicesProvider.GetRequiredService<MainWindow>().Show();
 
             _ = dataStorageFeature.LoadData();
         }
@@ -88,18 +81,24 @@ namespace WorkLifeBalance
         //initialize app called when data was loaded
         private void InitializeApp()
         {
+            DataStorageFeature dataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
+            AppTimer appTimer= _servicesProvider.GetRequiredService<AppTimer>();
+            TimeTrackerFeature timeTrackerFeature = _servicesProvider.GetRequiredService<TimeTrackerFeature>();
+            ActivityTrackerFeature activityTrackerFeature = _servicesProvider.GetRequiredService<ActivityTrackerFeature>();
+            StateCheckerFeature stateCheckerFeature = _servicesProvider.GetRequiredService<StateCheckerFeature>();
+            
             //set app ready so timers can start
-            dataStorageFeature!.IsAppReady = true;
+            dataStorageFeature.IsAppReady = true;
 
             //subscribe features to the main timer
-            appTimer!.Subscribe(timeTrackerFeature!.AddFeature());
+            appTimer.Subscribe(timeTrackerFeature.AddFeature());
             appTimer.Subscribe(dataStorageFeature.AddFeature());
-            appTimer.Subscribe(activityTrackerFeature!.AddFeature());
+            appTimer.Subscribe(activityTrackerFeature.AddFeature());
 
             //check settings to see if you need to add some features
             if (dataStorageFeature.Settings.AutoDetectWorkingC)
             {
-                appTimer.Subscribe(stateCheckerFeature!.AddFeature());
+                appTimer.Subscribe(stateCheckerFeature.AddFeature());
             }
 
             //starts the main timer
@@ -115,7 +114,7 @@ namespace WorkLifeBalance
         {
             var psi = new ProcessStartInfo
             {
-                FileName = dataStorageFeature?.AppExePath,
+                FileName = _servicesProvider.GetRequiredService<DataStorageFeature>().AppExePath,
                 UseShellExecute = true,
                 Verb = "runas"
             };
