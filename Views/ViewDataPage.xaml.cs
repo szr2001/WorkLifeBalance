@@ -8,12 +8,6 @@ namespace WorkLifeBalance.Views
     /// </summary>
     public partial class ViewDataPage : Page
     {
-        private ViewDataPageVM viewDataPageVM;
-        public ViewDataPage(ViewDataPageVM viewDataPageVM)
-        {
-            InitializeComponent();
-            this.viewDataPageVM = viewDataPageVM;
-            DataContext = viewDataPageVM;
-        }
+
     }
 }

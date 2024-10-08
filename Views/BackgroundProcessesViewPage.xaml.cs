@@ -8,12 +8,5 @@ namespace WorkLifeBalance.Views
     /// </summary>
     public partial class BackgroundProcessesViewPage : Page
     {
-        private BackgroundProcessesViewPageVM backgroundWindowsViewPageVM;
-        public BackgroundProcessesViewPage(BackgroundProcessesViewPageVM backgroundWindowsViewPageVM)
-        {
-            InitializeComponent();
-            this.backgroundWindowsViewPageVM = backgroundWindowsViewPageVM;
-            DataContext = backgroundWindowsViewPageVM;
-        }
     }
 }

@@ -91,7 +91,7 @@ namespace WorkLifeBalance.ViewModels
 
         }
 
-        public override async Task ClosePageAsync()
+        public override async Task OnPageClosingAsync()
         {
             dataStorageFeature.Settings.SaveInterval = AutoSaveInterval;
 

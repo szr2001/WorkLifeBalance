@@ -47,7 +47,7 @@ namespace WorkLifeBalance
             services.AddSingleton<SecondWindowVM>();
             services.AddSingleton<SettingsPageVM>();
             services.AddSingleton<ViewDataPageVM>();
-            services.AddSingleton<ViewDaysDetailsPageVM>();
+            services.AddSingleton<ViewDayDetailsPageVM>();
             services.AddSingleton<ViewDaysPageVM>();
 
             _servicesProvider = services.BuildServiceProvider();
@@ -67,8 +67,8 @@ namespace WorkLifeBalance
             }
 
             if (Debug)
-            {
-                 lowHandler.EnableConsole();
+            {   
+                lowHandler.EnableConsole();
                 Log.Logger = new LoggerConfiguration()
                 .WriteTo.Console()
                 .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)

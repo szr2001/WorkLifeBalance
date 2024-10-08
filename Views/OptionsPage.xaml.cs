@@ -9,18 +9,5 @@ namespace WorkLifeBalance.Views
     /// </summary>
     public partial class OptionsPage : Page
     {
-        private OptionsPageVM optionsPageVM;
-        public OptionsPage(OptionsPageVM optionsPageVM)
-        {
-            InitializeComponent();
-            this.optionsPageVM = optionsPageVM;
-            DataContext = optionsPageVM;
-        }
-
-        [RelayCommand]
-        private void OpenSettings()
-        {
-            SecondWindow.RequestSecondWindow(SecondWindowType.Settings);
-        }
     }
 }

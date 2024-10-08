@@ -11,6 +11,21 @@
         <DataTemplate DataType="{x:Type TypeName= viewModel:SettingsPageVM}">
             <views:SettingsPage/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type TypeName= viewModel:BackgroundProcessesViewPageVM}">
+            <views:BackgroundProcessesViewPage/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type TypeName= viewModel:OptionsPageVM}">
+            <views:OptionsPage/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type TypeName= viewModel:ViewDataPageVM}">
+            <views:ViewDataPage/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type TypeName= viewModel:ViewDayDetailsPageVM}">
+            <views:ViewDayDetailsPage/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type TypeName= viewModel:ViewDaysPageVM}">
+            <views:ViewDaysPage/>
+        </DataTemplate>
 
         <SolidColorBrush x:Key="WLFBBluishWhite" Color="#E4FDE1" />
         <SolidColorBrush x:Key="WLFBOceanBlue" Color="#028090" />

@@ -44,7 +44,7 @@ namespace WorkLifeBalance.ViewModels
             DetectedWindows = new ObservableCollection<string>(DetectedWindows.Except(SelectedWindows));
         }
 
-        public override async Task ClosePageAsync()
+        public override async Task OnPageClosingAsync()
         {
             activityTrackerFeature.OnWindowChange -= UpdateActiveWindowUi;
             dataStorageFeature.AutoChangeData.WorkingStateWindows = SelectedWindows.ToArray();

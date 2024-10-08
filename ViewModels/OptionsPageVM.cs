@@ -1,9 +1,10 @@
-﻿using System.Numerics;
+﻿using CommunityToolkit.Mvvm.Input;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace WorkLifeBalance.ViewModels
 {
-    public class OptionsPageVM : SecondWindowPageVMBase
+    public partial class OptionsPageVM : SecondWindowPageVMBase
     {
         public OptionsPageVM()
         {
@@ -11,9 +12,16 @@ namespace WorkLifeBalance.ViewModels
             WindowPageName = "Options";
         }
 
-        public override Task ClosePageAsync()
+        public override Task OnPageClosingAsync()
         {
+            SecondWindow.RequestSecondWindow(SecondWindowType.Settings);
             return Task.CompletedTask;
+        }
+
+        [RelayCommand]
+        private void OpenSettings()
+        {
+            SecondWindow.RequestSecondWindow(SecondWindowType.Settings);
         }
     }
 }

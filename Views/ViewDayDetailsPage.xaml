@@ -122,8 +122,9 @@
                     Grid.Row="6"
                     Grid.Column="0"
                     Grid.ColumnSpan="3"
+                    Command="{Binding BackToViewDaysPage}"
                     Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
-                    Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}" Click="BackToViewDaysPage" >
+                    Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}">
                     <TextBlock Text="Back"
                                    TextAlignment="Center"
                                    FontWeight="Bold"

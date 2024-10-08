@@ -68,8 +68,7 @@
                                                     TextBlock.Foreground="White"
                                                     TextBlock.FontWeight="Bold"
                                                     Style="{Binding Source={StaticResource OceanBlueRoundedBtnStyle}}"
-                                                    Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}" 
-                                                    Click="ViewDay"/>
+                                                    Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}" />
                                             </StackPanel>
 
                                     </Border>
@@ -92,7 +91,7 @@
                 </Grid.ColumnDefinitions>
                 <Button Margin="15,8,15,5"
                         Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
-                        Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}" Click="ReturnToPreviousPage">
+                        Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}">
                     <TextBlock Text="Back"
                                TextAlignment="Center"
                                FontWeight="Bold"
@@ -121,7 +120,7 @@
                              TextBlock.FontWeight="Bold"
                              Text="00"
                              Width="35"
-                             Name="MonthB" TextChanged="UpdateFilterMonth"/>
+                             Name="MonthB"/>
                         
                     <TextBlock Text="Day:"
                                TextAlignment="Center"
@@ -137,7 +136,7 @@
                              TextBlock.FontWeight="Bold"
                              Text="00"
                              Width="35"
-                             Name="DayB" TextChanged="UpdateFilterDay"/>
+                             Name="DayB"/>
                         
                     <TextBlock Text="Year:"
                                TextAlignment="Center"
@@ -153,11 +152,11 @@
                              TextBlock.FontWeight="Bold"
                              Width="50"
                              Text="0000"
-                             Name="YearB" TextChanged="UpdateFilterYear"/>
+                             Name="YearB"/>
                     
                     <Button Margin="15,5,0,5"
                             Style="{Binding Source={StaticResource LightblueRoundedBtnHoverStyle}}"
-                            Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}" Click="ApplyFilters">
+                            Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}">
                         
                         <TextBlock Text="Search"
                                    TextAlignment="Center"
