@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using System.Diagnostics;
 using System.Windows;
 using WorkLifeBalance.Services;
@@ -22,6 +23,17 @@ namespace WorkLifeBalance
         private DataBaseHandler? dataBaseHandler;
         private AppTimer? appTimer;
         private LowLevelHandler? lowLevelHandler;
+        private readonly ServiceProvider _servicesProvider;
+
+        public App()
+        {
+            IServiceCollection services = new ServiceCollection();
+
+            services.AddSingleton<MainWindow>();
+
+            _servicesProvider = services.BuildServiceProvider();
+        }
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);

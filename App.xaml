@@ -1,8 +1,14 @@
 ﻿<Application x:Class="WorkLifeBalance.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:WorkLifeBalance">
+             xmlns:local="clr-namespace:WorkLifeBalance"
+             xmlns:viewModel="clr-namespace:WorkLifeBalance.ViewModels"
+             xmlns:views="clr-namespace:WorkLifeBalance.Views">
     <Application.Resources>
+
+        <DataTemplate DataType="{x:Type TypeName= viewModel:SettingsPageVM}">
+            <views:SettingsPage/>
+        </DataTemplate>
 
         <SolidColorBrush x:Key="WLFBBluishWhite" Color="#E4FDE1" />
         <SolidColorBrush x:Key="WLFBOceanBlue" Color="#028090" />
