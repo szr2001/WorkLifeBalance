@@ -4,12 +4,14 @@ using System.Threading.Tasks;
 
 namespace WorkLifeBalance.ViewModels
 {
-    public abstract class SecondWindowPageVMBase : ViewModelBase
+    public abstract partial class SecondWindowPageVMBase : ViewModelBase
     {
-        public Vector2 RequiredWindowSize = new Vector2(250, 300);
-        public string WindowPageName = "Page";
+        [ObservableProperty]
+        public Vector2 requiredWindowSize = new Vector2(250, 300);
+        
+        [ObservableProperty]
+        public string windowPageName = "Page";
 
-        //pass object args
         public virtual Task OnPageClosingAsync()
         {
             return Task.CompletedTask;

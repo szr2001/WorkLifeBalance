@@ -1,50 +1,55 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows;
 using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Models;
+using WorkLifeBalance.Services;
 
 namespace WorkLifeBalance.ViewModels
 {
     public partial class ViewDayDetailsPageVM : SecondWindowPageVMBase
     {
-        public ProcessActivityData[] activities { get; set; } = new ProcessActivityData[0];
+        [ObservableProperty]
+        public ProcessActivityData[]? activities;
+
+        [ObservableProperty]
+        private DayData? loadedDayData;
 
         private int LoadedPageType = 0;
-        private DayData LoadedDayData = new();
         private ISecondWindowService secondWindowService;
-
-        public ViewDayDetailsPageVM(ISecondWindowService secondWindowService)
+        private DataBaseHandler database;
+        public ViewDayDetailsPageVM(ISecondWindowService secondWindowService, DataBaseHandler database)
         {
             RequiredWindowSize = new Vector2(430, 440);
             WindowPageName = "View Day Details";
             this.secondWindowService = secondWindowService;
+            this.database = database;
         }
 
         private async Task RequiestData()
         {
-            //List<ProcessActivityData> RequestedActivity = (await DataBaseHandler.ReadDayActivity(LoadedDayData.Date));
-            //activities = RequestedActivity.OrderByDescending(data => data.TimeSpentC).ToArray();
-
-            //WorkedT.Text = LoadedDayData.WorkedAmmountC.ToString("HH:mm:ss");
-            //RestedT.Text = LoadedDayData.RestedAmmountC.ToString("HH:mm:ss");
-            //DataContext = this;
+            List<ProcessActivityData> RequestedActivity = (await database.ReadDayActivity(LoadedDayData!.Date));
+            Activities = RequestedActivity.OrderByDescending(data => data.TimeSpentC).ToArray();
         }
 
-        public override Task OnPageOppeningAsync(object args)
+        public override Task OnPageOppeningAsync(object? args)
         {
-            //if (args != null)
-            //{
-            //    if (args is (int loadedpagetype, DayData day))
-            //    {
-            //        LoadedPageType = loadedpagetype;
-            //        LoadedDayData = day;
-            //        pageNme = $"{LoadedDayData.DateC.ToString("MM/dd/yyyy")} Activity";
-            //        _ = RequiestData();
-            //        return;
-            //    }
-            //}
+            if (args != null)
+            {
+                if (args is (int loadedpagetype, DayData day))
+                {
+                    LoadedPageType = loadedpagetype;
+                    LoadedDayData = day;
+                    WindowPageName = $"{LoadedDayData.DateC.ToString("MM/dd/yyyy")} Activity";
+                    _ = RequiestData();
+                    return base.OnPageOppeningAsync(args);
+                }
+            }
 
             //MainWindow.ShowErrorBox("Error ViewDayDetails", "Requested ViewDayDetails Page with no/wrong arguments");
             return base.OnPageOppeningAsync(args);

@@ -3,11 +3,14 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:converters="clr-namespace:WorkLifeBalance.Converters"
       xmlns:local="clr-namespace:WorkLifeBalance.Views"
       mc:Ignorable="d" 
       d:DesignHeight="370" d:DesignWidth="400"
       Title="ViewDayDetailsPage">
-
+    <Page.Resources>
+        <converters:TimeOnlyStringConverter x:Key="TimeOnlyStringConverter"/>
+    </Page.Resources>
     <Border CornerRadius="15"
             Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
         <Grid>
@@ -41,7 +44,7 @@
                         Margin="10,10,10,0"
                         Background="{Binding Source={StaticResource WLFBOceanBlue}}">
                     <ScrollViewer VerticalScrollBarVisibility="Hidden">
-                            <ItemsControl ItemsSource="{Binding activities}">
+                            <ItemsControl ItemsSource="{Binding Activities}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Vertical"
@@ -97,8 +100,7 @@
                                FontWeight="Bold"
                                FontSize="23"
                                Foreground="White"/>
-                    <TextBlock Text="00:00:00"
-                               Name="WorkedT"
+                    <TextBlock Text="{Binding LoadedDayData.WorkedAmmountC, Converter={StaticResource TimeOnlyStringConverter}}"
                                TextAlignment="Center"
                                FontWeight="Bold"
                                FontSize="16"
@@ -108,8 +110,7 @@
                                FontWeight="Bold"
                                FontSize="23"
                                Foreground="White"/>
-                    <TextBlock Text="00:00:00"
-                               Name="RestedT"
+                    <TextBlock Text="{Binding LoadedDayData.RestedAmmountC, Converter={StaticResource TimeOnlyStringConverter}}"
                                TextAlignment="Center"
                                FontWeight="Bold"
                                FontSize="16"
@@ -126,11 +127,11 @@
                     Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
                     Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}">
                     <TextBlock Text="Back"
-                                   TextAlignment="Center"
-                                   FontWeight="Bold"
-                                   FontSize="25"
-                                   Margin="0,0,0,4"
-                                   Foreground="White"/>
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               FontSize="25"
+                               Margin="0,0,0,4"
+                               Foreground="White"/>
             </Button>
         </Grid>
     </Border>
