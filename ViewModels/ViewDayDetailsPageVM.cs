@@ -30,7 +30,7 @@ namespace WorkLifeBalance.ViewModels
             //DataContext = this;
         }
 
-        public override Task OnPageOppeningAsync()
+        public override Task OnPageOppeningAsync(object args)
         {
             //if (args != null)
             //{
@@ -45,13 +45,13 @@ namespace WorkLifeBalance.ViewModels
             //}
 
             //MainWindow.ShowErrorBox("Error ViewDayDetails", "Requested ViewDayDetails Page with no/wrong arguments");
-            return base.OnPageOppeningAsync();
+            return base.OnPageOppeningAsync(args);
         }
 
         [RelayCommand]
         private void BackToViewDaysPage()
         {
-            SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, LoadedPageType);
+            //SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, LoadedPageType);
         }
     }
 }

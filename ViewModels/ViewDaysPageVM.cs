@@ -67,7 +67,7 @@ namespace WorkLifeBalance.ViewModels
 
         private void ReturnToPreviousPage(object sender, RoutedEventArgs e)
         {
-            SecondWindow.RequestSecondWindow(SecondWindowType.ViewData);
+            //SecondWindow.RequestSecondWindow(SecondWindowType.ViewData);
         }
 
         private void ViewDay(object sender, RoutedEventArgs e)
@@ -88,7 +88,7 @@ namespace WorkLifeBalance.ViewModels
 
             ClickedDay.ConvertSaveDataToUsableData();
 
-            SecondWindow.RequestSecondWindow(SecondWindowType.ViewDayActivity, (LoadedPageType, ClickedDay));
+            //SecondWindow.RequestSecondWindow(SecondWindowType.ViewDayActivity, (LoadedPageType, ClickedDay));
         }
 
         private void ApplyFilters(object sender, RoutedEventArgs e)

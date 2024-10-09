@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.ViewModels;
@@ -10,40 +7,33 @@ namespace WorkLifeBalance.Services
 {
     public class SecondWindowService : ISecondWindowService
     {
-        private SecondWindowVM secondWindowVm;
-        public SecondWindowService(SecondWindowVM secondWindowVm)
+        private readonly SecondWindowVM secondWindowVm;
+        private readonly INavigationService navigation;
+
+        public SecondWindowService(SecondWindowVM secondWindowVm, INavigationService navigation)
         {
             this.secondWindowVm = secondWindowVm;
+            this.navigation = navigation;
+            secondWindowVm.OnWindowClosing += ClearWindow;
         }
 
-        public Task BackgroundProcesses()
+        private async Task ClearWindow()
         {
-            throw new NotImplementedException();
+            SecondWindowPageVMBase activeModel = (SecondWindowPageVMBase)navigation.ActiveView;
+            await activeModel.OnPageClosingAsync();
+            secondWindowVm.OnWindowClosed.Invoke();
         }
 
-        public Task OpenSettings()
+        public async Task OpenWindowWith<T>(object args) where T : SecondWindowPageVMBase 
         {
-            throw new NotImplementedException();
-        }
-
-        public Task OpenViewData()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Options()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task ViewDayActivity()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task ViewDays()
-        {
-            throw new NotImplementedException();
+            navigation.NavigateTo<T>();
+            SecondWindowPageVMBase activeModel = (SecondWindowPageVMBase)navigation.ActiveView;
+            secondWindowVm.Width = (int)activeModel.RequiredWindowSize.X;
+            secondWindowVm.Height = (int)activeModel.RequiredWindowSize.Y;
+            secondWindowVm.PageName = activeModel.WindowPageName;
+            secondWindowVm.ActivePage = activeModel;
+            secondWindowVm.OnWindowRequested.Invoke();
+            await activeModel.OnPageOppeningAsync(args);
         }
     }
 }

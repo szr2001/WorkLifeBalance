@@ -54,7 +54,7 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         private void ReturnToPreviousPage()
         {
-            SecondWindow.RequestSecondWindow(SecondWindowType.Settings);
+            //SecondWindow.RequestSecondWindow(SecondWindowType.Settings);
         }
 
         [RelayCommand]

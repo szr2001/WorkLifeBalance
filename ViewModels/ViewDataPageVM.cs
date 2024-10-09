@@ -128,19 +128,19 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         private void SeePreviousMonth()
         {
-            SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, 2);
+            //SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, 2);
         }
 
         [RelayCommand]
         private void SeeCurrentMonth()
         {
-            SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, 1);
+            //SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, 1);
         }
 
         [RelayCommand]
         private void SeeAllDays()
         {
-            SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, 0);
+            //SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, 0);
         }
 
         private int ConvertTimeOnlyToSeconds(TimeOnly time)

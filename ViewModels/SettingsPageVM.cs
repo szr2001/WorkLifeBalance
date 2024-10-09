@@ -149,7 +149,7 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         private void ConfigureAutoDetect()//needs more work, make a new class or pass the second window reff 
         {
-            SecondWindow.RequestSecondWindow(SecondWindowType.BackgroundProcesses);
+            //SecondWindow.RequestSecondWindow(SecondWindowType.BackgroundProcesses);
         }
     }
 }

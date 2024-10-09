@@ -14,14 +14,14 @@ namespace WorkLifeBalance.ViewModels
 
         public override Task OnPageClosingAsync()
         {
-            SecondWindow.RequestSecondWindow(SecondWindowType.Settings);
+            //SecondWindow.RequestSecondWindow(SecondWindowType.Settings);
             return Task.CompletedTask;
         }
 
         [RelayCommand]
         private void OpenSettings()
         {
-            SecondWindow.RequestSecondWindow(SecondWindowType.Settings);
+            //SecondWindow.RequestSecondWindow(SecondWindowType.Settings);
         }
     }
 }

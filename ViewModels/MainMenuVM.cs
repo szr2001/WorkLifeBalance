@@ -49,13 +49,13 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         public void OpenViewDataWindow()
         {
-            SecondWindow.RequestSecondWindow(SecondWindowType.ViewData);
+            //SecondWindow.RequestSecondWindow(SecondWindowType.ViewData);
         }
 
         [RelayCommand]
         public void OpenOptionsWindow()
         {
-            SecondWindow.RequestSecondWindow(SecondWindowType.Options);
+            //SecondWindow.RequestSecondWindow(SecondWindowType.Options);
         }
 
         [RelayCommand]

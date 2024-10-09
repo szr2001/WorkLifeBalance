@@ -23,7 +23,7 @@ namespace WorkLifeBalance
         {
             if (e.NewValue is SecondWindowVM viewModel)
             {
-                viewModel.OnWindowClose += Hide;
+                viewModel.OnWindowClosed += ()=> Hide();
                 viewModel.OnWindowRequested += Show;
             }
         }
