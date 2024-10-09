@@ -39,6 +39,7 @@ namespace WorkLifeBalance
             services.AddSingleton<LowLevelHandler>();
             services.AddSingleton<AppTimer>();
             services.AddSingleton<INavigationService, NavigationService>();
+            services.AddSingleton<ISecondWindowService, SecondWindowService>();
             services.AddSingleton<Func<Type, ViewModelBase>>(serviceProvider => viewModelType => (ViewModelBase)serviceProvider.GetRequiredService(viewModelType));
 
             services.AddSingleton<BackgroundProcessesViewPageVM>();
