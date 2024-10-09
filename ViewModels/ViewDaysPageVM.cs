@@ -6,6 +6,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
 using WorkLifeBalance.Models;
+using WorkLifeBalance.Interfaces;
+using System.Numerics;
 
 namespace WorkLifeBalance.ViewModels
 {
@@ -13,15 +15,17 @@ namespace WorkLifeBalance.ViewModels
     {
         public ObservableCollection<DayData> LoadedData { get; set; } = new();
 
-        private DayData[] backupdata;
+        private DayData[]? backupdata;
         //use this to request the correct page when leaving the DayActivity page
         private int LoadedPageType = 0;
         private string FilterMonth = "00";
         private string FilterDay = "00";
         private string FilterYear = "0000";
-        public ViewDaysPageVM()
+        private ISecondWindowService secondWindowService;
+        public ViewDaysPageVM(ISecondWindowService secondWindowService)
         {
-            //RequiredWindowSize = new Vector2(710, 570);
+            RequiredWindowSize = new Vector2(710, 570);
+            this.secondWindowService = secondWindowService;
             //if (args != null)
             //{
             //    if (args is int loadedpagetype)
@@ -67,7 +71,7 @@ namespace WorkLifeBalance.ViewModels
 
         private void ReturnToPreviousPage(object sender, RoutedEventArgs e)
         {
-            //SecondWindow.RequestSecondWindow(SecondWindowType.ViewData);
+            secondWindowService.OpenWindowWith<ViewDataPageVM>();
         }
 
         private void ViewDay(object sender, RoutedEventArgs e)
@@ -88,7 +92,7 @@ namespace WorkLifeBalance.ViewModels
 
             ClickedDay.ConvertSaveDataToUsableData();
 
-            //SecondWindow.RequestSecondWindow(SecondWindowType.ViewDayActivity, (LoadedPageType, ClickedDay));
+            secondWindowService.OpenWindowWith<ViewDayDetailsPageVM>((LoadedPageType, ClickedDay));
         }
 
         private void ApplyFilters(object sender, RoutedEventArgs e)

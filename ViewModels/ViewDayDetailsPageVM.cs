@@ -2,6 +2,7 @@
 using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows;
+using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Models;
 
 namespace WorkLifeBalance.ViewModels
@@ -12,12 +13,13 @@ namespace WorkLifeBalance.ViewModels
 
         private int LoadedPageType = 0;
         private DayData LoadedDayData = new();
+        private ISecondWindowService secondWindowService;
 
-        //use args somewhere
-        public ViewDayDetailsPageVM() 
+        public ViewDayDetailsPageVM(ISecondWindowService secondWindowService)
         {
             RequiredWindowSize = new Vector2(430, 440);
             WindowPageName = "View Day Details";
+            this.secondWindowService = secondWindowService;
         }
 
         private async Task RequiestData()
@@ -51,7 +53,7 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         private void BackToViewDaysPage()
         {
-            //SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, LoadedPageType);
+            secondWindowService.OpenWindowWith<ViewDaysPageVM>(LoadedPageType);
         }
     }
 }

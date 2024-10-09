@@ -5,6 +5,7 @@ using Serilog;
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
+using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Models;
 using WorkLifeBalance.Services.Feature;
 using File = System.IO.File;
@@ -48,8 +49,11 @@ namespace WorkLifeBalance.ViewModels
         private bool startupAncorBottomRight = false;
 
         private DataStorageFeature dataStorageFeature;
-        public SettingsPageVM(DataStorageFeature dataStorageFeature)
+        private ISecondWindowService secondWindowService;
+
+        public SettingsPageVM(DataStorageFeature dataStorageFeature, ISecondWindowService secondWindowService)
         {
+            this.secondWindowService = secondWindowService;
             this.dataStorageFeature = dataStorageFeature;
             RequiredWindowSize = new Vector2(250, 320);
             WindowPageName = "Settings";
@@ -147,9 +151,9 @@ namespace WorkLifeBalance.ViewModels
         }
 
         [RelayCommand]
-        private void ConfigureAutoDetect()//needs more work, make a new class or pass the second window reff 
+        private void ConfigureAutoDetect()
         {
-            //SecondWindow.RequestSecondWindow(SecondWindowType.BackgroundProcesses);
+            secondWindowService.OpenWindowWith<BackgroundProcessesViewPageVM>();
         }
     }
 }

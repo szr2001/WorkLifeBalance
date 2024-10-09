@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
 
@@ -21,13 +22,15 @@ namespace WorkLifeBalance.ViewModels
         private DataStorageFeature dataStorageFeature;
         private LowLevelHandler lowLevelHandler;
         private ActivityTrackerFeature activityTrackerFeature;
-        public BackgroundProcessesViewPageVM(DataStorageFeature dataStorageFeature, LowLevelHandler lowLevelHandler, ActivityTrackerFeature activityTrackerFeature)
+        private ISecondWindowService secondWindowService;
+        public BackgroundProcessesViewPageVM(DataStorageFeature dataStorageFeature, LowLevelHandler lowLevelHandler, ActivityTrackerFeature activityTrackerFeature, ISecondWindowService secondWindowService)
         {
             RequiredWindowSize = new Vector2(700, 570);
             WindowPageName = "Customize Work Apps";
             this.dataStorageFeature = dataStorageFeature;
             this.lowLevelHandler = lowLevelHandler;
             this.activityTrackerFeature = activityTrackerFeature;
+            this.secondWindowService = secondWindowService;
             activityTrackerFeature.OnWindowChange += UpdateActiveWindowUi;
             InitializeProcessNames();
         }
@@ -54,7 +57,7 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         private void ReturnToPreviousPage()
         {
-            //SecondWindow.RequestSecondWindow(SecondWindowType.Settings);
+            secondWindowService.OpenWindowWith<SettingsPageVM>();
         }
 
         [RelayCommand]

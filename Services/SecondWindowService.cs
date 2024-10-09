@@ -24,7 +24,7 @@ namespace WorkLifeBalance.Services
             secondWindowVm.OnWindowClosed.Invoke();
         }
 
-        public async Task OpenWindowWith<T>(object args) where T : SecondWindowPageVMBase 
+        public async Task OpenWindowWith<T>(object? args = null) where T : SecondWindowPageVMBase 
         {
             navigation.NavigateTo<T>();
             SecondWindowPageVMBase activeModel = (SecondWindowPageVMBase)navigation.ActiveView;

@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Serilog;
 using System.Threading.Tasks;
 using System.Windows;
+using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
 
@@ -27,7 +28,8 @@ namespace WorkLifeBalance.ViewModels
         private LowLevelHandler lowLevelHandler;
         private DataStorageFeature dataStorageFeature;
         private TimeTrackerFeature timeTrackerFeature;
-        public MainMenuVM(AppTimer mainTimer, LowLevelHandler lowLevelHandler, DataStorageFeature dataStorageFeature, TimeTrackerFeature timeTrackerFeature)
+        private ISecondWindowService secondWindowService;
+        public MainMenuVM(AppTimer mainTimer, LowLevelHandler lowLevelHandler, DataStorageFeature dataStorageFeature, TimeTrackerFeature timeTrackerFeature, ISecondWindowService secondWindowService)
         {
             this.mainTimer = mainTimer;
             this.lowLevelHandler = lowLevelHandler;
@@ -38,6 +40,7 @@ namespace WorkLifeBalance.ViewModels
             dataStorageFeature.OnSaving += () => { DateText = $"Saving data..."; };
             dataStorageFeature.OnSaved += () => { DateText = $"Today: {dataStorageFeature.TodayData.DateC.ToString("MM/dd/yyyy")}"; };
             timeTrackerFeature.OnSpentTimeChange += UpdateElapsedTime;
+            this.secondWindowService = secondWindowService;
         }
 
         private void UpdateElapsedTime()
@@ -49,13 +52,13 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         public void OpenViewDataWindow()
         {
-            //SecondWindow.RequestSecondWindow(SecondWindowType.ViewData);
+            secondWindowService.OpenWindowWith<ViewDataPageVM>();
         }
 
         [RelayCommand]
         public void OpenOptionsWindow()
         {
-            //SecondWindow.RequestSecondWindow(SecondWindowType.Options);
+            secondWindowService.OpenWindowWith<OptionsPageVM>();
         }
 
         [RelayCommand]

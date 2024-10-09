@@ -15,7 +15,7 @@ namespace WorkLifeBalance.ViewModels
             return Task.CompletedTask;
         }
 
-        public virtual Task OnPageOppeningAsync(object args) 
+        public virtual Task OnPageOppeningAsync(object? args = null) 
         {
             return Task.CompletedTask;
         }

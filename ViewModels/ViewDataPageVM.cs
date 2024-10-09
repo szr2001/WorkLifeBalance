@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
+using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Models;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
@@ -53,10 +54,12 @@ namespace WorkLifeBalance.ViewModels
 
         private DataBaseHandler databaseHandler;
         private DataStorageFeature dataStorageFeature;
-        public ViewDataPageVM(DataBaseHandler databaseHandler, DataStorageFeature dataStorageFeature)
+        private ISecondWindowService secondWindowService;
+        public ViewDataPageVM(DataBaseHandler databaseHandler, DataStorageFeature dataStorageFeature, ISecondWindowService secondWindowService)
         {
             RequiredWindowSize = new Vector2(750, 580);
             WindowPageName = "View Data";
+            this.secondWindowService = secondWindowService;
             this.databaseHandler = databaseHandler;
             this.dataStorageFeature = dataStorageFeature;
 
@@ -128,19 +131,19 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         private void SeePreviousMonth()
         {
-            //SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, 2);
+            secondWindowService.OpenWindowWith<ViewDaysPageVM>(2);
         }
 
         [RelayCommand]
         private void SeeCurrentMonth()
         {
-            //SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, 1);
+            secondWindowService.OpenWindowWith<ViewDaysPageVM>(1);
         }
 
         [RelayCommand]
         private void SeeAllDays()
         {
-            //SecondWindow.RequestSecondWindow(SecondWindowType.ViewDays, 0);
+            secondWindowService.OpenWindowWith<ViewDaysPageVM>(0);
         }
 
         private int ConvertTimeOnlyToSeconds(TimeOnly time)
