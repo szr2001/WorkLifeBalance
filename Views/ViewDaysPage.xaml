@@ -99,7 +99,7 @@
                                Margin="0,0,0,4"
                                Foreground="White"/>
                 </Button>
-                <Border Grid.Column="2"
+                <Border Grid.Column="1"
                         Grid.ColumnSpan="6"
                         Background="{Binding Source={StaticResource WLFBOceanBlue}}"
                         CornerRadius="15"
@@ -110,48 +110,42 @@
                                TextAlignment="Center"
                                FontWeight="Bold"
                                FontSize="20"
-                               Margin="12,8,0,0"
+                               Margin="4,8,0,0"
                                Foreground="White"/>
-                        
-                    <TextBox Height="30"
-                             TextAlignment="Center"
-                             TextBlock.FontSize="20"
-                             MaxLength="2"
-                             TextBlock.FontWeight="Bold"
-                             Text="00"
-                             Width="35"/>
-                        
-                    <TextBlock Text="Day:"
+
+                        <ComboBox Style="{StaticResource CustomComboBoxStyle}"
+                                  Width="70"
+                                  Margin="2,5,2,5"
+                                  ItemContainerStyle="{StaticResource CustomComboBoxItemStyle}">
+                        </ComboBox>
+
+                        <TextBlock Text="Day:"
                                TextAlignment="Center"
                                FontWeight="Bold"
                                FontSize="20"
-                               Margin="12,8,0,0"
+                               Margin="4,8,0,0"
                                Foreground="White"/>
-                        
-                    <TextBox Height="30"
-                             TextAlignment="Center"
-                             TextBlock.FontSize="20"
-                             MaxLength="2"
-                             TextBlock.FontWeight="Bold"
-                             Text="00"
-                             Width="35"/>
+
+                        <ComboBox Style="{StaticResource CustomComboBoxStyle}"
+                                  Width="70"
+                                  Margin="2,5,2,5"
+                                  ItemContainerStyle="{StaticResource CustomComboBoxItemStyle}">
+                        </ComboBox>
 
                         <TextBlock Text="Year:"
                                TextAlignment="Center"
                                FontWeight="Bold"
                                FontSize="20"
-                               Margin="12,8,0,0"
+                               Margin="4,8,0,0"
                                Foreground="White"/>
 
-                        <TextBox Height="30"
-                             TextAlignment="Center"
-                             TextBlock.FontSize="20"
-                             MaxLength="4"
-                             TextBlock.FontWeight="Bold"
-                             Width="50"
-                             Text="0000"/>
+                        <ComboBox Style="{StaticResource CustomComboBoxStyle}"
+                                  Width="100"
+                                  Margin="2,5,2,5"
+                                  ItemContainerStyle="{StaticResource CustomComboBoxItemStyle}">
+                        </ComboBox>
                     
-                    <Button Margin="15,5,0,5"
+                    <Button Margin="5,5,0,5"
                             Style="{Binding Source={StaticResource LightblueRoundedBtnHoverStyle}}"
                             Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}">
                         

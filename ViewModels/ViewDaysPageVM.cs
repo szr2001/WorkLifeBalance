@@ -15,6 +15,8 @@ namespace WorkLifeBalance.ViewModels
     {
         public ObservableCollection<DayData> LoadedData { get; set; } = new();
 
+        //make days,months, years calculate based on database data
+
         private DayData[]? backupdata;
         //use this to request the correct page when leaving the DayActivity page
         private int LoadedPageType = 0;

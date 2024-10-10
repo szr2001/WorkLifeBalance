@@ -108,12 +108,6 @@
                                    Name="ElapsedRestT"
                                    FontSize="15"
                                    TextAlignment="Center"/>
-                        <ComboBox Style="{StaticResource CustomComboBoxStyle}"
-                                  ItemContainerStyle="{StaticResource CustomComboBoxItemStyle}">
-                            <ComboBoxItem Name="Item2">Erig</ComboBoxItem>
-                            <ComboBoxItem Name="Item3">Mig</ComboBoxItem>
-                            <ComboBoxItem Name="Item5">Tutig</ComboBoxItem>
-                        </ComboBox>
                     </StackPanel>
                     <Button Grid.Column="1"
                             Width="45"

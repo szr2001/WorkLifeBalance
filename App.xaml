@@ -256,7 +256,7 @@
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
             <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
             <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
-            <Setter Property="MinWidth" Value="120"/>
+            <Setter Property="MinWidth" Value="40"/>
             <Setter Property="MinHeight" Value="20"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Template">
@@ -304,7 +304,7 @@
                                             BorderThickness="1"
                                             CornerRadius="10"
                                             BorderBrush="{Binding Source={StaticResource WLFBBrightOceanBlue}}"/>
-                                    <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                    <ScrollViewer Margin="4,6,4,6" MaxHeight="100" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" SnapsToDevicePixels="True">
                                         <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
                                     </ScrollViewer>
                                 </Grid>
@@ -321,7 +321,6 @@
                                 <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
                             </Trigger>
                             <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="true">
-                                <Setter TargetName="DropDownBorder" Property="CornerRadius" Value="0"/>
                                 <Setter TargetName="DropDownBorder" Property="Margin" Value="0,2,0,0"/>
                             </Trigger>
                             <Trigger Property="IsEditable" Value="true">
