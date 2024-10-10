@@ -26,14 +26,15 @@ namespace WorkLifeBalance.Services
 
         public async Task OpenWindowWith<T>(object? args = null) where T : SecondWindowPageVMBase 
         {
+            Console.WriteLine($"WindowRequested of type {typeof(T)}");
             navigation.NavigateTo<T>();
             SecondWindowPageVMBase activeModel = (SecondWindowPageVMBase)navigation.ActiveView;
             secondWindowVm.Width = (int)activeModel.RequiredWindowSize.X;
             secondWindowVm.Height = (int)activeModel.RequiredWindowSize.Y;
             secondWindowVm.PageName = activeModel.WindowPageName;
             secondWindowVm.ActivePage = activeModel;
-            secondWindowVm.OnWindowRequested.Invoke();
             await activeModel.OnPageOppeningAsync(args);
+            secondWindowVm.OnWindowRequested.Invoke();
         }
     }
 }

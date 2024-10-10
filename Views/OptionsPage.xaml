@@ -18,7 +18,7 @@
                             Grid.Row="6"
                             Grid.Column="0"
                             Grid.ColumnSpan="3"
-                            Command="{Binding OpenSettings}"
+                            Command="{Binding OpenSettingsCommand}"
                             Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
                             Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}">
                         <TextBlock Text="Settings"

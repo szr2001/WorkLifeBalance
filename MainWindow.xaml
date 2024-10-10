@@ -41,6 +41,7 @@
                                 Width="24"
                                 Margin="0,1,0,0"
                                 ToolTip="Close App"
+                                Command="{Binding CloseAppCommand}"
                                 Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
                                 Style="{Binding Source={StaticResource RedRoundedBtnHoverStyle}}">
                             <Image Margin="1"
@@ -60,6 +61,7 @@
                                 Width="24"
                                 Margin="0,2,0,0"
                                 ToolTip="Options"
+                                Command="{Binding OpenOptionsWindowCommand}"
                                 Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
                                 Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}">
                             <Image Margin="2"
@@ -68,7 +70,8 @@
                         <Button Height="23"
                                 Width="24"
                                 Margin="0,2,0,0"
-                                ToolTip="{Binding OpenViewDataWindow}"
+                                Command="{Binding OpenViewDataWindowCommand}"
+                                ToolTip="View Data"
                                 Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
                                 Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}">
                             <Image Margin="2"
@@ -98,14 +101,12 @@
                                    FontSize="20"
                                    TextAlignment="Center"/>
                         <TextBlock Text="{Binding ElapsedWorkTime}"
-                                   Name="ElapsedWorkT"
                                    FontSize="15"
                                    TextAlignment="Center"/>
                         <TextBlock Text="Break Amount"
                                    TextAlignment="Center"
                                    FontSize="20"/>
                         <TextBlock Text="{Binding ElapsedRestTime}"
-                                   Name="ElapsedRestT"
                                    FontSize="15"
                                    TextAlignment="Center"/>
                     </StackPanel>
@@ -115,6 +116,7 @@
                             Name="ToggleBtn"
                             ToolTip="Toggle Work/Rest"
                             Height="45" 
+                            Command="{Binding ToggleStateCommand}"
                             Template="{Binding Source={StaticResource RoundedBtnTemp}}">
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource RoundedBtnStyle}">

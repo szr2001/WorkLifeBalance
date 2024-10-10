@@ -150,7 +150,7 @@
                         <StackPanel Orientation="Vertical">
                             <Button Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
                                     Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}"
-                                    Command="{Binding SeePreviousMonth}"
+                                    Command="{Binding SeePreviousMonthCommand}"
                                     Height="30"
                                     Margin="25,5,25,0">
                                 <TextBlock Text="Previous Month"
@@ -162,7 +162,7 @@
                             </Button>
                             <Button Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
                                     Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}"
-                                    Command="{Binding SeeCurrentMonth}"
+                                    Command="{Binding SeeCurrentMonthCommand}"
                                     Height="30"
                                     Margin="25,8,25,0">
                                 <TextBlock Text="Curent Month"
@@ -174,7 +174,7 @@
                             </Button>
                             <Button Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
                                     Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}"
-                                    Command="{Binding SeeAllDays}"
+                                    Command="{Binding SeeAllDaysCommand}"
                                     Height="30"
                                     Margin="25,8,25,0">
                                 <TextBlock Text="All Days"

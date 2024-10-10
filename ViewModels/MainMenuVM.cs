@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Serilog;
+using System;
 using System.Threading.Tasks;
-using System.Windows;
 using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
@@ -52,18 +52,21 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         public void OpenViewDataWindow()
         {
+            Console.WriteLine("RequestWindow");
             secondWindowService.OpenWindowWith<ViewDataPageVM>();
         }
 
         [RelayCommand]
         public void OpenOptionsWindow()
         {
+            Console.WriteLine("RequestWindow");
             secondWindowService.OpenWindowWith<OptionsPageVM>();
         }
 
         [RelayCommand]
         public void ToggleState()
         {
+            Console.WriteLine("Request toggle state");
             if (!dataStorageFeature.IsAppReady || dataStorageFeature.IsClosingApp) return;
 
             switch (mainTimer.AppTimerState)
@@ -81,19 +84,20 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         public async Task CloseApp()
         {
-            if (dataStorageFeature.IsClosingApp) return;
+            //if (dataStorageFeature.IsClosingApp) return;
 
-            dataStorageFeature.IsClosingApp = true;
+            //dataStorageFeature.IsClosingApp = true;
 
-            //CloseSideBar(null, null);
+            ////CloseSideBar(null, null);
 
-            await dataStorageFeature.SaveData();
+            //await dataStorageFeature.SaveData();
 
-            Log.Information("------------------App Shuting Down------------------");
+            //Log.Information("------------------App Shuting Down------------------");
 
-            await Log.CloseAndFlushAsync();
+            //await Log.CloseAndFlushAsync();
 
-            Application.Current.Shutdown();
+            //Application.Current.Shutdown();
+            await Task.Delay(55);
         }
 
     }
