@@ -13,16 +13,16 @@ namespace WorkLifeBalance.ViewModels
     {
         //bind to dateOnly and timeOnly and use converters
         [ObservableProperty]
-        private string? dateText;
+        public string? dateText;
 
         [ObservableProperty]
-        private string? elapsedWorkTime;
+        public string? elapsedWorkTime;
 
         [ObservableProperty]
-        private string? elapsedRestTime;
+        public string? elapsedRestTime;
 
         [ObservableProperty]
-        private AppState appState;
+        public AppState appState;
 
         private AppTimer mainTimer;
         private LowLevelHandler lowLevelHandler;

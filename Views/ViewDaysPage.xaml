@@ -119,8 +119,7 @@
                              MaxLength="2"
                              TextBlock.FontWeight="Bold"
                              Text="00"
-                             Width="35"
-                             Name="MonthB"/>
+                             Width="35"/>
                         
                     <TextBlock Text="Day:"
                                TextAlignment="Center"
@@ -135,24 +134,22 @@
                              MaxLength="2"
                              TextBlock.FontWeight="Bold"
                              Text="00"
-                             Width="35"
-                             Name="DayB"/>
-                        
-                    <TextBlock Text="Year:"
+                             Width="35"/>
+
+                        <TextBlock Text="Year:"
                                TextAlignment="Center"
                                FontWeight="Bold"
                                FontSize="20"
                                Margin="12,8,0,0"
                                Foreground="White"/>
-                        
-                    <TextBox Height="30"
+
+                        <TextBox Height="30"
                              TextAlignment="Center"
                              TextBlock.FontSize="20"
                              MaxLength="4"
                              TextBlock.FontWeight="Bold"
                              Width="50"
-                             Text="0000"
-                             Name="YearB"/>
+                             Text="0000"/>
                     
                     <Button Margin="15,5,0,5"
                             Style="{Binding Source={StaticResource LightblueRoundedBtnHoverStyle}}"

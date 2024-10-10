@@ -11,7 +11,7 @@ using System.Numerics;
 
 namespace WorkLifeBalance.ViewModels
 {
-    public class ViewDaysPageVM : SecondWindowPageVMBase
+    public partial class ViewDaysPageVM : SecondWindowPageVMBase
     {
         public ObservableCollection<DayData> LoadedData { get; set; } = new();
 

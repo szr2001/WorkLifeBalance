@@ -14,6 +14,7 @@
     <Border CornerRadius="15"
             MouseDown="MoveWindow"
             Background= "{Binding Source={StaticResource WLFBOceanBlue}}">
+        
         <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="120"/>
@@ -41,8 +42,7 @@
                                 Margin="0,1,0,0"
                                 ToolTip="Close App"
                                 Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
-                                Style="{Binding Source={StaticResource RedRoundedBtnHoverStyle}}" 
-                                Click="{Binding CloseApp}">
+                                Style="{Binding Source={StaticResource RedRoundedBtnHoverStyle}}">
                             <Image Margin="1"
                                    Source="Assets/Cancel.png"/>
                         </Button>
@@ -61,8 +61,7 @@
                                 Margin="0,2,0,0"
                                 ToolTip="Options"
                                 Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
-                                Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}" 
-                                Click="{Binding OpenOptionsWindow}">
+                                Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}">
                             <Image Margin="2"
                                    Source="Assets/Settings.png"/>
                         </Button>
@@ -109,6 +108,12 @@
                                    Name="ElapsedRestT"
                                    FontSize="15"
                                    TextAlignment="Center"/>
+                        <ComboBox Style="{StaticResource CustomComboBoxStyle}"
+                                  ItemContainerStyle="{StaticResource CustomComboBoxItemStyle}">
+                            <ComboBoxItem Name="Item2">Erig</ComboBoxItem>
+                            <ComboBoxItem Name="Item3">Mig</ComboBoxItem>
+                            <ComboBoxItem Name="Item5">Tutig</ComboBoxItem>
+                        </ComboBox>
                     </StackPanel>
                     <Button Grid.Column="1"
                             Width="45"
@@ -116,7 +121,6 @@
                             Name="ToggleBtn"
                             ToolTip="Toggle Work/Rest"
                             Height="45" 
-                            Click="{Binding ToggleState}"
                             Template="{Binding Source={StaticResource RoundedBtnTemp}}">
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource RoundedBtnStyle}">

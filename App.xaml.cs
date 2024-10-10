@@ -58,36 +58,36 @@ namespace WorkLifeBalance
         {
             base.OnStartup(e);
 
-            LowLevelHandler lowHandler = _servicesProvider.GetRequiredService<LowLevelHandler>();
-            DataStorageFeature dataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
+            //LowLevelHandler lowHandler = _servicesProvider.GetRequiredService<LowLevelHandler>();
+            //DataStorageFeature dataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
 
-            if (lowHandler.IsRunningAsAdmin())
-            {
-                RestartApplicationWithAdmin();
-                return;
-            }
+            //if (lowHandler.IsRunningAsAdmin())
+            //{
+            //    RestartApplicationWithAdmin();
+            //    return;
+            //}
 
-            if (Debug)
-            {   
-                lowHandler.EnableConsole();
-                Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console()
-                .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
-                .CreateLogger();
-            }
-            else
-            {
-                Log.Logger = new LoggerConfiguration()
-                .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
-                .CreateLogger();
-            }
+            //if (Debug)
+            //{   
+            //    lowHandler.EnableConsole();
+            //    Log.Logger = new LoggerConfiguration()
+            //    .WriteTo.Console()
+            //    .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+            //    .CreateLogger();
+            //}
+            //else
+            //{
+            //    Log.Logger = new LoggerConfiguration()
+            //    .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+            //    .CreateLogger();
+            //}
 
-            dataStorageFeature.OnLoaded += InitializeApp;
+            //dataStorageFeature.OnLoaded += InitializeApp;
 
             var mainWindow = _servicesProvider.GetRequiredService<MainWindow>(); 
             mainWindow.Show();
 
-            _ = dataStorageFeature.LoadData();
+            //_ = dataStorageFeature.LoadData();
         }
 
         //initialize app called when data was loaded
