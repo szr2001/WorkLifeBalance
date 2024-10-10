@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -15,17 +16,6 @@ namespace WorkLifeBalance
         public SecondWindow() 
         {
             InitializeComponent();
-
-            this.DataContextChanged += SubscribeToVMEvents;
-        }
-
-        private void SubscribeToVMEvents(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (e.NewValue is SecondWindowVM viewModel)
-            {
-                viewModel.OnWindowClosed += Hide;
-                viewModel.OnWindowRequested += Show;
-            }
         }
 
         private void MoveWindow(object sender, MouseButtonEventArgs e)

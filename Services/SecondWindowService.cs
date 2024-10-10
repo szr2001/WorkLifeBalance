@@ -8,11 +8,13 @@ namespace WorkLifeBalance.Services
     public class SecondWindowService : ISecondWindowService
     {
         private readonly SecondWindowVM secondWindowVm;
+        private readonly SecondWindow secondWindowView;
         private readonly INavigationService navigation;
 
-        public SecondWindowService(SecondWindowVM secondWindowVm, INavigationService navigation)
+        public SecondWindowService(SecondWindowVM secondWindowVm, SecondWindow secondWindowView, INavigationService navigation)
         {
             this.secondWindowVm = secondWindowVm;
+            this.secondWindowView = secondWindowView;
             this.navigation = navigation;
             secondWindowVm.OnWindowClosing += ClearWindow;
         }
@@ -21,7 +23,7 @@ namespace WorkLifeBalance.Services
         {
             SecondWindowPageVMBase activeModel = (SecondWindowPageVMBase)navigation.ActiveView;
             await activeModel.OnPageClosingAsync();
-            secondWindowVm.OnWindowClosed.Invoke();
+            secondWindowView.Hide();
         }
 
         public async Task OpenWindowWith<T>(object? args = null) where T : SecondWindowPageVMBase 
@@ -34,7 +36,7 @@ namespace WorkLifeBalance.Services
             secondWindowVm.PageName = activeModel.WindowPageName;
             secondWindowVm.ActivePage = activeModel;
             await activeModel.OnPageOppeningAsync(args);
-            secondWindowVm.OnWindowRequested.Invoke();
+            secondWindowView.Show();
         }
     }
 }

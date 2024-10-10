@@ -8,6 +8,9 @@ namespace WorkLifeBalance.Views
     /// </summary>
     public partial class ViewDataPage : Page
     {
-
+        public ViewDataPage()
+        {
+            InitializeComponent();
+        }
     }
 }

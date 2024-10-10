@@ -45,7 +45,7 @@
                             VerticalAlignment="Center"
                             HorizontalAlignment="Right"
                             Margin="0,0,5,0"
-                            Command="{Binding CloseSecondWindow}">
+                            Command="{Binding CloseSecondWindowCommand}">
                             <Image Margin="2"
                                Source="pack://application:,,,/Assets/Cancel.png">
 
@@ -54,11 +54,12 @@
                 </Grid>
             </Border>
             
-            <ContentControl Grid.Row="1"
+            <Frame Grid.Row="1"
                    Margin="10"
-                   Content="{Binding activePage}">
+                   Content="{Binding ActivePage}"
+                   NavigationUIVisibility="Hidden">
                         
-            </ContentControl>
+            </Frame>
         
         </Grid>
         

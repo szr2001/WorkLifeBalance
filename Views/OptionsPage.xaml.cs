@@ -9,5 +9,9 @@ namespace WorkLifeBalance.Views
     /// </summary>
     public partial class OptionsPage : Page
     {
+        public OptionsPage()
+        {
+            InitializeComponent();
+        }
     }
 }

@@ -11,5 +11,9 @@ namespace WorkLifeBalance.Views
     /// </summary>
     public partial class ViewDayDetailsPage : Page
     {
+        public ViewDayDetailsPage()
+        {
+            InitializeComponent();
+        }
     }
 }

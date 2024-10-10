@@ -8,22 +8,22 @@
 
         <!--when we bind something to a SettingsPageVM, it will be displayed using the SettingsPage
         like binding a Frame to a SettingsPageVM, it will be displayed using a SettingsPage view-->
-        <DataTemplate DataType="{x:Type TypeName= viewModel:SettingsPageVM}">
+        <DataTemplate DataType="{x:Type viewModel:SettingsPageVM}">
             <views:SettingsPage/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type TypeName= viewModel:BackgroundProcessesViewPageVM}">
+        <DataTemplate DataType="{x:Type viewModel:BackgroundProcessesViewPageVM}">
             <views:BackgroundProcessesViewPage/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type TypeName= viewModel:OptionsPageVM}">
+        <DataTemplate DataType="{x:Type viewModel:OptionsPageVM}">
             <views:OptionsPage/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type TypeName= viewModel:ViewDataPageVM}">
+        <DataTemplate DataType="{x:Type viewModel:ViewDataPageVM}">
             <views:ViewDataPage/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type TypeName= viewModel:ViewDayDetailsPageVM}">
+        <DataTemplate DataType="{x:Type viewModel:ViewDayDetailsPageVM}">
             <views:ViewDayDetailsPage/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type TypeName= viewModel:ViewDaysPageVM}">
+        <DataTemplate DataType="{x:Type viewModel:ViewDaysPageVM}">
             <views:ViewDaysPage/>
         </DataTemplate>
 
