@@ -9,6 +9,10 @@ using WorkLifeBalance.Models;
 using WorkLifeBalance.Interfaces;
 using System.Numerics;
 using CommunityToolkit.Mvvm.Input;
+using WorkLifeBalance.Services;
+using CommunityToolkit.Mvvm.ComponentModel;
+using System;
+using WorkLifeBalance.Services.Feature;
 
 namespace WorkLifeBalance.ViewModels
 {
@@ -16,7 +20,23 @@ namespace WorkLifeBalance.ViewModels
     {
         public ObservableCollection<DayData> LoadedData { get; set; } = new();
 
-        //make days,months, years calculate based on database data
+        [ObservableProperty]
+        public int[]? filterDays;
+
+        [ObservableProperty]
+        public int selectedDay = 0;
+        
+        [ObservableProperty]
+        public int[]? filterMonths;
+
+        [ObservableProperty]
+        public int selectedMonth = 0;
+        
+        [ObservableProperty]
+        public int[]? filterYears;
+
+        [ObservableProperty]
+        public int selectedYear = 0;
 
         private DayData[]? backupdata;
         //use this to request the correct page when leaving the DayActivity page
@@ -25,51 +45,82 @@ namespace WorkLifeBalance.ViewModels
         private string FilterDay = "00";
         private string FilterYear = "0000";
         private ISecondWindowService secondWindowService;
-        public ViewDaysPageVM(ISecondWindowService secondWindowService)
+        private DataBaseHandler database;
+        private DataStorageFeature dataStorage;
+        public ViewDaysPageVM(ISecondWindowService secondWindowService, DataBaseHandler database, DataStorageFeature dataStorage)
         {
             RequiredWindowSize = new Vector2(710, 570);
             this.secondWindowService = secondWindowService;
-            //if (args != null)
-            //{
-            //    if (args is int loadedpagetype)
-            //    {
-            //        _ = RequiestData(loadedpagetype);
-            //        LoadedPageType = loadedpagetype;
-            //        return;
-            //    }
-            //}
-
+            this.database = database;
+            this.dataStorage = dataStorage;
+            SetFilterValues();
             //MainWindow.ShowErrorBox("Error ViewDaysPage", "Requested ViewDays Page with no/wrong arguments");
+        }
+
+        private void SetFilterValues()
+        {
+            //use the database to choose what days/month/years should the filters contain
+            DateOnly Today = dataStorage.TodayData.DateC;
+            List<int> Days = new();
+            List<int> Months = new();
+            List<int> Years = new();
+            for (int x = 0; x < 31; x++)
+            {
+                Days.Add(x);
+                FilterDays = Days.ToArray();
+            }
+            for (int x = 0; x < 13; x++)
+            {
+                Months.Add(x);
+                FilterMonths = Months.ToArray();
+            }
+            for (int x = Today.Year; x > 2020 ; x--)
+            {
+                Years.Add(x);
+            }
+            Years.Add(0);
+            FilterYears = Years.ToArray();
         }
 
         private async Task RequiestData(int requiestedDataType)
         {
-            //DateOnly currentDate = DataStorageFeature.Instance.TodayData.DateC;
-            //DateTime previousMonthDateTime = currentDate.ToDateTime(new TimeOnly(0, 0, 0)).AddMonths(-1);
-            //DateOnly previousDate = DateOnly.FromDateTime(previousMonthDateTime);
+            DateOnly currentDate = dataStorage.TodayData.DateC;
+            DateTime previousMonthDateTime = currentDate.ToDateTime(new TimeOnly(0, 0, 0)).AddMonths(-1);
+            DateOnly previousDate = DateOnly.FromDateTime(previousMonthDateTime);
 
             List<DayData> Days = new();
-            //switch (requiestedDataType)
-            //{
-            //    //call database
-            //    case 0:
-            //        Days = await DataBaseHandler.ReadMonth();
-            //        pageNme = "All Months Days";
-            //        break;
-            //    case 1:
-            //        Days = await DataBaseHandler.ReadMonth(currentDate.ToString("MM"), currentDate.ToString("yyyy"));
-            //        pageNme = "Current Month Days";
-            //        break;
-            //    case 2:
-            //        Days = await DataBaseHandler.ReadMonth(previousDate.ToString("MM"), previousDate.ToString("yyyy"));
-            //        pageNme = "Previous Month Days";
-            //        break;
-            //}
+            switch (requiestedDataType)
+            {
+                case 0:
+                    Days = await database.ReadMonth();
+                    WindowPageName = "All Months Days";
+                    break;
+                case 1:
+                    Days = await database.ReadMonth(currentDate.ToString("MM"), currentDate.ToString("yyyy"));
+                    WindowPageName = "Current Month Days";
+                    break;
+                case 2:
+                    Days = await database.ReadMonth(previousDate.ToString("MM"), previousDate.ToString("yyyy"));
+                    WindowPageName = "Previous Month Days";
+                    break;
+            }
 
             Days.Reverse();
             LoadedData = new ObservableCollection<DayData>(Days);
 
             backupdata = LoadedData.ToArray();
+        }
+
+        public override async Task OnPageOppeningAsync(object? args = null)
+        {
+            if (args != null)
+            {
+                if (args is int loadedpagetype)
+                {
+                    await RequiestData(loadedpagetype);
+                    LoadedPageType = loadedpagetype;
+                }
+            }
         }
 
         [RelayCommand]
@@ -78,28 +129,18 @@ namespace WorkLifeBalance.ViewModels
             secondWindowService.OpenWindowWith<ViewDataPageVM>();
         }
 
-        private void ViewDay(object sender, RoutedEventArgs e)
+        [RelayCommand]
+        private void ViewDay(DayData data)
         {
-            Button button = (Button)sender;
-            DayData ClickedDay = new();
+            Console.WriteLine("RAWR");
 
-            StackPanel ButtonParent = FindParent<StackPanel>(button);
+            data.ConvertSaveDataToUsableData();
 
-            TextBlock tempblock = (TextBlock)ButtonParent.Children[1];
-            ClickedDay.WorkedAmmount = tempblock.Text.Replace(":", "");
-
-            tempblock = (TextBlock)ButtonParent.Children[3];
-            ClickedDay.RestedAmmount = tempblock.Text.Replace(":", "");
-
-            tempblock = (TextBlock)ButtonParent.Children[4];
-            ClickedDay.Date = tempblock.Text.Replace("/", "");
-
-            ClickedDay.ConvertSaveDataToUsableData();
-
-            secondWindowService.OpenWindowWith<ViewDayDetailsPageVM>((LoadedPageType, ClickedDay));
+            secondWindowService.OpenWindowWith<ViewDayDetailsPageVM>((LoadedPageType, data));
         }
 
-        private void ApplyFilters(object sender, RoutedEventArgs e)
+        [RelayCommand]
+        private void ApplyFilters()
         {
             if (FilterMonth == "00" && FilterDay == "00" && FilterYear == "0000")
             {
@@ -143,42 +184,6 @@ namespace WorkLifeBalance.ViewModels
 
             T parent = parentObject as T;
             return parent ?? FindParent<T>(parentObject);
-        }
-
-        private void UpdateFilterMonth(object sender, TextChangedEventArgs e)
-        {
-            //if (string.IsNullOrEmpty(MonthB.Text) || !int.TryParse(MonthB.Text, out _))
-            //{
-            //    MonthB.Text = "00";
-            //    FilterMonth = "00";
-            //    return;
-            //}
-
-            //FilterMonth = MonthB.Text;
-        }
-
-        private void UpdateFilterDay(object sender, TextChangedEventArgs e)
-        {
-            //if (string.IsNullOrEmpty(DayB.Text) || !int.TryParse(DayB.Text, out _))
-            //{
-            //    DayB.Text = "00";
-            //    FilterDay = "00";
-            //    return;
-            //}
-
-            //FilterDay = DayB.Text;
-        }
-
-        private void UpdateFilterYear(object sender, TextChangedEventArgs e)
-        {
-            //if (string.IsNullOrEmpty(YearB.Text) || !int.TryParse(YearB.Text, out _))
-            //{
-            //    YearB.Text = "0000";
-            //    FilterYear = "0000";
-            //    return;
-            //}
-
-            //FilterYear = YearB.Text;
         }
     }
 }

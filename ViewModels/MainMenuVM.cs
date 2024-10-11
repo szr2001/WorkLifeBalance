@@ -52,21 +52,18 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         public void OpenViewDataWindow()
         {
-            Console.WriteLine("RequestWindow");
             secondWindowService.OpenWindowWith<ViewDataPageVM>();
         }
 
         [RelayCommand]
         public void OpenOptionsWindow()
         {
-            Console.WriteLine("RequestWindow");
             secondWindowService.OpenWindowWith<OptionsPageVM>();
         }
 
         [RelayCommand]
         public void ToggleState()
         {
-            Console.WriteLine("Request toggle state");
             if (!dataStorageFeature.IsAppReady || dataStorageFeature.IsClosingApp) return;
 
             switch (mainTimer.AppTimerState)

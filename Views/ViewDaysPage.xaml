@@ -67,6 +67,8 @@
                                                     TextBlock.FontSize="15"
                                                     TextBlock.Foreground="White"
                                                     TextBlock.FontWeight="Bold"
+                                                    Command="{Binding DataContext.ViewDayCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                    CommandParameter="{Binding}"
                                                     Style="{Binding Source={StaticResource OceanBlueRoundedBtnStyle}}"
                                                     Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}" />
                                             </StackPanel>
@@ -116,6 +118,8 @@
 
                         <ComboBox Style="{StaticResource CustomComboBoxStyle}"
                                   Width="70"
+                                  ItemsSource="{Binding FilterMonths}"
+                                  SelectedItem="{Binding SelectedMonth,Mode=TwoWay}"
                                   Margin="2,5,2,5"
                                   ItemContainerStyle="{StaticResource CustomComboBoxItemStyle}">
                         </ComboBox>
@@ -129,6 +133,8 @@
 
                         <ComboBox Style="{StaticResource CustomComboBoxStyle}"
                                   Width="70"
+                                  ItemsSource="{Binding FilterDays}"
+                                  SelectedItem="{Binding SelectedDay,Mode=TwoWay}"
                                   Margin="2,5,2,5"
                                   ItemContainerStyle="{StaticResource CustomComboBoxItemStyle}">
                         </ComboBox>
@@ -141,12 +147,15 @@
                                Foreground="White"/>
 
                         <ComboBox Style="{StaticResource CustomComboBoxStyle}"
+                                  ItemsSource="{Binding FilterYears}"
+                                  SelectedItem="{Binding SelectedYear,Mode=TwoWay}"
                                   Width="100"
                                   Margin="2,5,2,5"
                                   ItemContainerStyle="{StaticResource CustomComboBoxItemStyle}">
                         </ComboBox>
                     
                     <Button Margin="5,5,0,5"
+                            Command="{Binding ApplyFiltersCommand}"
                             Style="{Binding Source={StaticResource LightblueRoundedBtnHoverStyle}}"
                             Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}">
                         

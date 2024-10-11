@@ -28,7 +28,6 @@ namespace WorkLifeBalance.Services
 
         public async Task OpenWindowWith<T>(object? args = null) where T : SecondWindowPageVMBase 
         {
-            Console.WriteLine($"WindowRequested of type {typeof(T)}");
             navigation.NavigateTo<T>();
             SecondWindowPageVMBase activeModel = (SecondWindowPageVMBase)navigation.ActiveView;
             secondWindowVm.Width = (int)activeModel.RequiredWindowSize.X;
