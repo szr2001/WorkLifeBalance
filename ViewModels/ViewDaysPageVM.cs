@@ -8,6 +8,7 @@ using System.Windows;
 using WorkLifeBalance.Models;
 using WorkLifeBalance.Interfaces;
 using System.Numerics;
+using CommunityToolkit.Mvvm.Input;
 
 namespace WorkLifeBalance.ViewModels
 {
@@ -71,7 +72,8 @@ namespace WorkLifeBalance.ViewModels
             backupdata = LoadedData.ToArray();
         }
 
-        private void ReturnToPreviousPage(object sender, RoutedEventArgs e)
+        [RelayCommand]
+        private void ReturnToPreviousPage()
         {
             secondWindowService.OpenWindowWith<ViewDataPageVM>();
         }

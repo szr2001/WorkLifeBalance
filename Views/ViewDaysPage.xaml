@@ -91,7 +91,8 @@
                 </Grid.ColumnDefinitions>
                 <Button Margin="15,8,15,5"
                         Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
-                        Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}">
+                        Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}"
+                        Command="{Binding ReturnToPreviousPageCommand}">
                     <TextBlock Text="Back"
                                TextAlignment="Center"
                                FontWeight="Bold"

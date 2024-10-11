@@ -9,7 +9,7 @@
         ResizeMode="NoResize"
         AllowsTransparency="True"
         WindowStyle="None"
-        Title="SecondWindow" Height="{Binding Height}" Width="{Binding Width}">
+        Title="SecondWindow" Height="{Binding Height, Mode=TwoWay}" Width="{Binding Width, Mode=TwoWay}">
 
     <Border CornerRadius="0,0,20,20"
             Background= "{Binding Source={StaticResource WLFBOceanBlue}}">
