@@ -12,7 +12,7 @@ namespace WorkLifeBalance.Converters
             {
                 return date.ToString("MM/dd/yyyy");
             }
-            return string.Empty;
+            throw new Exception("Value is not of type DateOnly");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -29,10 +29,7 @@ namespace WorkLifeBalance.Converters
                     );
                 return newDate;
             }
-            else
-            {
-                return DateOnly.MinValue;
-            }
+            throw new Exception("Value is not of type string");
         }
     }
 }

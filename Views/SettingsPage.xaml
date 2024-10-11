@@ -10,7 +10,8 @@
       d:DesignHeight="270" d:DesignWidth="200"
       Title="SettingsPage">
     <Page.Resources>
-        <converters:IntStringConverter x:Key="IntStringConverter"/> 
+        <converters:IntStringConverter x:Key="IntStringConverter"/>
+        <converters:BoolVisibilityConverter x:Key="BoolVisibilityConverter"/> 
     </Page.Resources>
     <Border Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
             CornerRadius="15">
@@ -149,7 +150,8 @@
                             <Border Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
                                     CornerRadius="15"
                                     Margin="5"
-                                    Height="00">
+                                    Visibility="{Binding AutoDetectWork, Converter={StaticResource BoolVisibilityConverter}}"
+                                    Height="80">
                                 <Border.Style>
                                     <Style TargetType="Border">
                                         <Style.Triggers>
@@ -218,7 +220,8 @@
                             <Border Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
                                     CornerRadius="15"
                                     Margin="5"
-                                    Height="0">
+                                    Visibility="{Binding AutoDetectIdle, Converter={StaticResource BoolVisibilityConverter}}"
+                                    Height="55">
                                 <Border.Style>
                                     <Style TargetType="Border">
                                         <Style.Triggers>

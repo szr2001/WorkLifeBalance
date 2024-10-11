@@ -12,7 +12,7 @@ namespace WorkLifeBalance.Converters
             {
                 return time.ToString("HH:mm:ss");
             }
-            return string.Empty;
+            throw new Exception("Value is not of type TimeOnly");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -34,10 +34,7 @@ namespace WorkLifeBalance.Converters
                     );
                 return newTime;
             }
-            else
-            {
-                return TimeOnly.MinValue;
-            }
+            throw new Exception("Value is not of type string");
         }
     }
 }
