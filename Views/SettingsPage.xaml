@@ -81,22 +81,22 @@
                                     </Grid.RowDefinitions>
                                     <ToggleButton Grid.Row="0"
                                                   Grid.Column="0"
-                                                  IsChecked="{Binding startupAncorTopLeft, Mode=TwoWay}"
+                                                  IsChecked="{Binding StartupAncorTopLeft, Mode=TwoWay}"
                                                   Template="{Binding Source= {StaticResource CornerToggleBtnTemp}}">
                                     </ToggleButton>
                                     <ToggleButton Grid.Row="0"
                                                   Grid.Column="1"
-                                                  IsChecked="{Binding startupAncorTopRight, Mode=TwoWay}"
+                                                  IsChecked="{Binding StartupAncorTopRight, Mode=TwoWay}"
                                                   Style="{Binding Source={StaticResource CornerToggleBtnStyle}}"
                                                   Template="{Binding Source= {StaticResource CornerToggleBtnTemp}}"/>
                                     <ToggleButton Grid.Row="1"
                                                   Grid.Column="0"
-                                                  IsChecked="{Binding startupAncorBottomLeft, Mode=TwoWay}"
+                                                  IsChecked="{Binding StartupAncorBottomLeft, Mode=TwoWay}"
                                                   Style="{Binding Source={StaticResource CornerToggleBtnStyle}}"
                                                   Template="{Binding Source= {StaticResource CornerToggleBtnTemp}}"/>
                                     <ToggleButton Grid.Row="1"
                                                   Grid.Column="1"
-                                                  IsChecked="{Binding startupAncorBottomRight, Mode=TwoWay}"
+                                                  IsChecked="{Binding StartupAncorBottomRight, Mode=TwoWay}"
                                                   Style="{Binding Source={StaticResource CornerToggleBtnStyle}}"
                                                   Template="{Binding Source= {StaticResource CornerToggleBtnTemp}}"/>
                                 </Grid>
@@ -188,7 +188,7 @@
                                                 Foreground="White"
                                                 FontWeight="Bold"
                                                 FontSize="15"
-                                                Command="{Binding ConfigureAutoDetect}"
+                                                Command="{Binding ConfigureAutoDetectCommand}"
                                                 TextBlock.TextAlignment="Center"
                                                 Content="Configure" />
                                     </StackPanel>

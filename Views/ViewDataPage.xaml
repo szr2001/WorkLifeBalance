@@ -65,7 +65,7 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="{Binding recordWorkRestRatio}"
+                            <TextBlock Text="{Binding RecordWorkRestRatio}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
@@ -84,12 +84,12 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="{Binding recordMostWorked, Converter={StaticResource TimeOnlyStringConverter}}"
+                            <TextBlock Text="{Binding RecordMostWorked, Converter={StaticResource TimeOnlyStringConverter}}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
                                        Foreground="White"/>
-                            <TextBlock Text="{Binding recordMostWorkedDate, Converter={StaticResource DateOnlyStringConverter}}"
+                            <TextBlock Text="{Binding RecordMostWorkedDate, Converter={StaticResource DateOnlyStringConverter}}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
@@ -108,12 +108,12 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="{Binding recordMostRested, Converter={StaticResource TimeOnlyStringConverter}}"
+                            <TextBlock Text="{Binding RecordMostRested, Converter={StaticResource TimeOnlyStringConverter}}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
                                        Foreground="White"/>
-                            <TextBlock Text="{Binding recordMostRestedDate, Converter={StaticResource DateOnlyStringConverter}}"
+                            <TextBlock Text="{Binding RecordMostRestedDate, Converter={StaticResource DateOnlyStringConverter}}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
@@ -219,7 +219,7 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="{Binding previousMonthWorkRestRatio}"
+                            <TextBlock Text="{Binding PreviousMonthWorkRestRatio}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
@@ -238,12 +238,12 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="{Binding previousMonthMostWorked, Converter={StaticResource TimeOnlyStringConverter}}"
+                            <TextBlock Text="{Binding PreviousMonthMostWorked, Converter={StaticResource TimeOnlyStringConverter}}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
                                        Foreground="White"/>
-                            <TextBlock Text="{Binding previousMonthMostWorkedDate, Converter={StaticResource DateOnlyStringConverter}}"
+                            <TextBlock Text="{Binding PreviousMonthMostWorkedDate, Converter={StaticResource DateOnlyStringConverter}}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
@@ -262,12 +262,12 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="{Binding previousMonthMostRested, Converter={StaticResource TimeOnlyStringConverter}}"
+                            <TextBlock Text="{Binding PreviousMonthMostRested, Converter={StaticResource TimeOnlyStringConverter}}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
                                        Foreground="White"/>
-                            <TextBlock Text="{Binding previousMonthMostRestedDate, Converter={StaticResource DateOnlyStringConverter}}"
+                            <TextBlock Text="{Binding PreviousMonthMostRestedDate, Converter={StaticResource DateOnlyStringConverter}}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
@@ -286,7 +286,7 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="{Binding previousMonthTotalDays}"
+                            <TextBlock Text="{Binding PreviousMonthTotalDays}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
@@ -326,7 +326,7 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="{Binding currentMonthWorkRestRatio}"
+                            <TextBlock Text="{Binding CurrentMonthWorkRestRatio}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
@@ -345,12 +345,12 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="{Binding currentMonthMostWorked, Converter={StaticResource TimeOnlyStringConverter}}"
+                            <TextBlock Text="{Binding CurrentMonthMostWorked, Converter={StaticResource TimeOnlyStringConverter}}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
                                        Foreground="White"/>
-                            <TextBlock Text="{Binding currentMonthMostWorkedDate, Converter={StaticResource DateOnlyStringConverter}}"
+                            <TextBlock Text="{Binding CurrentMonthMostWorkedDate, Converter={StaticResource DateOnlyStringConverter}}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
@@ -369,12 +369,12 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="{Binding currentMonthMostRested, Converter={StaticResource TimeOnlyStringConverter}}"
+                            <TextBlock Text="{Binding CurrentMonthMostRested, Converter={StaticResource TimeOnlyStringConverter}}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
                                        Foreground="White"/>
-                            <TextBlock Text="{Binding currentMonthMostRestedDate, Converter={StaticResource DateOnlyStringConverter}}"
+                            <TextBlock Text="{Binding CurrentMonthMostRestedDate, Converter={StaticResource DateOnlyStringConverter}}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
@@ -393,7 +393,7 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBlock Text="{Binding currentMonthTotalDays}"
+                            <TextBlock Text="{Binding CurrentMonthTotalDays}"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="13"
