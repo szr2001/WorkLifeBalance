@@ -71,9 +71,9 @@ namespace WorkLifeBalance.Models
     }
     public enum AnchorCorner
     {
-        TopLeft = 0,
-        TopRight = 1,
-        BootomLeft = 2,
-        BottomRight = 3
+        TopLeft,
+        TopRight,
+        BootomLeft,
+        BottomRight
     }
 }

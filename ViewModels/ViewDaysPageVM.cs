@@ -132,8 +132,6 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         private void ViewDay(DayData data)
         {
-            Console.WriteLine("RAWR");
-
             data.ConvertSaveDataToUsableData();
 
             secondWindowService.OpenWindowWith<ViewDayDetailsPageVM>((LoadedPageType, data));

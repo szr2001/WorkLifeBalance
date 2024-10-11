@@ -3,8 +3,10 @@ using CommunityToolkit.Mvvm.Input;
 using IWshRuntimeLibrary;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Models;
 using WorkLifeBalance.Services.Feature;
@@ -37,16 +39,19 @@ namespace WorkLifeBalance.ViewModels
         private bool autoDetectIdle = false;
 
         [ObservableProperty]
-        private bool startupAncorTopLeft = false;
+        private AnchorCorner[] anchorCorners = new AnchorCorner[4]
+        {
+            AnchorCorner.TopLeft,
+            AnchorCorner.TopRight,
+            AnchorCorner.BootomLeft,
+            AnchorCorner.BottomRight
+        };
 
         [ObservableProperty]
-        private bool startupAncorTopRight = false;
+        private int[] numbers;
 
         [ObservableProperty]
-        private bool startupAncorBottomLeft = false;
-
-        [ObservableProperty]
-        private bool startupAncorBottomRight = false;
+        private AnchorCorner selectedStartupCorner = AnchorCorner.BootomLeft;
 
         private DataStorageFeature dataStorageFeature;
         private ISecondWindowService secondWindowService;
@@ -58,26 +63,12 @@ namespace WorkLifeBalance.ViewModels
             RequiredWindowSize = new Vector2(250, 320);
             WindowPageName = "Settings";
 
-            ApplySettings();
+            InitializeData();
         }
 
-        private void ApplySettings()
+        private void InitializeData()
         {
-            switch (dataStorageFeature.Settings.StartUpCornerC)
-            {
-                case AnchorCorner.TopLeft:
-                    StartupAncorTopLeft = true;
-                    break;
-                case AnchorCorner.TopRight:
-                    StartupAncorTopRight = true;
-                    break;
-                case AnchorCorner.BootomLeft:
-                    StartupAncorBottomLeft = true;
-                    break;
-                case AnchorCorner.BottomRight:
-                    StartupAncorBottomRight = true;
-                    break;
-            }
+            SelectedStartupCorner = dataStorageFeature.Settings.StartUpCornerC;
 
             Version = $"Version: {dataStorageFeature.AppVersion}";
 
@@ -93,6 +84,12 @@ namespace WorkLifeBalance.ViewModels
 
             AutoDetectIdle = dataStorageFeature.Settings.AutoDetectIdleC;
 
+            List<int> numbersTemp = new();
+            for(int x = 1; x <= 300; x++)
+            {
+                numbersTemp.Add(x);
+            }
+            Numbers = numbersTemp.ToArray();
         }
 
         public override async Task OnPageClosingAsync()
@@ -108,6 +105,8 @@ namespace WorkLifeBalance.ViewModels
             dataStorageFeature.Settings.AutoDetectWorkingC = AutoDetectWork;
 
             dataStorageFeature.Settings.StartWithWindowsC = StartWithWin;
+
+            dataStorageFeature.Settings.StartUpCornerC = SelectedStartupCorner;
 
             await dataStorageFeature.SaveData();
 

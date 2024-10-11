@@ -40,6 +40,7 @@ namespace WorkLifeBalance
             services.AddSingleton<AppTimer>();
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<ISecondWindowService, SecondWindowService>();
+            //factory method for the second window, to retrive the correct ViewModels.
             services.AddSingleton<Func<Type, ViewModelBase>>(serviceProvider => viewModelType => (ViewModelBase)serviceProvider.GetRequiredService(viewModelType));
 
             services.AddSingleton<BackgroundProcessesViewPageVM>();
@@ -61,12 +62,14 @@ namespace WorkLifeBalance
             LowLevelHandler lowHandler = _servicesProvider.GetRequiredService<LowLevelHandler>();
             DataStorageFeature dataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
 
-            if (lowHandler.IsRunningAsAdmin())
+            //move show a popup and then if the user pressses ok, restart, if not, close app
+            if (!lowHandler.IsRunningAsAdmin())
             {
                 RestartApplicationWithAdmin();
                 return;
             }
 
+            //use a json config to get the debug bool value
             if (Debug)
             {
                 lowHandler.EnableConsole();
@@ -83,9 +86,6 @@ namespace WorkLifeBalance
             }
 
             dataStorageFeature.OnLoaded += InitializeApp;
-
-            var mainWindow = _servicesProvider.GetRequiredService<MainWindow>(); 
-            mainWindow.Show();
 
             _ = dataStorageFeature.LoadData();
         }
@@ -119,6 +119,8 @@ namespace WorkLifeBalance
             //SetAppState(AppState.Resting);
             //ApplyAutoDetectWorking();
 
+            var mainWindow = _servicesProvider.GetRequiredService<MainWindow>();
+            mainWindow.Show();
             Log.Information("------------------App Initialized------------------");
         }
 

@@ -7,7 +7,7 @@
       xmlns:models="clr-namespace:WorkLifeBalance.Models"
       xmlns:converters="clr-namespace:WorkLifeBalance.Converters"
       mc:Ignorable="d" 
-      d:DesignHeight="270" d:DesignWidth="200"
+      d:DesignHeight="1270" d:DesignWidth="200"
       Title="SettingsPage">
     <Page.Resources>
         <converters:IntStringConverter x:Key="IntStringConverter"/>
@@ -54,7 +54,7 @@
                         </StackPanel>
                     </Border>
 
-                    <Border Height="85"
+                    <Border Height="55"
                             Margin="0,5,0,5"
                             CornerRadius="15"
                             Background="{Binding Source={StaticResource WLFBOceanBlue}}">
@@ -66,46 +66,17 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <Border Width="50"
-                                    Height="50"
-                                    CornerRadius="5"
-                                    Margin="0,5,0,0"
-                                    Background="{Binding Source={StaticResource WLFBLightBlue}}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <ToggleButton Grid.Row="0"
-                                                  Grid.Column="0"
-                                                  IsChecked="{Binding StartupAncorTopLeft, Mode=TwoWay}"
-                                                  Template="{Binding Source= {StaticResource CornerToggleBtnTemp}}">
-                                    </ToggleButton>
-                                    <ToggleButton Grid.Row="0"
-                                                  Grid.Column="1"
-                                                  IsChecked="{Binding StartupAncorTopRight, Mode=TwoWay}"
-                                                  Style="{Binding Source={StaticResource CornerToggleBtnStyle}}"
-                                                  Template="{Binding Source= {StaticResource CornerToggleBtnTemp}}"/>
-                                    <ToggleButton Grid.Row="1"
-                                                  Grid.Column="0"
-                                                  IsChecked="{Binding StartupAncorBottomLeft, Mode=TwoWay}"
-                                                  Style="{Binding Source={StaticResource CornerToggleBtnStyle}}"
-                                                  Template="{Binding Source= {StaticResource CornerToggleBtnTemp}}"/>
-                                    <ToggleButton Grid.Row="1"
-                                                  Grid.Column="1"
-                                                  IsChecked="{Binding StartupAncorBottomRight, Mode=TwoWay}"
-                                                  Style="{Binding Source={StaticResource CornerToggleBtnStyle}}"
-                                                  Template="{Binding Source= {StaticResource CornerToggleBtnTemp}}"/>
-                                </Grid>
-                            </Border>
+                            <ComboBox Width="150"
+                                      Height="25"
+                                      ItemsSource="{Binding AnchorCorners, Mode=TwoWay}"
+                                      SelectedItem="{Binding SelectedStartupCorner}"
+                                      Style="{Binding Source={StaticResource CustomComboBoxStyle}}"
+                                      ItemContainerStyle ="{Binding Source={StaticResource CustomComboBoxItemStyle}}"
+                                      Margin="0,2,0,0"/>
                         </StackPanel>
                     </Border>
 
-                    <Border Height="55"
+                    <Border Height="50"
                             Margin="0,5,0,5"
                             CornerRadius="15"
                             Background="{Binding Source={StaticResource WLFBOceanBlue}}">
@@ -117,15 +88,13 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <TextBox Width="35"
-                                     Height="25"
-                                     MaxLength="2"
-                                     Text="{Binding AutoSaveInterval, Converter={StaticResource IntStringConverter}, Mode=TwoWay}"
-                                     TextAlignment="Center"
-                                     FontSize="20"
-                                     FontWeight="Bold"
-                                     Padding="0,-2,0,0"
-                                     Margin="0,5,0,0"/>
+                            <ComboBox Width="50"
+                                      Height="25"
+                                      SelectedItem="{Binding AutoSaveInterval, Mode=TwoWay}"
+                                      ItemsSource="{Binding Numbers}"
+                                      Style="{Binding Source={StaticResource CustomComboBoxStyle}}"
+                                      ItemContainerStyle ="{Binding Source={StaticResource CustomComboBoxItemStyle}}"
+                                      Margin="0,2,0,0"/>
                         </StackPanel>
                     </Border>
 
@@ -173,15 +142,13 @@
                                                    FontWeight="Bold"
                                                    FontSize="10"
                                                    Foreground="White"/>
-                                        <TextBox Width="30"
-                                                 Height="20"
-                                                 Text="{Binding AutoDetectInterval, Converter={StaticResource IntStringConverter}, Mode=TwoWay}"
-                                                 MaxLength="3"
-                                                 TextAlignment="Center"
-                                                 FontSize="15"
-                                                 FontWeight="Bold"
-                                                 Padding="0,-2,0,0"
-                                                 Margin="0,5,0,0"/>
+                                        <ComboBox Width="50"
+                                                  SelectedItem="{Binding AutoDetectInterval, Mode=TwoWay}"
+                                                  Height="22"
+                                                  ItemsSource="{Binding Numbers}"
+                                                  Style="{Binding Source={StaticResource CustomComboBoxStyle}}"
+                                                  ItemContainerStyle ="{Binding Source={StaticResource CustomComboBoxItemStyle}}"
+                                                  Margin="0,2,0,0"/>
                                         <Button Style="{Binding Source={StaticResource OceanBlueRoundedBtnStyle}}"
                                                 Template="{Binding Source= {StaticResource SlightRoundedBtnTemp}}"
                                                 Width="110"
@@ -221,7 +188,7 @@
                                     CornerRadius="15"
                                     Margin="5"
                                     Visibility="{Binding AutoDetectIdle, Converter={StaticResource BoolVisibilityConverter}}"
-                                    Height="55">
+                                    Height="51">
                                 <Border.Style>
                                     <Style TargetType="Border">
                                         <Style.Triggers>
@@ -243,15 +210,13 @@
                                                    FontWeight="Bold"
                                                    FontSize="10"
                                                    Foreground="White"/>
-                                        <TextBox Width="30"
-                                                 Height="20"
-                                                 Text="{Binding AutoDetectIdleInterval, Converter={StaticResource IntStringConverter}, Mode=TwoWay}"
-                                                 MaxLength="3"
-                                                 TextAlignment="Center"
-                                                 FontSize="15"
-                                                 FontWeight="Bold"
-                                                 Padding="0,-2,0,0"
-                                                 Margin="0,5,0,0"/>
+                                        <ComboBox Width="50"
+                                                  Height="22"
+                                                  SelectedItem="{Binding AutoDetectIdleInterval, Mode=TwoWay}"
+                                                  ItemsSource="{Binding Numbers}"
+                                                  Style="{Binding Source={StaticResource CustomComboBoxStyle}}"
+                                                  ItemContainerStyle ="{Binding Source={StaticResource CustomComboBoxItemStyle}}"
+                                                  Margin="0,2,0,0"/>
                                     </StackPanel>
                                 </Border>
                             </Border>
