@@ -111,7 +111,7 @@ namespace WorkLifeBalance.ViewModels
             await dataStorageFeature.SaveData();
 
             ApplyStartToWindows();
-
+            dataStorageFeature.Settings.OnSettingsChanged.Invoke();
             Log.Information("Applied Settings");
         }
 

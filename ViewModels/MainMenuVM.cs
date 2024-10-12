@@ -24,6 +24,9 @@ namespace WorkLifeBalance.ViewModels
         [ObservableProperty]
         public AppState appState;
 
+        [ObservableProperty]
+        public bool autoDetectWork;
+
         private AppTimer mainTimer;
         private LowLevelHandler lowLevelHandler;
         private DataStorageFeature dataStorageFeature;
@@ -37,6 +40,10 @@ namespace WorkLifeBalance.ViewModels
             this.timeTrackerFeature = timeTrackerFeature;
 
             mainTimer.OnStateChanges += (newAppState) => { AppState = newAppState; };
+            dataStorageFeature.Settings.OnSettingsChanged += () => 
+            {
+                AutoDetectWork = dataStorageFeature.Settings.AutoDetectWorkingC;
+            };
             dataStorageFeature.OnSaving += () => { DateText = $"Saving data..."; };
             dataStorageFeature.OnSaved += () => { DateText = $"Today: {dataStorageFeature.TodayData.DateC.ToString("MM/dd/yyyy")}"; };
             timeTrackerFeature.OnSpentTimeChange += UpdateElapsedTime;

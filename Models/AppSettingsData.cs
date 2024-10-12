@@ -20,6 +20,8 @@ namespace WorkLifeBalance.Models
         public bool AutoDetectIdleC = false;
         public AnchorCorner StartUpCornerC = AnchorCorner.BootomLeft;
 
+        public Action OnSettingsChanged = new(() => { });
+
         public void ConvertSaveDataToUsableData()
         {
             try

@@ -144,14 +144,14 @@ namespace WorkLifeBalance.ViewModels
             {
                 LoadedData.Clear();
 
-                foreach (DayData day in backupdata)
+                foreach (DayData day in backupdata!)
                 {
                     LoadedData.Add(day);
                 }
                 return;
             }
 
-            DayData[] tempdata = backupdata;
+            DayData[] tempdata = backupdata!;
             if (FilterMonth != "00")
             {
                 tempdata = tempdata.Where(daydata => daydata.DateC.ToString("MM") == FilterMonth).ToArray();

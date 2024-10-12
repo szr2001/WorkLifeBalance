@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorkLifeBalance"
+        xmlns:features="clr-namespace:WorkLifeBalance.Services.Feature"
         mc:Ignorable="d"
         Background="Transparent"
         ResizeMode="NoResize"
@@ -121,14 +122,52 @@
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource RoundedBtnStyle}">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding AppState}" Value="Working">
+                                    <DataTrigger Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="true">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                        <Setter Property="Background" Value="{Binding Source={StaticResource WLFBOceanBlue}}"/>
                                     </DataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="false"/>
+                                            <Condition Binding="{Binding AppState, Mode=TwoWay}" Value="Resting"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Background" Value="{Binding Source={StaticResource WLFBLightBlue}}"/>
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="false"/>
+                                            <Condition Binding="{Binding AppState, Mode=TwoWay}" Value="Working"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Background" Value="{Binding Source={StaticResource WLFBLighterPurple}}"/>
+                                    </MultiDataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Button.Style>
-                        <Image Margin="5"
-                               Source="Assets/Rest.png"
-                               Name="ToggleRecordingImage"/>
+                        <Image Margin="5">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="true">
+                                            <Setter Property="Source" Value="Assets/Automat.png"/>
+                                        </DataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="false"/>
+                                                <Condition Binding="{Binding AppState, Mode=TwoWay}" Value="Resting"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Source" Value="Assets/Rest.png"/>
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="false"/>
+                                                <Condition Binding="{Binding AppState, Mode=TwoWay}" Value="Working"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Source" Value="Assets/Work.png"/>
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
                     </Button>
                 </Grid>
             </Border>

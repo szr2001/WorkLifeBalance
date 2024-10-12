@@ -63,11 +63,11 @@ namespace WorkLifeBalance
             DataStorageFeature dataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
 
             //move show a popup and then if the user pressses ok, restart, if not, close app
-            if (!lowHandler.IsRunningAsAdmin())
-            {
-                RestartApplicationWithAdmin();
-                return;
-            }
+            //if (!lowHandler.IsRunningAsAdmin())
+            //{
+            //    RestartApplicationWithAdmin();
+            //    return;
+            //}
 
             //use a json config to get the debug bool value
             if (Debug)
