@@ -16,13 +16,13 @@ namespace WorkLifeBalance.ViewModels
         public string? dateText;
 
         [ObservableProperty]
-        public string? elapsedWorkTime;
+        public TimeOnly elapsedWorkTime;
 
         [ObservableProperty]
-        public string? elapsedRestTime;
+        public TimeOnly elapsedRestTime;
 
         [ObservableProperty]
-        public AppState appState;
+        public AppState appState = AppState.Resting;
 
         [ObservableProperty]
         public bool autoDetectWork;
@@ -38,22 +38,49 @@ namespace WorkLifeBalance.ViewModels
             this.lowLevelHandler = lowLevelHandler;
             this.dataStorageFeature = dataStorageFeature;
             this.timeTrackerFeature = timeTrackerFeature;
-
-            mainTimer.OnStateChanges += (newAppState) => { AppState = newAppState; };
-            dataStorageFeature.Settings.OnSettingsChanged += () => 
-            {
-                AutoDetectWork = dataStorageFeature.Settings.AutoDetectWorkingC;
-            };
-            dataStorageFeature.OnSaving += () => { DateText = $"Saving data..."; };
-            dataStorageFeature.OnSaved += () => { DateText = $"Today: {dataStorageFeature.TodayData.DateC.ToString("MM/dd/yyyy")}"; };
-            timeTrackerFeature.OnSpentTimeChange += UpdateElapsedTime;
             this.secondWindowService = secondWindowService;
+
+            DateText = $"Today: {dataStorageFeature.TodayData.DateC:MM/dd/yyyy}";
+
+            SubscribeToEvents();
         }
 
-        private void UpdateElapsedTime()
+        private void SubscribeToEvents()
         {
-            ElapsedWorkTime = dataStorageFeature.TodayData.WorkedAmmountC.ToString("HH:mm:ss");
-            ElapsedRestTime = dataStorageFeature.TodayData.RestedAmmountC.ToString("HH:mm:ss");
+            mainTimer.OnStateChanges += OnStateChanged;
+
+            dataStorageFeature.Settings.OnSettingsChanged += OnSettingsChanged;
+
+            dataStorageFeature.OnSaving += OnSavingData;
+            dataStorageFeature.OnSaved += OnDataSaved;
+
+            timeTrackerFeature.OnSpentTimeChange += OnTimeSpentChanged;
+        }
+
+        private void OnStateChanged(AppState state)
+        {
+            AppState = state;
+        }
+
+        private void OnSettingsChanged()
+        {
+            AutoDetectWork = dataStorageFeature.Settings.AutoDetectWorkingC;
+        }
+
+        private void OnSavingData()
+        {
+            DateText = "Saving data...";
+        }
+
+        private void OnDataSaved()
+        {
+            DateText = $"Today: {dataStorageFeature.TodayData.DateC:MM/dd/yyyy}";
+        }
+
+        private void OnTimeSpentChanged()
+        {
+            ElapsedWorkTime = dataStorageFeature.TodayData.WorkedAmmountC;
+            ElapsedRestTime = dataStorageFeature.TodayData.RestedAmmountC;
         }
 
         [RelayCommand]

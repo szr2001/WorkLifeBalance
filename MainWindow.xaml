@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorkLifeBalance"
+        xmlns:converters="clr-namespace:WorkLifeBalance.Converters"
         xmlns:features="clr-namespace:WorkLifeBalance.Services.Feature"
         mc:Ignorable="d"
         Background="Transparent"
@@ -11,182 +12,177 @@
         AllowsTransparency="True"
         WindowStyle="None"
         Title="WorkLifeBalance" Height="140" Width="220">
-    
+    <Window.Resources>
+        <converters:TimeOnlyStringConverter x:Key="TimeOnlyStringConverter"/>
+    </Window.Resources>
     <Border CornerRadius="15"
             MouseDown="MoveWindow"
             Background= "{Binding Source={StaticResource WLFBOceanBlue}}">
-        
-        <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="120"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="15"
-                                  Name="OptionMenuVisibility"/>
-                <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-                <Border Grid.Row="0"
-                        Grid.Column="0"
-                        MouseEnter="OpenSideBar" 
-                        MouseLeave="CloseSideBar">
-                
-                    <Border Margin="3,10,3,10"
-                            CornerRadius="5"
-                            Background="{Binding Source={StaticResource WLFBBluishWhite}}">
-                        <StackPanel Orientation="Vertical"
-                                    Visibility="Collapsed"
-                                    Name="OptionsPannel">
-
-                        <Button Height="23"
-                                Width="24"
-                                Margin="0,1,0,0"
-                                ToolTip="Close App"
-                                Command="{Binding CloseAppCommand}"
-                                Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
-                                Style="{Binding Source={StaticResource RedRoundedBtnHoverStyle}}">
-                            <Image Margin="1"
-                                   Source="Assets/Cancel.png"/>
-                        </Button>
-                        <Button Height="23"
-                                Width="24"
-                                Margin="0,2,0,0"
-                                ToolTip="Minimize App"
-                                Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
-                                Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}" 
-                                Click="HideWindow">
-                            <Image Margin="2"
-                                   Source="Assets/Minimize.png"/>
-                        </Button>
-                        <Button Height="23"
-                                Width="24"
-                                Margin="0,2,0,0"
-                                ToolTip="Options"
-                                Command="{Binding OpenOptionsWindowCommand}"
-                                Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
-                                Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}">
-                            <Image Margin="2"
-                                   Source="Assets/Settings.png"/>
-                        </Button>
-                        <Button Height="23"
-                                Width="24"
-                                Margin="0,2,0,0"
-                                Command="{Binding OpenViewDataWindowCommand}"
-                                ToolTip="View Data"
-                                Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
-                                Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}">
-                            <Image Margin="2"
-                                   Source="Assets/DataSheet.png"/>
-                        </Button>
-                    </StackPanel>
-                        
+            <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="120"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="15"
+                                      Name="OptionMenuVisibility"/>
+                    <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+                    <Border Grid.Row="0"
+                            Grid.Column="0"
+                            MouseEnter="OpenSideBar" 
+                            MouseLeave="CloseSideBar">
+                        <Border Margin="3,10,3,10"
+                                CornerRadius="5"
+                                Background="{Binding Source={StaticResource WLFBBluishWhite}}">
+                            <StackPanel Orientation="Vertical"
+                                        Visibility="Collapsed"
+                                        Name="OptionsPannel">
+                            <Button Height="23"
+                                    Width="24"
+                                    Margin="0,1,0,0"
+                                    ToolTip="Close App"
+                                    Command="{Binding CloseAppCommand}"
+                                    Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
+                                    Style="{Binding Source={StaticResource RedRoundedBtnHoverStyle}}">
+                                <Image Margin="1"
+                                       Source="Assets/Cancel.png"/>
+                            </Button>
+                            <Button Height="23"
+                                    Width="24"
+                                    Margin="0,2,0,0"
+                                    ToolTip="Minimize App"
+                                    Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
+                                    Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}" 
+                                    Click="HideWindow">
+                                <Image Margin="2"
+                                       Source="Assets/Minimize.png"/>
+                            </Button>
+                            <Button Height="23"
+                                    Width="24"
+                                    Margin="0,2,0,0"
+                                    ToolTip="Options"
+                                    Command="{Binding OpenOptionsWindowCommand}"
+                                    Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
+                                    Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}">
+                                <Image Margin="2"
+                                       Source="Assets/Settings.png"/>
+                            </Button>
+                            <Button Height="23"
+                                    Width="24"
+                                    Margin="0,2,0,0"
+                                    Command="{Binding OpenViewDataWindowCommand}"
+                                    ToolTip="View Data"
+                                    Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
+                                    Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}">
+                                <Image Margin="2"
+                                       Source="Assets/DataSheet.png"/>
+                            </Button>
+                        </StackPanel>
+                        </Border>
                     </Border>
-                </Border>
-            <Border Grid.Row="0"
-                    Grid.Column="1"
-                    Margin="0,4,4,4"
-                    Background ="{Binding Source = {StaticResource WLFBBluishWhite}}"
-                    CornerRadius="12">
-            
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="48"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Vertical"
-                                Grid.Column="0"
-                                Margin="0,0,-10,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center">
-                        <TextBlock Text="Worked Amount:"
-                                   FontSize="20"
-                                   TextAlignment="Center"/>
-                        <TextBlock Text="{Binding ElapsedWorkTime}"
-                                   FontSize="15"
-                                   TextAlignment="Center"/>
-                        <TextBlock Text="Break Amount"
-                                   TextAlignment="Center"
-                                   FontSize="20"/>
-                        <TextBlock Text="{Binding ElapsedRestTime}"
-                                   FontSize="15"
-                                   TextAlignment="Center"/>
-                    </StackPanel>
-                    <Button Grid.Column="1"
-                            Width="45"
-                            Margin="-5,0,0,0"
-                            Name="ToggleBtn"
-                            ToolTip="Toggle Work/Rest"
-                            Height="45" 
-                            Command="{Binding ToggleStateCommand}"
-                            Template="{Binding Source={StaticResource RoundedBtnTemp}}">
-                        <Button.Style>
-                            <Style TargetType="Button" BasedOn="{StaticResource RoundedBtnStyle}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="true">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="Background" Value="{Binding Source={StaticResource WLFBOceanBlue}}"/>
-                                    </DataTrigger>
-                                    <MultiDataTrigger>
-                                        <MultiDataTrigger.Conditions>
-                                            <Condition Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="false"/>
-                                            <Condition Binding="{Binding AppState, Mode=TwoWay}" Value="Resting"/>
-                                        </MultiDataTrigger.Conditions>
-                                        <Setter Property="Background" Value="{Binding Source={StaticResource WLFBLightBlue}}"/>
-                                    </MultiDataTrigger>
-                                    <MultiDataTrigger>
-                                        <MultiDataTrigger.Conditions>
-                                            <Condition Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="false"/>
-                                            <Condition Binding="{Binding AppState, Mode=TwoWay}" Value="Working"/>
-                                        </MultiDataTrigger.Conditions>
-                                        <Setter Property="Background" Value="{Binding Source={StaticResource WLFBLighterPurple}}"/>
-                                    </MultiDataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                        <Image Margin="5">
-                            <Image.Style>
-                                <Style TargetType="Image">
+                <Border Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="0,4,4,4"
+                        Background ="{Binding Source = {StaticResource WLFBBluishWhite}}"
+                        CornerRadius="12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="48"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Vertical"
+                                    Grid.Column="0"
+                                    Margin="0,0,-10,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="Worked Amount:"
+                                       FontSize="20"
+                                       TextAlignment="Center"/>
+                            <TextBlock Text="{Binding ElapsedWorkTime, Converter={StaticResource TimeOnlyStringConverter}}"
+                                       FontSize="15"
+                                       TextAlignment="Center"/>
+                            <TextBlock Text="Break Amount"
+                                       TextAlignment="Center"
+                                       FontSize="20"/>
+                            <TextBlock Text="{Binding ElapsedRestTime, Converter={StaticResource TimeOnlyStringConverter}}"
+                                       FontSize="15"
+                                       TextAlignment="Center"/>
+                        </StackPanel>
+                        <Button Grid.Column="1"
+                                Width="45"
+                                Margin="-5,0,0,0"
+                                Name="ToggleBtn"
+                                ToolTip="Toggle Work/Rest"
+                                Height="45"
+                                Command="{Binding ToggleStateCommand}"
+                                Template="{Binding Source={StaticResource RoundedBtnTemp}}">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource RoundedBtnStyle}">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="true">
-                                            <Setter Property="Source" Value="Assets/Automat.png"/>
+                                            <Setter Property="IsEnabled" Value="False"/>
+                                            <Setter Property="Background" Value="{Binding Source={StaticResource WLFBOceanBlue}}"/>
                                         </DataTrigger>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
                                                 <Condition Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="false"/>
                                                 <Condition Binding="{Binding AppState, Mode=TwoWay}" Value="Resting"/>
                                             </MultiDataTrigger.Conditions>
-                                            <Setter Property="Source" Value="Assets/Rest.png"/>
+                                            <Setter Property="Background" Value="{Binding Source={StaticResource WLFBLightBlue}}"/>
                                         </MultiDataTrigger>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
                                                 <Condition Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="false"/>
                                                 <Condition Binding="{Binding AppState, Mode=TwoWay}" Value="Working"/>
                                             </MultiDataTrigger.Conditions>
-                                            <Setter Property="Source" Value="Assets/Work.png"/>
+                                            <Setter Property="Background" Value="{Binding Source={StaticResource WLFBLighterPurple}}"/>
                                         </MultiDataTrigger>
                                     </Style.Triggers>
                                 </Style>
-                            </Image.Style>
-                        </Image>
-                    </Button>
-                </Grid>
-            </Border>
-            <StackPanel Orientation="Vertical"
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center">
-
-            <TextBlock Text="{Binding DateText}"
-                       TextAlignment="Center"
-                       Name="DateT"
-                       FontWeight="Bold"
-                       Margin="0,-5,0,0"
-                       FontSize="15"
-                       Foreground="White"/>
-
-            </StackPanel>
-    </Grid>
+                            </Button.Style>
+                            <Image Margin="5">
+                                <Image.Style>
+                                    <Style TargetType="Image">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="true">
+                                                <Setter Property="Source" Value="Assets/Automat.png"/>
+                                            </DataTrigger>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="false"/>
+                                                    <Condition Binding="{Binding AppState, Mode=TwoWay}" Value="Resting"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Source" Value="Assets/Rest.png"/>
+                                            </MultiDataTrigger>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="false"/>
+                                                    <Condition Binding="{Binding AppState, Mode=TwoWay}" Value="Working"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Source" Value="Assets/Work.png"/>
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                        </Button>
+                    </Grid>
+                </Border>
+                <StackPanel Orientation="Vertical"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                <TextBlock Text="{Binding DateText}"
+                           TextAlignment="Center"
+                           Name="DateT"
+                           FontWeight="Bold"
+                           Margin="0,-5,0,0"
+                           FontSize="15"
+                           Foreground="White"/>
+                </StackPanel>
+        </Grid>
     </Border>
 </Window>
