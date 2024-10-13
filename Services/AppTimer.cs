@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Services.Feature;
 
 namespace WorkLifeBalance.Services
@@ -13,9 +14,13 @@ namespace WorkLifeBalance.Services
         public event Action<AppState>? OnStateChanges;
 
         private DataStorageFeature dataStorageFeature;
-        public AppTimer(DataStorageFeature dataStorageFeature)
+        private IFeaturesServices featuresServices;
+        private StateCheckerFeature stateCheckerFeature;
+        public AppTimer(DataStorageFeature dataStorageFeature, IFeaturesServices featuresServices, StateCheckerFeature stateCheckerFeature)
         {
             this.dataStorageFeature = dataStorageFeature;
+            this.featuresServices = featuresServices;
+            this.stateCheckerFeature = stateCheckerFeature;
         }
         public AppState AppTimerState
         {
@@ -63,6 +68,34 @@ namespace WorkLifeBalance.Services
                 OnTimerTick -= eventname;
                 Log.Information($"{eventname.Method.Name} UnSubscribed from Main Timer");
             }
+        }
+
+        public void SetAppState(AppState state)
+        {
+            if (AppTimerState == state) return;
+
+            //Circular dependency detected. APpTimer requires featureServ, FeatureServ require APptimer
+            switch (state)
+            {
+                case AppState.Working:
+                    if (dataStorageFeature.Settings.AutoDetectIdleC)
+                    {
+                        featuresServices.AddFeature<IdleCheckerFeature>();
+                    }
+                    break;
+
+                case AppState.Resting:
+                    if (dataStorageFeature.Settings.AutoDetectIdleC)
+                    {
+                        if (!stateCheckerFeature.IsFocusingOnWorkingWindow)
+                        {
+                            featuresServices.RemoveFeature<IdleCheckerFeature>();
+                        }
+                    }
+                    break;
+            }
+            AppTimerState = state;
+            Log.Information($"App state changed to {state}");
         }
 
         public void Stop()

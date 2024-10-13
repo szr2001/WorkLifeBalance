@@ -67,11 +67,11 @@ namespace WorkLifeBalance
             DataStorageFeature dataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
 
             //move show a popup and then if the user pressses ok, restart, if not, close app
-            if (!lowHandler.IsRunningAsAdmin())
-            {
-                RestartApplicationWithAdmin();
-                return;
-            }
+            //if (!lowHandler.IsRunningAsAdmin())
+            //{
+            //    RestartApplicationWithAdmin();
+            //    return;
+            //}
 
             //use a json config to get the debug bool value
             if (Debug)
@@ -97,26 +97,33 @@ namespace WorkLifeBalance
         //initialize app called when data was loaded
         private void InitializeApp()
         {
-            DataStorageFeature dataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
-            AppTimer appTimer= _servicesProvider.GetRequiredService<AppTimer>();
-            
-            //set app ready so timers can start
-            dataStorageFeature.IsAppReady = true;
-
-            FeaturesService featuresService = _servicesProvider.GetRequiredService<FeaturesService>();
-            featuresService.AddFeature<DataStorageFeature>();
-            featuresService.AddFeature<TimeTrackerFeature>();
-            featuresService.AddFeature<ActivityTrackerFeature>();
-
-
-            //check settings to see if you need to add some features
-            if (dataStorageFeature.Settings.AutoDetectWorkingC)
+            try
             {
-                featuresService.AddFeature<StateCheckerFeature>();
-            }
+                DataStorageFeature dataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
+                AppTimer appTimer = _servicesProvider.GetRequiredService<AppTimer>();
+                //set app ready so timers can start
+                dataStorageFeature.IsAppReady = true;
 
-            //starts the main timer
-            appTimer.StartTick();
+                IFeaturesServices featuresService = _servicesProvider.GetRequiredService<IFeaturesServices>();
+                featuresService.AddFeature<DataStorageFeature>();
+                featuresService.AddFeature<TimeTrackerFeature>();
+                featuresService.AddFeature<ActivityTrackerFeature>();
+
+                //check settings to see if you need to add some features
+                if (dataStorageFeature.Settings.AutoDetectWorkingC)
+                {
+                    featuresService.AddFeature<StateCheckerFeature>();
+                }
+
+                //starts the main timer
+                appTimer.StartTick();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            
 
             //SetAppState(AppState.Resting);
 

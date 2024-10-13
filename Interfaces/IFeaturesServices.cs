@@ -4,7 +4,7 @@ namespace WorkLifeBalance.Interfaces
 {
     public interface IFeaturesServices
     {
-        public void AddFeature<T>() where T : FeatureBase;
-        public void RemoveFeature<T>() where T : FeatureBase;
+        public void AddFeature<TFeature>() where TFeature : FeatureBase;
+        public void RemoveFeature<TFeature>() where TFeature : FeatureBase;
     }
 }

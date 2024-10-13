@@ -15,15 +15,16 @@ namespace WorkLifeBalance.Services
             _appTimer = appTimer;
         }
 
-        public void AddFeature<T>() where T : FeatureBase
+        public void AddFeature<TFeature>() where TFeature : FeatureBase
         {
-            FeatureBase feature = _featureFactory.Invoke(typeof(T));
+            Console.WriteLine(typeof(TFeature));
+            FeatureBase feature = _featureFactory.Invoke(typeof(TFeature));
             _appTimer.Subscribe(feature.AddFeature());
         }
 
-        public void RemoveFeature<T>() where T : FeatureBase
+        public void RemoveFeature<TFeature>() where TFeature : FeatureBase
         {
-            FeatureBase feature = _featureFactory.Invoke(typeof(T));
+            FeatureBase feature = _featureFactory.Invoke(typeof(TFeature));
             _appTimer.UnSubscribe(feature.RemoveFeature());
         }
     }

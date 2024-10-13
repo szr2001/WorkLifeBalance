@@ -55,47 +55,6 @@ namespace WorkLifeBalance
             //use the DataStorageFeature.Instance.Settings.StartUpCornerC 
         }
 
-        //sets the app state and also enables/disables the mouse idle check feature based on settings so it will only run of 
-        //the app is in working stage, no need to check idle when the user is not working
-        public void SetAppState(AppState state)
-        {
-            //if (AppTimer.AppTimerState == state) return;
-
-            //switch (state)
-            //{
-            //    case AppState.Working:
-            //        if (!DataStorageFeature.Instance.Settings.AutoDetectWorkingC)
-            //        {
-            //            ToggleBtn.Background = LightPurpleColor;
-            //            ToggleRecordingImage.Source = WorkImg;
-            //        }
-
-            //        if (DataStorageFeature.Instance.Settings.AutoDetectIdleC)
-            //        {
-            //            AppTimer.Subscribe(IdleCheckerFeature.Instance.AddFeature());
-            //        }
-            //        break;
-
-            //    case AppState.Resting:
-            //        if (!DataStorageFeature.Instance.Settings.AutoDetectWorkingC)
-            //        {
-            //            ToggleBtn.Background = LightBlueColor;
-            //            ToggleRecordingImage.Source = RestImg;
-            //        }
-
-            //        if (DataStorageFeature.Instance.Settings.AutoDetectIdleC)
-            //        {
-            //            if (!StateCheckerFeature.Instance.IsFocusingOnWorkingWindow)
-            //            {
-            //                AppTimer.UnSubscribe(IdleCheckerFeature.Instance.RemoveFeature());
-            //            }
-            //        }
-            //        break;
-            //}
-            //AppTimer.AppTimerState = state;
-            //Log.Information($"App state changed to {state}");
-        }
-
         public void ApplyAutoDetectWorking()
         {
             //bool value = DataStorageFeature.Instance.Settings.AutoDetectWorkingC;

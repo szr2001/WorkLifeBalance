@@ -47,7 +47,6 @@ namespace WorkLifeBalance.ViewModels
             DetectedWindows = new ObservableCollection<string>(allProcesses.Except(SelectedWindows));
         }
 
-
         public override Task OnPageOppeningAsync(object? args = null)
         {
             InitializeProcessNames();

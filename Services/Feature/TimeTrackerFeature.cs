@@ -7,7 +7,7 @@ namespace WorkLifeBalance.Services.Feature
         public delegate void SpentTimeEvent();
         public event SpentTimeEvent? OnSpentTimeChange;
 
-        private TimeSpan OneSec = new TimeSpan(0, 0, 1);
+        private TimeSpan OneSec = new (0, 0, 1);
         private AppTimer appTimer;
         private DataStorageFeature dataStorageFeature;
         public TimeTrackerFeature(AppTimer appTimer, DataStorageFeature dataStorageFeature)

@@ -9,16 +9,14 @@ namespace WorkLifeBalance.Services.Feature
     {
         private static IdleCheckerFeature? _instance;
         private Vector2 _oldmousePosition = new Vector2(-1, -1);
-        public static IdleCheckerFeature Instance
+        private AppTimer appTimer;
+        private DataStorageFeature dataStorageFeature;
+        private LowLevelHandler lowLevelHandler;
+        public IdleCheckerFeature(AppTimer appTimer, DataStorageFeature dataStorageFeature, LowLevelHandler lowLevelHandler)
         {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new IdleCheckerFeature();
-                }
-                return _instance;
-            }
+            this.appTimer = appTimer;
+            this.dataStorageFeature = dataStorageFeature;
+            this.lowLevelHandler = lowLevelHandler;
         }
 
         protected override Action ReturnFeatureMethod()
@@ -33,14 +31,14 @@ namespace WorkLifeBalance.Services.Feature
 
             int delay = 0;
 
-            //if (AppTimmerState == AppState.Idle)
-            //{
-            //    delay = 3000;
-            //}
-            //else
-            //{
-            //    delay = DataStorageFeature.Instance.Settings.AutoDetectIdle * 60000 / 2;
-            //}
+            if (appTimer.AppTimerState == AppState.Idle)
+            {
+                delay = 3000;
+            }
+            else
+            {
+                delay = dataStorageFeature.Settings.AutoDetectIdle * 60000 / 2;
+            }
 
             IsCheckingIdleTriggered = true;
 
@@ -65,7 +63,7 @@ namespace WorkLifeBalance.Services.Feature
 
             try
             {
-                //newpos = LowLevelHandler.GetMousePos();
+                newpos = lowLevelHandler.GetMousePos();
             }
             catch (Exception ex)
             {
@@ -80,12 +78,12 @@ namespace WorkLifeBalance.Services.Feature
 
             if (newpos == _oldmousePosition)
             {
-                MainWindow.instance.SetAppState(AppState.Idle);
+                appTimer.SetAppState(AppState.Idle);
                 Log.Information($"Mouse not moving, Old: {_oldmousePosition} New: {newpos}");
             }
             else
             {
-                MainWindow.instance.SetAppState(AppState.Working);
+                appTimer.SetAppState(AppState.Working);
                 Log.Information($"Mouse Moved, Old: {_oldmousePosition} New: {newpos}");
             }
 

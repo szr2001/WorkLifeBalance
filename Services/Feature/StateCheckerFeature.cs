@@ -1,11 +1,22 @@
 ﻿using Serilog;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace WorkLifeBalance.Services.Feature
 {
     public class StateCheckerFeature : FeatureBase
     {
         public bool IsFocusingOnWorkingWindow = false;
+        private readonly DataStorageFeature dataStorageFeature;
+        private readonly ActivityTrackerFeature activityTrackerFeature;
+        private readonly AppTimer appTimer;
+        public StateCheckerFeature(DataStorageFeature dataStorageFeature, ActivityTrackerFeature activityTrackerFeature, AppTimer appTimer)
+        {
+            this.dataStorageFeature = dataStorageFeature;
+            this.activityTrackerFeature = activityTrackerFeature;
+            this.appTimer = appTimer;
+        }
 
         protected override Action ReturnFeatureMethod()
         {
@@ -21,7 +32,7 @@ namespace WorkLifeBalance.Services.Feature
 
             try
             {
-                //await Task.Delay(DataStorageFeature.Instance.Settings.AutoDetectInterval * 1000, CancelTokenS.Token);
+                await Task.Delay(dataStorageFeature.Settings.AutoDetectInterval * 1000, CancelTokenS.Token);
                 CheckStateChange();
             }
             catch (Exception ex)
@@ -36,33 +47,33 @@ namespace WorkLifeBalance.Services.Feature
 
         private void CheckStateChange()
         {
-            //if (string.IsNullOrEmpty(ActivityTrackerFeature.Instance.ActiveWindow)) return;
+            if (string.IsNullOrEmpty(activityTrackerFeature.ActiveWindow)) return;
 
-            //IsFocusingOnWorkingWindow = DataStorageFeature.Instance.AutoChangeData.WorkingStateWindows.Contains(ActivityTrackerFeature.Instance.ActiveWindow);
+            IsFocusingOnWorkingWindow = dataStorageFeature.AutoChangeData.WorkingStateWindows.Contains(activityTrackerFeature.ActiveWindow);
 
-            //switch (AppTimmerState)
-            //{
-            //    case AppState.Working:
-            //        if (!IsFocusingOnWorkingWindow)
-            //        {
-            //            MainWindow.instance.SetAppState(AppState.Resting);
-            //        }
-            //        break;
+            switch (appTimer.AppTimerState)
+            {
+                case AppState.Working:
+                    if (!IsFocusingOnWorkingWindow)
+                    {
+                        appTimer.SetAppState(AppState.Resting);
+                    }
+                    break;
 
-            //    case AppState.Resting:
-            //        if (IsFocusingOnWorkingWindow)
-            //        {
-            //            MainWindow.instance.SetAppState(AppState.Working);
-            //        }
-            //        break;
+                case AppState.Resting:
+                    if (IsFocusingOnWorkingWindow)
+                    {
+                        appTimer.SetAppState(AppState.Working);
+                    }
+                    break;
 
-            //    case AppState.Idle:
-            //        if (!IsFocusingOnWorkingWindow)
-            //        {
-            //            MainWindow.instance.SetAppState(AppState.Resting);
-            //        }
-            //        break;
-            //}
+                case AppState.Idle:
+                    if (!IsFocusingOnWorkingWindow)
+                    {
+                        appTimer.SetAppState(AppState.Resting);
+                    }
+                    break;
+            }
         }
     }
 }
