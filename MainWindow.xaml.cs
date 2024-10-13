@@ -16,63 +16,10 @@ namespace WorkLifeBalance
     /// 
     public partial class MainWindow : Window
     {
-        public static MainWindow? instance;
-
-        public Dispatcher MainDispatcher = Dispatcher.CurrentDispatcher;
-        //use binding ifs to bind to colors and sprites directly in the xaml
-        private ImageSource AutomaticImg = new BitmapImage();
-        private ImageSource RestImg = new BitmapImage();
-        private ImageSource WorkImg = new BitmapImage();
-
-        private SolidColorBrush LightBlueColor = new();
-        private SolidColorBrush LightPurpleColor = new();
-        private SolidColorBrush OceanBlue = new();
-
-        private readonly bool DebugMode = true;
         public MainWindow()
         {
             Topmost = true;
-            //LoadStyleInfo();
-
             InitializeComponent();
-            //SetWindowLocation();
-        }
-
-        private void LoadStyleInfo()
-        {
-            //load images and colors
-            RestImg = new BitmapImage(new Uri($"{Directory.GetCurrentDirectory()}/Assets/Rest.png"));
-            WorkImg = new BitmapImage(new Uri($"{Directory.GetCurrentDirectory()}/Assets/Work.png"));
-            AutomaticImg = new BitmapImage(new Uri($"{Directory.GetCurrentDirectory()}/Assets/Automat.png"));
-            LightBlueColor = (SolidColorBrush)FindResource("WLFBLigherBlue");
-            LightPurpleColor = (SolidColorBrush)FindResource("WLFBLightPurple");
-            OceanBlue = (SolidColorBrush)FindResource("WLFBOceanBlue");
-        }
-
-        private void SetWindowLocation()
-        {
-            //bind to the VM
-            //use the DataStorageFeature.Instance.Settings.StartUpCornerC 
-        }
-
-        public void ApplyAutoDetectWorking()
-        {
-            //bool value = DataStorageFeature.Instance.Settings.AutoDetectWorkingC;
-            //ToggleBtn.IsEnabled = !value;
-
-            //if (value == true)
-            //{
-            //    AppTimer.Subscribe(StateCheckerFeature.Instance.AddFeature());
-            //    ToggleBtn.Background = OceanBlue;
-            //    ToggleRecordingImage.Source = AutomaticImg;
-            //}
-            //else
-            //{
-            //    AppTimer.UnSubscribe(StateCheckerFeature.Instance.AddFeature());
-            //    ToggleBtn.Background = LightBlueColor;
-            //    ToggleRecordingImage.Source = RestImg;
-            //    SetAppState(AppState.Resting);
-            //}
         }
 
         private void MoveWindow(object sender, MouseButtonEventArgs e)

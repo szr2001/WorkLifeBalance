@@ -7,13 +7,13 @@ namespace WorkLifeBalance.Services.Feature
         public delegate void SpentTimeEvent();
         public event SpentTimeEvent? OnSpentTimeChange;
 
-        private TimeSpan OneSec = new (0, 0, 1);
-        private AppTimer appTimer;
-        private DataStorageFeature dataStorageFeature;
-        public TimeTrackerFeature(AppTimer appTimer, DataStorageFeature dataStorageFeature)
+        private readonly TimeSpan OneSec = new (0, 0, 1);
+        private readonly AppStateHandler appStateHandler;
+        private readonly DataStorageFeature dataStorageFeature;
+        public TimeTrackerFeature(DataStorageFeature dataStorageFeature, AppStateHandler appStateHandler)
         {
-            this.appTimer = appTimer;
             this.dataStorageFeature = dataStorageFeature;
+            this.appStateHandler = appStateHandler;
         }
         protected override Action ReturnFeatureMethod()
         {
@@ -22,7 +22,7 @@ namespace WorkLifeBalance.Services.Feature
 
         private void TriggerUpdateSpentTime()
         {
-            switch (appTimer.AppTimerState)
+            switch (appStateHandler.AppTimerState)
             {
                 case AppState.Working:
                     dataStorageFeature.TodayData.WorkedAmmountC = dataStorageFeature.TodayData.WorkedAmmountC.Add(OneSec);

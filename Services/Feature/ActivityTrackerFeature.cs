@@ -12,8 +12,8 @@ namespace WorkLifeBalance.Services.Feature
 
         private TimeSpan OneSec = new TimeSpan(0, 0, 1);
 
-        private LowLevelHandler lowLevelHandler;
-        private DataStorageFeature dataStorageFeature;
+        private readonly LowLevelHandler lowLevelHandler;
+        private readonly DataStorageFeature dataStorageFeature;
         public ActivityTrackerFeature(LowLevelHandler lowLevelHandler, DataStorageFeature dataStorageFeature)
         {
             this.lowLevelHandler = lowLevelHandler;

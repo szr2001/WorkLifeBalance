@@ -8,14 +8,14 @@ namespace WorkLifeBalance.Services.Feature
     public class IdleCheckerFeature : FeatureBase
     {
         private Vector2 _oldmousePosition = new Vector2(-1, -1);
-        private AppTimer appTimer;
-        private DataStorageFeature dataStorageFeature;
-        private LowLevelHandler lowLevelHandler;
-        public IdleCheckerFeature(AppTimer appTimer, DataStorageFeature dataStorageFeature, LowLevelHandler lowLevelHandler)
+        private readonly AppStateHandler appStateHandler;
+        private readonly DataStorageFeature dataStorageFeature;
+        private readonly LowLevelHandler lowLevelHandler;
+        public IdleCheckerFeature(DataStorageFeature dataStorageFeature, LowLevelHandler lowLevelHandler, AppStateHandler appStateHandler)
         {
-            this.appTimer = appTimer;
             this.dataStorageFeature = dataStorageFeature;
             this.lowLevelHandler = lowLevelHandler;
+            this.appStateHandler = appStateHandler;
         }
 
         protected override Action ReturnFeatureMethod()
@@ -30,7 +30,7 @@ namespace WorkLifeBalance.Services.Feature
 
             int delay = 0;
 
-            if (appTimer.AppTimerState == AppState.Idle)
+            if (appStateHandler.AppTimerState == AppState.Idle)
             {
                 delay = 3000;
             }
@@ -77,12 +77,12 @@ namespace WorkLifeBalance.Services.Feature
 
             if (newpos == _oldmousePosition)
             {
-                appTimer.SetAppState(AppState.Idle);
+                appStateHandler.SetAppState(AppState.Idle);
                 Log.Information($"Mouse not moving, Old: {_oldmousePosition} New: {newpos}");
             }
             else
             {
-                appTimer.SetAppState(AppState.Working);
+                appStateHandler.SetAppState(AppState.Working);
                 Log.Information($"Mouse Moved, Old: {_oldmousePosition} New: {newpos}");
             }
 

@@ -137,11 +137,11 @@ namespace WorkLifeBalance.Services
 
         private bool EnumWindowsCallback(nint hWnd, nint lParam)
         {
-            List<nint> windows = GCHandle.FromIntPtr(lParam).Target as List<nint>;
+            List<nint>? windows = GCHandle.FromIntPtr(lParam).Target as List<nint>;
 
             if (IsWindowVisible(hWnd))
             {
-                windows.Add(hWnd);
+                windows!.Add(hWnd);
             }
 
             return true;

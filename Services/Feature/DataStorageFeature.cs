@@ -26,7 +26,7 @@ namespace WorkLifeBalance.Services.Feature
         public event Action? OnLoaded;
         public event Action? OnSaving;
         public event Action? OnSaved;
-        private DataBaseHandler dataBaseHandler;
+        private readonly DataBaseHandler dataBaseHandler;
         public DataStorageFeature(DataBaseHandler dataBaseHandler)
         {
             AppName = "WorkLifeBalance";

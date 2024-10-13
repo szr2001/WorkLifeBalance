@@ -10,12 +10,12 @@ namespace WorkLifeBalance.Services.Feature
         public bool IsFocusingOnWorkingWindow = false;
         private readonly DataStorageFeature dataStorageFeature;
         private readonly ActivityTrackerFeature activityTrackerFeature;
-        private readonly AppTimer appTimer;
-        public StateCheckerFeature(DataStorageFeature dataStorageFeature, ActivityTrackerFeature activityTrackerFeature, AppTimer appTimer)
+        private readonly AppStateHandler appStateHandler;
+        public StateCheckerFeature(DataStorageFeature dataStorageFeature, ActivityTrackerFeature activityTrackerFeature, AppStateHandler appStateHandler)
         {
             this.dataStorageFeature = dataStorageFeature;
             this.activityTrackerFeature = activityTrackerFeature;
-            this.appTimer = appTimer;
+            this.appStateHandler = appStateHandler;
         }
 
         protected override Action ReturnFeatureMethod()
@@ -51,26 +51,26 @@ namespace WorkLifeBalance.Services.Feature
 
             IsFocusingOnWorkingWindow = dataStorageFeature.AutoChangeData.WorkingStateWindows.Contains(activityTrackerFeature.ActiveWindow);
 
-            switch (appTimer.AppTimerState)
+            switch (appStateHandler.AppTimerState)
             {
                 case AppState.Working:
                     if (!IsFocusingOnWorkingWindow)
                     {
-                        appTimer.SetAppState(AppState.Resting);
+                        appStateHandler.SetAppState(AppState.Resting);
                     }
                     break;
 
                 case AppState.Resting:
                     if (IsFocusingOnWorkingWindow)
                     {
-                        appTimer.SetAppState(AppState.Working);
+                        appStateHandler.SetAppState(AppState.Working);
                     }
                     break;
 
                 case AppState.Idle:
                     if (!IsFocusingOnWorkingWindow)
                     {
-                        appTimer.SetAppState(AppState.Resting);
+                        appStateHandler.SetAppState(AppState.Resting);
                     }
                     break;
             }

@@ -27,18 +27,18 @@ namespace WorkLifeBalance.ViewModels
         [ObservableProperty]
         public bool autoDetectWork;
 
-        private AppTimer mainTimer;
-        private LowLevelHandler lowLevelHandler;
-        private DataStorageFeature dataStorageFeature;
-        private TimeTrackerFeature timeTrackerFeature;
-        private ISecondWindowService secondWindowService;
-        public MainMenuVM(AppTimer mainTimer, LowLevelHandler lowLevelHandler, DataStorageFeature dataStorageFeature, TimeTrackerFeature timeTrackerFeature, ISecondWindowService secondWindowService)
+        private readonly AppStateHandler appStateHandler;
+        private readonly LowLevelHandler lowLevelHandler;
+        private readonly DataStorageFeature dataStorageFeature;
+        private readonly TimeTrackerFeature timeTrackerFeature;
+        private readonly ISecondWindowService secondWindowService;
+        public MainMenuVM(AppTimer mainTimer, LowLevelHandler lowLevelHandler, DataStorageFeature dataStorageFeature, TimeTrackerFeature timeTrackerFeature, ISecondWindowService secondWindowService, AppStateHandler appStateHandler)
         {
-            this.mainTimer = mainTimer;
             this.lowLevelHandler = lowLevelHandler;
             this.dataStorageFeature = dataStorageFeature;
             this.timeTrackerFeature = timeTrackerFeature;
             this.secondWindowService = secondWindowService;
+            this.appStateHandler = appStateHandler;
 
             DateText = $"Today: {dataStorageFeature.TodayData.DateC:MM/dd/yyyy}";
 
@@ -48,7 +48,7 @@ namespace WorkLifeBalance.ViewModels
 
         private void SubscribeToEvents()
         {
-            mainTimer.OnStateChanges += OnStateChanged;
+            appStateHandler.OnStateChanges += OnStateChanged;
 
             dataStorageFeature.Settings.OnSettingsChanged += OnSettingsChanged;
 
@@ -101,14 +101,14 @@ namespace WorkLifeBalance.ViewModels
         {
             if (!dataStorageFeature.IsAppReady || dataStorageFeature.IsClosingApp) return;
 
-            switch (mainTimer.AppTimerState)
+            switch (appStateHandler.AppTimerState)
             {
                 case AppState.Working:
-                    mainTimer.AppTimerState = AppState.Resting;
+                    appStateHandler.AppTimerState = AppState.Resting;
                     break;
 
                 case AppState.Resting:
-                    mainTimer.AppTimerState = AppState.Working;
+                    appStateHandler.AppTimerState = AppState.Working;
                     break;
             }
         }

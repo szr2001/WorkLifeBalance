@@ -11,30 +11,14 @@ namespace WorkLifeBalance.Services
     //Main timer that runs once a second, other features can subscribe to it and have their own run interval
     public class AppTimer
     {
-        public event Action<AppState>? OnStateChanges;
+        private readonly DataStorageFeature dataStorageFeature;
+        private event Action? OnTimerTick;
+        private CancellationTokenSource CancelTick = new();
 
-        private DataStorageFeature dataStorageFeature;
         public AppTimer(DataStorageFeature dataStorageFeature)
         {
             this.dataStorageFeature = dataStorageFeature;
         }
-        public AppState AppTimerState
-        {
-            get
-            {
-                return appTimerState;
-            }
-            set
-            {
-                if (appTimerState == value) return;
-                appTimerState = value;
-                OnStateChanges?.Invoke(appTimerState);
-            }
-        }
-
-        private AppState appTimerState = AppState.Resting;
-        private event Action? OnTimerTick;
-        private CancellationTokenSource CancelTick = new();
 
         public void StartTick()
         {
@@ -64,14 +48,6 @@ namespace WorkLifeBalance.Services
                 OnTimerTick -= eventname;
                 Log.Information($"{eventname.Method.Name} UnSubscribed from Main Timer");
             }
-        }
-
-        public void SetAppState(AppState state)
-        {
-            if (AppTimerState == state) return;
-
-            AppTimerState = state;
-            Log.Information($"App state changed to {state}");
         }
 
         public void Stop()
