@@ -7,7 +7,6 @@ namespace WorkLifeBalance.Services.Feature
 {
     public class IdleCheckerFeature : FeatureBase
     {
-        private static IdleCheckerFeature? _instance;
         private Vector2 _oldmousePosition = new Vector2(-1, -1);
         private AppTimer appTimer;
         private DataStorageFeature dataStorageFeature;

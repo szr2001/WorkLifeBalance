@@ -14,13 +14,9 @@ namespace WorkLifeBalance.Services
         public event Action<AppState>? OnStateChanges;
 
         private DataStorageFeature dataStorageFeature;
-        private IFeaturesServices featuresServices;
-        private StateCheckerFeature stateCheckerFeature;
-        public AppTimer(DataStorageFeature dataStorageFeature, IFeaturesServices featuresServices, StateCheckerFeature stateCheckerFeature)
+        public AppTimer(DataStorageFeature dataStorageFeature)
         {
             this.dataStorageFeature = dataStorageFeature;
-            this.featuresServices = featuresServices;
-            this.stateCheckerFeature = stateCheckerFeature;
         }
         public AppState AppTimerState
         {
@@ -74,26 +70,6 @@ namespace WorkLifeBalance.Services
         {
             if (AppTimerState == state) return;
 
-            //Circular dependency detected. APpTimer requires featureServ, FeatureServ require APptimer
-            switch (state)
-            {
-                case AppState.Working:
-                    if (dataStorageFeature.Settings.AutoDetectIdleC)
-                    {
-                        featuresServices.AddFeature<IdleCheckerFeature>();
-                    }
-                    break;
-
-                case AppState.Resting:
-                    if (dataStorageFeature.Settings.AutoDetectIdleC)
-                    {
-                        if (!stateCheckerFeature.IsFocusingOnWorkingWindow)
-                        {
-                            featuresServices.RemoveFeature<IdleCheckerFeature>();
-                        }
-                    }
-                    break;
-            }
             AppTimerState = state;
             Log.Information($"App state changed to {state}");
         }

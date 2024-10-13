@@ -97,33 +97,25 @@ namespace WorkLifeBalance
         //initialize app called when data was loaded
         private void InitializeApp()
         {
-            try
-            {
-                DataStorageFeature dataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
-                AppTimer appTimer = _servicesProvider.GetRequiredService<AppTimer>();
-                //set app ready so timers can start
-                dataStorageFeature.IsAppReady = true;
-
-                IFeaturesServices featuresService = _servicesProvider.GetRequiredService<IFeaturesServices>();
-                featuresService.AddFeature<DataStorageFeature>();
-                featuresService.AddFeature<TimeTrackerFeature>();
-                featuresService.AddFeature<ActivityTrackerFeature>();
-
-                //check settings to see if you need to add some features
-                if (dataStorageFeature.Settings.AutoDetectWorkingC)
-                {
-                    featuresService.AddFeature<StateCheckerFeature>();
-                }
-
-                //starts the main timer
-                appTimer.StartTick();
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
+            DataStorageFeature dataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
+            AppTimer appTimer = _servicesProvider.GetRequiredService<AppTimer>();
             
+            //set app ready so timers can start
+            dataStorageFeature.IsAppReady = true;
+
+            IFeaturesServices featuresService = _servicesProvider.GetRequiredService<IFeaturesServices>();
+            featuresService.AddFeature<DataStorageFeature>();
+            featuresService.AddFeature<TimeTrackerFeature>();
+            featuresService.AddFeature<ActivityTrackerFeature>();
+
+            //check settings to see if you need to add some features
+            if (dataStorageFeature.Settings.AutoDetectWorkingC)
+            {
+                featuresService.AddFeature<StateCheckerFeature>();
+            }
+
+            //starts the main timer
+            appTimer.StartTick();
 
             //SetAppState(AppState.Resting);
 
