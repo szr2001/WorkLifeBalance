@@ -48,7 +48,7 @@ namespace WorkLifeBalance.ViewModels
         };
 
         [ObservableProperty]
-        private int[] numbers;
+        private int[]? numbers;
 
         [ObservableProperty]
         private AnchorCorner selectedStartupCorner = AnchorCorner.BootomLeft;

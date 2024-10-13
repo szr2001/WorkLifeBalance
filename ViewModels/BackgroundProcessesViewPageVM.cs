@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
@@ -32,7 +33,6 @@ namespace WorkLifeBalance.ViewModels
             this.activityTrackerFeature = activityTrackerFeature;
             this.secondWindowService = secondWindowService;
             activityTrackerFeature.OnWindowChange += UpdateActiveWindowUi;
-            InitializeProcessNames();
         }
 
         private void UpdateActiveWindowUi(string newwindow)
@@ -43,8 +43,15 @@ namespace WorkLifeBalance.ViewModels
         private void InitializeProcessNames()
         {
             SelectedWindows = new ObservableCollection<string>(dataStorageFeature.AutoChangeData.WorkingStateWindows);
-            DetectedWindows = new ObservableCollection<string>(lowLevelHandler.GetBackgroundApplicationsName());
-            DetectedWindows = new ObservableCollection<string>(DetectedWindows.Except(SelectedWindows));
+            List<string> allProcesses = lowLevelHandler.GetBackgroundApplicationsName();
+            DetectedWindows = new ObservableCollection<string>(allProcesses.Except(SelectedWindows));
+        }
+
+
+        public override Task OnPageOppeningAsync(object? args = null)
+        {
+            InitializeProcessNames();
+            return Task.CompletedTask;
         }
 
         public override async Task OnPageClosingAsync()
@@ -61,29 +68,17 @@ namespace WorkLifeBalance.ViewModels
         }
 
         [RelayCommand]
-        private void SelectProcess(object sender)
+        private void SelectProcess(string processName)
         {
-            Button button = (Button)sender;
-            TextBlock textBlock = (TextBlock)button.Content;
-
-            if (DetectedWindows.Contains(textBlock.Text))
-            {
-                DetectedWindows.Remove(textBlock.Text);
-                SelectedWindows.Add(textBlock.Text);
-            }
+            DetectedWindows.Remove(processName);
+            SelectedWindows.Add(processName);
         }
 
         [RelayCommand]
-        private void DeselectProcess(object sender)
+        private void DeselectProcess(string processName)
         {
-            Button button = (Button)sender;
-            TextBlock textBlock = (TextBlock)button.Content;
-
-            if (SelectedWindows.Contains(textBlock.Text))
-            {
-                SelectedWindows.Remove(textBlock.Text);
-                DetectedWindows.Add(textBlock.Text);
-            }
+            SelectedWindows.Remove(processName);
+            DetectedWindows.Add(processName);
         }
     }
 }

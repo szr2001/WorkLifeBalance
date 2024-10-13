@@ -57,10 +57,10 @@
                                                 FontWeight="Bold"
                                                 Foreground="White"
                                                 FontSize="15"
-                                                Command="{Binding DeselectProcess}"
-                                                CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+                                                Command="{Binding DataContext.DeselectProcessCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                CommandParameter="{Binding}">
                                             <Button.Content>
-                                                <TextBlock Text="{Binding Path=.}" Padding="5"/>
+                                                <TextBlock Text="{Binding}" Padding="5"/>
                                             </Button.Content>
                                         </Button>
                                     </Border>
@@ -106,10 +106,10 @@
                                                     FontWeight="Bold"
                                                     Foreground="White"
                                                     FontSize="15"
-                                                    Command="{Binding SelectProcess}"
-                                                    CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+                                                    Command="{Binding DataContext.SelectProcessCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                    CommandParameter="{Binding}">
                                                 <Button.Content>
-                                                    <TextBlock Text="{Binding Path=.}" Padding="5"/>
+                                                    <TextBlock Text="{Binding}" Padding="5"/>
                                                 </Button.Content>
                                             </Button>
                                         </Border>
