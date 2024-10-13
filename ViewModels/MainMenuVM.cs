@@ -43,6 +43,7 @@ namespace WorkLifeBalance.ViewModels
             DateText = $"Today: {dataStorageFeature.TodayData.DateC:MM/dd/yyyy}";
 
             SubscribeToEvents();
+            OnSettingsChanged();
         }
 
         private void SubscribeToEvents()

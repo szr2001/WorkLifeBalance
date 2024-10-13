@@ -40,8 +40,12 @@ namespace WorkLifeBalance
             services.AddSingleton<AppTimer>();
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<ISecondWindowService, SecondWindowService>();
-            //factory method for the second window, to retrive the correct ViewModels.
+            services.AddSingleton<IFeaturesServices, FeaturesService>();
+
+            //factory method for ViewModelBase.
             services.AddSingleton<Func<Type, ViewModelBase>>(serviceProvider => viewModelType => (ViewModelBase)serviceProvider.GetRequiredService(viewModelType));
+            //factory method for Features.
+            services.AddSingleton<Func<Type, FeatureBase>>(serviceProvider => featureBase => (FeatureBase)serviceProvider.GetRequiredService(featureBase));
 
             services.AddSingleton<BackgroundProcessesViewPageVM>();
             services.AddSingleton<MainMenuVM>();
@@ -95,29 +99,26 @@ namespace WorkLifeBalance
         {
             DataStorageFeature dataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
             AppTimer appTimer= _servicesProvider.GetRequiredService<AppTimer>();
-            TimeTrackerFeature timeTrackerFeature = _servicesProvider.GetRequiredService<TimeTrackerFeature>();
-            ActivityTrackerFeature activityTrackerFeature = _servicesProvider.GetRequiredService<ActivityTrackerFeature>();
-            StateCheckerFeature stateCheckerFeature = _servicesProvider.GetRequiredService<StateCheckerFeature>();
             
             //set app ready so timers can start
             dataStorageFeature.IsAppReady = true;
 
-            //subscribe features to the main timer
-            appTimer.Subscribe(timeTrackerFeature.AddFeature());
-            appTimer.Subscribe(dataStorageFeature.AddFeature());
-            appTimer.Subscribe(activityTrackerFeature.AddFeature());
+            FeaturesService featuresService = _servicesProvider.GetRequiredService<FeaturesService>();
+            featuresService.AddFeature<DataStorageFeature>();
+            featuresService.AddFeature<TimeTrackerFeature>();
+            featuresService.AddFeature<ActivityTrackerFeature>();
+
 
             //check settings to see if you need to add some features
             if (dataStorageFeature.Settings.AutoDetectWorkingC)
             {
-                appTimer.Subscribe(stateCheckerFeature.AddFeature());
+                featuresService.AddFeature<StateCheckerFeature>();
             }
 
             //starts the main timer
             appTimer.StartTick();
 
             //SetAppState(AppState.Resting);
-            //ApplyAutoDetectWorking();
 
             var mainWindow = _servicesProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
