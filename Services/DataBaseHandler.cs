@@ -155,7 +155,6 @@ namespace WorkLifeBalance.Services
         public async Task<int> ReadCountInMonth(string month)
         {
             int returncount = 0;
-
             string sql = @$"SELECT COUNT(*) AS row_count
                             FROM Days WHERE date LIKE @Pattern";
             returncount = await dataAccess.Execute(sql, new { Pattern = $"{month}%%" });

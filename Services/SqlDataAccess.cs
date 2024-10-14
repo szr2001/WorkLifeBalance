@@ -36,7 +36,7 @@ namespace WorkLifeBalance.Services
                     {
                         try
                         {
-                            var rows = await connection.ExecuteAsync(sql, parameters);
+                            var rows = await connection.ExecuteScalarAsync<int>(sql, parameters);
                             await transaction.CommitAsync();
                             return rows;
                         }
