@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
-using System.Configuration.Internal;
+using Microsoft.Extensions.Configuration.Json;
 using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Services;
@@ -16,18 +18,30 @@ namespace WorkLifeBalance
     /// </summary>
     public partial class App : Application
     {
-        private bool Debug = true;
         private readonly ServiceProvider _servicesProvider;
-
+        private readonly IConfiguration _configuration;
         public App()
-        { 
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            _configuration = builder.Build();
+
             IServiceCollection services = new ServiceCollection();
 
+            ConfigureServices(services);
+
+            _servicesProvider = services.BuildServiceProvider();
+        }
+
+        private void ConfigureServices(IServiceCollection services)
+        {
             services.AddSingleton(provider => new MainWindow
             {
                 DataContext = provider.GetRequiredService<MainMenuVM>()
             });
-            services.AddSingleton(provider => new SecondWindow 
+            services.AddSingleton(provider => new SecondWindow
             {
                 DataContext = provider.GetService<SecondWindowVM>()
             });
@@ -36,6 +50,7 @@ namespace WorkLifeBalance
             services.AddSingleton<IdleCheckerFeature>();
             services.AddSingleton<StateCheckerFeature>();
             services.AddSingleton<TimeTrackerFeature>();
+            services.AddSingleton(_configuration);
             services.AddSingleton<DataBaseHandler>();
             services.AddSingleton<LowLevelHandler>();
             services.AddSingleton<AppStateHandler>();
@@ -57,8 +72,6 @@ namespace WorkLifeBalance
             services.AddSingleton<ViewDataPageVM>();
             services.AddSingleton<ViewDayDetailsPageVM>();
             services.AddSingleton<ViewDaysPageVM>();
-
-            _servicesProvider = services.BuildServiceProvider();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -76,7 +89,8 @@ namespace WorkLifeBalance
             }
 
             //use a json config to get the debug bool value
-            if (Debug)
+            bool isDebug = _configuration.GetValue<bool>("Debug");
+            if (isDebug)
             {
                 lowHandler.EnableConsole();
                 Log.Logger = new LoggerConfiguration()
