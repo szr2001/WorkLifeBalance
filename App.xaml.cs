@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
+using System.Configuration.Internal;
 using System.Diagnostics;
 using System.Windows;
 using WorkLifeBalance.Interfaces;
@@ -19,7 +20,7 @@ namespace WorkLifeBalance
         private readonly ServiceProvider _servicesProvider;
 
         public App()
-        {
+        { 
             IServiceCollection services = new ServiceCollection();
 
             services.AddSingleton(provider => new MainWindow

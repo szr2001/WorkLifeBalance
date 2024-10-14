@@ -19,6 +19,17 @@ namespace WorkLifeBalance.Services
         //connection string for the db
         private readonly string ConnectionString = @$"Data Source={Directory.GetCurrentDirectory()}\RecordedData.db;Version=3;";
 
+        public async Task WriteData<T>(string sql, T parameters)
+        {
+            await Task.CompletedTask;
+        }
+
+        private async Task<List<T>> ReadData<T, U>(string sql, U parameters)
+        {
+            await Task.CompletedTask;
+            return new();
+        }
+
         public async Task WriteAutoSateData(AutoStateChangeData autod)
         {
             //wait for a time when no methods writes now to the database
@@ -70,10 +81,6 @@ namespace WorkLifeBalance.Services
                         {
                             //rols back if failed
                             await transaction.RollbackAsync();
-                            MainWindow.instance.MainDispatcher.Invoke(() =>
-                            {
-                                //MainWindow.ShowErrorBox("Failed to write to database", $"This can be caused by a missing database file: {ex.Message}");
-                            });
                         }
                         finally
                         {
@@ -117,10 +124,7 @@ namespace WorkLifeBalance.Services
                     }
                     catch (Exception ex)
                     {
-                        MainWindow.instance.MainDispatcher.Invoke(() =>
-                        {
-                            //MainWindow.ShowErrorBox("Failed to write to database", $"This can be caused by a missing database file: {ex.Message}");
-                        });
+
                     }
                     finally
                     {
@@ -174,11 +178,7 @@ namespace WorkLifeBalance.Services
                     }
                     catch (Exception ex)
                     {
-                        //close app if failed
-                        MainWindow.instance.MainDispatcher.Invoke(() =>
-                        {
-                            //MainWindow.ShowErrorBox("Failed to read from database", $"This can be caused by a missing database file: {ex.Message}");
-                        });
+
                     }
                     finally
                     {
@@ -235,10 +235,6 @@ namespace WorkLifeBalance.Services
                         {
                             //rols back if failed
                             await transaction.RollbackAsync();
-                            MainWindow.instance.MainDispatcher.Invoke(() =>
-                            {
-                                //MainWindow.ShowErrorBox("Failed to write to database", $"This can be caused by a missing database file: {ex.Message}");
-                            });
                         }
                         finally
                         {
@@ -278,10 +274,6 @@ namespace WorkLifeBalance.Services
                     }
                     catch (Exception ex)
                     {
-                        MainWindow.instance.MainDispatcher.Invoke(() =>
-                        {
-                            //MainWindow.ShowErrorBox("Failed to write to database", $"This can be caused by a missing database file: {ex.Message}");
-                        });
                     }
                     finally
                     {
@@ -334,10 +326,6 @@ namespace WorkLifeBalance.Services
                         {
                             //rols back if failed
                             await transaction.RollbackAsync();
-                            MainWindow.instance.MainDispatcher.Invoke(() =>
-                            {
-                                //MainWindow.ShowErrorBox("Failed to write to database", $"This can be caused by a missing database file: {ex.Message}");
-                            });
                         }
                         finally
                         {
@@ -376,11 +364,6 @@ namespace WorkLifeBalance.Services
                     }
                     catch (Exception ex)
                     {
-                        //close app if failed
-                        MainWindow.instance.MainDispatcher.Invoke(() =>
-                        {
-                            //MainWindow.ShowErrorBox("Failed to read from database", $"This can be caused by a missing database file: {ex.Message}");
-                        });
                     }
                     finally
                     {
@@ -427,11 +410,6 @@ namespace WorkLifeBalance.Services
                     }
                     catch (Exception ex)
                     {
-                        //close app if failed
-                        MainWindow.instance.MainDispatcher.Invoke(() =>
-                        {
-                            //MainWindow.ShowErrorBox("Failed to read from database", $"This can be caused by a missing database file: {ex.Message}");
-                        });
                     }
                     finally
                     {
@@ -486,11 +464,6 @@ namespace WorkLifeBalance.Services
                     }
                     catch (Exception ex)
                     {
-                        //close app if failed
-                        MainWindow.instance.MainDispatcher.Invoke(() =>
-                        {
-                            //MainWindow.ShowErrorBox("Failed to read from database", $"This can be caused by a missing database file: {ex.Message}");
-                        });
                     }
                     finally
                     {
@@ -554,11 +527,6 @@ namespace WorkLifeBalance.Services
                     }
                     catch (Exception ex)
                     {
-                        //close app if failed
-                        MainWindow.instance.MainDispatcher.Invoke(() =>
-                        {
-                            //MainWindow.ShowErrorBox("Failed to read from database", $"This can be caused by a missing database file: {ex.Message}");
-                        });
                     }
                     finally
                     {
@@ -618,11 +586,6 @@ namespace WorkLifeBalance.Services
                     }
                     catch (Exception ex)
                     {
-                        //close app if failed
-                        MainWindow.instance.MainDispatcher.Invoke(() =>
-                        {
-                            //MainWindow.ShowErrorBox("Failed to read from database", $"This can be caused by a missing database file: {ex.Message}");
-                        });
                     }
                     finally
                     {
