@@ -22,12 +22,15 @@ namespace WorkLifeBalance.Services
             //I'm too dumb to figure out the sql for less calls
             string DeleteOldWorkingWindowsSQL = @"DELETE FROM WorkingWindows";
 
-            await dataAccess.Execute(DeleteOldWorkingWindowsSQL, Array.Empty<object>());
+            await dataAccess.Execute(DeleteOldWorkingWindowsSQL, new { });
 
             string InsertNewWorkingWindowsSQL = @"INSERT INTO WorkingWindows (WorkingStateWindows)
-                  VALUES (@WindowValue)";
+                  VALUES (@WorkingWindow)";
 
-            await dataAccess.WriteData(InsertNewWorkingWindowsSQL, autod.WorkingStateWindows);
+            foreach(string window in autod.WorkingStateWindows)
+            {
+                await dataAccess.WriteData(InsertNewWorkingWindowsSQL, new { WorkingWindow = window });
+            }
 
             string UpdateActivitySql = @"UPDATE Activity
                                 SET TimeSpent = @TimeSpent
@@ -109,7 +112,7 @@ namespace WorkLifeBalance.Services
             string sql = @$"SELECT * FROM Settings
                             LIMIT 1";
 
-            retrivedSettings = (await dataAccess.ReadData<AppSettingsData, dynamic[]>(sql, new object[]{ })).FirstOrDefault();
+            retrivedSettings = (await dataAccess.ReadData<AppSettingsData, dynamic>(sql, new { })).FirstOrDefault();
 
             if(retrivedSettings == null)
             {
@@ -194,8 +197,8 @@ namespace WorkLifeBalance.Services
             if (string.IsNullOrEmpty(Month) || string.IsNullOrEmpty(year))
             {
                 sql = @$"SELECT * FROM Days 
-                             WHERE CAST(@CollumnData as INT) = 
-                            (SELECT MAX(CAST(@CollumnData as INT)) FROM Days)";
+                         WHERE CAST(@CollumnData as INT) = 
+                        (SELECT MAX(CAST(@CollumnData as INT)) FROM Days)";
                 retrivedDay = (await dataAccess.ReadData<DayData, dynamic>(sql, new { CollumnData = collumnData })).FirstOrDefault();
             }
             else
@@ -203,7 +206,7 @@ namespace WorkLifeBalance.Services
                 sql = @$"SELECT * FROM Days 
                              WHERE CAST(@CollumnData as INT) = 
                              (SELECT MAX(CAST(@CollumnData as INT)) FROM Days
-                             WHERE Date LIKE @Pattern";
+                             WHERE Date LIKE @Pattern)";
                 retrivedDay = (await dataAccess.ReadData<DayData, dynamic>(sql, new { Pattern = $"{Month}%{year}%", CollumnData = collumnData})).FirstOrDefault();
             }
 
