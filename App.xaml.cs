@@ -1,15 +1,14 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using WorkLifeBalance.Services.Feature;
+using WorkLifeBalance.Interfaces;
+using WorkLifeBalance.ViewModels;
+using WorkLifeBalance.Services;
+using System.Diagnostics;
+using System.Windows;
+using System.IO;
 using Serilog;
 using System;
-using Microsoft.Extensions.Configuration.Json;
-using System.Diagnostics;
-using System.IO;
-using System.Windows;
-using WorkLifeBalance.Interfaces;
-using WorkLifeBalance.Services;
-using WorkLifeBalance.Services.Feature;
-using WorkLifeBalance.ViewModels;
 
 namespace WorkLifeBalance
 {
@@ -50,6 +49,7 @@ namespace WorkLifeBalance
             services.AddSingleton<IdleCheckerFeature>();
             services.AddSingleton<StateCheckerFeature>();
             services.AddSingleton<TimeTrackerFeature>();
+            services.AddSingleton<SqlDataAccess>();
             services.AddSingleton(_configuration);
             services.AddSingleton<DataBaseHandler>();
             services.AddSingleton<LowLevelHandler>();
