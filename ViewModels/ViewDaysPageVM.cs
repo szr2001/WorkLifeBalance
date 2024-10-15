@@ -172,16 +172,5 @@ namespace WorkLifeBalance.ViewModels
                 LoadedData.Add(day);
             }
         }
-
-        private T FindParent<T>(DependencyObject child) where T : DependencyObject
-        {
-            DependencyObject parentObject = VisualTreeHelper.GetParent(child);
-
-            if (parentObject == null)
-                return null;
-
-            T parent = parentObject as T;
-            return parent ?? FindParent<T>(parentObject);
-        }
     }
 }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using WorkLifeBalance.Models;
 using System.Linq;
 using System;
+using Dapper;
 
 namespace WorkLifeBalance.Services
 {
@@ -154,12 +155,12 @@ namespace WorkLifeBalance.Services
 
         public async Task<int> ReadCountInMonth(string month)
         {
-            int returncount = 0;
+            int affectedRows = 0;
             string sql = @$"SELECT COUNT(*) AS row_count
                             FROM Days WHERE date LIKE @Pattern";
-            returncount = await dataAccess.Execute(sql, new { Pattern = $"{month}%%" });
+            affectedRows = await dataAccess.Execute(sql, new { Pattern = $"{month}%%" });
 
-            return returncount;
+            return affectedRows;
         }
 
         public async Task<List<DayData>> ReadMonth(string Month = "", string year = "")
@@ -173,7 +174,6 @@ namespace WorkLifeBalance.Services
             }
             else
             {
-                //problem with Pattern
                 sql = @$"SELECT * from Days 
                         WHERE Date Like @Pattern";
             }
@@ -193,22 +193,25 @@ namespace WorkLifeBalance.Services
             DayData? retrivedDay = null;
 
             string sql;
+
             if (string.IsNullOrEmpty(Month) || string.IsNullOrEmpty(year))
             {
+                //pass the value directly because it brokes if I use it as a parameter
                 sql = @$"SELECT * FROM Days 
-                         WHERE CAST(@CollumnData as INT) = 
-                        (SELECT MAX(CAST(@CollumnData as INT)) FROM Days)";
-                retrivedDay = (await dataAccess.ReadData<DayData, dynamic>(sql, new { CollumnData = collumnData })).FirstOrDefault();
+                      WHERE CAST({collumnData} as INT) = 
+                      (SELECT MAX(CAST({collumnData} as INT)) FROM Days)";
+                retrivedDay = (await dataAccess.ReadData<DayData, dynamic>(sql, new { })).FirstOrDefault();
             }
             else
             {
                 sql = @$"SELECT * FROM Days 
-                             WHERE CAST(@CollumnData as INT) = 
-                             (SELECT MAX(CAST(@CollumnData as INT)) FROM Days
-                             WHERE Date LIKE @Pattern)";
-                retrivedDay = (await dataAccess.ReadData<DayData, dynamic>(sql, new { Pattern = $"{Month}%{year}%", CollumnData = collumnData})).FirstOrDefault();
-            }
+                        WHERE CAST({collumnData} as INT) = 
+                        (SELECT MAX(CAST({collumnData} as INT)) FROM Days
+                        WHERE Date LIKE @Template)";
 
+
+                retrivedDay = (await dataAccess.ReadData<DayData, dynamic>(sql, new { Template = $"{Month}%{year}" })).FirstOrDefault();
+            }
 
             if (retrivedDay == null)
             {
