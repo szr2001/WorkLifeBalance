@@ -23,14 +23,14 @@ namespace WorkLifeBalance.Services
             //I'm too dumb to figure out the sql for less calls
             string DeleteOldWorkingWindowsSQL = @"DELETE FROM WorkingWindows";
 
-            await dataAccess.Execute(DeleteOldWorkingWindowsSQL, new { });
+            await dataAccess.ExecuteAsync(DeleteOldWorkingWindowsSQL, new { });
 
             string InsertNewWorkingWindowsSQL = @"INSERT INTO WorkingWindows (WorkingStateWindows)
                   VALUES (@WorkingWindow)";
 
             foreach(string window in autod.WorkingStateWindows)
             {
-                await dataAccess.WriteData(InsertNewWorkingWindowsSQL, new { WorkingWindow = window });
+                await dataAccess.WriteDataAsync(InsertNewWorkingWindowsSQL, new { WorkingWindow = window });
             }
 
             string UpdateActivitySql = @"UPDATE Activity
@@ -42,11 +42,11 @@ namespace WorkLifeBalance.Services
 
             foreach (ProcessActivityData activity in autod.Activities)
             {
-                int affectedRows = await dataAccess.WriteData(UpdateActivitySql, activity);
+                int affectedRows = await dataAccess.WriteDataAsync(UpdateActivitySql, activity);
 
                 if (affectedRows == 0)
                 {
-                    await dataAccess.WriteData(InsertActivitySql, activity);
+                    await dataAccess.WriteDataAsync(InsertActivitySql, activity);
                 }
             }
 
@@ -59,11 +59,11 @@ namespace WorkLifeBalance.Services
             string sql = @$"SELECT * FROM Activity
                             WHERE Date = @Date";
 
-            retrivedSettings.Activities = (await dataAccess.ReadData<ProcessActivityData, dynamic>(sql, new { Date = date })).ToArray();
+            retrivedSettings.Activities = (await dataAccess.ReadDataAsync<ProcessActivityData, dynamic>(sql, new { Date = date })).ToArray();
 
             sql = @$"SELECT * FROM WorkingWindows";
 
-            retrivedSettings.WorkingStateWindows = (await dataAccess.ReadData<string, dynamic>(sql, new { })).ToArray();
+            retrivedSettings.WorkingStateWindows = (await dataAccess.ReadDataAsync<string, dynamic>(sql, new { })).ToArray();
 
             retrivedSettings.ConvertSaveDataToUsableData();
             
@@ -78,7 +78,7 @@ namespace WorkLifeBalance.Services
                             WHERE Date Like @Date";
 
 
-            ReturnActivity = (await dataAccess.ReadData<ProcessActivityData, dynamic>(sql, new { Date = date })).ToList();
+            ReturnActivity = (await dataAccess.ReadDataAsync<ProcessActivityData, dynamic>(sql, new { Date = date })).ToList();
 
             foreach (ProcessActivityData day in ReturnActivity)
             {
@@ -103,7 +103,7 @@ namespace WorkLifeBalance.Services
                         AutoDetectIdleInterval = @AutoDetectIdleInterval
                         LIMIT 1";
 
-            await dataAccess.WriteData(sql, sett);
+            await dataAccess.WriteDataAsync(sql, sett);
         }
 
         public async Task<AppSettingsData> ReadSettings()
@@ -113,7 +113,7 @@ namespace WorkLifeBalance.Services
             string sql = @$"SELECT * FROM Settings
                             LIMIT 1";
 
-            retrivedSettings = (await dataAccess.ReadData<AppSettingsData, dynamic>(sql, new { })).FirstOrDefault();
+            retrivedSettings = (await dataAccess.ReadDataAsync<AppSettingsData, dynamic>(sql, new { })).FirstOrDefault();
 
             if(retrivedSettings == null)
             {
@@ -132,7 +132,7 @@ namespace WorkLifeBalance.Services
             string sql = @"INSERT OR REPLACE INTO Days (Date,WorkedAmmount,RestedAmmount)
                          VALUES (@Date,@WorkedAmmount,@RestedAmmount)";
 
-            await dataAccess.WriteData(sql, day);
+            await dataAccess.WriteDataAsync(sql, day);
         }
 
         public async Task<DayData> ReadDay(string date)
@@ -141,7 +141,7 @@ namespace WorkLifeBalance.Services
 
             string sql = @$"SELECT * FROM Days
                           WHERE Date = @Date";
-            retrivedDay = (await dataAccess.ReadData<DayData, dynamic>(sql, new { Date = date })).FirstOrDefault();
+            retrivedDay = (await dataAccess.ReadDataAsync<DayData, dynamic>(sql, new { Date = date })).FirstOrDefault();
 
             if(retrivedDay == null)
             {
@@ -158,7 +158,7 @@ namespace WorkLifeBalance.Services
             int affectedRows = 0;
             string sql = @$"SELECT COUNT(*) AS row_count
                             FROM Days WHERE date LIKE @Pattern";
-            affectedRows = await dataAccess.Execute(sql, new { Pattern = $"{month}%%" });
+            affectedRows = await dataAccess.ExecuteAsync(sql, new { Pattern = $"{month}%%" });
 
             return affectedRows;
         }
@@ -178,7 +178,7 @@ namespace WorkLifeBalance.Services
                         WHERE Date Like @Pattern";
             }
 
-            ReturnDays = (await dataAccess.ReadData<DayData, dynamic>(sql, new { Pattern = $"{Month}%{year}" })).ToList();
+            ReturnDays = (await dataAccess.ReadDataAsync<DayData, dynamic>(sql, new { Pattern = $"{Month}%{year}" })).ToList();
 
             foreach (DayData day in ReturnDays)
             {
@@ -200,7 +200,7 @@ namespace WorkLifeBalance.Services
                 sql = @$"SELECT * FROM Days 
                       WHERE CAST({collumnData} as INT) = 
                       (SELECT MAX(CAST({collumnData} as INT)) FROM Days)";
-                retrivedDay = (await dataAccess.ReadData<DayData, dynamic>(sql, new { })).FirstOrDefault();
+                retrivedDay = (await dataAccess.ReadDataAsync<DayData, dynamic>(sql, new { })).FirstOrDefault();
             }
             else
             {
@@ -210,7 +210,7 @@ namespace WorkLifeBalance.Services
                         WHERE Date LIKE @Template)";
 
 
-                retrivedDay = (await dataAccess.ReadData<DayData, dynamic>(sql, new { Template = $"{Month}%{year}" })).FirstOrDefault();
+                retrivedDay = (await dataAccess.ReadDataAsync<DayData, dynamic>(sql, new { Template = $"{Month}%{year}" })).FirstOrDefault();
             }
 
             if (retrivedDay == null)
@@ -242,7 +242,7 @@ namespace WorkLifeBalance.Services
                         (SELECT MAX(@Activity) FROM Days
                         WHERE Date Like @Pattern)";
             }
-            retrivedDay = (await dataAccess.ReadData<ProcessActivityData, dynamic>(sql, new { Activity = activity, Pattern = $"{Month}%{year}" })).FirstOrDefault();
+            retrivedDay = (await dataAccess.ReadDataAsync<ProcessActivityData, dynamic>(sql, new { Activity = activity, Pattern = $"{Month}%{year}" })).FirstOrDefault();
 
             if(retrivedDay == null)
             {

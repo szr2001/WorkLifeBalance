@@ -27,7 +27,6 @@
     <None Remove="Assets\Settings.png" />
     <None Remove="Assets\Work.png" />
     <None Remove="Assets\WorkLifeBalanceLogo.png" />
-    <None Remove="RecordedData.db" />
   </ItemGroup>
 
   <ItemGroup>
@@ -79,9 +78,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Work.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="RecordedData.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

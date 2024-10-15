@@ -55,7 +55,7 @@ namespace WorkLifeBalance
             services.AddSingleton<DataBaseHandler>();
             services.AddSingleton<LowLevelHandler>();
             services.AddSingleton<AppStateHandler>();
-            services.AddSingleton<SqlLiteDatabaseCreator>();
+            services.AddSingleton<SqlLiteDatabaseIntegrity>();
             services.AddSingleton<AppTimer>();
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<ISecondWindowService, SecondWindowService>();
@@ -111,7 +111,7 @@ namespace WorkLifeBalance
         {
             DataStorageFeature dataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
 
-            SqlLiteDatabaseCreator sqlLiteDatabaseCreator = _servicesProvider.GetRequiredService<SqlLiteDatabaseCreator>();
+            SqlLiteDatabaseIntegrity sqlLiteDatabaseCreator = _servicesProvider.GetRequiredService<SqlLiteDatabaseIntegrity>();
 
             await sqlLiteDatabaseCreator.CheckDatabaseIntegrity();
 
