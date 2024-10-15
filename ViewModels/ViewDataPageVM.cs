@@ -7,6 +7,7 @@ using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Models;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WorkLifeBalance.ViewModels
 {
@@ -118,14 +119,17 @@ namespace WorkLifeBalance.ViewModels
             float MonthToporkedSeconds = ConvertTimeOnlyToSeconds(PreviousMonthMostWorked);
 
             PreviousMonthWorkRestRatio = MonthToporkedSeconds == 0 ? 0 : MonthToporkedSeconds / 86400;
+            PreviousMonthWorkRestRatio = (float)Math.Round(PreviousMonthWorkRestRatio, 2);
 
             MonthToporkedSeconds = ConvertTimeOnlyToSeconds(CurrentMonthMostWorked);
 
             CurrentMonthWorkRestRatio = MonthToporkedSeconds == 0 ? 0 : MonthToporkedSeconds / 86400;
+            CurrentMonthWorkRestRatio = (float)Math.Round(CurrentMonthWorkRestRatio, 2);
 
             MonthToporkedSeconds = ConvertTimeOnlyToSeconds(RecordMostWorked);
 
             RecordWorkRestRatio = MonthToporkedSeconds == 0 ? 0 : MonthToporkedSeconds / 86400;
+            RecordWorkRestRatio = (float)Math.Round(RecordWorkRestRatio, 2);
         }
 
         [RelayCommand]
