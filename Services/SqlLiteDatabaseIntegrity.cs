@@ -1,11 +1,11 @@
 ﻿using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WorkLifeBalance.Services.Feature;
-using static Dapper.SqlMapper;
 
 namespace WorkLifeBalance.Services
 {
@@ -24,6 +24,7 @@ namespace WorkLifeBalance.Services
             DatabaseUpdates = new()
             {
                 { "2.0.0", Create2_0_0V},
+                { "Beta", UpdateBetaTo2_0_0V}
             };
         }
 
@@ -32,9 +33,10 @@ namespace WorkLifeBalance.Services
             databasePath = @$"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\WorkLifeBalance\RecordedData.db";
             connectionString = @$"Data Source={databasePath};Version=3;";
 
-            if (IsDataasePresent())
+            if (IsDatabasePresent())
             {
-               await UpdateOrCreateDatabase(await GetDatabaseVersion());
+                string version = await GetDatabaseVersion();
+                await UpdateOrCreateDatabase(version);
             }
             else
             {
@@ -51,7 +53,6 @@ namespace WorkLifeBalance.Services
                 Log.Information("Database up to date");
                 return;
             }
-
             //else check if the version exists in the update list
             if (DatabaseUpdates.ContainsKey(version))
             {
@@ -60,10 +61,10 @@ namespace WorkLifeBalance.Services
                 //then we get the updated database version
                 string databaseVersion = await GetDatabaseVersion();
                 //if its not up to date, then we call this method again, to give it the next update
-                Log.Warning($"Database Updated to version {version}");
+                Log.Warning($"Database Updated to version {databaseVersion}");
                 if(databaseVersion != dataStorageFeature.AppVersion)
                 {
-                    _ = UpdateOrCreateDatabase(databaseVersion);
+                    //_ = UpdateOrCreateDatabase(databaseVersion);
                 }
             }
             else
@@ -86,35 +87,48 @@ namespace WorkLifeBalance.Services
 
         private async Task<string> GetDatabaseVersion()
         {
-            string version = "";
+            string version = "Beta";
 
             string sql = "SELECT Version from Settings";
 
-            var result = (await sqlDataAccess.ReadDataAsync<string, dynamic>(sql, new { })).FirstOrDefault();
-            if(result != null)
+            try
             {
-                version = result;
+                var result = (await sqlDataAccess.ReadDataAsync<string, dynamic>(sql, new { })).FirstOrDefault();
+                if(result != null)
+                {
+                    version = result;
+                }
+            }
+            catch            
+            {
+                Log.Warning("Database Version collumn not found, indicatin Beta version database");
             }
 
-            Console.WriteLine(version);
 
             return version;
         }
 
         private async Task UpdateDatabaseVersion(string version)
         {
-            string updateVersionSQL =
-                """
-                Insert into Settings (Version) values (@Version)
-
-                """;
-
+            string updateVersionSQL = "UPDATE Settings SET Version = @Version";
             await sqlDataAccess.ExecuteAsync<dynamic>(updateVersionSQL, new { Version = version });
         }
 
-        private bool IsDataasePresent()
+        private bool IsDatabasePresent()
         {
             return File.Exists(databasePath);
+        }
+
+        private async Task UpdateBetaTo2_0_0V()
+        {
+            string sqlCreateVersionTable =
+                """
+                    ALTER TABLE Settings
+                    ADD COLUMN Version string;
+                """;
+            await sqlDataAccess.ExecuteAsync(sqlCreateVersionTable, new { });
+
+            await UpdateDatabaseVersion("2.0.0");
         }
 
         private async Task Create2_0_0V()
