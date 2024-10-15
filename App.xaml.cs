@@ -9,6 +9,7 @@ using System.Windows;
 using System.IO;
 using Serilog;
 using System;
+using System.Threading.Tasks;
 
 namespace WorkLifeBalance
 {
@@ -54,6 +55,7 @@ namespace WorkLifeBalance
             services.AddSingleton<DataBaseHandler>();
             services.AddSingleton<LowLevelHandler>();
             services.AddSingleton<AppStateHandler>();
+            services.AddSingleton<SqlLiteDatabaseCreator>();
             services.AddSingleton<AppTimer>();
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<ISecondWindowService, SecondWindowService>();
@@ -79,7 +81,6 @@ namespace WorkLifeBalance
             base.OnStartup(e);
 
             LowLevelHandler lowHandler = _servicesProvider.GetRequiredService<LowLevelHandler>();
-            DataStorageFeature dataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
 
             //move show a popup and then if the user pressses ok, restart, if not, close app
             //if (!lowHandler.IsRunningAsAdmin())
@@ -88,7 +89,6 @@ namespace WorkLifeBalance
             //    return;
             //}
 
-            //use a json config to get the debug bool value
             bool isDebug = _configuration.GetValue<bool>("Debug");
             if (isDebug)
             {
@@ -104,16 +104,19 @@ namespace WorkLifeBalance
                 .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
             }
-
-            dataStorageFeature.OnLoaded += InitializeApp;
-
-            _ = dataStorageFeature.LoadData();
+            _ = InitializeApp();
         }
 
-        //initialize app called when data was loaded
-        private void InitializeApp()
+        private async Task InitializeApp()
         {
             DataStorageFeature dataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
+
+            SqlLiteDatabaseCreator sqlLiteDatabaseCreator = _servicesProvider.GetRequiredService<SqlLiteDatabaseCreator>();
+
+            await sqlLiteDatabaseCreator.CheckDatabaseIntegrity();
+
+            await dataStorageFeature.LoadData();
+            
             AppTimer appTimer = _servicesProvider.GetRequiredService<AppTimer>();
             
             //set app ready so timers can start
@@ -132,8 +135,6 @@ namespace WorkLifeBalance
 
             //starts the main timer
             appTimer.StartTick();
-
-            //SetAppState(AppState.Resting);
 
             var mainWindow = _servicesProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
