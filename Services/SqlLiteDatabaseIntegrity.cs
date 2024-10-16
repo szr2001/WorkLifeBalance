@@ -1,11 +1,10 @@
-﻿using Serilog;
-using System;
+﻿using WorkLifeBalance.Services.Feature;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using WorkLifeBalance.Services.Feature;
+using System.Linq;
+using System.IO;
+using Serilog;
+using System;
 
 namespace WorkLifeBalance.Services
 {
@@ -21,6 +20,10 @@ namespace WorkLifeBalance.Services
         {
             this.sqlDataAccess = sqlDataAccess;
             this.dataStorageFeature = dataStorageFeature;
+
+            databasePath = @$"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\WorkLifeBalance\RecordedData.db";
+            connectionString = @$"Data Source={databasePath};Version=3;";
+
             DatabaseUpdates = new()
             {
                 { "2.0.0", Create2_0_0V},
@@ -30,9 +33,6 @@ namespace WorkLifeBalance.Services
 
         public async Task CheckDatabaseIntegrity()
         {
-            databasePath = @$"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\WorkLifeBalance\RecordedData.db";
-            connectionString = @$"Data Source={databasePath};Version=3;";
-
             if (IsDatabasePresent())
             {
                 string version = await GetDatabaseVersion();
@@ -43,37 +43,34 @@ namespace WorkLifeBalance.Services
                 Log.Warning("Database file not found, genereting one");
                 await DatabaseUpdates[dataStorageFeature.AppVersion]();
             }
+            Log.Information($"Database is up to date!");
         }
 
         private async Task UpdateOrCreateDatabase(string version)
         {
-            //if the database has the correct version, just return
-            if (version == dataStorageFeature.AppVersion)
+            //if the database doesn't have the latest version
+            if (version != dataStorageFeature.AppVersion)
             {
-                Log.Information("Database up to date");
-                return;
-            }
-            //else check if the version exists in the update list
-            if (DatabaseUpdates.ContainsKey(version))
-            {
-                //if yes, execute the update, updating the database
-                await DatabaseUpdates[version]();
-                //then we get the updated database version
-                string databaseVersion = await GetDatabaseVersion();
-                //if its not up to date, then we call this method again, to give it the next update
-                Log.Warning($"Database Updated to version {databaseVersion}");
-                if(databaseVersion != dataStorageFeature.AppVersion)
+                //else check if the version exists in the update list
+                if (DatabaseUpdates.ContainsKey(version))
                 {
-                    //_ = UpdateOrCreateDatabase(databaseVersion);
+                    //if yes, execute the update, updating the database
+                    await DatabaseUpdates[version]();
+                    //then we get the updated database version
+                    string databaseVersion = await GetDatabaseVersion();
+                    //if its not up to date, then we call this method again, to give it the next update
+                    Log.Warning($"Database Updated to version {databaseVersion}");
+                  
+                    await UpdateOrCreateDatabase(databaseVersion);
                 }
-            }
-            else
-            {
-                Log.Error($"Database corupted, re-genereting it");
-                //if we don't have an update for that version, it means the databse is really old or bugged
-                //so we delete it and call the update with the current versiom, which will just create the databse
-                DeleteDatabaseFile();
-                await DatabaseUpdates[dataStorageFeature.AppVersion]();
+                else
+                {
+                    Log.Error($"Database corupted, re-genereting it");
+                    //if we don't have an update for that version, it means the databse is really old or bugged
+                    //so we delete it and call the update with the current versiom, which will just create the databse
+                    DeleteDatabaseFile();
+                    await DatabaseUpdates[dataStorageFeature.AppVersion]();
+                }
             }
         }
 
@@ -110,7 +107,20 @@ namespace WorkLifeBalance.Services
 
         private async Task UpdateDatabaseVersion(string version)
         {
-            string updateVersionSQL = "UPDATE Settings SET Version = @Version";
+            string sql = "SELECT COUNT(1) FROM Settings";
+            bool ExistVersionRow = (await sqlDataAccess.ExecuteAsync(sql, new { })) > 0 ? true : false;
+
+            string updateVersionSQL = "";
+
+            if(ExistVersionRow)
+            {
+                updateVersionSQL = "UPDATE Settings SET Version = @Version";
+            }
+            else
+            {
+                updateVersionSQL = "INSERT INTO Settings (Version) VALUES (@Version)";
+            }
+
             await sqlDataAccess.ExecuteAsync<dynamic>(updateVersionSQL, new { Version = version });
         }
 

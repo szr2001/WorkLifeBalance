@@ -111,9 +111,9 @@ namespace WorkLifeBalance
         {
             DataStorageFeature dataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
 
-            SqlLiteDatabaseIntegrity sqlLiteDatabaseCreator = _servicesProvider.GetRequiredService<SqlLiteDatabaseIntegrity>();
+            SqlLiteDatabaseIntegrity sqlLiteDatabaseIntegrity = _servicesProvider.GetRequiredService<SqlLiteDatabaseIntegrity>();
 
-            await sqlLiteDatabaseCreator.CheckDatabaseIntegrity();
+            await sqlLiteDatabaseIntegrity.CheckDatabaseIntegrity();
 
             await dataStorageFeature.LoadData();
             
