@@ -6,8 +6,8 @@ namespace WorkLifeBalance.Models
     [Serializable]
     public class AutoStateChangeData
     {
-        public ProcessActivityData[] Activities { get; set; } = new ProcessActivityData[0];
-        public string[] WorkingStateWindows { get; set; } = new string[0];
+        public ProcessActivityData[] Activities { get; set; } = Array.Empty<ProcessActivityData>();
+        public string[] WorkingStateWindows { get; set; } = Array.Empty<string>();
 
         public Dictionary<string, TimeOnly> ActivitiesC = new();
 
@@ -35,10 +35,12 @@ namespace WorkLifeBalance.Models
 
                 foreach (KeyValuePair<string, TimeOnly> activity in ActivitiesC)
                 {
-                    ProcessActivityData process = new();
-                    //process.DateC = DataStorageFeature.Instance.TodayData.DateC;
-                    process.Process = activity.Key;
-                    process.TimeSpentC = activity.Value;
+                    ProcessActivityData process = new()
+                    {
+                        //process.DateC = DataStorageFeature.Instance.TodayData.DateC;
+                        Process = activity.Key,
+                        TimeSpentC = activity.Value
+                    };
 
                     process.ConvertUsableDataToSaveData();
 

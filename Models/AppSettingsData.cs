@@ -5,6 +5,10 @@ namespace WorkLifeBalance.Models
 {
     public class AppSettingsData
     {
+        public readonly string Version = "2.0.0";
+        public string AppName;
+        public string AppDirectory;
+        public string AppExePath;
         public string LastTimeOpened { get; set; } = "";
         public int SaveInterval { get; set; } = 5;
         public int AutoDetectInterval { get; set; } = 1;
@@ -21,6 +25,13 @@ namespace WorkLifeBalance.Models
         public AnchorCorner StartUpCornerC = AnchorCorner.BootomLeft;
 
         public Action OnSettingsChanged = new(() => { });
+
+        public AppSettingsData()
+        {
+            AppName = "WorkLifeBalance";
+            AppDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            AppExePath = $"{AppDirectory}/{AppName}.exe";
+        }
 
         public void ConvertSaveDataToUsableData()
         {

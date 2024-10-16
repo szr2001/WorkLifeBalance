@@ -14,7 +14,6 @@ namespace WorkLifeBalance.Services
         private readonly DataStorageFeature dataStorageFeature;
         private readonly Dictionary<string, Func<Task>> DatabaseUpdates;
         private string databasePath = "";
-        private string connectionString = "";
 
         public SqlLiteDatabaseIntegrity(SqlDataAccess sqlDataAccess, DataStorageFeature dataStorageFeature)
         {
@@ -22,7 +21,6 @@ namespace WorkLifeBalance.Services
             this.dataStorageFeature = dataStorageFeature;
 
             databasePath = @$"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\WorkLifeBalance\RecordedData.db";
-            connectionString = @$"Data Source={databasePath};Version=3;";
 
             DatabaseUpdates = new()
             {
@@ -41,7 +39,7 @@ namespace WorkLifeBalance.Services
             else
             {
                 Log.Warning("Database file not found, genereting one");
-                await DatabaseUpdates[dataStorageFeature.AppVersion]();
+                await DatabaseUpdates[dataStorageFeature.Settings.Version]();
             }
             Log.Information($"Database is up to date!");
         }
@@ -49,13 +47,13 @@ namespace WorkLifeBalance.Services
         private async Task UpdateOrCreateDatabase(string version)
         {
             //if the database doesn't have the latest version
-            if (version != dataStorageFeature.AppVersion)
+            if (version != dataStorageFeature.Settings.Version)
             {
                 //else check if the version exists in the update list
-                if (DatabaseUpdates.ContainsKey(version))
+                if (DatabaseUpdates.TryGetValue(version, out Func<Task>? DBUpdateMethod))
                 {
                     //if yes, execute the update, updating the database
-                    await DatabaseUpdates[version]();
+                    await DBUpdateMethod();
                     //then we get the updated database version
                     string databaseVersion = await GetDatabaseVersion();
                     //if its not up to date, then we call this method again, to give it the next update
@@ -69,7 +67,7 @@ namespace WorkLifeBalance.Services
                     //if we don't have an update for that version, it means the databse is really old or bugged
                     //so we delete it and call the update with the current versiom, which will just create the databse
                     DeleteDatabaseFile();
-                    await DatabaseUpdates[dataStorageFeature.AppVersion]();
+                    await DatabaseUpdates[dataStorageFeature.Settings.Version]();
                 }
             }
         }
@@ -108,7 +106,7 @@ namespace WorkLifeBalance.Services
         private async Task UpdateDatabaseVersion(string version)
         {
             string sql = "SELECT COUNT(1) FROM Settings";
-            bool ExistVersionRow = (await sqlDataAccess.ExecuteAsync(sql, new { })) > 0 ? true : false;
+            bool ExistVersionRow = (await sqlDataAccess.ExecuteAsync(sql, new { })) > 0;
 
             string updateVersionSQL = "";
 

@@ -115,10 +115,7 @@ namespace WorkLifeBalance.Services
 
             retrivedSettings = (await dataAccess.ReadDataAsync<AppSettingsData, dynamic>(sql, new { })).FirstOrDefault();
 
-            if(retrivedSettings == null)
-            {
-                retrivedSettings = new();
-            }
+            retrivedSettings ??= new();
 
             retrivedSettings.ConvertSaveDataToUsableData();
 
@@ -143,10 +140,7 @@ namespace WorkLifeBalance.Services
                           WHERE Date = @Date";
             retrivedDay = (await dataAccess.ReadDataAsync<DayData, dynamic>(sql, new { Date = date })).FirstOrDefault();
 
-            if(retrivedDay == null)
-            {
-                retrivedDay = new();
-            }
+            retrivedDay ??= new();
 
             retrivedDay.ConvertSaveDataToUsableData();
 
@@ -213,10 +207,7 @@ namespace WorkLifeBalance.Services
                 retrivedDay = (await dataAccess.ReadDataAsync<DayData, dynamic>(sql, new { Template = $"{Month}%{year}" })).FirstOrDefault();
             }
 
-            if (retrivedDay == null)
-            {
-                retrivedDay = new();
-            }
+            retrivedDay ??= new();
 
             retrivedDay.ConvertSaveDataToUsableData();
 
@@ -244,10 +235,7 @@ namespace WorkLifeBalance.Services
             }
             retrivedDay = (await dataAccess.ReadDataAsync<ProcessActivityData, dynamic>(sql, new { Activity = activity, Pattern = $"{Month}%{year}" })).FirstOrDefault();
 
-            if(retrivedDay == null)
-            {
-                retrivedDay = new();
-            }
+            retrivedDay ??= new();
 
             retrivedDay.ConvertSaveDataToUsableData();
 

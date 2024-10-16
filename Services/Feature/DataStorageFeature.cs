@@ -7,11 +7,6 @@ namespace WorkLifeBalance.Services.Feature
 {
     public class DataStorageFeature : FeatureBase
     {
-        public readonly string AppVersion = "2.0.0";
-        public string AppName;
-        public string AppDirectory;
-        public string AppExePath;
-
         public bool IsAppSaving { get; private set; } = false;
         public bool IsAppLoading { get; private set; } = false;
 
@@ -29,9 +24,6 @@ namespace WorkLifeBalance.Services.Feature
         private readonly DataBaseHandler dataBaseHandler;
         public DataStorageFeature(DataBaseHandler dataBaseHandler)
         {
-            AppName = "WorkLifeBalance";
-            AppDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            AppExePath = $"{AppDirectory}/{AppName}.exe";
             this.dataBaseHandler = dataBaseHandler;
         }
         public async Task SaveData()

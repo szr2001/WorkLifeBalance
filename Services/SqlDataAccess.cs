@@ -13,21 +13,16 @@ namespace WorkLifeBalance.Services
 {
     public class SqlDataAccess
     {
-        private readonly IConfiguration configuration;
         private readonly SemaphoreSlim _semaphore = new(1);
         //use config to read the connection string
         private readonly string ConnectionString = @$"Data Source={Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\WorkLifeBalance\RecordedData.db;Version=3;";
-        public SqlDataAccess(IConfiguration configuration) 
-        {
-            this.configuration = configuration;
-        }
 
         public async Task<int> ExecuteAsync<T>(string sql, T parameters)
         {
             await _semaphore.WaitAsync();
             try
             {
-                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+                using (SQLiteConnection connection = new(ConnectionString))
                 {
                     await connection.OpenAsync();
 
@@ -59,7 +54,7 @@ namespace WorkLifeBalance.Services
             await _semaphore.WaitAsync();
             try
             {
-                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+                using (SQLiteConnection connection = new(ConnectionString))
                 {
                     await connection.OpenAsync();
                     
@@ -92,7 +87,7 @@ namespace WorkLifeBalance.Services
             await _semaphore.WaitAsync();
             try
             {
-                using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+                using (SQLiteConnection connection = new(ConnectionString))
                 {
                     await connection.OpenAsync();
                     try

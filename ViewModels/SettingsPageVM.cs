@@ -53,8 +53,8 @@ namespace WorkLifeBalance.ViewModels
         [ObservableProperty]
         private AnchorCorner selectedStartupCorner = AnchorCorner.BootomLeft;
 
-        private DataStorageFeature dataStorageFeature;
-        private ISecondWindowService secondWindowService;
+        private readonly DataStorageFeature dataStorageFeature;
+        private readonly ISecondWindowService secondWindowService;
 
         public SettingsPageVM(DataStorageFeature dataStorageFeature, ISecondWindowService secondWindowService)
         {
@@ -70,7 +70,7 @@ namespace WorkLifeBalance.ViewModels
         {
             SelectedStartupCorner = dataStorageFeature.Settings.StartUpCornerC;
 
-            Version = $"Version: {dataStorageFeature.AppVersion}";
+            Version = $"Version: {dataStorageFeature.Settings.Version}";
 
             AutoSaveInterval = dataStorageFeature.Settings.SaveInterval;
 
@@ -117,7 +117,7 @@ namespace WorkLifeBalance.ViewModels
 
         private void ApplyStartToWindows()
         {
-            string startupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), $"{dataStorageFeature.AppName}.lnk");
+            string startupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), $"{dataStorageFeature.Settings.Version}.lnk");
 
             if (dataStorageFeature.Settings.StartWithWindowsC)
             {
@@ -133,10 +133,10 @@ namespace WorkLifeBalance.ViewModels
         {
             if (!File.Exists(startupfolder))
             {
-                WshShell shell = new WshShell();
+                WshShell shell = new();
                 IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(startupfolder);
-                shortcut.TargetPath = dataStorageFeature.AppExePath;
-                shortcut.WorkingDirectory = dataStorageFeature.AppDirectory;
+                shortcut.TargetPath = dataStorageFeature.Settings.AppDirectory;
+                shortcut.WorkingDirectory = dataStorageFeature.Settings.AppDirectory;
                 shortcut.Save();
             }
         }

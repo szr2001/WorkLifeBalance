@@ -146,7 +146,7 @@ namespace WorkLifeBalance
             var DataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
             var psi = new ProcessStartInfo
             {
-                FileName = DataStorageFeature.AppExePath,
+                FileName = DataStorageFeature.Settings.AppExePath,
                 UseShellExecute = true,
                 Verb = "runas"
             };
