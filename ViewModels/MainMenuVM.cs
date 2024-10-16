@@ -2,8 +2,12 @@
 using CommunityToolkit.Mvvm.Input;
 using Serilog;
 using System;
+using System.IO.Pipes;
+using System.Numerics;
 using System.Threading.Tasks;
+using System.Windows;
 using WorkLifeBalance.Interfaces;
+using WorkLifeBalance.Models;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
 
@@ -11,6 +15,8 @@ namespace WorkLifeBalance.ViewModels
 {
     public partial class MainMenuVM : ObservableObject
     {
+
+
         //bind to dateOnly and timeOnly and use converters
         [ObservableProperty]
         public string? dateText;
@@ -27,6 +33,12 @@ namespace WorkLifeBalance.ViewModels
         [ObservableProperty]
         public bool autoDetectWork;
 
+        [ObservableProperty]
+        public int startupTop = 0;
+
+        [ObservableProperty]
+        public int startupLeft = 0;
+
         private readonly AppStateHandler appStateHandler;
         private readonly LowLevelHandler lowLevelHandler;
         private readonly DataStorageFeature dataStorageFeature;
@@ -42,8 +54,35 @@ namespace WorkLifeBalance.ViewModels
 
             DateText = $"Today: {dataStorageFeature.TodayData.DateC:MM/dd/yyyy}";
 
+            InitializeStartupLocation();
             SubscribeToEvents();
             OnSettingsChanged();
+        }
+
+        private void InitializeStartupLocation()
+        {
+            int ScreenWidth = (int)SystemParameters.PrimaryScreenWidth;
+            int ScreenHeight = (int)SystemParameters.PrimaryScreenHeight;
+
+            switch (dataStorageFeature.Settings.StartUpCornerC)
+            {
+                case AnchorCorner.TopLeft:
+                    StartupLeft = 0;
+                    StartupTop = 0;
+                    break;
+                case AnchorCorner.TopRight:
+                    StartupLeft = ScreenWidth - 220;
+                    StartupTop = 0;
+                    break;
+                case AnchorCorner.BootomLeft:
+                    StartupLeft = 0;
+                    StartupTop = ScreenHeight - 180;
+                    break;
+                case AnchorCorner.BottomRight:
+                    StartupLeft = ScreenWidth - 220;
+                    StartupTop = ScreenHeight - 180;
+                    break;
+            }
         }
 
         private void SubscribeToEvents()
