@@ -15,12 +15,6 @@ namespace WorkLifeBalance.ViewModels
             WindowPageName = "Options";
         }
 
-        public override Task OnPageClosingAsync()
-        {
-            secondWindowService.OpenWindowWith<SettingsPageVM>();
-            return Task.CompletedTask;
-        }
-
         [RelayCommand]
         private void OpenSettings()
         {

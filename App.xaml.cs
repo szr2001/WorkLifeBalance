@@ -132,6 +132,10 @@ namespace WorkLifeBalance
             {
                 featuresService.AddFeature<StateCheckerFeature>();
             }
+            if (dataStorageFeature.Settings.AutoDetectIdleC)
+            {
+                featuresService.AddFeature<IdleCheckerFeature>();
+            }
 
             //starts the main timer
             appTimer.StartTick();

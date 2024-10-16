@@ -32,7 +32,6 @@ namespace WorkLifeBalance.ViewModels
             this.lowLevelHandler = lowLevelHandler;
             this.activityTrackerFeature = activityTrackerFeature;
             this.secondWindowService = secondWindowService;
-            activityTrackerFeature.OnWindowChange += UpdateActiveWindowUi;
         }
 
         private void UpdateActiveWindowUi(string newwindow)
@@ -49,6 +48,7 @@ namespace WorkLifeBalance.ViewModels
 
         public override Task OnPageOppeningAsync(object? args = null)
         {
+            activityTrackerFeature.OnWindowChange += UpdateActiveWindowUi;
             InitializeProcessNames();
             return Task.CompletedTask;
         }

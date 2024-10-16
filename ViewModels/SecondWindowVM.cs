@@ -23,7 +23,7 @@ namespace WorkLifeBalance.ViewModels
         [ObservableProperty]
         public int width = 250;
 
-        public Func<Task> OnWindowClosing = new(() => { return Task.CompletedTask; });
+        public Action OnWindowClosing = new(() => { });
 
         [RelayCommand]
         private void CloseSecondWindow()

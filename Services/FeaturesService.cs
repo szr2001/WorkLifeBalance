@@ -17,7 +17,6 @@ namespace WorkLifeBalance.Services
 
         public void AddFeature<TFeature>() where TFeature : FeatureBase
         {
-            Console.WriteLine(typeof(TFeature));
             FeatureBase feature = _featureFactory.Invoke(typeof(TFeature));
             _appTimer.Subscribe(feature.AddFeature());
         }

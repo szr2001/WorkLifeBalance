@@ -16,18 +16,28 @@ namespace WorkLifeBalance.Services
             this.secondWindowVm = secondWindowVm;
             this.secondWindowView = secondWindowView;
             this.navigation = navigation;
-            secondWindowVm.OnWindowClosing += ClearWindow;
+            secondWindowVm.OnWindowClosing += CloseWindow;
         }
 
-        private async Task ClearWindow()
+        private void CloseWindow()
+        {
+            _ = Task.Run(ClearPage);
+            secondWindowView.Hide();
+        }
+
+        private async Task ClearPage()
         {
             SecondWindowPageVMBase activeModel = (SecondWindowPageVMBase)navigation.ActiveView;
-            await activeModel.OnPageClosingAsync();
-            secondWindowView.Hide();
+            if(activeModel != null)
+            {
+                await activeModel.OnPageClosingAsync().ConfigureAwait(false);
+            }
         }
 
         public async Task OpenWindowWith<T>(object? args = null) where T : SecondWindowPageVMBase 
         {
+            _ = Task.Run(ClearPage);
+
             navigation.NavigateTo<T>();
             SecondWindowPageVMBase activeModel = (SecondWindowPageVMBase)navigation.ActiveView;
             secondWindowVm.Width = (int)activeModel.RequiredWindowSize.X;

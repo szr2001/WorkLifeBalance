@@ -1,10 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Data.SQLite;
 using System.Threading;
 using System.Linq;
-using System.IO;
 using Serilog;
 using System;
 using Dapper;

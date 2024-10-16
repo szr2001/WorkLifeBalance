@@ -55,9 +55,10 @@ namespace WorkLifeBalance.ViewModels
 
         private readonly DataStorageFeature dataStorageFeature;
         private readonly ISecondWindowService secondWindowService;
-
-        public SettingsPageVM(DataStorageFeature dataStorageFeature, ISecondWindowService secondWindowService)
+        private readonly IFeaturesServices featuresServices;
+        public SettingsPageVM(DataStorageFeature dataStorageFeature, ISecondWindowService secondWindowService, IFeaturesServices featuresServices)
         {
+            this.featuresServices = featuresServices;
             this.secondWindowService = secondWindowService;
             this.dataStorageFeature = dataStorageFeature;
             RequiredWindowSize = new Vector2(250, 320);
@@ -109,6 +110,24 @@ namespace WorkLifeBalance.ViewModels
             dataStorageFeature.Settings.StartUpCornerC = SelectedStartupCorner;
 
             await dataStorageFeature.SaveData();
+
+            if (AutoDetectWork)
+            {
+                featuresServices.AddFeature<StateCheckerFeature>();
+            }
+            else
+            {
+                featuresServices.RemoveFeature<StateCheckerFeature>();
+            }
+
+            if (AutoDetectIdle)
+            {
+                featuresServices.AddFeature<IdleCheckerFeature>();
+            }
+            else
+            {
+                featuresServices.RemoveFeature<IdleCheckerFeature>();
+            }
 
             ApplyStartToWindows();
             dataStorageFeature.Settings.OnSettingsChanged.Invoke();
