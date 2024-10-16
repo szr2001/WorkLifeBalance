@@ -30,15 +30,14 @@ namespace WorkLifeBalance.Services.Feature
         {
             if (IsAppSaving) return;
 
+            Log.Information($"Saving...");
+
             IsAppSaving = true;
 
             OnSaving?.Invoke();
 
-            Log.Information($"Saving Day");
             await dataBaseHandler.WriteDay(TodayData);
-            Log.Information($"Saving Settings");
             await dataBaseHandler.WriteSettings(Settings);
-            Log.Information($"Saving Activities");
             await dataBaseHandler.WriteAutoSateData(AutoChangeData);
 
             OnSaved?.Invoke();

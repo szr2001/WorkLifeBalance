@@ -41,33 +41,19 @@ namespace WorkLifeBalance.Services.Feature
 
             IsCheckingIdleTriggered = true;
 
-            try
-            {
-                await Task.Delay(delay, CancelTokenS.Token);
-                CheckIdle();
-            }
-            catch (Exception ex)
-            {
-                Log.Warning(ex, $"IdleCheckerFeature timer loop");
-            }
-            finally
-            {
-                IsCheckingIdleTriggered = false;
-            }
+            await Task.Delay(5000, CancelTokenS.Token);
+            CheckIdle();
+         
+            IsCheckingIdleTriggered = false;
         }
 
         private void CheckIdle()
         {
+            if (appStateHandler.AppTimerState == AppState.Resting) return;
+
             Vector2 newpos = Vector2.Zero;
 
-            try
-            {
-                newpos = lowLevelHandler.GetMousePos();
-            }
-            catch (Exception ex)
-            {
-                Log.Warning(ex, "IdleChecker failed to get mouse pos");
-            }
+            newpos = lowLevelHandler.GetMousePos();
 
             if (_oldmousePosition == new Vector2(-1, -1))
             {
@@ -78,12 +64,10 @@ namespace WorkLifeBalance.Services.Feature
             if (newpos == _oldmousePosition)
             {
                 appStateHandler.SetAppState(AppState.Idle);
-                Log.Information($"Mouse not moving, Old: {_oldmousePosition} New: {newpos}");
             }
             else
             {
                 appStateHandler.SetAppState(AppState.Working);
-                Log.Information($"Mouse Moved, Old: {_oldmousePosition} New: {newpos}");
             }
 
             _oldmousePosition = newpos;
