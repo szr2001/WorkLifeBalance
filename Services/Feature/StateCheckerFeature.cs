@@ -66,13 +66,6 @@ namespace WorkLifeBalance.Services.Feature
                         appStateHandler.SetAppState(AppState.Working);
                     }
                     break;
-
-                case AppState.Idle:
-                    if (!IsFocusingOnWorkingWindow)
-                    {
-                        appStateHandler.SetAppState(AppState.Resting);
-                    }
-                    break;
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Serilog;
 using System;
+using System.IO.Pipes;
 using System.Numerics;
 using System.Threading.Tasks;
 
@@ -11,6 +12,10 @@ namespace WorkLifeBalance.Services.Feature
         private readonly AppStateHandler appStateHandler;
         private readonly DataStorageFeature dataStorageFeature;
         private readonly LowLevelHandler lowLevelHandler;
+
+        private readonly int MinuteMiliseconds = 60000;
+        private readonly int IdleDelay = 3000;
+        private readonly int RestingDelay = 600000;
         public IdleCheckerFeature(DataStorageFeature dataStorageFeature, LowLevelHandler lowLevelHandler, AppStateHandler appStateHandler)
         {
             this.dataStorageFeature = dataStorageFeature;
@@ -30,16 +35,23 @@ namespace WorkLifeBalance.Services.Feature
 
             int delay = 0;
 
-            if (appStateHandler.AppTimerState == AppState.Idle)
+            switch (appStateHandler.AppTimerState)
             {
-                delay = 3000;
-            }
-            else
-            {
-                delay = dataStorageFeature.Settings.AutoDetectIdle * 60000 / 2;
+                case AppState.Working:
+                    //delay = dataStorageFeature.Settings.AutoDetectIdle * MinuteMiliseconds / 2;
+                    delay = 5000;
+                    break;
+                case AppState.Resting:
+                    delay = 5000;
+                    break;
+                case AppState.Idle:
+                    delay = 3000;
+                    break;
             }
 
             IsCheckingIdleTriggered = true;
+
+            Console.WriteLine(delay);
 
             await Task.Delay(delay, CancelTokenS.Token);
             CheckIdle();
@@ -49,8 +61,6 @@ namespace WorkLifeBalance.Services.Feature
 
         private void CheckIdle()
         {
-            if (appStateHandler.AppTimerState == AppState.Resting) return;
-
             Vector2 newpos = Vector2.Zero;
 
             newpos = lowLevelHandler.GetMousePos();

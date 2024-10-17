@@ -33,7 +33,7 @@ namespace WorkLifeBalance.Services.Feature
                     break;
 
                 case AppState.Idle:
-                    dataStorageFeature.TodayData.RestedAmmountC = dataStorageFeature.TodayData.RestedAmmountC.Add(OneSec);
+                    dataStorageFeature.TodayData.IdleAmmountC = dataStorageFeature.TodayData.IdleAmmountC.Add(OneSec);
                     break;
             }
             OnSpentTimeChange?.Invoke();

@@ -8,10 +8,12 @@ namespace WorkLifeBalance.Models
         public string Date { get; set; } = "";
         public string WorkedAmmount { get; set; } = "";
         public string RestedAmmount { get; set; } = "";
+        public string IdleAmmount { get; set; } = "";
 
         public DateOnly DateC { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         public TimeOnly WorkedAmmountC { get; set; } = new TimeOnly(0, 0, 0);
         public TimeOnly RestedAmmountC { get; set; } = new TimeOnly(0, 0, 0);
+        public TimeOnly IdleAmmountC { get; set; } = new TimeOnly(0, 0, 0);
 
         public void ConvertSaveDataToUsableData()
         {
@@ -42,6 +44,13 @@ namespace WorkLifeBalance.Models
                         int.Parse(RestedAmmount.Substring(2, 2)),
                         int.Parse(RestedAmmount.Substring(4, 2))
                     );
+
+                IdleAmmountC = new TimeOnly
+                    (
+                        int.Parse(IdleAmmount.Substring(0, 2)),
+                        int.Parse(IdleAmmount.Substring(2, 2)),
+                        int.Parse(IdleAmmount.Substring(4, 2))
+                    );
             }
             catch (Exception ex)
             {
@@ -57,6 +66,8 @@ namespace WorkLifeBalance.Models
                 WorkedAmmount = WorkedAmmountC.ToString("HHmmss");
 
                 RestedAmmount = RestedAmmountC.ToString("HHmmss");
+
+                IdleAmmount = IdleAmmountC.ToString("HHmmss");
             }
             catch (Exception ex)
             {

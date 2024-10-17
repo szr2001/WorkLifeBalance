@@ -126,8 +126,8 @@ namespace WorkLifeBalance.Services
         {
             day.ConvertUsableDataToSaveData();
             
-            string sql = @"INSERT OR REPLACE INTO Days (Date,WorkedAmmount,RestedAmmount)
-                         VALUES (@Date,@WorkedAmmount,@RestedAmmount)";
+            string sql = @"INSERT OR REPLACE INTO Days (Date,WorkedAmmount,RestedAmmount,IdleAmmount)
+                         VALUES (@Date,@WorkedAmmount,@RestedAmmount,@IdleAmmount)";
 
             await dataAccess.WriteDataAsync(sql, day);
         }

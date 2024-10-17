@@ -126,15 +126,12 @@ namespace WorkLifeBalance
             featuresService.AddFeature<DataStorageFeature>();
             featuresService.AddFeature<TimeTrackerFeature>();
             featuresService.AddFeature<ActivityTrackerFeature>();
+            //featuresService.AddFeature<IdleCheckerFeature>();
 
             //check settings to see if you need to add some features
             if (dataStorageFeature.Settings.AutoDetectWorkingC)
             {
                 featuresService.AddFeature<StateCheckerFeature>();
-            }
-            if (dataStorageFeature.Settings.AutoDetectIdleC)
-            {
-                featuresService.AddFeature<IdleCheckerFeature>();
             }
 
             //starts the main timer

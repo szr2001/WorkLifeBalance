@@ -100,18 +100,24 @@
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center">
                             <TextBlock Text="Worked Amount:"
-                                       FontSize="20"
+                                       FontSize="15"
                                        TextAlignment="Center"/>
                             <TextBlock Text="{Binding ElapsedWorkTime, Converter={StaticResource TimeOnlyStringConverter}}"
                                        FontSize="15"
                                        TextAlignment="Center"/>
                             <TextBlock Text="Break Amount"
                                        TextAlignment="Center"
-                                       FontSize="20"/>
+                                       FontSize="15"/>
                             <TextBlock Text="{Binding ElapsedRestTime, Converter={StaticResource TimeOnlyStringConverter}}"
                                        FontSize="15"
                                        TextAlignment="Center"/>
-                        </StackPanel>
+                            <TextBlock Text="Idle Amount"
+                                         TextAlignment="Center"
+                                         FontSize="15"/>
+                            <TextBlock Text="{Binding IdleRestTime, Converter={StaticResource TimeOnlyStringConverter}}"
+                                         FontSize="15"
+                                         TextAlignment="Center"/>
+                    </StackPanel>
                         <Button Grid.Column="1"
                                 Width="45"
                                 Margin="-5,0,0,0"

@@ -132,11 +132,15 @@ namespace WorkLifeBalance.Services
             string sqlCreateVersionTable =
                 """
                     ALTER TABLE Settings
-                    ADD COLUMN Version string;
+                    ADD COLUMN Version TEXT Default "2.0.0";
+                """;
+            string sqlCreateIdleAmmountTable =
+                """
+                    ALTER TABLE Days
+                    ADD COLUMN IdleAmmount TEXT Default '000000';
                 """;
             await sqlDataAccess.ExecuteAsync(sqlCreateVersionTable, new { });
-
-            await UpdateDatabaseVersion("2.0.0");
+            await sqlDataAccess.ExecuteAsync(sqlCreateIdleAmmountTable, new { });
         }
 
         private async Task Create2_0_0V()
@@ -155,8 +159,9 @@ namespace WorkLifeBalance.Services
                 """
                     CREATE TABLE "Days" (
                 	"Date"	TEXT NOT NULL UNIQUE,
-                	"WorkedAmmount"	TEXT NOT NULL,
-                	"RestedAmmount"	TEXT NOT NULL,
+                	"WorkedAmmount"	TEXT NOT NULL DEFAULT "0",
+                    "IdleAmmount" TEXT NOT NULL DEFAULT "0",
+                	"RestedAmmount"	TEXT NOT NULL DEFAULT "0",
                 	PRIMARY KEY("Date"));
                 """;
             await sqlDataAccess.ExecuteAsync(createDaysSQL, new { });
@@ -168,7 +173,7 @@ namespace WorkLifeBalance.Services
                 	"StartWithWindows"	INTEGER,
                 	"AutoDetectWorking"	INTEGER,
                 	"AutoDetectIdle"	INTEGER,
-                	"StartUpCorner"	INTEGER,
+                	"StartUpCorner"	INTEGER DEFAULT "2",
                 	"SaveInterval"	INTEGER,
                 	"AutoDetectInterval"	INTEGER,
                 	"AutoDetectIdleInterval"	INTEGER,
