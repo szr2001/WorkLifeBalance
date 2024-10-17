@@ -40,6 +40,7 @@ namespace WorkLifeBalance.Services
 
             navigation.NavigateTo<T>();
             SecondWindowPageVMBase activeModel = (SecondWindowPageVMBase)navigation.ActiveView;
+            //add a loading page first
             secondWindowVm.Width = (int)activeModel.RequiredWindowSize.X;
             secondWindowVm.Height = (int)activeModel.RequiredWindowSize.Y;
             secondWindowVm.PageName = activeModel.WindowPageName;

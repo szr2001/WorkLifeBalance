@@ -41,9 +41,6 @@ namespace WorkLifeBalance.ViewModels
         private DayData[]? backupdata;
         //use this to request the correct page when leaving the DayActivity page
         private int LoadedPageType = 0;
-        private string FilterMonth = "00";
-        private string FilterDay = "00";
-        private string FilterYear = "0000";
         private ISecondWindowService secondWindowService;
         private DataBaseHandler database;
         private DataStorageFeature dataStorage;
@@ -54,7 +51,6 @@ namespace WorkLifeBalance.ViewModels
             this.database = database;
             this.dataStorage = dataStorage;
             SetFilterValues();
-            //MainWindow.ShowErrorBox("Error ViewDaysPage", "Requested ViewDays Page with no/wrong arguments");
         }
 
         private void SetFilterValues()
@@ -82,7 +78,7 @@ namespace WorkLifeBalance.ViewModels
             FilterYears = Years.ToArray();
         }
 
-        private async Task RequiestData(int requiestedDataType)
+        private async Task RequiestData(int requiestedDataType = 0)
         {
             DateOnly currentDate = dataStorage.TodayData.DateC;
             DateTime previousMonthDateTime = currentDate.ToDateTime(new TimeOnly(0, 0, 0)).AddMonths(-1);
@@ -104,6 +100,10 @@ namespace WorkLifeBalance.ViewModels
                     WindowPageName = "Previous Month Days";
                     break;
             }
+
+            SelectedMonth = 0;
+            SelectedDay = 0;
+            SelectedYear = 0;
 
             Days.Reverse();
             LoadedData = new ObservableCollection<DayData>(Days);
@@ -140,7 +140,7 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         private void ApplyFilters()
         {
-            if (FilterMonth == "00" && FilterDay == "00" && FilterYear == "0000")
+            if (SelectedMonth == 0 && SelectedDay == 0 && SelectedYear == 0)
             {
                 LoadedData.Clear();
 
@@ -152,17 +152,17 @@ namespace WorkLifeBalance.ViewModels
             }
 
             DayData[] tempdata = backupdata!;
-            if (FilterMonth != "00")
+            if (SelectedMonth != 0)
             {
-                tempdata = tempdata.Where(daydata => daydata.DateC.ToString("MM") == FilterMonth).ToArray();
+                tempdata = tempdata.Where(daydata => daydata.DateC.Month == SelectedMonth).ToArray();
             }
-            if (FilterDay != "00")
+            if (SelectedDay != 0)
             {
-                tempdata = tempdata.Where(daydata => daydata.DateC.ToString("dd") == FilterDay).ToArray();
+                tempdata = tempdata.Where(daydata => daydata.DateC.Day == SelectedDay).ToArray();
             }
-            if (FilterYear != "0000")
+            if (SelectedYear != 0)
             {
-                tempdata = tempdata.Where(daydata => daydata.DateC.ToString("yyyy") == FilterYear).ToArray();
+                tempdata = tempdata.Where(daydata => daydata.DateC.Year == SelectedYear).ToArray();
             }
 
             LoadedData.Clear();

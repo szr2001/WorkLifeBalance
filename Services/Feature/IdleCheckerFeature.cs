@@ -41,7 +41,7 @@ namespace WorkLifeBalance.Services.Feature
 
             IsCheckingIdleTriggered = true;
 
-            await Task.Delay(5000, CancelTokenS.Token);
+            await Task.Delay(delay, CancelTokenS.Token);
             CheckIdle();
          
             IsCheckingIdleTriggered = false;
