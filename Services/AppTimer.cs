@@ -12,7 +12,7 @@ namespace WorkLifeBalance.Services
     public class AppTimer
     {
         private readonly DataStorageFeature dataStorageFeature;
-        private event Action? OnTimerTick;
+        private event Func<Task>? OnTimerTick;
         private CancellationTokenSource CancelTick = new();
 
         public AppTimer(DataStorageFeature dataStorageFeature)
@@ -29,7 +29,7 @@ namespace WorkLifeBalance.Services
             _ = TimerLoop(CancelTick.Token);
         }
 
-        public void Subscribe(Action eventname)
+        public void Subscribe(Func<Task> eventname)
         {
             if (OnTimerTick != null)
             {
@@ -39,7 +39,7 @@ namespace WorkLifeBalance.Services
             Log.Information($"{eventname.Method.Name} Subscribed to Main Timer");
         }
 
-        public void UnSubscribe(Action eventname)
+        public void UnSubscribe(Func<Task> eventname)
         {
             if (OnTimerTick == null) return;
 
@@ -71,11 +71,11 @@ namespace WorkLifeBalance.Services
                     //triggered while saving, so data is not updated while is saving
                     if (dataStorageFeature.IsAppSaving)
                     {
-                        await Task.Delay(500);
+                        await Task.Delay(500, token);
                         continue;
                     }
 
-                    await Task.Delay(1000);
+                    await Task.Delay(1000, token);
                 }
                 catch (Exception ex)
                 {

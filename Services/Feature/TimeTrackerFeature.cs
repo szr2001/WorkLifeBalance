@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace WorkLifeBalance.Services.Feature
 {
@@ -15,12 +16,12 @@ namespace WorkLifeBalance.Services.Feature
             this.dataStorageFeature = dataStorageFeature;
             this.appStateHandler = appStateHandler;
         }
-        protected override Action ReturnFeatureMethod()
+        protected override Func<Task> ReturnFeatureMethod()
         {
             return TriggerUpdateSpentTime;
         }
 
-        private void TriggerUpdateSpentTime()
+        private Task TriggerUpdateSpentTime()
         {
             switch (appStateHandler.AppTimerState)
             {
@@ -37,6 +38,7 @@ namespace WorkLifeBalance.Services.Feature
                     break;
             }
             OnSpentTimeChange?.Invoke();
+            return Task.CompletedTask;
         }
     }
 

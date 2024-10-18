@@ -3,67 +3,84 @@ using System;
 using System.IO.Pipes;
 using System.Numerics;
 using System.Threading.Tasks;
+using WorkLifeBalance.Interfaces;
+using static Dapper.SqlMapper;
 
 namespace WorkLifeBalance.Services.Feature
 {
     public class IdleCheckerFeature : FeatureBase
     {
-        private Vector2 _oldmousePosition = new Vector2(-1, -1);
+        private Vector2 _oldmousePosition = new(-1, -1);
         private readonly AppStateHandler appStateHandler;
         private readonly DataStorageFeature dataStorageFeature;
         private readonly LowLevelHandler lowLevelHandler;
+        private readonly IFeaturesServices featuresServices;
 
         private readonly int MinuteMiliseconds = 60000;
         private readonly int IdleDelay = 3000;
         private readonly int RestingDelay = 600000;
-        public IdleCheckerFeature(DataStorageFeature dataStorageFeature, LowLevelHandler lowLevelHandler, AppStateHandler appStateHandler)
+        public IdleCheckerFeature(DataStorageFeature dataStorageFeature, LowLevelHandler lowLevelHandler, AppStateHandler appStateHandler, IFeaturesServices featuresServices)
         {
             this.dataStorageFeature = dataStorageFeature;
             this.lowLevelHandler = lowLevelHandler;
             this.appStateHandler = appStateHandler;
+            this.featuresServices = featuresServices;
         }
 
-        protected override Action ReturnFeatureMethod()
+        protected override Func<Task> ReturnFeatureMethod()
         {
             return TriggerCheckIdle;
         }
 
         private bool IsCheckingIdleTriggered = false;
-        private async void TriggerCheckIdle()
+        private async Task TriggerCheckIdle()
         {
             if (IsCheckingIdleTriggered) return;
 
-            int delay = 0;
-
-            switch (appStateHandler.AppTimerState)
+            try
             {
-                case AppState.Working:
-                    //delay = dataStorageFeature.Settings.AutoDetectIdle * MinuteMiliseconds / 2;
-                    delay = 5000;
-                    break;
-                case AppState.Resting:
-                    delay = 5000;
-                    break;
-                case AppState.Idle:
+                IsCheckingIdleTriggered = true;
+                int delay;
+
+                if (appStateHandler.AppTimerState == AppState.Idle)
+                {
                     delay = 3000;
-                    break;
+                }
+                else
+                {
+                    //delay = (dataStorageFeature.Settings.AutoDetectIdle * 60000) / 2;
+                    delay = 10000;
+                }
+
+                await Task.Delay(delay, CancelTokenS.Token);
+                CheckIdle();
             }
-
-            IsCheckingIdleTriggered = true;
-
-            Console.WriteLine(delay);
-
-            await Task.Delay(delay, CancelTokenS.Token);
-            CheckIdle();
-         
-            IsCheckingIdleTriggered = false;
+            catch (TaskCanceledException taskCancel)
+            {
+                Log.Information($"Idle Checker: {taskCancel.Message}");
+            }
+            catch(Exception ex)
+            {
+                Log.Error(ex,"Idle Checker");
+            }
+            finally
+            {
+                IsCheckingIdleTriggered = false;
+            }
         }
 
         private void CheckIdle()
         {
             Vector2 newpos = Vector2.Zero;
 
-            newpos = lowLevelHandler.GetMousePos();
+            try
+            {
+                newpos = lowLevelHandler.GetMousePos();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+            }
 
             if (_oldmousePosition == new Vector2(-1, -1))
             {
@@ -73,11 +90,12 @@ namespace WorkLifeBalance.Services.Feature
 
             if (newpos == _oldmousePosition)
             {
+                featuresServices.RemoveFeature<StateCheckerFeature>();
                 appStateHandler.SetAppState(AppState.Idle);
             }
             else
             {
-                appStateHandler.SetAppState(AppState.Working);
+                featuresServices.AddFeature<StateCheckerFeature>();
             }
 
             _oldmousePosition = newpos;

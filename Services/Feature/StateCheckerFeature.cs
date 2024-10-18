@@ -18,26 +18,29 @@ namespace WorkLifeBalance.Services.Feature
             this.appStateHandler = appStateHandler;
         }
 
-        protected override Action ReturnFeatureMethod()
+        protected override Func<Task> ReturnFeatureMethod()
         {
             return TriggerWorkDetect;
         }
 
         private bool IsAutoWorkDetectionTriggered = false;
-        private async void TriggerWorkDetect()
+        private async Task TriggerWorkDetect()
         {
             if (IsAutoWorkDetectionTriggered) return;
 
-            IsAutoWorkDetectionTriggered = true;
-
             try
             {
+                IsAutoWorkDetectionTriggered = true;
                 await Task.Delay(dataStorageFeature.Settings.AutoDetectInterval * 1000, CancelTokenS.Token);
                 CheckStateChange();
             }
+            catch (TaskCanceledException taskCancel)
+            {
+                Log.Information($"State Checker: {taskCancel.Message}");
+            }
             catch (Exception ex)
             {
-                Log.Warning(ex, "StateCheckerFeature timer loop");
+                Log.Error(ex, "State Checker");
             }
             finally
             {
@@ -64,6 +67,16 @@ namespace WorkLifeBalance.Services.Feature
                     if (IsFocusingOnWorkingWindow)
                     {
                         appStateHandler.SetAppState(AppState.Working);
+                    }
+                    break;
+                case AppState.Idle:
+                    if (IsFocusingOnWorkingWindow)
+                    {
+                        appStateHandler.SetAppState(AppState.Working);
+                    }
+                    else
+                    {
+                        appStateHandler.SetAppState(AppState.Resting);
                     }
                     break;
             }

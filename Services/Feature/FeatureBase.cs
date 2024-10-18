@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace WorkLifeBalance.Services.Feature
 {
@@ -12,22 +13,27 @@ namespace WorkLifeBalance.Services.Feature
         protected CancellationTokenSource CancelTokenS = new();
 
         //used to add the current feature and create a new canceltoken,returns overrided method
-        public Action AddFeature()
+        public Func<Task> AddFeature()
         {
             CancelTokenS = new();
+            OnFeatureAdded();
             return ReturnFeatureMethod();
         }
 
         //used to remove the feature, cancels the features and returns the specific method
         //that needs to be removed from main timer
-        public Action RemoveFeature()
+        public Func<Task> RemoveFeature()
         {
             CancelToken();
+            OnFeatureRemoved();
             return ReturnFeatureMethod();
         }
 
         //override in childrens to return the feature specific main method
-        protected abstract Action ReturnFeatureMethod();
+        protected abstract Func<Task> ReturnFeatureMethod();
+
+        protected virtual void OnFeatureAdded() { }
+        protected virtual void OnFeatureRemoved() { }
 
         private void CancelToken()
         {

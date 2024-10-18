@@ -1,5 +1,6 @@
 ﻿using Serilog;
 using System;
+using System.Threading.Tasks;
 
 namespace WorkLifeBalance.Services.Feature
 {
@@ -10,7 +11,7 @@ namespace WorkLifeBalance.Services.Feature
 
         public string ActiveWindow = "";
 
-        private TimeSpan OneSec = new TimeSpan(0, 0, 1);
+        private readonly TimeSpan OneSec = new (0, 0, 1);
 
         private readonly LowLevelHandler lowLevelHandler;
         private readonly DataStorageFeature dataStorageFeature;
@@ -20,12 +21,12 @@ namespace WorkLifeBalance.Services.Feature
             this.dataStorageFeature = dataStorageFeature;
         }
 
-        protected override Action ReturnFeatureMethod()
+        protected override Func<Task> ReturnFeatureMethod()
         {
             return TriggerRecordActivity;
         }
 
-        private void TriggerRecordActivity()
+        private Task TriggerRecordActivity()
         {
             try
             {
@@ -48,6 +49,7 @@ namespace WorkLifeBalance.Services.Feature
             {
                 dataStorageFeature.AutoChangeData.ActivitiesC.Add(ActiveWindow, new TimeOnly());
             }
+            return Task.CompletedTask;
         }
     }
 }

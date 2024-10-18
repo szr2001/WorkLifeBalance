@@ -68,13 +68,13 @@ namespace WorkLifeBalance.Services.Feature
             Log.Information($"Load Complete!");
         }
 
-        protected override Action ReturnFeatureMethod()
+        protected override Func<Task> ReturnFeatureMethod()
         {
             return TriggerSaveData;
         }
 
         private bool IsSaveTriggered = false;
-        private async void TriggerSaveData()
+        private async Task TriggerSaveData()
         {
             if (IsSaveTriggered) return;
 
@@ -85,9 +85,13 @@ namespace WorkLifeBalance.Services.Feature
                 await Task.Delay(Settings.SaveInterval * 60000, CancelTokenS.Token);
                 await SaveData();
             }
+            catch (TaskCanceledException taskCancel)
+            {
+                Log.Information($"DataStorage: {taskCancel.Message}");
+            }
             catch (Exception ex)
             {
-                Log.Warning(ex, $"DataStorageFeature timer loop");
+                Log.Error(ex, "DataStorage");
             }
 
             finally
