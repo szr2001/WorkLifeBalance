@@ -137,23 +137,6 @@ namespace WorkLifeBalance.ViewModels
         }
 
         [RelayCommand]
-        public void ToggleState()
-        {
-            if (!dataStorageFeature.IsAppReady || dataStorageFeature.IsClosingApp) return;
-
-            switch (appStateHandler.AppTimerState)
-            {
-                case AppState.Working:
-                    appStateHandler.AppTimerState = AppState.Resting;
-                    break;
-
-                case AppState.Resting:
-                    appStateHandler.AppTimerState = AppState.Working;
-                    break;
-            }
-        }
-
-        [RelayCommand]
         public async Task CloseApp()
         {
             //if (dataStorageFeature.IsClosingApp) return;

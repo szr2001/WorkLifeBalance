@@ -14,11 +14,107 @@
         WindowStyle="None"
         Top ="{Binding StartupTop, Mode=TwoWay}"
         Left ="{Binding StartupLeft, Mode=TwoWay}"
-        Title="WorkLifeBalance" Height="140" Width="220">
+        Title="WorkLifeBalance" Height="308" Width="500">
     <Window.Resources>
         <converters:TimeOnlyStringConverter x:Key="TimeOnlyStringConverter"/>
     </Window.Resources>
-    <Border CornerRadius="15"
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="15"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="15"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="15"/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5"
+                CornerRadius="8" MouseDown="MoveWindow">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
+                    <GradientStop Color="{StaticResource WBlueShadowC}" Offset="0"/>
+                    <GradientStop Color="{StaticResource WBlueC}" Offset="0.5"/>
+                    <GradientStop Color="{StaticResource WBlueHighlightC}" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="5" Opacity="0.5"/>
+            </Border.Effect>
+            <StackPanel Orientation="Horizontal" Margin="5,0,5,0" HorizontalAlignment="Center">
+                <Button Height="40"
+                        Width="100"
+                        Margin="4"
+                        Command="{Binding OpenViewDataWindowCommand}"
+                        Template="{StaticResource SlightRoundedBtnTemp}"
+                        Style="{StaticResource RoundedBtnStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Assets/DataSheet.png" Margin="1"/>
+                        <TextBlock Text="Data" FontFamily="Comic Sans MS" FontWeight="Bold"
+                                   VerticalAlignment="Center" Foreground="White" FontSize="20"/>
+                    </StackPanel>
+                </Button>
+                <Button Height="40"
+                        Width="130"
+                        Margin="4"
+                        Command="{Binding OpenOptionsWindowCommand}"
+                        Template="{StaticResource SlightRoundedBtnTemp}"
+                        Style="{StaticResource RoundedBtnStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Assets/Settings.png" Margin="1"/>
+                        <TextBlock Text="Settings" FontFamily="Comic Sans MS" FontWeight="Bold"
+                                   VerticalAlignment="Center" Foreground="White" FontSize="20"/>
+                    </StackPanel>
+                </Button>
+                <Button Height="40"
+                        Width="130"
+                        Margin="4"
+                        Template="{StaticResource SlightRoundedBtnTemp}"
+                        Style="{StaticResource RoundedBtnStyle}" Click="HideWindow">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Assets/Settings.png" Margin="1"/>
+                        <TextBlock Text="Minimize" FontFamily="Comic Sans MS" FontWeight="Bold"
+                    VerticalAlignment="Center" Foreground="White" FontSize="20"/>
+                    </StackPanel>
+                </Button>
+                <Button Height="40"
+                       Width="100"
+                       Margin="4"
+                       Command="{Binding CloseAppCommand}"
+                       Template="{StaticResource SlightRoundedBtnTemp}"
+                       Style="{StaticResource RedRoundedBtnStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Assets/Cancel.png" Margin="1"/>
+                        <TextBlock Text="Close" FontFamily="Comic Sans MS" FontWeight="Bold"
+                                   VerticalAlignment="Center" Foreground="White" FontSize="20"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Border>
+        <Border Grid.Column="1" CornerRadius="0,0,8,8" Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="2">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
+                    <GradientStop Color="{StaticResource WDarkPurpleShadowC}" Offset=".8"/>
+                    <GradientStop Color="{StaticResource WDarkPurpleC}" Offset="0.3"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="5" Opacity="0.5"/>
+            </Border.Effect>
+        </Border>
+        <Border Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3"
+                CornerRadius="8,8,8,8" Background="{StaticResource WDarkPurple}">
+        </Border>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" 
+                    Grid.ColumnSpan="3" Grid.RowSpan="2">
+            
+        </StackPanel>
+    </Grid>
+    <!--<Border CornerRadius="15"
             MouseDown="MoveWindow"
             Background= "{StaticResource WLFBOceanBlue}">
             <Grid>
@@ -193,5 +289,5 @@
                            Foreground="White"/>
                 </StackPanel>
         </Grid>
-    </Border>
+    </Border>-->
 </Window>

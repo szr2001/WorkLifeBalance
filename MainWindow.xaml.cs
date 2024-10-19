@@ -34,17 +34,5 @@ namespace WorkLifeBalance
         {
             WindowState = WindowState.Minimized;
         }
-
-        private void OpenSideBar(object sender, MouseEventArgs e)
-        {
-            OptionMenuVisibility.Width = new GridLength(35, GridUnitType.Pixel);
-            OptionsPannel.Visibility = Visibility.Visible;
-        }
-
-        private void CloseSideBar(object sender, MouseEventArgs e)
-        {
-            OptionMenuVisibility.Width = new GridLength(15, GridUnitType.Pixel);
-            OptionsPannel.Visibility = Visibility.Collapsed;
-        }
     }
 }
