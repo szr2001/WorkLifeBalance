@@ -12,7 +12,7 @@
         <converters:TimeOnlyStringConverter x:Key="TimeOnlyStringConverter"/>
     </Page.Resources>
     <Border CornerRadius="15"
-            Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
+            Background="{StaticResource WLFBBrightOceanBlue}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -42,7 +42,7 @@
                 <Border Height="350"
                         CornerRadius="20"
                         Margin="10,10,10,0"
-                        Background="{Binding Source={StaticResource WLFBOceanBlue}}">
+                        Background="{StaticResource WLFBOceanBlue}">
                     <ScrollViewer VerticalScrollBarVisibility="Hidden">
                             <ItemsControl ItemsSource="{Binding Activities}">
                                 <ItemsControl.ItemsPanel>
@@ -57,10 +57,10 @@
                                         <Border Margin="5"
                                                 MinWidth="210"
                                                 HorizontalAlignment="Stretch"
-                                                Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
+                                                Background="{StaticResource WLFBBrightOceanBlue}"
                                                 CornerRadius="15">
                                             <Border Margin="5"
-                                                    Background="{Binding Source={StaticResource WLFBOceanBlue}}"
+                                                    Background="{StaticResource WLFBOceanBlue}"
                                                     CornerRadius="15">
                                                 <StackPanel Orientation="Vertical">
                                                     <TextBlock Text="{Binding Process}"
@@ -93,7 +93,7 @@
                     Grid.Column="0"
                     Grid.RowSpan="3"
                     Grid.ColumnSpan="3"
-                    Background="{Binding Source={StaticResource WLFBOceanBlue}}">
+                    Background="{StaticResource WLFBOceanBlue}">
                 <StackPanel Orientation="Vertical">
                     <TextBlock Text="Worked:"
                                TextAlignment="Center"
@@ -124,8 +124,8 @@
                     Grid.Column="0"
                     Grid.ColumnSpan="3"
                     Command="{Binding BackToViewDaysPageCommand}"
-                    Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
-                    Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}">
+                    Style="{StaticResource BlueRoundedBtnHoverStyle}"
+                    Template="{StaticResource SlightRoundedBtnTemp}">
                     <TextBlock Text="Back"
                                TextAlignment="Center"
                                FontWeight="Bold"

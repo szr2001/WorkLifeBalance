@@ -12,7 +12,7 @@
         Title="SecondWindow" Height="{Binding Height, Mode=TwoWay}" Width="{Binding Width, Mode=TwoWay}">
 
     <Border CornerRadius="0,0,20,20"
-            Background= "{Binding Source={StaticResource WLFBOceanBlue}}">
+            Background= "{StaticResource WLFBOceanBlue}">
 
         <Grid>
 
@@ -23,7 +23,7 @@
 
             <Border Grid.Row="0"
                     MouseDown="MoveWindow"
-                    Background="{ Binding Source={StaticResource WLFBBluishWhite}}">
+                    Background="{StaticResource WLFBBluishWhite}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -35,13 +35,13 @@
                                Grid.ColumnSpan="2"
                                FontSize="20"
                                FontWeight="Bold"
-                               Foreground="{ Binding Source={StaticResource WLFBOceanBlue}}"
+                               Foreground="{StaticResource WLFBOceanBlue}"
                                Text="{Binding PageName}"/>
                     <Button Width="28"
                             Height="28" 
                             Grid.Column="1"
-                            Template="{Binding Source={StaticResource RoundedBtnTemp}}"
-                            Style="{Binding Source={StaticResource RedRoundedBtnHoverStyle}}" 
+                            Template="{StaticResource RoundedBtnTemp}"
+                            Style="{StaticResource RedRoundedBtnHoverStyle}" 
                             VerticalAlignment="Center"
                             HorizontalAlignment="Right"
                             Margin="0,0,5,0"

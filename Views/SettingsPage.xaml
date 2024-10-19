@@ -13,7 +13,7 @@
         <converters:IntStringConverter x:Key="IntStringConverter"/>
         <converters:BoolVisibilityConverter x:Key="BoolVisibilityConverter"/> 
     </Page.Resources>
-    <Border Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
+    <Border Background="{StaticResource WLFBBrightOceanBlue}"
             CornerRadius="15">
 
         <Border Margin="8,0,8,8">
@@ -21,7 +21,7 @@
                 <StackPanel>
                     <Border Margin="35,5,35,5"
                             CornerRadius="15"
-                            Background="{Binding Source={StaticResource WLFBOceanBlue}}">
+                            Background="{StaticResource WLFBOceanBlue}">
 
                         <TextBlock Text="{Binding Version}"
                                    TextAlignment="Center"
@@ -34,7 +34,7 @@
                     <Border Height="55"
                             Margin="0,0,0,5"
                             CornerRadius="15"
-                            Background="{Binding Source={StaticResource WLFBOceanBlue}}">
+                            Background="{StaticResource WLFBOceanBlue}">
 
                         <StackPanel Orientation="Vertical">
 
@@ -47,8 +47,8 @@
                                           Width="25"
                                           IsChecked="{Binding StartWithWin, Mode=TwoWay}"
                                           Margin="0,5,0,0"
-                                          Style="{Binding Source={StaticResource RoundedToggleBtnStyle}}"
-                                          Template="{Binding Source= {StaticResource RoundedToggleBtnTemp}}">
+                                          Style="{StaticResource RoundedToggleBtnStyle}"
+                                          Template="{StaticResource RoundedToggleBtnTemp}">
 
                             </ToggleButton>
                         </StackPanel>
@@ -57,7 +57,7 @@
                     <Border Height="55"
                             Margin="0,5,0,5"
                             CornerRadius="15"
-                            Background="{Binding Source={StaticResource WLFBOceanBlue}}">
+                            Background="{StaticResource WLFBOceanBlue}">
 
                         <StackPanel Orientation="Vertical">
 
@@ -70,8 +70,8 @@
                                       Height="25"
                                       ItemsSource="{Binding AnchorCorners, Mode=TwoWay}"
                                       SelectedItem="{Binding SelectedStartupCorner}"
-                                      Style="{Binding Source={StaticResource CustomComboBoxStyle}}"
-                                      ItemContainerStyle ="{Binding Source={StaticResource CustomComboBoxItemStyle}}"
+                                      Style="{StaticResource CustomComboBoxStyle}"
+                                      ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
                                       Margin="0,2,0,0"/>
                         </StackPanel>
                     </Border>
@@ -79,7 +79,7 @@
                     <Border Height="50"
                             Margin="0,5,0,5"
                             CornerRadius="15"
-                            Background="{Binding Source={StaticResource WLFBOceanBlue}}">
+                            Background="{StaticResource WLFBOceanBlue}">
 
                         <StackPanel Orientation="Vertical">
 
@@ -92,15 +92,15 @@
                                       Height="25"
                                       SelectedItem="{Binding AutoSaveInterval, Mode=TwoWay}"
                                       ItemsSource="{Binding Numbers}"
-                                      Style="{Binding Source={StaticResource CustomComboBoxStyle}}"
-                                      ItemContainerStyle ="{Binding Source={StaticResource CustomComboBoxItemStyle}}"
+                                      Style="{StaticResource CustomComboBoxStyle}"
+                                      ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
                                       Margin="0,2,0,0"/>
                         </StackPanel>
                     </Border>
 
                     <Border Margin="0,5,0,5"
                             CornerRadius="15"
-                            Background="{Binding Source={StaticResource WLFBOceanBlue}}">
+                            Background="{StaticResource WLFBOceanBlue}">
 
                         <StackPanel Orientation="Vertical"
                                     Margin="5">
@@ -114,9 +114,9 @@
                                           Width="25"
                                           IsChecked="{Binding AutoDetectWork, Mode=TwoWay}"
                                           Margin="0,5,0,0"
-                                          Style="{Binding Source={StaticResource RoundedToggleBtnStyle}}"
-                                          Template="{Binding Source= {StaticResource RoundedToggleBtnTemp}}" />
-                            <Border Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
+                                          Style="{StaticResource RoundedToggleBtnStyle}"
+                                          Template="{StaticResource RoundedToggleBtnTemp}" />
+                            <Border Background="{StaticResource WLFBBrightOceanBlue}"
                                     CornerRadius="15"
                                     Margin="5"
                                     Visibility="{Binding AutoDetectWork, Converter={StaticResource BoolVisibilityConverter}}"
@@ -133,7 +133,7 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Border.Style>
-                                <Border Background="{Binding Source={StaticResource WLFBOceanBlue}}"
+                                <Border Background="{StaticResource WLFBOceanBlue}"
                                         Margin="4"
                                         CornerRadius="15">
                                     <StackPanel Margin="2">
@@ -146,11 +146,11 @@
                                                   SelectedItem="{Binding AutoDetectInterval, Mode=TwoWay}"
                                                   Height="22"
                                                   ItemsSource="{Binding Numbers}"
-                                                  Style="{Binding Source={StaticResource CustomComboBoxStyle}}"
-                                                  ItemContainerStyle ="{Binding Source={StaticResource CustomComboBoxItemStyle}}"
+                                                  Style="{StaticResource CustomComboBoxStyle}"
+                                                  ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
                                                   Margin="0,2,0,0"/>
-                                        <Button Style="{Binding Source={StaticResource OceanBlueRoundedBtnStyle}}"
-                                                Template="{Binding Source= {StaticResource SlightRoundedBtnTemp}}"
+                                        <Button Style="{StaticResource OceanBlueRoundedBtnStyle}"
+                                                Template="{StaticResource SlightRoundedBtnTemp}"
                                                 Width="110"
                                                 Margin="4"
                                                 Height="23"
@@ -168,7 +168,7 @@
                     
                     <Border Margin="0,5,0,5"
                             CornerRadius="15"
-                            Background="{Binding Source={StaticResource WLFBOceanBlue}}">
+                            Background="{StaticResource WLFBOceanBlue}">
 
                         <StackPanel Orientation="Vertical"
                                     Margin="5">
@@ -182,9 +182,9 @@
                                           Width="25"
                                           IsChecked="{Binding AutoDetectIdle, Mode=TwoWay}"
                                           Margin="0,5,0,0"
-                                          Style="{Binding Source={StaticResource RoundedToggleBtnStyle}}"
-                                          Template="{Binding Source= {StaticResource RoundedToggleBtnTemp}}" />
-                            <Border Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
+                                          Style="{StaticResource RoundedToggleBtnStyle}"
+                                          Template="{StaticResource RoundedToggleBtnTemp}" />
+                            <Border Background="{StaticResource WLFBBrightOceanBlue}"
                                     CornerRadius="15"
                                     Margin="5"
                                     Visibility="{Binding AutoDetectIdle, Converter={StaticResource BoolVisibilityConverter}}"
@@ -201,7 +201,7 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Border.Style>
-                                <Border Background="{Binding Source={StaticResource WLFBOceanBlue}}"
+                                <Border Background="{StaticResource WLFBOceanBlue}"
                                         Margin="4"
                                         CornerRadius="15">
                                     <StackPanel Margin="2">
@@ -214,8 +214,8 @@
                                                   Height="22"
                                                   SelectedItem="{Binding AutoDetectIdleInterval, Mode=TwoWay}"
                                                   ItemsSource="{Binding Numbers}"
-                                                  Style="{Binding Source={StaticResource CustomComboBoxStyle}}"
-                                                  ItemContainerStyle ="{Binding Source={StaticResource CustomComboBoxItemStyle}}"
+                                                  Style="{StaticResource CustomComboBoxStyle}"
+                                                  ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
                                                   Margin="0,2,0,0"/>
                                     </StackPanel>
                                 </Border>

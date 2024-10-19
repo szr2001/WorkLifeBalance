@@ -9,7 +9,7 @@
       Title="BackgroundWindowsViewPage">
 
     <Border CornerRadius="15"
-            Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
+            Background="{StaticResource WLFBBrightOceanBlue}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="180"/>
@@ -35,7 +35,7 @@
                     Grid.ColumnSpan="7"
                     CornerRadius="20"
                     Margin="0,10,10,10"
-                    Background="{Binding Source={StaticResource WLFBOceanBlue}}">
+                    Background="{StaticResource WLFBOceanBlue}">
                 <ScrollViewer VerticalScrollBarVisibility="Hidden">
                     <Grid>
                         <ItemsControl ItemsSource="{Binding SelectedWindows}">
@@ -49,11 +49,11 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border Margin="5"
-                                            Background="{Binding Source={StaticResource WLFBLightPurple}}"
+                                            Background="{StaticResource WLFBLightPurple}"
                                             CornerRadius="15">
                                         <Button Margin="5"
-                                                Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
-                                                Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}"
+                                                Style="{StaticResource BlueRoundedBtnHoverStyle}"
+                                                Template="{StaticResource SlightRoundedBtnTemp}"
                                                 FontWeight="Bold"
                                                 Foreground="White"
                                                 FontSize="15"
@@ -76,7 +76,7 @@
                     Grid.ColumnSpan="7"
                     CornerRadius="20"
                     Margin="0,10,10,10"
-                    Background="{Binding Source={StaticResource WLFBOceanBlue}}">
+                    Background="{StaticResource WLFBOceanBlue}">
                 <ScrollViewer VerticalScrollBarVisibility="Hidden">
                     <Grid>
                         <ItemsControl ItemsSource="{Binding DetectedWindows}">
@@ -90,7 +90,7 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border Margin="5"
-                                            Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
+                                            Background="{StaticResource WLFBBrightOceanBlue}"
                                             CornerRadius="15">
                                         <Border Margin="8"
                                                 Grid.Row="2"
@@ -98,11 +98,11 @@
                                                 Panel.ZIndex="12"
                                                 Grid.ColumnSpan="2"
                                                 Grid.RowSpan="4"
-                                                Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
+                                                Background="{StaticResource WLFBBrightOceanBlue}"
                                                 CornerRadius="15">
                                             <Button Margin="1"
-                                                    Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
-                                                    Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}"
+                                                    Style="{StaticResource BlueRoundedBtnHoverStyle}"
+                                                    Template="{StaticResource SlightRoundedBtnTemp}"
                                                     FontWeight="Bold"
                                                     Foreground="White"
                                                     FontSize="15"
@@ -124,7 +124,7 @@
                     Grid.Row="0"
                     Margin="10"
                     CornerRadius="15"
-                    Background="{Binding Source={StaticResource WLFBOceanBlue}}"
+                    Background="{StaticResource WLFBOceanBlue}"
                     Grid.RowSpan="5">
                 <TextBlock Text="You can select what processes to be considerated 'Working' and the app will try to detect when you are working based on what window is focused"
                            TextWrapping="Wrap"
@@ -142,7 +142,7 @@
                     Grid.Column="0"
                     Grid.RowSpan="8"
                     Grid.ColumnSpan="1"
-                    Background="{Binding Source={StaticResource WLFBOceanBlue}}">
+                    Background="{StaticResource WLFBOceanBlue}">
                 <StackPanel Orientation="Vertical"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Stretch">
@@ -160,8 +160,8 @@
             </Border>
             <Button Grid.Row="9" 
                     Margin="15,8,15,5"
-                    Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
-                    Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}"
+                    Style="{StaticResource BlueRoundedBtnHoverStyle}"
+                    Template="{StaticResource SlightRoundedBtnTemp}"
                     Command="{Binding ReturnToPreviousPageCommand}">
                 <TextBlock Text="Back"
                            TextAlignment="Center"

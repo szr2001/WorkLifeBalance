@@ -20,7 +20,7 @@
     </Window.Resources>
     <Border CornerRadius="15"
             MouseDown="MoveWindow"
-            Background= "{Binding Source={StaticResource WLFBOceanBlue}}">
+            Background= "{StaticResource WLFBOceanBlue}">
             <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="120"/>
@@ -37,7 +37,7 @@
                             MouseLeave="CloseSideBar">
                         <Border Margin="3,10,3,10"
                                 CornerRadius="5"
-                                Background="{Binding Source={StaticResource WLFBBluishWhite}}">
+                                Background="{StaticResource WLFBBluishWhite}">
                             <StackPanel Orientation="Vertical"
                                         Visibility="Visible"
                                         Name="OptionsPannel">
@@ -46,8 +46,8 @@
                                     Margin="0,1,0,0"
                                     ToolTip="Close App"
                                     Command="{Binding CloseAppCommand}"
-                                    Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
-                                    Style="{Binding Source={StaticResource RedRoundedBtnHoverStyle}}">
+                                    Template="{StaticResource RoundedBtnTemp}"
+                                    Style="{StaticResource RedRoundedBtnHoverStyle}">
                                 <Image Margin="1"
                                        Source="Assets/Cancel.png"/>
                             </Button>
@@ -55,8 +55,8 @@
                                     Width="24"
                                     Margin="0,2,0,0"
                                     ToolTip="Minimize App"
-                                    Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
-                                    Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}" 
+                                    Template="{StaticResource RoundedBtnTemp}"
+                                    Style="{StaticResource RoundedBtnHoverStyle}" 
                                     Click="HideWindow">
                                 <Image Margin="2"
                                        Source="Assets/Minimize.png"/>
@@ -66,8 +66,8 @@
                                     Margin="0,2,0,0"
                                     ToolTip="Options"
                                     Command="{Binding OpenOptionsWindowCommand}"
-                                    Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
-                                    Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}">
+                                    Template="{StaticResource RoundedBtnTemp}"
+                                    Style="{StaticResource RoundedBtnHoverStyle}">
                                 <Image Margin="2"
                                        Source="Assets/Settings.png"/>
                             </Button>
@@ -76,8 +76,8 @@
                                     Margin="0,2,0,0"
                                     Command="{Binding OpenViewDataWindowCommand}"
                                     ToolTip="View Data"
-                                    Template="{Binding Source= {StaticResource RoundedBtnTemp}}"
-                                    Style="{Binding Source={StaticResource RoundedBtnHoverStyle}}">
+                                    Template="{StaticResource RoundedBtnTemp}"
+                                    Style="{StaticResource RoundedBtnHoverStyle}">
                                 <Image Margin="2"
                                        Source="Assets/DataSheet.png"/>
                             </Button>
@@ -87,7 +87,7 @@
                 <Border Grid.Row="0"
                         Grid.Column="1"
                         Margin="0,4,4,4"
-                        Background ="{Binding Source = {StaticResource WLFBBluishWhite}}"
+                        Background ="{StaticResource WLFBBluishWhite}"
                         CornerRadius="12">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -125,27 +125,27 @@
                                 ToolTip="Toggle Work/Rest"
                                 Height="45"
                                 Command="{Binding ToggleStateCommand}"
-                                Template="{Binding Source={StaticResource RoundedBtnTemp}}">
+                                Template="{StaticResource RoundedBtnTemp}">
                             <Button.Style>
                                 <Style TargetType="Button" BasedOn="{StaticResource RoundedBtnStyle}">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="true">
                                             <Setter Property="IsEnabled" Value="False"/>
-                                            <Setter Property="Background" Value="{Binding Source={StaticResource WLFBOceanBlue}}"/>
+                                        <Setter Property="Background" Value="{StaticResource WLFBOceanBlue}"/>
                                         </DataTrigger>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
                                                 <Condition Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="false"/>
                                                 <Condition Binding="{Binding AppState, Mode=TwoWay}" Value="Resting"/>
                                             </MultiDataTrigger.Conditions>
-                                            <Setter Property="Background" Value="{Binding Source={StaticResource WLFBLightBlue}}"/>
+                                        <Setter Property="Background" Value="{StaticResource WLFBLightBlue}"/>
                                         </MultiDataTrigger>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
                                                 <Condition Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="false"/>
                                                 <Condition Binding="{Binding AppState, Mode=TwoWay}" Value="Working"/>
                                             </MultiDataTrigger.Conditions>
-                                            <Setter Property="Background" Value="{Binding Source={StaticResource WLFBLighterPurple}}"/>
+                                        <Setter Property="Background" Value="{StaticResource WLFBLighterPurple}"/>
                                         </MultiDataTrigger>
                                     </Style.Triggers>
                                 </Style>

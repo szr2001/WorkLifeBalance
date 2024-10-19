@@ -8,7 +8,7 @@
       d:DesignHeight="270" d:DesignWidth="200"
       Title="OptionsPage">
 
-    <Border Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
+    <Border Background="{StaticResource WLFBBrightOceanBlue}"
             CornerRadius="15">
 
         <Border Margin="8">
@@ -19,8 +19,8 @@
                             Grid.Column="0"
                             Grid.ColumnSpan="3"
                             Command="{Binding OpenSettingsCommand}"
-                            Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
-                            Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}">
+                            Style="{StaticResource BlueRoundedBtnHoverStyle}"
+                            Template="{StaticResource SlightRoundedBtnTemp}">
                         <TextBlock Text="Settings"
                                    TextAlignment="Center"
                                    FontWeight="Bold"

@@ -9,13 +9,13 @@
       Title="ViewDaysPage">
 
     <Border CornerRadius="15"
-            Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}">
+            Background="{StaticResource WLFBBrightOceanBlue}">
 
         <StackPanel Orientation="Vertical">
             <Border Height="430"
                     CornerRadius="20"
                     Margin="15,15,15,0"
-                    Background="{Binding Source={StaticResource WLFBOceanBlue}}">
+                    Background="{StaticResource WLFBOceanBlue}">
                 <ScrollViewer VerticalScrollBarVisibility="Hidden">
                     <ItemsControl ItemsSource="{Binding LoadedData}">
                         <ItemsControl.ItemsPanel>
@@ -29,10 +29,10 @@
                                 <Border Width="120"
                                         Margin="5"
                                         Height="135"
-                                        Background="{Binding Source={StaticResource WLFBBrightOceanBlue}}"
+                                        Background="{StaticResource WLFBBrightOceanBlue}"
                                         CornerRadius="15">
                                     <Border Margin="5"
-                                            Background="{Binding Source={StaticResource WLFBOceanBlue}}"
+                                            Background="{StaticResource WLFBOceanBlue}"
                                             CornerRadius="15">
                                         <StackPanel Orientation="Vertical">
                                             <TextBlock Text="Worked:"
@@ -69,8 +69,8 @@
                                                     TextBlock.FontWeight="Bold"
                                                     Command="{Binding DataContext.ViewDayCommand, RelativeSource={RelativeSource AncestorType=Page}}"
                                                     CommandParameter="{Binding}"
-                                                    Style="{Binding Source={StaticResource OceanBlueRoundedBtnStyle}}"
-                                                    Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}" />
+                                                    Style="{StaticResource OceanBlueRoundedBtnStyle}"
+                                                    Template="{StaticResource SlightRoundedBtnTemp}" />
                                             </StackPanel>
 
                                     </Border>
@@ -92,8 +92,8 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Button Margin="15,8,15,5"
-                        Style="{Binding Source={StaticResource BlueRoundedBtnHoverStyle}}"
-                        Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}"
+                        Style="{StaticResource BlueRoundedBtnHoverStyle}"
+                        Template="{StaticResource SlightRoundedBtnTemp}"
                         Command="{Binding ReturnToPreviousPageCommand}">
                     <TextBlock Text="Back"
                                TextAlignment="Center"
@@ -104,7 +104,7 @@
                 </Button>
                 <Border Grid.Column="1"
                         Grid.ColumnSpan="6"
-                        Background="{Binding Source={StaticResource WLFBOceanBlue}}"
+                        Background="{StaticResource WLFBOceanBlue}"
                         CornerRadius="15"
                         Margin="5,5,0,5">
                     
@@ -156,8 +156,8 @@
                     
                     <Button Margin="5,5,0,5"
                             Command="{Binding ApplyFiltersCommand}"
-                            Style="{Binding Source={StaticResource LightblueRoundedBtnHoverStyle}}"
-                            Template="{Binding Source={StaticResource SlightRoundedBtnTemp}}">
+                            Style="{StaticResource LightblueRoundedBtnHoverStyle}"
+                            Template="{StaticResource SlightRoundedBtnTemp}">
                         
                         <TextBlock Text="Search"
                                    TextAlignment="Center"
