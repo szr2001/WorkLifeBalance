@@ -25,7 +25,7 @@ namespace WorkLifeBalance.ViewModels
         public TimeOnly elapsedRestTime;
 
         [ObservableProperty]
-        public TimeOnly idleRestTime;
+        public TimeOnly elapsedIdleTime;
 
         [ObservableProperty]
         public AppState appState = AppState.Resting;
@@ -121,7 +121,7 @@ namespace WorkLifeBalance.ViewModels
         {
             ElapsedWorkTime = dataStorageFeature.TodayData.WorkedAmmountC;
             ElapsedRestTime = dataStorageFeature.TodayData.RestedAmmountC;
-            IdleRestTime = dataStorageFeature.TodayData.IdleAmmountC;
+            ElapsedIdleTime = dataStorageFeature.TodayData.IdleAmmountC;
         }
 
         [RelayCommand]

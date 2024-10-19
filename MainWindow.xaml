@@ -105,12 +105,58 @@
             <Border.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="5" Opacity="0.5"/>
             </Border.Effect>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Vertical" Margin="15,15,5,15">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Image Source="Assets/Work.png"
+                               Width="50" Margin="2" Height="50"/>
+                        <TextBlock Text="Worked:" FontFamily="Comic Sans MS" FontWeight="Bold"
+                                   Foreground="White" FontSize="40" Margin="10,0,0,0"/>
+
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Image Source="Assets/Rest.png"
+                               Width="50" Margin="2" Height="50"/>
+                        <TextBlock Text="Rested:" FontFamily="Comic Sans MS" FontWeight="Bold"
+                                   Foreground="White" FontSize="40" Margin="10,0,0,0"/>
+
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Image Source="Assets/Idle.png"
+                               Width="50" Margin="2" Height="50"/>
+                        <TextBlock Text="Idle:" FontFamily="Comic Sans MS" FontWeight="Bold"
+                                   Foreground="White" FontSize="40" Margin="10,0,0,0"/>
+
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Grid.Column="1" HorizontalAlignment="Center"
+                            Margin="5,15,5,15">
+                    <TextBlock Text="{Binding ElapsedWorkTime, Converter={StaticResource TimeOnlyStringConverter}}"                               FontFamily="Comic Sans MS"
+                                   Foreground="White" FontSize="40"/>
+                    <TextBlock Text="{Binding ElapsedRestTime, Converter={StaticResource TimeOnlyStringConverter}}"                               FontFamily="Comic Sans MS"
+                                   Foreground="White" FontSize="40"/>
+                    <TextBlock Text="{Binding ElapsedIdleTime, Converter={StaticResource TimeOnlyStringConverter}}"
+                               FontFamily="Comic Sans MS"
+                                   Foreground="White" FontSize="40"/>
+
+                </StackPanel>
+            </Grid>
         </Border>
         <Border Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3"
                 CornerRadius="8,8,8,8" Background="{StaticResource WDarkPurple}">
+            <TextBlock Text="{Binding DateText}" FontFamily="Comic Sans MS" FontWeight="Bold"
+                       Foreground="White" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                       Margin="10"/>
         </Border>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" 
                     Grid.ColumnSpan="3" Grid.RowSpan="2">
+            
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="3">
             
         </StackPanel>
     </Grid>
