@@ -39,7 +39,7 @@
                                 CornerRadius="5"
                                 Background="{Binding Source={StaticResource WLFBBluishWhite}}">
                             <StackPanel Orientation="Vertical"
-                                        Visibility="Collapsed"
+                                        Visibility="Visible"
                                         Name="OptionsPannel">
                             <Button Height="23"
                                     Width="24"

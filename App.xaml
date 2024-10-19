@@ -27,6 +27,16 @@
             <views:ViewDaysPage/>
         </DataTemplate>
 
+        <!--New Colors-->
+        <SolidColorBrush x:Key="WDarkPurple" Color="#1d1841" />
+        <SolidColorBrush x:Key="WPurple" Color="#363062" />
+        <SolidColorBrush x:Key="WBlue" Color="#435585" />
+        <SolidColorBrush x:Key="WLightBlue" Color="#818FB4" />
+        
+        <!--New Colors-->
+
+
+        <!--Old Colors-->
         <SolidColorBrush x:Key="WLFBBluishWhite" Color="#E4FDE1" />
         <SolidColorBrush x:Key="WLFBOceanBlue" Color="#028090" />
         <SolidColorBrush x:Key="WLFBBrightOceanBlue" Color="#129eb0" />
@@ -36,7 +46,7 @@
 
         <SolidColorBrush x:Key="WLFBLighterPurple" Color="#6a73d4" />
         <SolidColorBrush x:Key="WLFBLightPurple" Color="#5b64c2" />
-        
+        <!--Old Colors-->
 
         <Style x:Key="RoundedToggleBtnStyle" TargetType="ToggleButton">
             <Setter Property="Background" Value="white"/>
