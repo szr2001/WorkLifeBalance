@@ -13,7 +13,7 @@
         <converters:IntStringConverter x:Key="IntStringConverter"/>
         <converters:BoolVisibilityConverter x:Key="BoolVisibilityConverter"/> 
     </Page.Resources>
-    <Border Background="{StaticResource WLFBBrightOceanBlue}"
+    <Border Background="Transparent"
             CornerRadius="15">
 
         <Border Margin="8,0,8,8">

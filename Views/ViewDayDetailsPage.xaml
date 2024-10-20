@@ -12,7 +12,7 @@
         <converters:TimeOnlyStringConverter x:Key="TimeOnlyStringConverter"/>
     </Page.Resources>
     <Border CornerRadius="15"
-            Background="{StaticResource WLFBBrightOceanBlue}">
+            Background="Transparent">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>

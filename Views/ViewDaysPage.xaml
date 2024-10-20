@@ -9,12 +9,12 @@
       Title="ViewDaysPage">
 
     <Border CornerRadius="15"
-            Background="{StaticResource WLFBBrightOceanBlue}">
+            Background="Transparent">
 
         <StackPanel Orientation="Vertical">
             <Border Height="430"
                     CornerRadius="20"
-                    Margin="15,15,15,0"
+                    Margin="10,10,10,0"
                     Background="{StaticResource WLFBOceanBlue}">
                 <ScrollViewer VerticalScrollBarVisibility="Hidden">
                     <ItemsControl ItemsSource="{Binding LoadedData}">
