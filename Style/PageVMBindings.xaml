@@ -1,0 +1,27 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:viewModel="clr-namespace:WorkLifeBalance.ViewModels"
+                    xmlns:views="clr-namespace:WorkLifeBalance.Views">
+
+    <!--when we bind something to a SettingsPageVM, it will be displayed using the SettingsPage
+        like binding a Frame to a SettingsPageVM, it will be displayed using a SettingsPage view-->
+    <DataTemplate DataType="{x:Type viewModel:SettingsPageVM}">
+        <views:SettingsPage/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type viewModel:BackgroundProcessesViewPageVM}">
+        <views:BackgroundProcessesViewPage/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type viewModel:OptionsPageVM}">
+        <views:OptionsPage/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type viewModel:ViewDataPageVM}">
+        <views:ViewDataPage/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type viewModel:ViewDayDetailsPageVM}">
+        <views:ViewDayDetailsPage/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type viewModel:ViewDaysPageVM}">
+        <views:ViewDaysPage/>
+    </DataTemplate>
+    
+</ResourceDictionary>

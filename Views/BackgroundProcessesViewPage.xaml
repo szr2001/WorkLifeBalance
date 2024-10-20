@@ -1,0 +1,175 @@
+﻿<Page x:Class="WorkLifeBalance.Views.BackgroundProcessesViewPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WorkLifeBalance.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="500" d:DesignWidth="700"
+      Title="BackgroundWindowsViewPage">
+
+    <Border CornerRadius="15"
+            Background="Transparent">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="180"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="15"/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition Height="15"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Column="1"
+                    Grid.Row="0"
+                    Grid.RowSpan="4"
+                    Grid.ColumnSpan="7"
+                    CornerRadius="20"
+                    Margin="0,10,10,10"
+                    Background="{StaticResource WLFBOceanBlue}">
+                <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                    <Grid>
+                        <ItemsControl ItemsSource="{Binding SelectedWindows}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <!-- Use a WrapPanel to automatically arrange items in rows -->
+                                    <WrapPanel Orientation="Horizontal"
+                                               Margin="5"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="5"
+                                            Background="{StaticResource WLFBLightPurple}"
+                                            CornerRadius="15">
+                                        <Button Margin="5"
+                                                Style="{StaticResource BlueRoundedBtnHoverStyle}"
+                                                Template="{StaticResource SlightRoundedBtnTemp}"
+                                                FontWeight="Bold"
+                                                Foreground="White"
+                                                FontSize="15"
+                                                Command="{Binding DataContext.DeselectProcessCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                CommandParameter="{Binding}">
+                                            <Button.Content>
+                                                <TextBlock Text="{Binding}" Padding="5"/>
+                                            </Button.Content>
+                                        </Button>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </ScrollViewer>
+            </Border>
+            <Border Grid.Column="1"
+                    Grid.Row="4"
+                    Grid.RowSpan="6"
+                    Grid.ColumnSpan="7"
+                    CornerRadius="20"
+                    Margin="0,10,10,10"
+                    Background="{StaticResource WLFBOceanBlue}">
+                <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                    <Grid>
+                        <ItemsControl ItemsSource="{Binding DetectedWindows}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <!-- Use a WrapPanel to automatically arrange items in rows -->
+                                    <WrapPanel Orientation="Horizontal"
+                                               Margin="5"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="5"
+                                            Background="{StaticResource WLFBBrightOceanBlue}"
+                                            CornerRadius="15">
+                                        <Border Margin="8"
+                                                Grid.Row="2"
+                                                Grid.Column="2"
+                                                Panel.ZIndex="12"
+                                                Grid.ColumnSpan="2"
+                                                Grid.RowSpan="4"
+                                                Background="{StaticResource WLFBBrightOceanBlue}"
+                                                CornerRadius="15">
+                                            <Button Margin="1"
+                                                    Style="{StaticResource BlueRoundedBtnHoverStyle}"
+                                                    Template="{StaticResource SlightRoundedBtnTemp}"
+                                                    FontWeight="Bold"
+                                                    Foreground="White"
+                                                    FontSize="15"
+                                                    Command="{Binding DataContext.SelectProcessCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                    CommandParameter="{Binding}">
+                                                <Button.Content>
+                                                    <TextBlock Text="{Binding}" Padding="5"/>
+                                                </Button.Content>
+                                            </Button>
+                                        </Border>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </ScrollViewer>
+            </Border>
+            <Border Grid.Column="0"
+                    Grid.Row="0"
+                    Margin="10"
+                    CornerRadius="15"
+                    Background="{StaticResource WLFBOceanBlue}"
+                    Grid.RowSpan="5">
+                <TextBlock Text="You can select what processes to be considerated 'Working' and the app will try to detect when you are working based on what window is focused"
+                           TextWrapping="Wrap"
+                           VerticalAlignment="Center"
+                           TextAlignment="Center"
+                           FontSize="15"
+                           FontWeight="Bold"
+                           Margin="4"
+                           Foreground="PapayaWhip"/>
+            </Border>
+            <Border CornerRadius="20"
+                    Height="50"
+                    Margin="10,-20,10,0"
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.RowSpan="8"
+                    Grid.ColumnSpan="1"
+                    Background="{StaticResource WLFBOceanBlue}">
+                <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Stretch">
+                    <TextBlock Text="Active Window"
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               FontSize="15"
+                               Foreground="White"/>
+                    <TextBlock Text="{Binding ActiveWindow}"
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               FontSize="10"
+                               Foreground="White"/>
+                </StackPanel>
+            </Border>
+            <Button Grid.Row="9" 
+                    Margin="15,8,15,5"
+                    Style="{StaticResource BlueRoundedBtnHoverStyle}"
+                    Template="{StaticResource SlightRoundedBtnTemp}"
+                    Command="{Binding ReturnToPreviousPageCommand}">
+                <TextBlock Text="Back"
+                           TextAlignment="Center"
+                           FontWeight="Bold"
+                           FontSize="25"
+                           Margin="0,0,0,4"
+                           Foreground="White"/>
+            </Button>
+        </Grid>
+    </Border>
+</Page>

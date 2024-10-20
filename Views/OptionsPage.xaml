@@ -1,0 +1,32 @@
+﻿<Page x:Class="WorkLifeBalance.Views.OptionsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WorkLifeBalance.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="270" d:DesignWidth="200"
+      Title="OptionsPage">
+
+    <Border Background="Transparent"
+            CornerRadius="15">
+        <ScrollViewer VerticalScrollBarVisibility="Hidden">
+            <StackPanel Margin="5">
+                <Button Margin="5" Command="{Binding OpenSettingsCommand}"
+                        Style="{StaticResource RoundedBtnStyle}"
+                        Template="{StaticResource SlightRoundedBtnTemp}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Assets/Settings.png" Width="20" Margin="1"/>
+                        <TextBlock Text="Settings"
+                                   TextAlignment="Center"
+                                   FontWeight="Bold"
+                                   FontSize="20"
+                                   Margin="0,0,0,4"
+                                   Foreground="White"/>
+                    </StackPanel>
+                </Button>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+</Page>
