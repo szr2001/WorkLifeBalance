@@ -24,7 +24,10 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="65"/>
         </Grid.RowDefinitions>
-        <Grid Grid.RowSpan="2" Visibility="Visible">
+        <Grid Grid.RowSpan="2" x:Name="AnimatedGrid" RenderTransformOrigin="0.1,0.9">
+            <Grid.RenderTransform>
+                <ScaleTransform ScaleX="1" ScaleY="1" />
+            </Grid.RenderTransform>
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
                 <RowDefinition/>
@@ -139,13 +142,15 @@
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Column="1" HorizontalAlignment="Center"
                                 Margin="5,15,5,15">
-                        <TextBlock Text="{Binding ElapsedWorkTime, Converter={StaticResource TimeOnlyStringConverter}}"                               FontFamily="Comic Sans MS"
-                                       Foreground="White" FontSize="40"/>
-                        <TextBlock Text="{Binding ElapsedRestTime, Converter={StaticResource TimeOnlyStringConverter}}"                               FontFamily="Comic Sans MS"
-                                       Foreground="White" FontSize="40"/>
+                        <TextBlock Text="{Binding ElapsedWorkTime, Converter={StaticResource TimeOnlyStringConverter}}"                               
+                                   FontFamily="Comic Sans MS"
+                                   Foreground="White" FontSize="40"/>
+                        <TextBlock Text="{Binding ElapsedRestTime, Converter={StaticResource TimeOnlyStringConverter}}"                               
+                                   FontFamily="Comic Sans MS"
+                                   Foreground="White" FontSize="40"/>
                         <TextBlock Text="{Binding ElapsedIdleTime, Converter={StaticResource TimeOnlyStringConverter}}"
                                    FontFamily="Comic Sans MS"
-                                       Foreground="White" FontSize="40"/>
+                                   Foreground="White" FontSize="40"/>
 
                     </StackPanel>
                 </Grid>
@@ -158,7 +163,7 @@
             </Border>
             <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" 
                         Grid.ColumnSpan="3" Grid.RowSpan="2">
-            
+
             </StackPanel>
         </Grid>
         <Grid HorizontalAlignment="Left" Grid.Row="1">
@@ -169,8 +174,34 @@
                            HorizontalAlignment="Center" Margin="5"/>
 
             </Border>
-            <ToggleButton VerticalAlignment="Bottom" HorizontalAlignment="Left"
+            <ToggleButton VerticalAlignment="Bottom" HorizontalAlignment="Left" IsChecked="True"
                           Template="{StaticResource RoundedToggleBtnTemp}" Width="60" Height="60">
+                <ToggleButton.Triggers>
+                    <EventTrigger RoutedEvent="ToggleButton.Checked">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="AnimatedGrid"
+                                     Storyboard.TargetProperty="RenderTransform.ScaleX"
+                                     From="0" To="1" Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetName="AnimatedGrid"
+                                     Storyboard.TargetProperty="RenderTransform.ScaleY"
+                                     From="0" To="1" Duration="0:0:0.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="ToggleButton.Unchecked">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="AnimatedGrid"
+                                     Storyboard.TargetProperty="RenderTransform.ScaleX"
+                                     From="1" To="0" Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetName="AnimatedGrid"
+                                     Storyboard.TargetProperty="RenderTransform.ScaleY"
+                                     From="1" To="0" Duration="0:0:0.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </ToggleButton.Triggers>
                 <ToggleButton.Style>
                     <Style TargetType="ToggleButton" BasedOn="{StaticResource ToggleBtnStyle}">
                         <Style.Triggers>
@@ -206,181 +237,4 @@
             </ToggleButton>
         </Grid>
     </Grid>
-
-    <!--<Border CornerRadius="15"
-            MouseDown="MoveWindow"
-            Background= "{StaticResource WLFBOceanBlue}">
-            <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="120"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="15"
-                                      Name="OptionMenuVisibility"/>
-                    <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-                    <Border Grid.Row="0"
-                            Grid.Column="0"
-                            MouseEnter="OpenSideBar" 
-                            MouseLeave="CloseSideBar">
-                        <Border Margin="3,10,3,10"
-                                CornerRadius="5"
-                                Background="{StaticResource WLFBBluishWhite}">
-                            <StackPanel Orientation="Vertical"
-                                        Visibility="Visible"
-                                        Name="OptionsPannel">
-                            <Button Height="23"
-                                    Width="24"
-                                    Margin="0,1,0,0"
-                                    ToolTip="Close App"
-                                    Command="{Binding CloseAppCommand}"
-                                    Template="{StaticResource RoundedBtnTemp}"
-                                    Style="{StaticResource RedRoundedBtnHoverStyle}">
-                                <Image Margin="1"
-                                       Source="Assets/Cancel.png"/>
-                            </Button>
-                            <Button Height="23"
-                                    Width="24"
-                                    Margin="0,2,0,0"
-                                    ToolTip="Minimize App"
-                                    Template="{StaticResource RoundedBtnTemp}"
-                                    Style="{StaticResource RoundedBtnHoverStyle}" 
-                                    Click="HideWindow">
-                                <Image Margin="2"
-                                       Source="Assets/Minimize.png"/>
-                            </Button>
-                            <Button Height="23"
-                                    Width="24"
-                                    Margin="0,2,0,0"
-                                    ToolTip="Options"
-                                    Command="{Binding OpenOptionsWindowCommand}"
-                                    Template="{StaticResource RoundedBtnTemp}"
-                                    Style="{StaticResource RoundedBtnHoverStyle}">
-                                <Image Margin="2"
-                                       Source="Assets/Settings.png"/>
-                            </Button>
-                            <Button Height="23"
-                                    Width="24"
-                                    Margin="0,2,0,0"
-                                    Command="{Binding OpenViewDataWindowCommand}"
-                                    ToolTip="View Data"
-                                    Template="{StaticResource RoundedBtnTemp}"
-                                    Style="{StaticResource RoundedBtnHoverStyle}">
-                                <Image Margin="2"
-                                       Source="Assets/DataSheet.png"/>
-                            </Button>
-                        </StackPanel>
-                        </Border>
-                    </Border>
-                <Border Grid.Row="0"
-                        Grid.Column="1"
-                        Margin="0,4,4,4"
-                        Background ="{StaticResource WLFBBluishWhite}"
-                        CornerRadius="12">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="48"/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Orientation="Vertical"
-                                    Grid.Column="0"
-                                    Margin="0,0,-10,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center">
-                            <TextBlock Text="Worked Amount:"
-                                       FontSize="15"
-                                       TextAlignment="Center"/>
-                            <TextBlock Text="{Binding ElapsedWorkTime, Converter={StaticResource TimeOnlyStringConverter}}"
-                                       FontSize="15"
-                                       TextAlignment="Center"/>
-                            <TextBlock Text="Break Amount"
-                                       TextAlignment="Center"
-                                       FontSize="15"/>
-                            <TextBlock Text="{Binding ElapsedRestTime, Converter={StaticResource TimeOnlyStringConverter}}"
-                                       FontSize="15"
-                                       TextAlignment="Center"/>
-                            <TextBlock Text="Idle Amount"
-                                         TextAlignment="Center"
-                                         FontSize="15"/>
-                            <TextBlock Text="{Binding IdleRestTime, Converter={StaticResource TimeOnlyStringConverter}}"
-                                         FontSize="15"
-                                         TextAlignment="Center"/>
-                    </StackPanel>
-                        <Button Grid.Column="1"
-                                Width="45"
-                                Margin="-5,0,0,0"
-                                Name="ToggleBtn"
-                                ToolTip="Toggle Work/Rest"
-                                Height="45"
-                                Command="{Binding ToggleStateCommand}"
-                                Template="{StaticResource RoundedBtnTemp}">
-                            <Button.Style>
-                                <Style TargetType="Button" BasedOn="{StaticResource RoundedBtnStyle}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="true">
-                                            <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="Background" Value="{StaticResource WLFBOceanBlue}"/>
-                                        </DataTrigger>
-                                        <MultiDataTrigger>
-                                            <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="false"/>
-                                                <Condition Binding="{Binding AppState, Mode=TwoWay}" Value="Resting"/>
-                                            </MultiDataTrigger.Conditions>
-                                        <Setter Property="Background" Value="{StaticResource WLFBLightBlue}"/>
-                                        </MultiDataTrigger>
-                                        <MultiDataTrigger>
-                                            <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="false"/>
-                                                <Condition Binding="{Binding AppState, Mode=TwoWay}" Value="Working"/>
-                                            </MultiDataTrigger.Conditions>
-                                        <Setter Property="Background" Value="{StaticResource WLFBLighterPurple}"/>
-                                        </MultiDataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                            <Image Margin="5">
-                                <Image.Style>
-                                    <Style TargetType="Image">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="true">
-                                                <Setter Property="Source" Value="Assets/Automat.png"/>
-                                            </DataTrigger>
-                                            <MultiDataTrigger>
-                                                <MultiDataTrigger.Conditions>
-                                                    <Condition Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="false"/>
-                                                    <Condition Binding="{Binding AppState, Mode=TwoWay}" Value="Resting"/>
-                                                </MultiDataTrigger.Conditions>
-                                                <Setter Property="Source" Value="Assets/Rest.png"/>
-                                            </MultiDataTrigger>
-                                            <MultiDataTrigger>
-                                                <MultiDataTrigger.Conditions>
-                                                    <Condition Binding="{Binding AutoDetectWork, Mode=TwoWay}" Value="false"/>
-                                                    <Condition Binding="{Binding AppState, Mode=TwoWay}" Value="Working"/>
-                                                </MultiDataTrigger.Conditions>
-                                                <Setter Property="Source" Value="Assets/Work.png"/>
-                                            </MultiDataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Image.Style>
-                            </Image>
-                        </Button>
-                    </Grid>
-                </Border>
-                <StackPanel Orientation="Vertical"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="2"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center">
-                <TextBlock Text="{Binding DateText}"
-                           TextAlignment="Center"
-                           Name="DateT"
-                           FontWeight="Bold"
-                           Margin="0,-5,0,0"
-                           FontSize="15"
-                           Foreground="White"/>
-                </StackPanel>
-        </Grid>
-    </Border>-->
 </Window>
