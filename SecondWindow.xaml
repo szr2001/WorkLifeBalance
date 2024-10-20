@@ -11,7 +11,64 @@
         WindowStyle="None"
         Title="SecondWindow" Height="{Binding Height, Mode=TwoWay}" Width="{Binding Width, Mode=TwoWay}">
 
-    <Border CornerRadius="0,0,20,20"
+    <Grid Grid.RowSpan="2" x:Name="AnimatedGrid" RenderTransformOrigin="0.1,0.9">
+        <Grid.RenderTransform>
+            <ScaleTransform ScaleX="1" ScaleY="1" />
+        </Grid.RenderTransform>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+            <RowDefinition Height="65"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5"
+             CornerRadius="8" MouseDown="MoveWindow">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
+                    <GradientStop Color="{StaticResource WBlueShadowC}" Offset="0"/>
+                    <GradientStop Color="{StaticResource WBlueC}" Offset="0.5"/>
+                    <GradientStop Color="{StaticResource WBlueHighlightC}" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="5" Opacity="0.5"/>
+            </Border.Effect>
+            <Button Height="25" Width="80" Margin="4,4,15,4"
+                    Command="{Binding CloseSecondWindowCommand}" HorizontalAlignment="Right"
+                    Template="{StaticResource SlightRoundedBtnTemp}"
+                    Style="{StaticResource RedRoundedBtnStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Assets/Cancel.png" Margin="1"/>
+                    <TextBlock Text="Close" FontFamily="Comic Sans MS" FontWeight="Bold"
+                                VerticalAlignment="Center" Foreground="White" FontSize="20"/>
+                </StackPanel>
+            </Button>
+        </Border>
+        <Border Grid.Column="1" CornerRadius="0,0,8,8" Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="2">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
+                    <GradientStop Color="{StaticResource WDarkPurpleShadowC}" Offset=".8"/>
+                    <GradientStop Color="{StaticResource WDarkPurpleC}" Offset="0.3"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="5" Opacity="0.5"/>
+            </Border.Effect>
+            <Frame Content="{Binding ActivePage}"
+                   NavigationUIVisibility="Hidden">
+
+            </Frame>
+        </Border>
+    </Grid>
+    <!--<Border CornerRadius="0,0,20,20"
             Background= "{StaticResource WLFBOceanBlue}">
 
         <Grid>
@@ -63,5 +120,5 @@
         
         </Grid>
         
-    </Border>
+    </Border>-->
 </Window>

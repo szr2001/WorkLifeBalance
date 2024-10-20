@@ -168,7 +168,7 @@
         </Grid>
         <Grid HorizontalAlignment="Left" Grid.Row="1">
             <Border Background="{StaticResource WPurple}" Height="40" Width="120" 
-                    CornerRadius="8" Margin="45,0,0,0">
+                    CornerRadius="8" Margin="45,5,0,0">
                 <TextBlock Text="{Binding AppState}" FontFamily="Comic Sans MS" FontWeight="Bold"
                            Foreground="White" FontSize="20" VerticalAlignment="Center"
                            HorizontalAlignment="Center" Margin="5"/>
