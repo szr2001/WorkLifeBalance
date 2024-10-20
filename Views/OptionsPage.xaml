@@ -8,30 +8,25 @@
       d:DesignHeight="270" d:DesignWidth="200"
       Title="OptionsPage">
 
-    <Border Background="{StaticResource WLFBBrightOceanBlue}"
+    <Border Background="Transparent"
             CornerRadius="15">
-
-        <Border Margin="8">
-            <ScrollViewer VerticalScrollBarVisibility="Hidden">
-                <StackPanel>
-                    <Button Margin="5"
-                            Grid.Row="6"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="3"
-                            Command="{Binding OpenSettingsCommand}"
-                            Style="{StaticResource BlueRoundedBtnHoverStyle}"
-                            Template="{StaticResource SlightRoundedBtnTemp}">
+        <ScrollViewer VerticalScrollBarVisibility="Hidden">
+            <StackPanel Margin="5">
+                <Button Margin="5" Command="{Binding OpenSettingsCommand}"
+                        Style="{StaticResource RoundedBtnStyle}"
+                        Template="{StaticResource SlightRoundedBtnTemp}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Assets/Settings.png" Width="20" Margin="1"/>
                         <TextBlock Text="Settings"
                                    TextAlignment="Center"
                                    FontWeight="Bold"
                                    FontSize="20"
                                    Margin="0,0,0,4"
                                    Foreground="White"/>
-                    </Button>
+                    </StackPanel>
+                </Button>
 
-                </StackPanel>
-            </ScrollViewer>
-        </Border>
-
+            </StackPanel>
+        </ScrollViewer>
     </Border>
 </Page>
