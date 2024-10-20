@@ -23,8 +23,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="15"/>
+            <RowDefinition Height="65"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="15"/>
@@ -156,8 +155,43 @@
                     Grid.ColumnSpan="3" Grid.RowSpan="2">
             
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="3">
-            
+        <StackPanel Orientation="Horizontal" Grid.Row="2" 
+                    Grid.RowSpan="2" Grid.ColumnSpan="3">
+            <ToggleButton VerticalAlignment="Bottom" Margin="5,0,0,0"
+                          Template="{StaticResource RoundedToggleBtnTemp}" Width="60" Height="60">
+                <ToggleButton.Style>
+                    <Style TargetType="ToggleButton" BasedOn="{StaticResource ToggleBtnStyle}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding AppState, Mode=TwoWay}" Value="Resting">
+                                <Setter Property="Background" Value="{StaticResource WLFBOceanBlue}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding AppState, Mode=TwoWay}" Value="Working">
+                                <Setter Property="Background" Value="{StaticResource WLFBLighterPurple}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding AppState, Mode=TwoWay}" Value="Idle">
+                                <Setter Property="Background" Value="{StaticResource WLFBLightBlue}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToggleButton.Style>
+                <Image Margin="5">
+                    <Image.Style>
+                        <Style TargetType="Image">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding AppState, Mode=TwoWay}" Value="Resting">
+                                    <Setter Property="Source" Value="Assets/Rest.png"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AppState, Mode=TwoWay}" Value="Working">
+                                    <Setter Property="Source" Value="Assets/Work.png"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AppState, Mode=TwoWay}" Value="Idle">
+                                    <Setter Property="Source" Value="Assets/Idle.png"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+            </ToggleButton>
         </StackPanel>
     </Grid>
     <!--<Border CornerRadius="15"

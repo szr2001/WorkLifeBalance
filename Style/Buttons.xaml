@@ -20,7 +20,7 @@
     </Style>
         
     <ControlTemplate x:Key="RoundedToggleBtnTemp" TargetType="ToggleButton">
-        <Border CornerRadius="10"
+        <Border CornerRadius="30"
                 Background="{TemplateBinding Background}">
 
             <ContentPresenter HorizontalAlignment="Center" 
@@ -46,6 +46,26 @@
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
             <Setter Property="Background" Value="{StaticResource WLFBLighterPurple}"/> 
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ToggleBtnStyle" TargetType="ToggleButton">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="WhiteSmoke"/>
+                <Setter Property="RenderTransformOrigin" Value="0.5, 0.5"/>
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <ScaleTransform ScaleX="1.04" ScaleY="1.04"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Panel.ZIndex" Value="2"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Background" Value="{StaticResource WLFBLighterPurple}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
