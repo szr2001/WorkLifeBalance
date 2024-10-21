@@ -11,39 +11,23 @@
     <Page.Resources>
         <converters:TimeOnlyStringConverter x:Key="TimeOnlyStringConverter"/>
     </Page.Resources>
-    <Border CornerRadius="15"
-            Background="Transparent">
+    <Border Background="Transparent">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="150"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
             </Grid.RowDefinitions>
             
-            <StackPanel Orientation="Vertical"
-                        Grid.Row="0"
-                        Grid.RowSpan="7"
-                        Grid.Column="3"
-                        Grid.ColumnSpan="5">
-                <Border Height="350"
-                        CornerRadius="20"
-                        Margin="10,10,10,0"
-                        Background="{StaticResource WLFBOceanBlue}">
-                    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+            <StackPanel Orientation="Vertical" Grid.Column="1" Grid.RowSpan="2">
+                <Border CornerRadius="10"
+                        Height="370"
+                        Margin="10,10,10,10"
+                        Background="{StaticResource WBlue}">
+                    <ScrollViewer VerticalScrollBarVisibility="Hidden" Margin="0,2,0,2">
                             <ItemsControl ItemsSource="{Binding Activities}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -53,31 +37,26 @@
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Margin="5"
-                                                MinWidth="210"
-                                                HorizontalAlignment="Stretch"
-                                                Background="{StaticResource WLFBBrightOceanBlue}"
-                                                CornerRadius="15">
-                                            <Border Margin="5"
-                                                    Background="{StaticResource WLFBOceanBlue}"
-                                                    CornerRadius="15">
-                                                <StackPanel Orientation="Vertical">
-                                                    <TextBlock Text="{Binding Process}"
-                                                               TextAlignment="Center"
-                                                               Margin="5"
-                                                               FontWeight="Bold"
-                                                               FontSize="16"
-                                                               Foreground="White"/>
-                                                    <TextBlock Text="{Binding TimeSpentC, StringFormat=HH:mm:ss}"
-                                                               TextAlignment="Center"
-                                                               FontWeight="Bold"
-                                                               FontSize="14"
-                                                               Foreground="White"/>
-                                                </StackPanel>
+                                <DataTemplate>
+                                    <Border Margin="4"
+                                            Background="{StaticResource WBlueShadow}"
+                                            CornerRadius="10">
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock Text="{Binding Process}"
+                                                        TextAlignment="Center"
+                                                        Margin="3"
+                                                        FontWeight="Bold"
+                                                        FontSize="16"
+                                                        Foreground="White"/>
+                                            <TextBlock Text="{Binding TimeSpentC, StringFormat=HH:mm:ss}"
+                                                        TextAlignment="Center"
+                                                        Margin="3"
+                                                        FontWeight="Bold"
+                                                        FontSize="14"
+                                                        Foreground="White"/>
+                                        </StackPanel>
 
-                                            </Border>
-                                        </Border>
+                                    </Border>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -86,14 +65,13 @@
                 </Border>
             </StackPanel>
 
-            <Border CornerRadius="20"
-                    Height="110"
-                    Margin="10,-20,10,0"
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Grid.RowSpan="3"
-                    Grid.ColumnSpan="3"
-                    Background="{StaticResource WLFBOceanBlue}">
+            <Border CornerRadius="10"
+                    Height="170"
+                    Width ="140"
+                    VerticalAlignment="Top"
+                    Margin="10,10,0,00"
+                    Grid.RowSpan="1"
+                    Background="{StaticResource WBlueShadow}">
                 <StackPanel Orientation="Vertical">
                     <TextBlock Text="Worked:"
                                TextAlignment="Center"
@@ -115,16 +93,27 @@
                                FontWeight="Bold"
                                FontSize="16"
                                Foreground="White"/>
+                    <TextBlock Text="Idle:"
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               FontSize="23"
+                               Foreground="White"/>
+                    <TextBlock Text="{Binding LoadedDayData.IdleAmmountC, Converter={StaticResource TimeOnlyStringConverter}}"
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               FontSize="16"
+                               Foreground="White"/>
 
                 </StackPanel>
             </Border>
 
-            <Button Margin="15,6,15,9"
-                    Grid.Row="6"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="3"
+            <Button Grid.Row="1"
+                    Height="40"
+                    Width="110"
+                    Margin="10"
+                    VerticalAlignment="Bottom"
                     Command="{Binding BackToViewDaysPageCommand}"
-                    Style="{StaticResource BlueRoundedBtnHoverStyle}"
+                    Style="{StaticResource RoundedBtnStyle}"
                     Template="{StaticResource SlightRoundedBtnTemp}">
                     <TextBlock Text="Back"
                                TextAlignment="Center"
