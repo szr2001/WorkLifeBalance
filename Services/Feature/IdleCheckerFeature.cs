@@ -32,14 +32,13 @@ namespace WorkLifeBalance.Services.Feature
             return TriggerCheckIdle;
         }
 
-        private bool IsCheckingIdleTriggered = false;
         private async Task TriggerCheckIdle()
         {
-            if (IsCheckingIdleTriggered) return;
+            if (IsFeatureRuning) return;
 
             try
             {
-                IsCheckingIdleTriggered = true;
+                IsFeatureRuning = true;
                 int delay;
 
                 if (appStateHandler.AppTimerState == AppState.Idle)
@@ -65,7 +64,7 @@ namespace WorkLifeBalance.Services.Feature
             }
             finally
             {
-                IsCheckingIdleTriggered = false;
+                IsFeatureRuning = false;
             }
         }
 
