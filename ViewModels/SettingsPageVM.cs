@@ -33,12 +33,6 @@ namespace WorkLifeBalance.ViewModels
         private bool startWithWin = false;
 
         [ObservableProperty]
-        private bool autoDetectWork = false;
-
-        [ObservableProperty]
-        private bool autoDetectIdle = false;
-
-        [ObservableProperty]
         private int[]? numbers;
 
         private readonly DataStorageFeature dataStorageFeature;
@@ -67,10 +61,6 @@ namespace WorkLifeBalance.ViewModels
 
             StartWithWin = dataStorageFeature.Settings.StartWithWindowsC;
 
-            AutoDetectWork = dataStorageFeature.Settings.AutoDetectWorkingC;
-
-            AutoDetectIdle = dataStorageFeature.Settings.AutoDetectIdleC;
-
             List<int> numbersTemp = new();
             for(int x = 1; x <= 300; x++)
             {
@@ -87,31 +77,9 @@ namespace WorkLifeBalance.ViewModels
 
             dataStorageFeature.Settings.AutoDetectIdleInterval = AutoDetectIdleInterval;
 
-            dataStorageFeature.Settings.AutoDetectIdleC = (bool)AutoDetectIdle!;
-
-            dataStorageFeature.Settings.AutoDetectWorkingC = AutoDetectWork;
-
             dataStorageFeature.Settings.StartWithWindowsC = StartWithWin;
 
             await dataStorageFeature.SaveData();
-
-            if (AutoDetectWork)
-            {
-                featuresServices.AddFeature<StateCheckerFeature>();
-            }
-            else
-            {
-                featuresServices.RemoveFeature<StateCheckerFeature>();
-            }
-
-            if (AutoDetectIdle)
-            {
-                featuresServices.AddFeature<IdleCheckerFeature>();
-            }
-            else
-            {
-                featuresServices.RemoveFeature<IdleCheckerFeature>();
-            }
 
             ApplyStartToWindows();
             dataStorageFeature.Settings.OnSettingsChanged.Invoke();

@@ -30,9 +30,6 @@ namespace WorkLifeBalance.ViewModels
         [ObservableProperty]
         public AppState appState = AppState.Resting;
 
-        [ObservableProperty]
-        public bool autoDetectWork;
-
         private readonly AppStateHandler appStateHandler;
         private readonly LowLevelHandler lowLevelHandler;
         private readonly DataStorageFeature dataStorageFeature;
@@ -49,14 +46,11 @@ namespace WorkLifeBalance.ViewModels
             DateText = $"Today: {dataStorageFeature.TodayData.DateC:MM/dd/yyyy}";
 
             SubscribeToEvents();
-            OnSettingsChanged();
         }
 
         private void SubscribeToEvents()
         {
             appStateHandler.OnStateChanges += OnStateChanged;
-
-            dataStorageFeature.Settings.OnSettingsChanged += OnSettingsChanged;
 
             dataStorageFeature.OnSaving += OnSavingData;
             dataStorageFeature.OnSaved += OnDataSaved;
@@ -67,11 +61,6 @@ namespace WorkLifeBalance.ViewModels
         private void OnStateChanged(AppState state)
         {
             AppState = state;
-        }
-
-        private void OnSettingsChanged()
-        {
-            AutoDetectWork = dataStorageFeature.Settings.AutoDetectWorkingC;
         }
 
         private void OnSavingData()
@@ -119,7 +108,7 @@ namespace WorkLifeBalance.ViewModels
             //await Log.CloseAndFlushAsync();
 
             //Application.Current.Shutdown();
-            await Task.Delay(55);
+            //await Task.Delay(55);
         }
 
     }

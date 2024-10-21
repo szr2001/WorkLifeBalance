@@ -95,8 +95,6 @@ namespace WorkLifeBalance.Services
             string sql = @"UPDATE Settings 
                         SET LastTimeOpened = @LastTimeOpened,
                         StartWithWindows = @StartWithWindows,
-                        AutoDetectWorking = @AutoDetectWorking,
-                        AutoDetectIdle = @AutoDetectIdle,
                         SaveInterval = @SaveInterval,
                         AutoDetectInterval = @AutoDetectInterval,
                         AutoDetectIdleInterval = @AutoDetectIdleInterval

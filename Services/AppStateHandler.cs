@@ -1,5 +1,6 @@
 ﻿using Serilog;
 using System;
+using System.Threading.Channels;
 using WorkLifeBalance.Services.Feature;
 
 namespace WorkLifeBalance.Services
@@ -28,7 +29,7 @@ namespace WorkLifeBalance.Services
             if (AppTimerState == state) return;
 
             AppTimerState = state;
-            Log.Information($"App state changed to {state}"); // probl?
+            Log.Information($"App state changed to {state}");
         }
     }
 }

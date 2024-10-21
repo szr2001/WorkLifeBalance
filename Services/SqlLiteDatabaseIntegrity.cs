@@ -132,21 +132,34 @@ namespace WorkLifeBalance.Services
             string sqlCreateVersionTable =
                 """
                     ALTER TABLE Settings
-                    ADD COLUMN Version TEXT Default "2.0.0";
+                    ADD COLUMN Version TEXT NOT NULL Default "2.0.0";
                 """;
             string sqlCreateIdleAmmountTable =
                 """
                     ALTER TABLE Days
-                    ADD COLUMN IdleAmmount TEXT Default '000000';
+                    ADD COLUMN IdleAmmount TEXT NOT NULL Default '000000';
                 """;
-            string sqlRemoveIdleAmmountTable =
+            string sqlRemoveStartupCornerTable =
                 """
                     ALTER TABLE Settings
                     DROP COLUMN StartUpCorner;
                 """;
+            string sqlRemoveDetectStateBoolTable =
+                """
+                    ALTER TABLE Settings
+                    DROP COLUMN AutoDetectWorking;
+                """;
+            string sqlRemoveDetectIdleBoolTable =
+                """
+                    ALTER TABLE Settings
+                    DROP COLUMN AutoDetectIdle;
+                """;
             await sqlDataAccess.ExecuteAsync(sqlCreateVersionTable, new { });
             await sqlDataAccess.ExecuteAsync(sqlCreateIdleAmmountTable, new { });
-            await sqlDataAccess.ExecuteAsync(sqlRemoveIdleAmmountTable, new { });
+
+            await sqlDataAccess.ExecuteAsync(sqlRemoveStartupCornerTable, new { });
+            await sqlDataAccess.ExecuteAsync(sqlRemoveDetectStateBoolTable, new { });
+            await sqlDataAccess.ExecuteAsync(sqlRemoveDetectIdleBoolTable, new { });
         }
 
         private async Task Create2_0_0V()
@@ -165,9 +178,9 @@ namespace WorkLifeBalance.Services
                 """
                     CREATE TABLE "Days" (
                 	"Date"	TEXT NOT NULL UNIQUE,
-                	"WorkedAmmount"	TEXT NOT NULL DEFAULT "0",
-                    "IdleAmmount" TEXT NOT NULL DEFAULT "0",
-                	"RestedAmmount"	TEXT NOT NULL DEFAULT "0",
+                	"WorkedAmmount"	TEXT NOT NULL DEFAULT '000000',
+                    "IdleAmmount" TEXT NOT NULL DEFAULT '000000',
+                	"RestedAmmount"	TEXT NOT NULL DEFAULT '000000',
                 	PRIMARY KEY("Date"));
                 """;
             await sqlDataAccess.ExecuteAsync(createDaysSQL, new { });
@@ -177,8 +190,6 @@ namespace WorkLifeBalance.Services
                     CREATE TABLE "Settings" (
                 	"LastTimeOpened"	TEXT,
                 	"StartWithWindows"	INTEGER,
-                	"AutoDetectWorking"	INTEGER,
-                	"AutoDetectIdle"	INTEGER,
                 	"SaveInterval"	INTEGER,
                 	"AutoDetectInterval"	INTEGER,
                 	"AutoDetectIdleInterval"	INTEGER,
@@ -189,8 +200,7 @@ namespace WorkLifeBalance.Services
             string createWorkingWindowsSQL =
                 """
                     CREATE TABLE "WorkingWindows" (
-                	    "WorkingStateWindows"	TEXT NOT NULL UNIQUE
-                    );
+                	"WorkingStateWindows"	TEXT NOT NULL UNIQUE);
                 """;
             await sqlDataAccess.ExecuteAsync(createWorkingWindowsSQL, new { });
 

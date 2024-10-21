@@ -14,13 +14,9 @@ namespace WorkLifeBalance.Models
         public int AutoDetectInterval { get; set; } = 1;
         public int AutoDetectIdleInterval { get; set; } = 1;
         public int StartWithWindows { get; set; } = 0;
-        public int AutoDetectWorking { get; set; } = 0;
-        public int AutoDetectIdle { get; set; } = 0;
 
         public DateTime LastTimeOpenedC = new();
         public bool StartWithWindowsC = false;
-        public bool AutoDetectWorkingC = false;
-        public bool AutoDetectIdleC = false;
 
         public Action OnSettingsChanged = new(() => { });
 
@@ -49,9 +45,6 @@ namespace WorkLifeBalance.Models
                 }
                 StartWithWindowsC = StartWithWindows == 1;
 
-                AutoDetectWorkingC = AutoDetectWorking == 1;
-
-                AutoDetectIdleC = AutoDetectIdle == 1;
             }
             catch (Exception ex)
             {
@@ -68,10 +61,6 @@ namespace WorkLifeBalance.Models
                 LastTimeOpened = LastTimeOpenedC.ToString("HHmmMMddyyyy");
 
                 StartWithWindows = StartWithWindowsC ? 1 : 0;
-
-                AutoDetectWorking = AutoDetectWorkingC ? 1 : 0;
-
-                AutoDetectIdle = AutoDetectIdleC ? 1 : 0;
             }
             catch (Exception ex)
             {
