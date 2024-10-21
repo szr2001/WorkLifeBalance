@@ -15,8 +15,8 @@
             <Border Height="430"
                     CornerRadius="20"
                     Margin="10,10,10,0"
-                    Background="{StaticResource WLFBOceanBlue}">
-                <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                    Background="{StaticResource WBlue}">
+                <ScrollViewer VerticalScrollBarVisibility="Hidden" Margin="0,5,0,5">
                     <ItemsControl ItemsSource="{Binding LoadedData}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -26,54 +26,62 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Width="120"
-                                        Margin="5"
-                                        Height="135"
-                                        Background="{StaticResource WLFBBrightOceanBlue}"
+                                <Border Margin="4"
+                                        Width="122"
+                                        Background="{StaticResource WBlueShadow}"
                                         CornerRadius="15">
-                                    <Border Margin="5"
-                                            Background="{StaticResource WLFBOceanBlue}"
-                                            CornerRadius="15">
-                                        <StackPanel Orientation="Vertical">
-                                            <TextBlock Text="Worked:"
-                                                       TextAlignment="Center"
+                                    <StackPanel Orientation="Vertical" Margin="6">
+                                        <TextBlock Text="{Binding DateC, StringFormat=MM/dd/yyyy}"
+                                                   TextAlignment="Center"
+                                                   FontWeight="Bold"
+                                                   FontSize="15"
+                                                   Foreground="White"/>
+                                        <TextBlock Text="Worked:"
+                                                   TextAlignment="Center"
+                                                   FontWeight="Bold"
+                                                   FontSize="17"
+                                                   Foreground="White"/>
+                                        <TextBlock Text="{Binding WorkedAmmountC, StringFormat=HH:mm:ss}"
+                                                   TextAlignment="Center"
+                                                   FontWeight="Bold"
+                                                   FontSize="13"
+                                                   Foreground="White"/>
+                                        <TextBlock Text="Rested:"
+                                                   TextAlignment="Center"
+                                                   FontWeight="Bold"
+                                                   FontSize="17"
+                                                   Foreground="White"/>
+                                        <TextBlock Text="{Binding RestedAmmountC , StringFormat=HH:mm:ss}"
+                                                   TextAlignment="Center"
+                                                   FontWeight="Bold"
+                                                   FontSize="13"
+                                                   Foreground="White"/>
+                                        <TextBlock Text="Idle:"
+                                                   TextAlignment="Center"
+                                                   FontWeight="Bold"
+                                                   FontSize="17"
+                                                   Foreground="White"/>
+                                        <TextBlock Text="{Binding IdleAmmountC , StringFormat=HH:mm:ss}"
+                                                   TextAlignment="Center"
+                                                   FontWeight="Bold"
+                                                   FontSize="13"
+                                                   Foreground="White"/>
+                                        <Button Margin="6"
+                                                Width="70"
+                                                Command="{Binding DataContext.ViewDayCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource RoundedBtnStyle}"
+                                                Background="Purple"
+                                                Template="{StaticResource SlightRoundedBtnTemp}">
+                                            <TextBlock Text="Info"
+                                                       Foreground="White"
                                                        FontWeight="Bold"
-                                                       FontSize="15"
-                                                       Foreground="White"/>
-                                            <TextBlock Text="{Binding WorkedAmmountC, StringFormat=HH:mm:ss}"
-                                                       TextAlignment="Center"
-                                                       FontWeight="Bold"
-                                                       FontSize="12"
-                                                       Foreground="White"/>
-                                            <TextBlock Text="Rested:"
-                                                       TextAlignment="Center"
-                                                       FontWeight="Bold"
-                                                       FontSize="15"
-                                                       Foreground="White"/>
-                                            <TextBlock Text="{Binding RestedAmmountC , StringFormat=HH:mm:ss}"
-                                                       TextAlignment="Center"
-                                                       FontWeight="Bold"
-                                                       FontSize="12"
-                                                       Foreground="White"/>
-                                            <TextBlock Text="{Binding DateC, StringFormat=MM/dd/yyyy}"
-                                                       TextAlignment="Center"
-                                                       FontWeight="Bold"
-                                                       FontSize="15"
-                                                       Foreground="White"/>
-                                            <Button Margin="6"
-                                                    Width="50"
-                                                    Content="Info"
-                                                    ToolTip="See Details"
-                                                    TextBlock.FontSize="15"
-                                                    TextBlock.Foreground="White"
-                                                    TextBlock.FontWeight="Bold"
-                                                    Command="{Binding DataContext.ViewDayCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                                    CommandParameter="{Binding}"
-                                                    Style="{StaticResource OceanBlueRoundedBtnStyle}"
-                                                    Template="{StaticResource SlightRoundedBtnTemp}" />
-                                            </StackPanel>
+                                                       FontSize="15">
+                                                
+                                            </TextBlock>
+                                        </Button>
+                                    </StackPanel>
 
-                                    </Border>
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -92,7 +100,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Button Margin="15,8,15,5"
-                        Style="{StaticResource BlueRoundedBtnHoverStyle}"
+                        Style="{StaticResource RoundedBtnStyle}"
                         Template="{StaticResource SlightRoundedBtnTemp}"
                         Command="{Binding ReturnToPreviousPageCommand}">
                     <TextBlock Text="Back"
@@ -104,7 +112,7 @@
                 </Button>
                 <Border Grid.Column="1"
                         Grid.ColumnSpan="6"
-                        Background="{StaticResource WLFBOceanBlue}"
+                        Background="{StaticResource WBlue}"
                         CornerRadius="15"
                         Margin="5,5,0,5">
                     
@@ -156,13 +164,13 @@
                     
                     <Button Margin="5,5,0,5"
                             Command="{Binding ApplyFiltersCommand}"
-                            Style="{StaticResource LightblueRoundedBtnHoverStyle}"
+                            Style="{StaticResource RoundedBtnStyle}"
                             Template="{StaticResource SlightRoundedBtnTemp}">
                         
                         <TextBlock Text="Search"
                                    TextAlignment="Center"
                                    FontWeight="Bold"
-                                   FontSize="20"
+                                   FontSize="18"
                                    Margin="5"
                                    Foreground="White"/>
                     </Button>
