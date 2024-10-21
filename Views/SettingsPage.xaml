@@ -11,12 +11,9 @@
       Title="SettingsPage">
     <Page.Resources>
         <converters:IntStringConverter x:Key="IntStringConverter"/>
-        <converters:BoolVisibilityConverter x:Key="BoolVisibilityConverter"/> 
+        <converters:BoolVisibilityConverter x:Key="BoolVisibilityConverter"/>
     </Page.Resources>
-    <Border Background="Transparent"
-            CornerRadius="15">
-
-        <Border Margin="8,0,8,8">
+    <Border Margin="8,0,8,8">
             <ScrollViewer VerticalScrollBarVisibility="Hidden">
                 <StackPanel>
                     <Border Margin="35,5,35,5"
@@ -31,29 +28,6 @@
                                    FontSize="12"
                                    Foreground="White"/>
                     </Border>
-                    <Border Height="55"
-                            Margin="0,0,0,5"
-                            CornerRadius="15"
-                            Background="{StaticResource WLFBOceanBlue}">
-
-                        <StackPanel Orientation="Vertical">
-
-                            <TextBlock Text="Start With Windows?"
-                                       TextAlignment="Center"
-                                       FontWeight="Bold"
-                                       FontSize="15"
-                                       Foreground="White"/>
-                            <ToggleButton Height="25"
-                                          Width="25"
-                                          IsChecked="{Binding StartWithWin, Mode=TwoWay}"
-                                          Margin="0,5,0,0"
-                                          Style="{StaticResource RoundedToggleBtnStyle}"
-                                          Template="{StaticResource RoundedToggleBtnTemp}">
-
-                            </ToggleButton>
-                        </StackPanel>
-                    </Border>
-
                     <Border Height="55"
                             Margin="0,5,0,5"
                             CornerRadius="15"
@@ -75,7 +49,6 @@
                                       Margin="0,2,0,0"/>
                         </StackPanel>
                     </Border>
-
                     <Border Height="50"
                             Margin="0,5,0,5"
                             CornerRadius="15"
@@ -97,7 +70,6 @@
                                       Margin="0,2,0,0"/>
                         </StackPanel>
                     </Border>
-
                     <Border Margin="0,5,0,5"
                             CornerRadius="15"
                             Background="{StaticResource WLFBOceanBlue}">
@@ -165,7 +137,6 @@
                             </Border>
                         </StackPanel>
                     </Border >
-                    
                     <Border Margin="0,5,0,5"
                             CornerRadius="15"
                             Background="{StaticResource WLFBOceanBlue}">
@@ -225,6 +196,4 @@
                 </StackPanel>
             </ScrollViewer>
         </Border>
-    
-    </Border>
 </Page>

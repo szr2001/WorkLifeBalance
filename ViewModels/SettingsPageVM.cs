@@ -39,19 +39,7 @@ namespace WorkLifeBalance.ViewModels
         private bool autoDetectIdle = false;
 
         [ObservableProperty]
-        private AnchorCorner[] anchorCorners = new AnchorCorner[4]
-        {
-            AnchorCorner.TopLeft,
-            AnchorCorner.TopRight,
-            AnchorCorner.BootomLeft,
-            AnchorCorner.BottomRight
-        };
-
-        [ObservableProperty]
         private int[]? numbers;
-
-        [ObservableProperty]
-        private AnchorCorner selectedStartupCorner = AnchorCorner.BootomLeft;
 
         private readonly DataStorageFeature dataStorageFeature;
         private readonly ISecondWindowService secondWindowService;
@@ -69,8 +57,6 @@ namespace WorkLifeBalance.ViewModels
 
         private void InitializeData()
         {
-            SelectedStartupCorner = dataStorageFeature.Settings.StartUpCornerC;
-
             Version = $"Version: {dataStorageFeature.Settings.Version}";
 
             AutoSaveInterval = dataStorageFeature.Settings.SaveInterval;
@@ -106,8 +92,6 @@ namespace WorkLifeBalance.ViewModels
             dataStorageFeature.Settings.AutoDetectWorkingC = AutoDetectWork;
 
             dataStorageFeature.Settings.StartWithWindowsC = StartWithWin;
-
-            dataStorageFeature.Settings.StartUpCornerC = SelectedStartupCorner;
 
             await dataStorageFeature.SaveData();
 

@@ -28,7 +28,7 @@ namespace WorkLifeBalance.Services
             if (AppTimerState == state) return;
 
             AppTimerState = state;
-            Log.Information($"App state changed to {state}");
+            Log.Information($"App state changed to {state}"); // probl?
         }
     }
 }

@@ -139,8 +139,14 @@ namespace WorkLifeBalance.Services
                     ALTER TABLE Days
                     ADD COLUMN IdleAmmount TEXT Default '000000';
                 """;
+            string sqlRemoveIdleAmmountTable =
+                """
+                    ALTER TABLE Settings
+                    DROP COLUMN StartUpCorner;
+                """;
             await sqlDataAccess.ExecuteAsync(sqlCreateVersionTable, new { });
             await sqlDataAccess.ExecuteAsync(sqlCreateIdleAmmountTable, new { });
+            await sqlDataAccess.ExecuteAsync(sqlRemoveIdleAmmountTable, new { });
         }
 
         private async Task Create2_0_0V()
@@ -173,7 +179,6 @@ namespace WorkLifeBalance.Services
                 	"StartWithWindows"	INTEGER,
                 	"AutoDetectWorking"	INTEGER,
                 	"AutoDetectIdle"	INTEGER,
-                	"StartUpCorner"	INTEGER DEFAULT "2",
                 	"SaveInterval"	INTEGER,
                 	"AutoDetectInterval"	INTEGER,
                 	"AutoDetectIdleInterval"	INTEGER,

@@ -1,12 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Threading;
-using WorkLifeBalance.Services.Feature;
-using WorkLifeBalance.ViewModels;
 
 namespace WorkLifeBalance
 {
@@ -19,7 +12,15 @@ namespace WorkLifeBalance
         public MainWindow()
         {
             Topmost = true;
+            SetStartUpLocation();
             InitializeComponent();
+        }
+
+        private void SetStartUpLocation()
+        {
+            int ScreenHeight = (int)SystemParameters.PrimaryScreenHeight;
+            Left = 0;
+            Top = ScreenHeight - 348;
         }
 
         private void MoveWindow(object sender, MouseButtonEventArgs e)

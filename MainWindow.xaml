@@ -12,8 +12,6 @@
         AllowsTransparency="True"
         WindowStartupLocation="Manual"
         WindowStyle="None"
-        Top ="{Binding StartupTop, Mode=TwoWay}"
-        Left ="{Binding StartupLeft, Mode=TwoWay}"
         Title="WorkLifeBalance" Height="308" Width="500">
     <Window.Resources>
         <converters:TimeOnlyStringConverter x:Key="TimeOnlyStringConverter"/>

@@ -33,12 +33,6 @@ namespace WorkLifeBalance.ViewModels
         [ObservableProperty]
         public bool autoDetectWork;
 
-        [ObservableProperty]
-        public int startupTop = 0;
-
-        [ObservableProperty]
-        public int startupLeft = 0;
-
         private readonly AppStateHandler appStateHandler;
         private readonly LowLevelHandler lowLevelHandler;
         private readonly DataStorageFeature dataStorageFeature;
@@ -54,35 +48,8 @@ namespace WorkLifeBalance.ViewModels
 
             DateText = $"Today: {dataStorageFeature.TodayData.DateC:MM/dd/yyyy}";
 
-            InitializeStartupLocation();
             SubscribeToEvents();
             OnSettingsChanged();
-        }
-
-        private void InitializeStartupLocation()
-        {
-            int ScreenWidth = (int)SystemParameters.PrimaryScreenWidth;
-            int ScreenHeight = (int)SystemParameters.PrimaryScreenHeight;
-
-            switch (dataStorageFeature.Settings.StartUpCornerC)
-            {
-                case AnchorCorner.TopLeft:
-                    StartupLeft = 0;
-                    StartupTop = 0;
-                    break;
-                case AnchorCorner.TopRight:
-                    StartupLeft = ScreenWidth - 220;
-                    StartupTop = 0;
-                    break;
-                case AnchorCorner.BootomLeft:
-                    StartupLeft = 0;
-                    StartupTop = ScreenHeight - 180;
-                    break;
-                case AnchorCorner.BottomRight:
-                    StartupLeft = ScreenWidth - 220;
-                    StartupTop = ScreenHeight - 180;
-                    break;
-            }
         }
 
         private void SubscribeToEvents()

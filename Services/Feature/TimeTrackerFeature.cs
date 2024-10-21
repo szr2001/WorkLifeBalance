@@ -16,6 +16,7 @@ namespace WorkLifeBalance.Services.Feature
             this.dataStorageFeature = dataStorageFeature;
             this.appStateHandler = appStateHandler;
         }
+
         protected override Func<Task> ReturnFeatureMethod()
         {
             return TriggerUpdateSpentTime;
@@ -41,7 +42,6 @@ namespace WorkLifeBalance.Services.Feature
             return Task.CompletedTask;
         }
     }
-
 
     public enum AppState
     {

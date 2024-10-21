@@ -97,7 +97,6 @@ namespace WorkLifeBalance.Services
                         StartWithWindows = @StartWithWindows,
                         AutoDetectWorking = @AutoDetectWorking,
                         AutoDetectIdle = @AutoDetectIdle,
-                        StartUpCorner = @StartUpCorner,
                         SaveInterval = @SaveInterval,
                         AutoDetectInterval = @AutoDetectInterval,
                         AutoDetectIdleInterval = @AutoDetectIdleInterval
