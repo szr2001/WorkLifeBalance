@@ -20,5 +20,11 @@ namespace WorkLifeBalance.ViewModels
         {
             secondWindowService.OpenWindowWith<SettingsPageVM>();
         }
+
+        [RelayCommand]
+        private void ConfigureAutoDetect()
+        {
+            secondWindowService.OpenWindowWith<BackgroundProcessesViewPageVM>();
+        }
     }
 }

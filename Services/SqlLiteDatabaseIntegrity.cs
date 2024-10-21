@@ -99,7 +99,6 @@ namespace WorkLifeBalance.Services
                 Log.Warning("Database Version collumn not found, indicatin Beta version database");
             }
 
-
             return version;
         }
 

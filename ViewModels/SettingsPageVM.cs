@@ -36,12 +36,10 @@ namespace WorkLifeBalance.ViewModels
         private int[]? numbers;
 
         private readonly DataStorageFeature dataStorageFeature;
-        private readonly ISecondWindowService secondWindowService;
         private readonly IFeaturesServices featuresServices;
-        public SettingsPageVM(DataStorageFeature dataStorageFeature, ISecondWindowService secondWindowService, IFeaturesServices featuresServices)
+        public SettingsPageVM(DataStorageFeature dataStorageFeature, IFeaturesServices featuresServices)
         {
             this.featuresServices = featuresServices;
-            this.secondWindowService = secondWindowService;
             this.dataStorageFeature = dataStorageFeature;
             RequiredWindowSize = new Vector2(250, 320);
             WindowPageName = "Settings";
@@ -117,12 +115,6 @@ namespace WorkLifeBalance.ViewModels
             {
                 File.Delete(startupfolder);
             }
-        }
-
-        [RelayCommand]
-        private void ConfigureAutoDetect()
-        {
-            secondWindowService.OpenWindowWith<BackgroundProcessesViewPageVM>();
         }
     }
 }
