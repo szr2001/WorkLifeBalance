@@ -22,10 +22,10 @@
 
                         <TextBlock Text="{Binding Version}"
                                    TextAlignment="Center"
-                                   FontWeight="Bold"
-                                   Name="VersionT"
-                                   Margin="1,0,0,2"
-                                   FontSize="12"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   FontWeight="Bold" 
+                                   Name="VersionT" Margin="2" FontSize="12"
                                    Foreground="White"/>
                     </Border>
                 <Border Height="55"
@@ -78,7 +78,7 @@
                         <TextBlock Text="Detect State In Seconds"
                                    TextAlignment="Center"
                                    FontWeight="Bold"
-                                   FontSize="15"
+                                   FontSize="14"
                                    Foreground="White"/>
                         <ComboBox Width="50"
                                   SelectedItem="{Binding AutoDetectInterval, Mode=TwoWay}"
@@ -96,7 +96,7 @@
                         <TextBlock Text="Detect Idle In Minutes"
                                    TextAlignment="Center"
                                    FontWeight="Bold"
-                                   FontSize="15"
+                                   FontSize="14"
                                    Foreground="White"/>
                         <ComboBox Width="50"
                                   Height="22"

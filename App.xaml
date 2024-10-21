@@ -10,6 +10,10 @@
                 <ResourceDictionary Source="Style/Buttons.xaml"/>
                 <ResourceDictionary Source="Style/PageVMBindings.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="FontFamily"
+            Value="Comic Sans MS" />
+            </Style>
         </ResourceDictionary>
         
     </Application.Resources>

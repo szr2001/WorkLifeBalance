@@ -59,7 +59,7 @@
                             Style="{StaticResource RoundedBtnStyle}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="Assets/DataSheet.png" Margin="1"/>
-                            <TextBlock Text="Data" FontFamily="Comic Sans MS" FontWeight="Bold"
+                            <TextBlock Text="Data" FontWeight="Bold"
                                        VerticalAlignment="Center" Foreground="White" FontSize="20"/>
                         </StackPanel>
                     </Button>
@@ -71,7 +71,7 @@
                             Style="{StaticResource RoundedBtnStyle}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="Assets/Settings.png" Margin="1"/>
-                            <TextBlock Text="Settings" FontFamily="Comic Sans MS" FontWeight="Bold"
+                            <TextBlock Text="Settings" FontWeight="Bold"
                                        VerticalAlignment="Center" Foreground="White" FontSize="20"/>
                         </StackPanel>
                     </Button>
@@ -82,7 +82,7 @@
                             Style="{StaticResource RoundedBtnStyle}" Click="HideWindow">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="Assets/Settings.png" Margin="1"/>
-                            <TextBlock Text="Minimize" FontFamily="Comic Sans MS" FontWeight="Bold"
+                            <TextBlock Text="Minimize" FontWeight="Bold"
                         VerticalAlignment="Center" Foreground="White" FontSize="20"/>
                         </StackPanel>
                     </Button>
@@ -94,7 +94,7 @@
                            Style="{StaticResource RedRoundedBtnStyle}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="Assets/Cancel.png" Margin="1"/>
-                            <TextBlock Text="Close" FontFamily="Comic Sans MS" FontWeight="Bold"
+                            <TextBlock Text="Close" FontWeight="Bold"
                                        VerticalAlignment="Center" Foreground="White" FontSize="20"/>
                         </StackPanel>
                     </Button>
@@ -119,21 +119,21 @@
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                             <Image Source="Assets/Work.png"
                                    Width="50" Margin="2" Height="50"/>
-                            <TextBlock Text="Worked:" FontFamily="Comic Sans MS" FontWeight="Bold"
+                            <TextBlock Text="Worked:" FontWeight="Bold"
                                        Foreground="White" FontSize="40" Margin="10,0,0,0"/>
 
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                             <Image Source="Assets/Rest.png"
                                    Width="50" Margin="2" Height="50"/>
-                            <TextBlock Text="Rested:" FontFamily="Comic Sans MS" FontWeight="Bold"
+                            <TextBlock Text="Rested:" FontWeight="Bold"
                                        Foreground="White" FontSize="40" Margin="10,0,0,0"/>
 
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                             <Image Source="Assets/Idle.png"
                                    Width="50" Margin="2" Height="50"/>
-                            <TextBlock Text="Idle:" FontFamily="Comic Sans MS" FontWeight="Bold"
+                            <TextBlock Text="Idle:" FontWeight="Bold"
                                        Foreground="White" FontSize="40" Margin="10,0,0,0"/>
 
                         </StackPanel>
@@ -141,13 +141,10 @@
                     <StackPanel Orientation="Vertical" Grid.Column="1" HorizontalAlignment="Center"
                                 Margin="5,15,5,15">
                         <TextBlock Text="{Binding ElapsedWorkTime, Converter={StaticResource TimeOnlyStringConverter}}"                               
-                                   FontFamily="Comic Sans MS"
                                    Foreground="White" FontSize="40"/>
                         <TextBlock Text="{Binding ElapsedRestTime, Converter={StaticResource TimeOnlyStringConverter}}"                               
-                                   FontFamily="Comic Sans MS"
                                    Foreground="White" FontSize="40"/>
                         <TextBlock Text="{Binding ElapsedIdleTime, Converter={StaticResource TimeOnlyStringConverter}}"
-                                   FontFamily="Comic Sans MS"
                                    Foreground="White" FontSize="40"/>
 
                     </StackPanel>
@@ -155,7 +152,7 @@
             </Border>
             <Border Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3"
                     CornerRadius="8,8,8,8" Background="{StaticResource WDarkPurple}">
-                <TextBlock Text="{Binding DateText}" FontFamily="Comic Sans MS" FontWeight="Bold"
+                <TextBlock Text="{Binding DateText}" FontWeight="Bold"
                            Foreground="White" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Bottom"
                            Margin="10"/>
             </Border>
@@ -167,7 +164,7 @@
         <Grid HorizontalAlignment="Left" Grid.Row="1">
             <Border Background="{StaticResource WPurple}" Height="40" Width="120" 
                     CornerRadius="8" Margin="45,5,0,0">
-                <TextBlock Text="{Binding AppState}" FontFamily="Comic Sans MS" FontWeight="Bold"
+                <TextBlock Text="{Binding AppState}" FontWeight="Bold"
                            Foreground="White" FontSize="20" VerticalAlignment="Center"
                            HorizontalAlignment="Center" Margin="5"/>
 

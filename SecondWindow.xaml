@@ -43,7 +43,7 @@
                 <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="5" Opacity="0.5"/>
             </Border.Effect>
             <Grid>
-                <TextBlock Text="{Binding PageName}" FontFamily="Comic Sans MS" FontWeight="Bold"
+                <TextBlock Text="{Binding PageName}" FontWeight="Bold"
                            HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0,0,0" Foreground="White" FontSize="20"/>
                 <Button Height="25" Width="80" Margin="4,4,15,4"
                         Command="{Binding CloseSecondWindowCommand}" HorizontalAlignment="Right"
@@ -51,7 +51,7 @@
                         Style="{StaticResource RedRoundedBtnStyle}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="Assets/Cancel.png" Margin="1"/>
-                        <TextBlock Text="Close" FontFamily="Comic Sans MS" FontWeight="Bold"
+                        <TextBlock Text="Close" FontWeight="Bold"
                                 VerticalAlignment="Center" Foreground="White" FontSize="20"/>
                     </StackPanel>
                 </Button>
