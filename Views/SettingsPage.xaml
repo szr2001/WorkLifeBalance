@@ -17,8 +17,8 @@
             <ScrollViewer VerticalScrollBarVisibility="Hidden">
                 <StackPanel>
                 <Border Margin="35,5,35,5"
-                            CornerRadius="15"
-                            Background="{StaticResource WLFBOceanBlue}">
+                            CornerRadius="8"
+                            Background="{StaticResource WBlue}">
 
                         <TextBlock Text="{Binding Version}"
                                    TextAlignment="Center"
@@ -31,7 +31,7 @@
                 <Border Height="55"
                             Margin="0,0,0,5"
                             CornerRadius="15"
-                            Background="{StaticResource WLFBOceanBlue}">
+                            Background="{StaticResource WBlue}">
 
                         <StackPanel Orientation="Vertical">
 
@@ -53,7 +53,7 @@
                 <Border Height="50"
                         Margin="0,5,0,5"
                         CornerRadius="15"
-                        Background="{StaticResource WLFBOceanBlue}">
+                        Background="{StaticResource WBlue}">
 
                         <StackPanel Orientation="Vertical">
 
@@ -71,7 +71,7 @@
                                       Margin="0,2,0,0"/>
                         </StackPanel>
                     </Border>
-                <Border Background="{StaticResource WLFBOceanBlue}"
+                <Border Background="{StaticResource WBlue}"
                         Margin="0,5,0,5"
                         CornerRadius="15">
                     <StackPanel Margin="2">
@@ -89,7 +89,7 @@
                                   Margin="0,2,0,0"/>
                     </StackPanel>
                 </Border>
-                <Border Background="{StaticResource WLFBOceanBlue}"
+                <Border Background="{StaticResource WBlue}"
                         Margin="0,5,0,5"
                         CornerRadius="15">
                     <StackPanel Margin="2">
