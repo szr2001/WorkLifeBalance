@@ -23,14 +23,13 @@ namespace WorkLifeBalance.Services.Feature
             return TriggerWorkDetect;
         }
 
-        private bool IsAutoWorkDetectionTriggered = false;
         private async Task TriggerWorkDetect()
         {
-            if (IsAutoWorkDetectionTriggered) return;
+            if (IsFeatureRuning) return;
 
             try
             {
-                IsAutoWorkDetectionTriggered = true;
+                IsFeatureRuning = true;
                 await Task.Delay(dataStorageFeature.Settings.AutoDetectInterval * 1000, CancelTokenS.Token);
                 CheckStateChange();
             }
@@ -44,7 +43,7 @@ namespace WorkLifeBalance.Services.Feature
             }
             finally
             {
-                IsAutoWorkDetectionTriggered = false;
+                IsFeatureRuning = false;
             }
         }
 

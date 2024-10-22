@@ -72,6 +72,7 @@ namespace WorkLifeBalance
             services.AddSingleton<SecondWindowVM>();
             services.AddSingleton<SettingsPageVM>();
             services.AddSingleton<ViewDataPageVM>();
+            services.AddSingleton<LoadingPageVM>();
             services.AddSingleton<ViewDayDetailsPageVM>();
             services.AddSingleton<ViewDaysPageVM>();
         }
@@ -127,12 +128,7 @@ namespace WorkLifeBalance
             featuresService.AddFeature<TimeTrackerFeature>();
             featuresService.AddFeature<ActivityTrackerFeature>();
             featuresService.AddFeature<IdleCheckerFeature>();
-
-            //check settings to see if you need to add some features
-            if (dataStorageFeature.Settings.AutoDetectWorkingC)
-            {
-                featuresService.AddFeature<StateCheckerFeature>();
-            }
+            featuresService.AddFeature<StateCheckerFeature>();
 
             //starts the main timer
             appTimer.StartTick();

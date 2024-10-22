@@ -32,24 +32,22 @@ namespace WorkLifeBalance.Services.Feature
             return TriggerCheckIdle;
         }
 
-        private bool IsCheckingIdleTriggered = false;
         private async Task TriggerCheckIdle()
         {
-            if (IsCheckingIdleTriggered) return;
+            if (IsFeatureRuning) return;
 
             try
             {
-                IsCheckingIdleTriggered = true;
+                IsFeatureRuning = true;
                 int delay;
 
                 if (appStateHandler.AppTimerState == AppState.Idle)
                 {
-                    delay = 3000;
+                    delay = 2000;
                 }
                 else
                 {
-                    //delay = (dataStorageFeature.Settings.AutoDetectIdle * 60000) / 2;
-                    delay = 10000;
+                    delay = (dataStorageFeature.Settings.AutoDetectIdleInterval * 60000) / 2;
                 }
 
                 await Task.Delay(delay, CancelTokenS.Token);
@@ -65,7 +63,7 @@ namespace WorkLifeBalance.Services.Feature
             }
             finally
             {
-                IsCheckingIdleTriggered = false;
+                IsFeatureRuning = false;
             }
         }
 

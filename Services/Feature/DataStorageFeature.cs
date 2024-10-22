@@ -73,12 +73,11 @@ namespace WorkLifeBalance.Services.Feature
             return TriggerSaveData;
         }
 
-        private bool IsSaveTriggered = false;
         private async Task TriggerSaveData()
         {
-            if (IsSaveTriggered) return;
+            if (IsFeatureRuning) return;
 
-            IsSaveTriggered = true;
+            IsFeatureRuning = true;
 
             try
             {
@@ -96,7 +95,7 @@ namespace WorkLifeBalance.Services.Feature
 
             finally
             {
-                IsSaveTriggered = false;
+                IsFeatureRuning = false;
             }
         }
     }

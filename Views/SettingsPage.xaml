@@ -11,30 +11,27 @@
       Title="SettingsPage">
     <Page.Resources>
         <converters:IntStringConverter x:Key="IntStringConverter"/>
-        <converters:BoolVisibilityConverter x:Key="BoolVisibilityConverter"/> 
+        <converters:BoolVisibilityConverter x:Key="BoolVisibilityConverter"/>
     </Page.Resources>
-    <Border Background="Transparent"
-            CornerRadius="15">
-
-        <Border Margin="8,0,8,8">
+    <Border Margin="8,0,8,8">
             <ScrollViewer VerticalScrollBarVisibility="Hidden">
                 <StackPanel>
-                    <Border Margin="35,5,35,5"
-                            CornerRadius="15"
-                            Background="{StaticResource WLFBOceanBlue}">
+                <Border Margin="35,5,35,5"
+                            CornerRadius="8"
+                            Background="{StaticResource WBlue}">
 
                         <TextBlock Text="{Binding Version}"
                                    TextAlignment="Center"
-                                   FontWeight="Bold"
-                                   Name="VersionT"
-                                   Margin="1,0,0,2"
-                                   FontSize="12"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   FontWeight="Bold" 
+                                   Name="VersionT" Margin="2" FontSize="12"
                                    Foreground="White"/>
                     </Border>
-                    <Border Height="55"
+                <Border Height="55"
                             Margin="0,0,0,5"
                             CornerRadius="15"
-                            Background="{StaticResource WLFBOceanBlue}">
+                            Background="{StaticResource WBlue}">
 
                         <StackPanel Orientation="Vertical">
 
@@ -53,37 +50,14 @@
                             </ToggleButton>
                         </StackPanel>
                     </Border>
-
-                    <Border Height="55"
-                            Margin="0,5,0,5"
-                            CornerRadius="15"
-                            Background="{StaticResource WLFBOceanBlue}">
-
-                        <StackPanel Orientation="Vertical">
-
-                            <TextBlock Text="Start Up Corner"
-                                       TextAlignment="Center"
-                                       FontWeight="Bold"
-                                       FontSize="15"
-                                       Foreground="White"/>
-                            <ComboBox Width="150"
-                                      Height="25"
-                                      ItemsSource="{Binding AnchorCorners, Mode=TwoWay}"
-                                      SelectedItem="{Binding SelectedStartupCorner}"
-                                      Style="{StaticResource CustomComboBoxStyle}"
-                                      ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
-                                      Margin="0,2,0,0"/>
-                        </StackPanel>
-                    </Border>
-
-                    <Border Height="50"
-                            Margin="0,5,0,5"
-                            CornerRadius="15"
-                            Background="{StaticResource WLFBOceanBlue}">
+                <Border Height="50"
+                        Margin="0,5,0,5"
+                        CornerRadius="15"
+                        Background="{StaticResource WBlue}">
 
                         <StackPanel Orientation="Vertical">
 
-                            <TextBlock Text="Autosave In Minutes"
+                            <TextBlock Text="Save In Minutes"
                                        TextAlignment="Center"
                                        FontWeight="Bold"
                                        FontSize="15"
@@ -97,134 +71,43 @@
                                       Margin="0,2,0,0"/>
                         </StackPanel>
                     </Border>
-
-                    <Border Margin="0,5,0,5"
-                            CornerRadius="15"
-                            Background="{StaticResource WLFBOceanBlue}">
-
-                        <StackPanel Orientation="Vertical"
-                                    Margin="5">
-
-                            <TextBlock Text="Auto Detect Working"
-                                       TextAlignment="Center"
-                                       FontWeight="Bold"
-                                       FontSize="15"
-                                       Foreground="White"/>
-                            <ToggleButton Height="25"
-                                          Width="25"
-                                          IsChecked="{Binding AutoDetectWork, Mode=TwoWay}"
-                                          Margin="0,5,0,0"
-                                          Style="{StaticResource RoundedToggleBtnStyle}"
-                                          Template="{StaticResource RoundedToggleBtnTemp}" />
-                            <Border Background="{StaticResource WLFBBrightOceanBlue}"
-                                    CornerRadius="15"
-                                    Margin="5"
-                                    Visibility="{Binding AutoDetectWork, Converter={StaticResource BoolVisibilityConverter}}"
-                                    Height="80">
-                                <Border.Style>
-                                    <Style TargetType="Border">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding AutoDetectWork}" Value="true">
-                                                <Setter Property="Height" Value="80"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding AutoDetectWork}" Value="false">
-                                                <Setter Property="Height" Value="0"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Border.Style>
-                                <Border Background="{StaticResource WLFBOceanBlue}"
-                                        Margin="4"
-                                        CornerRadius="15">
-                                    <StackPanel Margin="2">
-                                        <TextBlock Text="Auto Detect State In Seconds"
-                                                   TextAlignment="Center"
-                                                   FontWeight="Bold"
-                                                   FontSize="10"
-                                                   Foreground="White"/>
-                                        <ComboBox Width="50"
-                                                  SelectedItem="{Binding AutoDetectInterval, Mode=TwoWay}"
-                                                  Height="22"
-                                                  ItemsSource="{Binding Numbers}"
-                                                  Style="{StaticResource CustomComboBoxStyle}"
-                                                  ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
-                                                  Margin="0,2,0,0"/>
-                                        <Button Style="{StaticResource OceanBlueRoundedBtnStyle}"
-                                                Template="{StaticResource SlightRoundedBtnTemp}"
-                                                Width="110"
-                                                Margin="4"
-                                                Height="23"
-                                                Foreground="White"
-                                                FontWeight="Bold"
-                                                FontSize="15"
-                                                Command="{Binding ConfigureAutoDetectCommand}"
-                                                TextBlock.TextAlignment="Center"
-                                                Content="Configure" />
-                                    </StackPanel>
-                                </Border>
-                            </Border>
-                        </StackPanel>
-                    </Border >
-                    
-                    <Border Margin="0,5,0,5"
-                            CornerRadius="15"
-                            Background="{StaticResource WLFBOceanBlue}">
-
-                        <StackPanel Orientation="Vertical"
-                                    Margin="5">
-
-                            <TextBlock Text="Detect Mouse Idle"
-                                       TextAlignment="Center"
-                                       FontWeight="Bold"
-                                       FontSize="15"
-                                       Foreground="White"/>
-                            <ToggleButton Height="25"
-                                          Width="25"
-                                          IsChecked="{Binding AutoDetectIdle, Mode=TwoWay}"
-                                          Margin="0,5,0,0"
-                                          Style="{StaticResource RoundedToggleBtnStyle}"
-                                          Template="{StaticResource RoundedToggleBtnTemp}" />
-                            <Border Background="{StaticResource WLFBBrightOceanBlue}"
-                                    CornerRadius="15"
-                                    Margin="5"
-                                    Visibility="{Binding AutoDetectIdle, Converter={StaticResource BoolVisibilityConverter}}"
-                                    Height="51">
-                                <Border.Style>
-                                    <Style TargetType="Border">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding AutoDetectIdle}" Value="true">
-                                                <Setter Property="Height" Value="55"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding AutoDetectIdle}" Value="false">
-                                                <Setter Property="Height" Value="0"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Border.Style>
-                                <Border Background="{StaticResource WLFBOceanBlue}"
-                                        Margin="4"
-                                        CornerRadius="15">
-                                    <StackPanel Margin="2">
-                                        <TextBlock Text="Auto Detect Idle In Minutes"
-                                                   TextAlignment="Center"
-                                                   FontWeight="Bold"
-                                                   FontSize="10"
-                                                   Foreground="White"/>
-                                        <ComboBox Width="50"
-                                                  Height="22"
-                                                  SelectedItem="{Binding AutoDetectIdleInterval, Mode=TwoWay}"
-                                                  ItemsSource="{Binding Numbers}"
-                                                  Style="{StaticResource CustomComboBoxStyle}"
-                                                  ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
-                                                  Margin="0,2,0,0"/>
-                                    </StackPanel>
-                                </Border>
-                            </Border>
-                        </StackPanel>
-                    </Border >
-                </StackPanel>
+                <Border Background="{StaticResource WBlue}"
+                        Margin="0,5,0,5"
+                        CornerRadius="15">
+                    <StackPanel Margin="2">
+                        <TextBlock Text="Detect State In Seconds"
+                                   TextAlignment="Center"
+                                   FontWeight="Bold"
+                                   FontSize="14"
+                                   Foreground="White"/>
+                        <ComboBox Width="50"
+                                  SelectedItem="{Binding AutoDetectInterval, Mode=TwoWay}"
+                                  Height="22"
+                                  ItemsSource="{Binding Numbers}"
+                                  Style="{StaticResource CustomComboBoxStyle}"
+                                  ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
+                                  Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Border>
+                <Border Background="{StaticResource WBlue}"
+                        Margin="0,5,0,5"
+                        CornerRadius="15">
+                    <StackPanel Margin="2">
+                        <TextBlock Text="Detect Idle In Minutes"
+                                   TextAlignment="Center"
+                                   FontWeight="Bold"
+                                   FontSize="14"
+                                   Foreground="White"/>
+                        <ComboBox Width="50"
+                                  Height="22"
+                                  SelectedItem="{Binding AutoDetectIdleInterval, Mode=TwoWay}"
+                                  ItemsSource="{Binding Numbers}"
+                                  Style="{StaticResource CustomComboBoxStyle}"
+                                  ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
+                                  Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
             </ScrollViewer>
         </Border>
-    
-    </Border>
 </Page>

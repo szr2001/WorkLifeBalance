@@ -38,15 +38,29 @@ namespace WorkLifeBalance.Services
         {
             _ = Task.Run(ClearPage);
 
+            navigation.NavigateTo<LoadingPageVM>();
+            SecondWindowPageVMBase loading = (SecondWindowPageVMBase)navigation.ActiveView;
+            
+            secondWindowVm.ActivePage = loading;
+            secondWindowView.Show();
+
             navigation.NavigateTo<T>();
             SecondWindowPageVMBase activeModel = (SecondWindowPageVMBase)navigation.ActiveView;
-            //add a loading page first
             secondWindowVm.Width = (int)activeModel.RequiredWindowSize.X;
             secondWindowVm.Height = (int)activeModel.RequiredWindowSize.Y;
             secondWindowVm.PageName = activeModel.WindowPageName;
-            secondWindowVm.ActivePage = activeModel;
-            await activeModel.OnPageOppeningAsync(args);
-            secondWindowView.Show();
+
+            await Task.Delay(300);
+
+            _ = Task.Run(async () =>
+            {
+                await activeModel.OnPageOppeningAsync(args);
+
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    secondWindowVm.ActivePage = activeModel;
+                });
+            });
         }
     }
 }

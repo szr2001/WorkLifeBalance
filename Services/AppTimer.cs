@@ -63,6 +63,7 @@ namespace WorkLifeBalance.Services
                 if (!dataStorageFeature.IsAppReady && dataStorageFeature.IsClosingApp)
                 {
                     Stop();
+                    return;
                 }
 
                 try
@@ -77,9 +78,13 @@ namespace WorkLifeBalance.Services
 
                     await Task.Delay(1000, token);
                 }
+                catch (TaskCanceledException taskCancel)
+                {
+                    Log.Information($"App Timer: {taskCancel.Message}");
+                }
                 catch (Exception ex)
                 {
-                    Log.Information(ex, "TimeHandler timer loop");
+                    Log.Error(ex, "App Timer");
                 }
 
                 OnTimerTick?.Invoke();

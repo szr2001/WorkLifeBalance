@@ -12,7 +12,7 @@
             CornerRadius="15">
         <ScrollViewer VerticalScrollBarVisibility="Hidden">
             <StackPanel Margin="5">
-                <Button Margin="5" Command="{Binding OpenSettingsCommand}"
+                <Button Margin="5" Height="30" Command="{Binding OpenSettingsCommand}"
                         Style="{StaticResource RoundedBtnStyle}"
                         Template="{StaticResource SlightRoundedBtnTemp}">
                     <StackPanel Orientation="Horizontal">
@@ -25,7 +25,20 @@
                                    Foreground="White"/>
                     </StackPanel>
                 </Button>
-
+                <Button Margin="5" Command="{Binding ConfigureAutoDetectCommand}"
+                        Style="{StaticResource RoundedBtnStyle}"
+                        Height="30"
+                        Template="{StaticResource SlightRoundedBtnTemp}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Assets/Automat.png" Width="20" Margin="1"/>
+                        <TextBlock Text="Configure Working"
+                                   TextAlignment="Center"
+                                   FontWeight="Bold"
+                                   FontSize="15"
+                                   Margin="0,0,0,4"
+                                   Foreground="White"/>
+                    </StackPanel>
+                </Button>
             </StackPanel>
         </ScrollViewer>
     </Border>

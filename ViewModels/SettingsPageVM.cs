@@ -33,33 +33,13 @@ namespace WorkLifeBalance.ViewModels
         private bool startWithWin = false;
 
         [ObservableProperty]
-        private bool autoDetectWork = false;
-
-        [ObservableProperty]
-        private bool autoDetectIdle = false;
-
-        [ObservableProperty]
-        private AnchorCorner[] anchorCorners = new AnchorCorner[4]
-        {
-            AnchorCorner.TopLeft,
-            AnchorCorner.TopRight,
-            AnchorCorner.BootomLeft,
-            AnchorCorner.BottomRight
-        };
-
-        [ObservableProperty]
         private int[]? numbers;
 
-        [ObservableProperty]
-        private AnchorCorner selectedStartupCorner = AnchorCorner.BootomLeft;
-
         private readonly DataStorageFeature dataStorageFeature;
-        private readonly ISecondWindowService secondWindowService;
         private readonly IFeaturesServices featuresServices;
-        public SettingsPageVM(DataStorageFeature dataStorageFeature, ISecondWindowService secondWindowService, IFeaturesServices featuresServices)
+        public SettingsPageVM(DataStorageFeature dataStorageFeature, IFeaturesServices featuresServices)
         {
             this.featuresServices = featuresServices;
-            this.secondWindowService = secondWindowService;
             this.dataStorageFeature = dataStorageFeature;
             RequiredWindowSize = new Vector2(250, 320);
             WindowPageName = "Settings";
@@ -69,8 +49,6 @@ namespace WorkLifeBalance.ViewModels
 
         private void InitializeData()
         {
-            SelectedStartupCorner = dataStorageFeature.Settings.StartUpCornerC;
-
             Version = $"Version: {dataStorageFeature.Settings.Version}";
 
             AutoSaveInterval = dataStorageFeature.Settings.SaveInterval;
@@ -80,10 +58,6 @@ namespace WorkLifeBalance.ViewModels
             AutoDetectIdleInterval = dataStorageFeature.Settings.AutoDetectIdleInterval;
 
             StartWithWin = dataStorageFeature.Settings.StartWithWindowsC;
-
-            AutoDetectWork = dataStorageFeature.Settings.AutoDetectWorkingC;
-
-            AutoDetectIdle = dataStorageFeature.Settings.AutoDetectIdleC;
 
             List<int> numbersTemp = new();
             for(int x = 1; x <= 300; x++)
@@ -101,33 +75,9 @@ namespace WorkLifeBalance.ViewModels
 
             dataStorageFeature.Settings.AutoDetectIdleInterval = AutoDetectIdleInterval;
 
-            dataStorageFeature.Settings.AutoDetectIdleC = (bool)AutoDetectIdle!;
-
-            dataStorageFeature.Settings.AutoDetectWorkingC = AutoDetectWork;
-
             dataStorageFeature.Settings.StartWithWindowsC = StartWithWin;
 
-            dataStorageFeature.Settings.StartUpCornerC = SelectedStartupCorner;
-
             await dataStorageFeature.SaveData();
-
-            if (AutoDetectWork)
-            {
-                featuresServices.AddFeature<StateCheckerFeature>();
-            }
-            else
-            {
-                featuresServices.RemoveFeature<StateCheckerFeature>();
-            }
-
-            if (AutoDetectIdle)
-            {
-                featuresServices.AddFeature<IdleCheckerFeature>();
-            }
-            else
-            {
-                featuresServices.RemoveFeature<IdleCheckerFeature>();
-            }
 
             ApplyStartToWindows();
             dataStorageFeature.Settings.OnSettingsChanged.Invoke();
@@ -165,12 +115,6 @@ namespace WorkLifeBalance.ViewModels
             {
                 File.Delete(startupfolder);
             }
-        }
-
-        [RelayCommand]
-        private void ConfigureAutoDetect()
-        {
-            secondWindowService.OpenWindowWith<BackgroundProcessesViewPageVM>();
         }
     }
 }

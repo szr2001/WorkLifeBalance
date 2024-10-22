@@ -63,7 +63,7 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         private void ReturnToPreviousPage()
         {
-            secondWindowService.OpenWindowWith<SettingsPageVM>();
+            secondWindowService.OpenWindowWith<OptionsPageVM>();
         }
 
         [RelayCommand]

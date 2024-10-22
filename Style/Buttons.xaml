@@ -14,7 +14,7 @@
                 </Setter>
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-            <Setter Property="Background" Value="{StaticResource WLFBLighterPurple}"/>
+                <Setter Property="Background" Value="MediumPurple"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -246,14 +246,14 @@
             <Border x:Name="Border"
                     Grid.ColumnSpan="2"
                     CornerRadius="8"
-                    Background="{StaticResource WLFBOceanBlue}"
-                    BorderBrush="{StaticResource WLFBLighterPurple}"
+                    Background="{StaticResource WBlueShadow}"
+                    BorderBrush="{StaticResource WBlueShadow}"
                     BorderThickness="1" />
             <Border Grid.Column="0"
                     CornerRadius="8" 
                     Margin="1" 
-                    Background="{StaticResource WLFBBrightOceanBlue}"
-                    BorderBrush="{StaticResource WLFBLighterPurple}"
+                    Background="{StaticResource WBlueHighlight}"
+                    BorderBrush="{StaticResource WBlueShadow}"
                     BorderThickness="0,0,1,0" />
             <Path x:Name="Arrow"
                     Grid.Column="1"
@@ -305,8 +305,8 @@
                                     Margin="3,3,23,3"
                                     Focusable="True"
                                     FontSize="5"
-                                    Background="{StaticResource WLFBBrightOceanBlue}"
-                                    Foreground="{StaticResource WLFBBluishWhite}"
+                                    Background="{StaticResource WBlueShadow}"
+                                    Foreground="{StaticResource WBlueShadow}"
                                     Visibility="Hidden"
                                     IsReadOnly="{TemplateBinding IsReadOnly}"/>
                         <Popup  Name="Popup"
@@ -320,10 +320,10 @@
                                     MinWidth="{TemplateBinding ActualWidth}"
                                     MaxHeight="{TemplateBinding MaxDropDownHeight}">
                                 <Border x:Name="DropDownBorder" 
-                                        Background="{StaticResource WLFBOceanBlue}"
+                                        Background="{StaticResource WBlue}"
                                         BorderThickness="1"
                                         CornerRadius="10"
-                                        BorderBrush="{StaticResource WLFBBrightOceanBlue}"/>
+                                        BorderBrush="{StaticResource WBlueShadow}"/>
                                 <ScrollViewer Margin="4,6,4,6" MaxHeight="100" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" SnapsToDevicePixels="True">
                                     <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
                                 </ScrollViewer>
@@ -335,7 +335,7 @@
                             <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                        <Setter Property="Foreground" Value="{StaticResource WLFBBrightOceanBlue}"/>
+                        <Setter Property="Foreground" Value="{StaticResource WBlue}"/>
                         </Trigger>
                         <Trigger Property="IsGrouping" Value="true">
                             <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
@@ -367,10 +367,10 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsHighlighted" Value="true">
-                            <Setter TargetName="Border" Property="Background" Value="{StaticResource WLFBBrightOceanBlue}"/>
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource WBlueHighlight}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Foreground" Value="{StaticResource WLFBOceanBlue}"/>
+                            <Setter Property="Foreground" Value="{StaticResource WBlue}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

@@ -23,5 +23,8 @@
     <DataTemplate DataType="{x:Type viewModel:ViewDaysPageVM}">
         <views:ViewDaysPage/>
     </DataTemplate>
+    <DataTemplate DataType="{x:Type viewModel:LoadingPageVM}">
+        <views:LoadingPage/>
+    </DataTemplate>
     
 </ResourceDictionary>

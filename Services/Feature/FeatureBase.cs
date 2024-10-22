@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.AccessControl;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,9 +13,12 @@ namespace WorkLifeBalance.Services.Feature
         //it will run once then ignore the main timer for 5 minutes and repeat.
         protected CancellationTokenSource CancelTokenS = new();
 
+        public bool IsFeatureRuning = false;
+
         //used to add the current feature and create a new canceltoken,returns overrided method
         public Func<Task> AddFeature()
         {
+            IsFeatureRuning = false;
             CancelTokenS = new();
             OnFeatureAdded();
             return ReturnFeatureMethod();
