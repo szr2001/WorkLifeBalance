@@ -20,7 +20,7 @@ namespace WorkLifeBalance
         {
             int ScreenHeight = (int)SystemParameters.PrimaryScreenHeight;
             Left = 0;
-            Top = ScreenHeight - 348;
+            Top = ScreenHeight - 297;
         }
 
         private void MoveWindow(object sender, MouseButtonEventArgs e)
