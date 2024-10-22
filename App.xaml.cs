@@ -60,6 +60,7 @@ namespace WorkLifeBalance
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<ISecondWindowService, SecondWindowService>();
             services.AddSingleton<IFeaturesServices, FeaturesService>();
+            services.AddSingleton<IUpdateCheckerService, UpdateCheckerService>();
 
             //factory method for ViewModelBase.
             services.AddSingleton<Func<Type, ViewModelBase>>(serviceProvider => viewModelType => (ViewModelBase)serviceProvider.GetRequiredService(viewModelType));
@@ -113,6 +114,10 @@ namespace WorkLifeBalance
             DataStorageFeature dataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
 
             SqlLiteDatabaseIntegrity sqlLiteDatabaseIntegrity = _servicesProvider.GetRequiredService<SqlLiteDatabaseIntegrity>();
+
+            IUpdateCheckerService updateCheckerService = _servicesProvider.GetRequiredService<IUpdateCheckerService>();
+
+            await updateCheckerService.CheckForUpdate();
 
             await sqlLiteDatabaseIntegrity.CheckDatabaseIntegrity();
 
