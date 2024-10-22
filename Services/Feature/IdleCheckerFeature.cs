@@ -43,12 +43,11 @@ namespace WorkLifeBalance.Services.Feature
 
                 if (appStateHandler.AppTimerState == AppState.Idle)
                 {
-                    delay = 1000;
+                    delay = 2000;
                 }
                 else
                 {
-                    //delay = (dataStorageFeature.Settings.AutoDetectIdle * 60000) / 2;
-                    delay = 4000;
+                    delay = (dataStorageFeature.Settings.AutoDetectIdleInterval * 60000) / 2;
                 }
 
                 await Task.Delay(delay, CancelTokenS.Token);

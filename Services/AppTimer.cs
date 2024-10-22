@@ -87,8 +87,6 @@ namespace WorkLifeBalance.Services
                     Log.Error(ex, "App Timer");
                 }
 
-                //Console.WriteLine($"App Timer Tick, Subscribers: {OnTimerTick?.GetInvocationList().Length}");
-
                 OnTimerTick?.Invoke();
             }
         }
