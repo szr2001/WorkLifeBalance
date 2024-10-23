@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Numerics;
 using System.Threading.Tasks;
+using WorkLifeBalance.ViewModels.Base;
 
 namespace WorkLifeBalance.ViewModels
 {

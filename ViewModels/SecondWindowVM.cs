@@ -10,20 +10,20 @@ namespace WorkLifeBalance.ViewModels
 {
     public partial class SecondWindowVM : ObservableObject
     {
+        //Maybe send the SecondWindowService and bind to it instead of having this field? Needs testing
+        [ObservableProperty]
+        private SecondWindowPageVMBase? activePage;
 
         [ObservableProperty]
-        public SecondWindowPageVMBase? activePage;
+        private string pageName = "Page";
 
         [ObservableProperty]
-        public string pageName = "Page";
+        private int height = 300;
 
         [ObservableProperty]
-        public int height = 300;
+        private int width = 250;
 
-        [ObservableProperty]
-        public int width = 250;
-
-        public Action OnWindowClosing = new(() => { });
+        public Action OnWindowClosing { get; set; } = new(() => { });
 
         [RelayCommand]
         private void CloseSecondWindow()

@@ -10,6 +10,7 @@ using System.IO;
 using Serilog;
 using System;
 using System.Threading.Tasks;
+using WorkLifeBalance.ViewModels.Base;
 
 namespace WorkLifeBalance
 {
@@ -62,6 +63,7 @@ namespace WorkLifeBalance
             services.AddSingleton<ISecondWindowService, SecondWindowService>();
             services.AddSingleton<IFeaturesServices, FeaturesService>();
             services.AddSingleton<IUpdateCheckerService, UpdateCheckerService>();
+            services.AddSingleton<IMainWindowDetailsService, MainWindowDetailsService>();
 
             //factory method for ViewModelBase.
             services.AddSingleton<Func<Type, ViewModelBase>>(serviceProvider => viewModelType => (ViewModelBase)serviceProvider.GetRequiredService(viewModelType));

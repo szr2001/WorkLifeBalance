@@ -1,4 +1,4 @@
-﻿using WorkLifeBalance.ViewModels;
+﻿using WorkLifeBalance.ViewModels.Base;
 
 namespace WorkLifeBalance.Interfaces
 {

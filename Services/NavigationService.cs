@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using WorkLifeBalance.Interfaces;
-using WorkLifeBalance.ViewModels;
+using WorkLifeBalance.ViewModels.Base;
 
 namespace WorkLifeBalance.Services
 {

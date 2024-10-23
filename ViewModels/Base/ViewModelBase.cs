@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WorkLifeBalance.ViewModels
+namespace WorkLifeBalance.ViewModels.Base
 {
-    public abstract class ViewModelBase: ObservableObject
+    public abstract class ViewModelBase : ObservableObject
     {
     }
 }
