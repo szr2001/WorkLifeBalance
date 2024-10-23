@@ -1,0 +1,26 @@
+﻿<Page x:Class="WorkLifeBalance.Views.UpdatePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WorkLifeBalance.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="350" d:DesignWidth="400"
+      Title="UpdatePage">
+
+    <Grid>
+        <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="25" 
+                   FontWeight="Bold" Text="{Binding Version}" Height="40"/>
+        <Border Margin="10" Height="250" Background="{StaticResource WBlue}" CornerRadius="8">
+            <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
+                <TextBlock Foreground="White" HorizontalAlignment="Center" FontSize="20" 
+                   FontWeight="Bold" Text="{Binding UpdateLog}"/>
+            </ScrollViewer>
+        </Border>
+        <Button VerticalAlignment="Bottom" Margin="10"
+                Height="30" Width="110" Style="{StaticResource RoundedBtnStyle}"
+                Template="{StaticResource SlightRoundedBtnTemp}" Command="{Binding GoToDownloadCommand}">
+            <TextBlock Text="Download" Foreground="White" FontSize="20" FontWeight="Bold"/>
+        </Button>
+    </Grid>
+</Page>
