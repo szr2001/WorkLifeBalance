@@ -1,13 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Serilog;
 using System;
-using System.IO.Pipes;
-using System.Numerics;
 using System.Threading.Tasks;
-using System.Windows;
 using WorkLifeBalance.Interfaces;
-using WorkLifeBalance.Models;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
 
@@ -16,19 +11,19 @@ namespace WorkLifeBalance.ViewModels
     public partial class MainMenuVM : ObservableObject
     {
         [ObservableProperty]
-        public string? dateText;
+        private string? dateText;
 
         [ObservableProperty]
-        public TimeOnly elapsedWorkTime;
+        private TimeOnly elapsedWorkTime;
 
         [ObservableProperty]
-        public TimeOnly elapsedRestTime;
+        private TimeOnly elapsedRestTime;
 
         [ObservableProperty]
-        public TimeOnly elapsedIdleTime;
+        private TimeOnly elapsedIdleTime;
 
         [ObservableProperty]
-        public AppState appState = AppState.Resting;
+        private AppState appState = AppState.Resting;
 
         private readonly AppStateHandler appStateHandler;
         private readonly LowLevelHandler lowLevelHandler;
