@@ -73,6 +73,7 @@ namespace WorkLifeBalance
             services.AddSingleton<SecondWindowVM>();
             services.AddSingleton<SettingsPageVM>();
             services.AddSingleton<ViewDataPageVM>();
+            services.AddSingleton<UpdatePageVM>();
             services.AddSingleton<LoadingPageVM>();
             services.AddSingleton<ViewDayDetailsPageVM>();
             services.AddSingleton<ViewDaysPageVM>();
