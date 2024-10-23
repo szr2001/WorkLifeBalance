@@ -50,6 +50,7 @@ namespace WorkLifeBalance
             services.AddSingleton<IdleCheckerFeature>();
             services.AddSingleton<StateCheckerFeature>();
             services.AddSingleton<TimeTrackerFeature>();
+            services.AddSingleton<ForceWorkFeature>();
             services.AddSingleton<SqlDataAccess>();
             services.AddSingleton(_configuration);
             services.AddSingleton<DataBaseHandler>();
