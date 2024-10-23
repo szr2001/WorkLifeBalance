@@ -26,5 +26,7 @@
     <DataTemplate DataType="{x:Type viewModel:LoadingPageVM}">
         <views:LoadingPage/>
     </DataTemplate>
-    
+    <DataTemplate DataType="{x:Type viewModel:UpdatePageVM}">
+        <views:UpdatePage/>
+    </DataTemplate>
 </ResourceDictionary>
