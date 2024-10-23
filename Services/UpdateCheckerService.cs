@@ -11,7 +11,6 @@ using System.Net.Http;
 using Serilog;
 using WorkLifeBalance.Services.Feature;
 using WorkLifeBalance.ViewModels;
-using System.Resources;
 
 namespace WorkLifeBalance.Services
 {
@@ -64,8 +63,6 @@ namespace WorkLifeBalance.Services
                 try 
                 {
                     string responseContent = await client.GetStringAsync(UpdateAdress);
-
-                    Console.WriteLine(responseContent);
 
                     VersionData? gistData = JsonConvert.DeserializeObject<VersionData>(responseContent);
                     return gistData;
