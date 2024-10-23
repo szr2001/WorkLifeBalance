@@ -11,6 +11,8 @@ namespace WorkLifeBalance.Services
         private readonly SecondWindow secondWindowView;
         private readonly INavigationService navigation;
 
+        private SecondWindowPageVMBase? activeSecondWindowPage;
+
         public SecondWindowService(SecondWindowVM secondWindowVm, SecondWindow secondWindowView, INavigationService navigation)
         {
             this.secondWindowVm = secondWindowVm;
@@ -27,10 +29,10 @@ namespace WorkLifeBalance.Services
 
         private async Task ClearPage()
         {
-            SecondWindowPageVMBase activeModel = (SecondWindowPageVMBase)navigation.ActiveView;
-            if(activeModel != null)
+            if(activeSecondWindowPage != null)
             {
-                await activeModel.OnPageClosingAsync().ConfigureAwait(false);
+                await activeSecondWindowPage.OnPageClosingAsync();
+                activeSecondWindowPage = null;
             }
         }
 
@@ -38,27 +40,25 @@ namespace WorkLifeBalance.Services
         {
             _ = Task.Run(ClearPage);
 
-            navigation.NavigateTo<LoadingPageVM>();
-            SecondWindowPageVMBase loading = (SecondWindowPageVMBase)navigation.ActiveView;
-            
+            SecondWindowPageVMBase loading = (SecondWindowPageVMBase)navigation.NavigateTo<LoadingPageVM>();
+
             secondWindowVm.ActivePage = loading;
             secondWindowView.Show();
 
-            navigation.NavigateTo<T>();
-            SecondWindowPageVMBase activeModel = (SecondWindowPageVMBase)navigation.ActiveView;
-            secondWindowVm.Width = (int)activeModel.RequiredWindowSize.X;
-            secondWindowVm.Height = (int)activeModel.RequiredWindowSize.Y;
-            secondWindowVm.PageName = activeModel.WindowPageName;
+            activeSecondWindowPage = (SecondWindowPageVMBase)navigation.NavigateTo<T>();
+            secondWindowVm.Width = (int)activeSecondWindowPage.RequiredWindowSize.X;
+            secondWindowVm.Height = (int)activeSecondWindowPage.RequiredWindowSize.Y;
+            secondWindowVm.PageName = activeSecondWindowPage.WindowPageName;
 
             await Task.Delay(300);
 
             _ = Task.Run(async () =>
             {
-                await activeModel.OnPageOppeningAsync(args);
+                await activeSecondWindowPage.OnPageOppeningAsync(args);
 
                 App.Current.Dispatcher.Invoke(() =>
                 {
-                    secondWindowVm.ActivePage = activeModel;
+                    secondWindowVm.ActivePage = activeSecondWindowPage;
                 });
             });
         }
