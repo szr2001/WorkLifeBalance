@@ -44,14 +44,8 @@ namespace WorkLifeBalance
             services.AddSingleton<IUpdateCheckerService, UpdateCheckerService>();
             services.AddSingleton<IMainWindowDetailsService, MainWindowDetailsService>();
 
-            services.AddSingleton(provider => new MainWindow
-            {
-                DataContext = provider.GetRequiredService<MainWindowVM>()
-            });
-            services.AddSingleton(provider => new SecondWindow
-            {
-                DataContext = provider.GetRequiredService<SecondWindowVM>()
-            });
+            services.AddSingleton<MainWindow>();
+            services.AddSingleton<SecondWindow>();
 
             services.AddSingleton<DataStorageFeature>();
             services.AddSingleton<ActivityTrackerFeature>();
@@ -59,6 +53,7 @@ namespace WorkLifeBalance
             services.AddSingleton<StateCheckerFeature>();
             services.AddSingleton<TimeTrackerFeature>();
             services.AddSingleton<ForceWorkFeature>();
+
             services.AddSingleton<SqlDataAccess>();
             services.AddSingleton(_configuration);
             services.AddSingleton<DataBaseHandler>();
