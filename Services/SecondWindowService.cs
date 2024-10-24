@@ -1,30 +1,30 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Threading.Tasks;
 using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.ViewModels;
 
 namespace WorkLifeBalance.Services
 {
-    public class SecondWindowService : ISecondWindowService
+    public partial class SecondWindowService : ObservableObject, ISecondWindowService
     {
-        private readonly SecondWindowVM secondWindowVm;
-        private readonly SecondWindow secondWindowView;
         private readonly INavigationService navigation;
+
+        [ObservableProperty]
+        private SecondWindowPageVMBase? loadedPage;
 
         private SecondWindowPageVMBase? activeSecondWindowPage;
 
-        public SecondWindowService(SecondWindowVM secondWindowVm, SecondWindow secondWindowView, INavigationService navigation)
+        //lock because of requesting view
+        public SecondWindowService(INavigationService navigation)
         {
-            this.secondWindowVm = secondWindowVm;
-            this.secondWindowView = secondWindowView;
             this.navigation = navigation;
-            secondWindowVm.OnWindowClosing += CloseWindow;
         }
 
         private void CloseWindow()
         {
             _ = Task.Run(ClearPage);
-            secondWindowView.Hide();
+            //secondWindowView.Hide();
         }
 
         private async Task ClearPage()
@@ -42,13 +42,13 @@ namespace WorkLifeBalance.Services
 
             SecondWindowPageVMBase loading = (SecondWindowPageVMBase)navigation.NavigateTo<LoadingPageVM>();
 
-            secondWindowVm.ActivePage = loading;
-            secondWindowView.Show();
+            LoadedPage = loading;
+            //secondWindowView.Show();
 
             activeSecondWindowPage = (SecondWindowPageVMBase)navigation.NavigateTo<T>();
-            secondWindowVm.Width = activeSecondWindowPage.PageWidth;
-            secondWindowVm.Height = activeSecondWindowPage.PageHeight;
-            secondWindowVm.PageName = activeSecondWindowPage.PageName;
+            //secondWindowVm.Width = activeSecondWindowPage.PageWidth;
+            //secondWindowVm.Height = activeSecondWindowPage.PageHeight;
+            //secondWindowVm.PageName = activeSecondWindowPage.PageName;
 
             await Task.Delay(300);
 
@@ -58,7 +58,7 @@ namespace WorkLifeBalance.Services
 
                 App.Current.Dispatcher.Invoke(() =>
                 {
-                    secondWindowVm.ActivePage = activeSecondWindowPage;
+                    LoadedPage = activeSecondWindowPage;
                 });
             });
         }

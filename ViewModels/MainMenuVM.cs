@@ -8,7 +8,7 @@ using WorkLifeBalance.Services.Feature;
 
 namespace WorkLifeBalance.ViewModels
 {
-    public partial class MainMenuVM : ObservableObject
+    public partial class MainWindowVM : ObservableObject
     {
         [ObservableProperty]
         private string? dateText;
@@ -30,7 +30,7 @@ namespace WorkLifeBalance.ViewModels
         private readonly DataStorageFeature dataStorageFeature;
         private readonly TimeTrackerFeature timeTrackerFeature;
         private readonly ISecondWindowService secondWindowService;
-        public MainMenuVM(AppTimer mainTimer, LowLevelHandler lowLevelHandler, DataStorageFeature dataStorageFeature, TimeTrackerFeature timeTrackerFeature, ISecondWindowService secondWindowService, AppStateHandler appStateHandler)
+        public MainWindowVM(AppTimer mainTimer, LowLevelHandler lowLevelHandler, DataStorageFeature dataStorageFeature, TimeTrackerFeature timeTrackerFeature, ISecondWindowService secondWindowService, AppStateHandler appStateHandler)
         {
             this.lowLevelHandler = lowLevelHandler;
             this.dataStorageFeature = dataStorageFeature;

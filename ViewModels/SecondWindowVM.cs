@@ -1,18 +1,18 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
-using System.DirectoryServices.ActiveDirectory;
-using System.Threading.Tasks;
-using System.Windows;
 using WorkLifeBalance.Interfaces;
 
 namespace WorkLifeBalance.ViewModels
 {
     public partial class SecondWindowVM : ObservableObject
     {
-        //Maybe send the SecondWindowService and bind to it instead of having this field? Needs testing
-        [ObservableProperty]
-        private SecondWindowPageVMBase? activePage;
+        public ISecondWindowService SecondWindowService { get; set; }
+
+        public SecondWindowVM(ISecondWindowService secondWindowService)
+        {
+            this.SecondWindowService = secondWindowService;
+        }
 
         [ObservableProperty]
         private string pageName = "Page";
@@ -30,16 +30,6 @@ namespace WorkLifeBalance.ViewModels
         {
             OnWindowClosing.Invoke();
         }
-    }
-
-    public enum SecondWindowType
-    {
-        Settings,
-        ViewData,
-        ViewDays,
-        BackgroundProcesses,
-        ViewDayActivity,
-        Options
     }
 }
 

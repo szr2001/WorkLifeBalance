@@ -67,7 +67,7 @@
             <Border.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="5" Opacity="0.5"/>
             </Border.Effect>
-            <Frame Content="{Binding ActivePage}"
+            <Frame Content="{Binding SecondWindowService.LoadedPage}"
                    NavigationUIVisibility="Hidden">
 
             </Frame>

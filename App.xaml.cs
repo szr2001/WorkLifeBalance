@@ -38,14 +38,21 @@ namespace WorkLifeBalance
 
         private void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<INavigationService, NavigationService>();
+            services.AddSingleton<ISecondWindowService, SecondWindowService>();
+            services.AddSingleton<IFeaturesServices, FeaturesService>();
+            services.AddSingleton<IUpdateCheckerService, UpdateCheckerService>();
+            services.AddSingleton<IMainWindowDetailsService, MainWindowDetailsService>();
+
             services.AddSingleton(provider => new MainWindow
             {
-                DataContext = provider.GetRequiredService<MainMenuVM>()
+                DataContext = provider.GetRequiredService<MainWindowVM>()
             });
             services.AddSingleton(provider => new SecondWindow
             {
-                DataContext = provider.GetService<SecondWindowVM>()
+                DataContext = provider.GetRequiredService<SecondWindowVM>()
             });
+
             services.AddSingleton<DataStorageFeature>();
             services.AddSingleton<ActivityTrackerFeature>();
             services.AddSingleton<IdleCheckerFeature>();
@@ -59,11 +66,6 @@ namespace WorkLifeBalance
             services.AddSingleton<AppStateHandler>();
             services.AddSingleton<SqlLiteDatabaseIntegrity>();
             services.AddSingleton<AppTimer>();
-            services.AddSingleton<INavigationService, NavigationService>();
-            services.AddSingleton<ISecondWindowService, SecondWindowService>();
-            services.AddSingleton<IFeaturesServices, FeaturesService>();
-            services.AddSingleton<IUpdateCheckerService, UpdateCheckerService>();
-            services.AddSingleton<IMainWindowDetailsService, MainWindowDetailsService>();
 
             //factory method for ViewModelBase.
             services.AddSingleton<Func<Type, ViewModelBase>>(serviceProvider => viewModelType => (ViewModelBase)serviceProvider.GetRequiredService(viewModelType));
@@ -71,7 +73,7 @@ namespace WorkLifeBalance
             services.AddSingleton<Func<Type, FeatureBase>>(serviceProvider => featureBase => (FeatureBase)serviceProvider.GetRequiredService(featureBase));
 
             services.AddSingleton<BackgroundProcessesViewPageVM>();
-            services.AddSingleton<MainMenuVM>();
+            services.AddSingleton<MainWindowVM>();
             services.AddSingleton<OptionsPageVM>();
             services.AddSingleton<SecondWindowVM>();
             services.AddSingleton<SettingsPageVM>();
@@ -126,9 +128,9 @@ namespace WorkLifeBalance
             await sqlLiteDatabaseIntegrity.CheckDatabaseIntegrity();
 
             await dataStorageFeature.LoadData();
-            
+
             AppTimer appTimer = _servicesProvider.GetRequiredService<AppTimer>();
-            
+
             //set app ready so timers can start
             dataStorageFeature.IsAppReady = true;
 
@@ -144,6 +146,8 @@ namespace WorkLifeBalance
 
             var mainWindow = _servicesProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
+
+            _servicesProvider.GetRequiredService<SecondWindow>().Show();
             Log.Information("------------------App Initialized------------------");
         }
 
