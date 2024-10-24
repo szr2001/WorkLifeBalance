@@ -10,7 +10,7 @@
 
     <Grid>
         <Image VerticalAlignment="Center" HorizontalAlignment="Center" 
-               Source="/Assets/Idle.png" Margin="55" RenderTransformOrigin="0.5,0.5">
+               Source="/Assets/Idle.png" Margin="80" Opacity=".5" RenderTransformOrigin="0.5,0.5">
             <Image.RenderTransform>
                 <RotateTransform />
             </Image.RenderTransform>

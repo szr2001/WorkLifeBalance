@@ -17,6 +17,11 @@ namespace WorkLifeBalance.Services
 
         public Action? OnPageLoaded { get; set; } = new(() => { });
 
+        partial void OnLoadedPageChanged(SecondWindowPageVMBase? oldValue, SecondWindowPageVMBase? newValue)
+        {
+            OnPageLoaded?.Invoke();
+        }
+
         public SecondWindowService(INavigationService navigation)
         {
             this.navigation = navigation;
@@ -38,25 +43,21 @@ namespace WorkLifeBalance.Services
 
         public async Task OpenWindowWith<T>(object? args = null) where T : SecondWindowPageVMBase 
         {
-            _ = Task.Run(ClearPage);
-
             SecondWindowPageVMBase loading = (SecondWindowPageVMBase)navigation.NavigateTo<LoadingPageVM>();
-
             LoadedPage = loading;
-            OnPageLoaded?.Invoke();
+
+            await Task.Delay(150);
+            
+            await Task.Run(ClearPage);
 
             activeSecondWindowPage = (SecondWindowPageVMBase)navigation.NavigateTo<T>();
 
-            await Task.Delay(300);
-
-            _ = Task.Run(async () =>
+            await Task.Run(async () =>
             {
                 await activeSecondWindowPage.OnPageOppeningAsync(args);
-
                 App.Current.Dispatcher.Invoke(() =>
                 {
                     LoadedPage = activeSecondWindowPage;
-                    OnPageLoaded?.Invoke();
                 });
             });
         }
