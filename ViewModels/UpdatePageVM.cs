@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using Serilog;
 using System.Diagnostics;
-using System.Numerics;
 using System.Threading.Tasks;
 using WorkLifeBalance.Models;
 

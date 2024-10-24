@@ -123,7 +123,7 @@ namespace WorkLifeBalance
 
             IUpdateCheckerService updateCheckerService = _servicesProvider.GetRequiredService<IUpdateCheckerService>();
 
-            await updateCheckerService.CheckForUpdate();
+            //await updateCheckerService.CheckForUpdate();
 
             await sqlLiteDatabaseIntegrity.CheckDatabaseIntegrity();
 
@@ -147,7 +147,6 @@ namespace WorkLifeBalance
             var mainWindow = _servicesProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
 
-            _servicesProvider.GetRequiredService<SecondWindow>().Show();
             Log.Information("------------------App Initialized------------------");
         }
 

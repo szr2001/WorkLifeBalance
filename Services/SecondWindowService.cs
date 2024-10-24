@@ -15,7 +15,6 @@ namespace WorkLifeBalance.Services
 
         private SecondWindowPageVMBase? activeSecondWindowPage;
 
-        //lock because of requesting view
         public SecondWindowService(INavigationService navigation)
         {
             this.navigation = navigation;
@@ -46,9 +45,6 @@ namespace WorkLifeBalance.Services
             //secondWindowView.Show();
 
             activeSecondWindowPage = (SecondWindowPageVMBase)navigation.NavigateTo<T>();
-            //secondWindowVm.Width = activeSecondWindowPage.PageWidth;
-            //secondWindowVm.Height = activeSecondWindowPage.PageHeight;
-            //secondWindowVm.PageName = activeSecondWindowPage.PageName;
 
             await Task.Delay(300);
 

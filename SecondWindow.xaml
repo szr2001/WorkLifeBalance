@@ -4,15 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorkLifeBalance"
-        mc:Ignorable="d"
-        Background="Transparent"
-        ResizeMode="NoResize"
-        AllowsTransparency="True"
-        WindowStyle="None"
-        Title="SecondWindow" Height="{Binding Height, Mode=TwoWay}" 
-        Width="{Binding Width, Mode=TwoWay}">
+        mc:Ignorable="d" Background="Transparent"
+        ResizeMode="NoResize" AllowsTransparency="True"
+        WindowStyle="None" Title="SecondWindow" 
+        Height="{Binding SecondWindowService.LoadedPage.PageHeight}" 
+        Width="{Binding SecondWindowService.LoadedPage.PageWidth}">
 
-    <Grid Grid.RowSpan="2" x:Name="AnimatedGrid" RenderTransformOrigin="0.1,0.9">
+    <Grid Grid.RowSpan="2">
         <Grid.RenderTransform>
             <ScaleTransform ScaleX="1" ScaleY="1" />
         </Grid.RenderTransform>
@@ -43,7 +41,7 @@
                 <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="5" Opacity="0.5"/>
             </Border.Effect>
             <Grid>
-                <TextBlock Text="{Binding PageName}" FontWeight="Bold"
+                <TextBlock Text="{Binding SecondWindowService.LoadedPage.PageName}" FontWeight="Bold"
                            HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0,0,0" Foreground="White" FontSize="20"/>
                 <Button Height="25" Width="80" Margin="4,4,15,4"
                         Command="{Binding CloseSecondWindowCommand}" HorizontalAlignment="Right"
@@ -73,57 +71,4 @@
             </Frame>
         </Border>
     </Grid>
-    <!--<Border CornerRadius="0,0,20,20"
-            Background= "{StaticResource WLFBOceanBlue}">
-
-        <Grid>
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-
-            <Border Grid.Row="0"
-                    MouseDown="MoveWindow"
-                    Background="{StaticResource WLFBBluishWhite}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="42"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Grid.Column="0"
-                               Grid.ColumnSpan="2"
-                               FontSize="20"
-                               FontWeight="Bold"
-                               Foreground="{StaticResource WLFBOceanBlue}"
-                               Text="{Binding PageName}"/>
-                    <Button Width="28"
-                            Height="28" 
-                            Grid.Column="1"
-                            Template="{StaticResource RoundedBtnTemp}"
-                            Style="{StaticResource RedRoundedBtnHoverStyle}" 
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Right"
-                            Margin="0,0,5,0"
-                            Command="{Binding CloseSecondWindowCommand}">
-                            <Image Margin="2"
-                               Source="pack://application:,,,/Assets/Cancel.png">
-
-                            </Image>
-                    </Button>
-                </Grid>
-            </Border>
-            
-            <Frame Grid.Row="1"
-                   Margin="10"
-                   Content="{Binding ActivePage}"
-                   NavigationUIVisibility="Hidden">
-                        
-            </Frame>
-        
-        </Grid>
-        
-    </Border>-->
 </Window>

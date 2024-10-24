@@ -1,6 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using System.Numerics;
-using System.Threading.Tasks;
 using WorkLifeBalance.Interfaces;
 
 namespace WorkLifeBalance.ViewModels

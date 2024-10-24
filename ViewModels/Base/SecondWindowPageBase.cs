@@ -7,10 +7,10 @@ namespace WorkLifeBalance.ViewModels
     public abstract partial class SecondWindowPageVMBase : ViewModelBase
     {
         [ObservableProperty]
-        private int pageWidth = 250;
+        private double pageWidth = 250;
         
         [ObservableProperty]
-        private int pageHeight = 300;
+        private double pageHeight = 300;
         
         [ObservableProperty]
         private string pageName = "Page";

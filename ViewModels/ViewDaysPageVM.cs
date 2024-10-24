@@ -2,12 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows;
 using WorkLifeBalance.Models;
 using WorkLifeBalance.Interfaces;
-using System.Numerics;
 using CommunityToolkit.Mvvm.Input;
 using WorkLifeBalance.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -40,7 +36,7 @@ namespace WorkLifeBalance.ViewModels
 
         private DayData[]? backupdata;
         //use this to request the correct page when leaving the DayActivity page
-        private int LoadedPageType = 0;
+        private int LoadedPageType;
         private ISecondWindowService secondWindowService;
         private DataBaseHandler database;
         private DataStorageFeature dataStorage;

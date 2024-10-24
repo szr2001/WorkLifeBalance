@@ -14,15 +14,6 @@ namespace WorkLifeBalance.ViewModels
             this.SecondWindowService = secondWindowService;
         }
 
-        [ObservableProperty]
-        private string pageName = "Page";
-
-        [ObservableProperty]
-        private int height = 300;
-
-        [ObservableProperty]
-        private int width = 250;
-
         public Action OnWindowClosing { get; set; } = new(() => { });
 
         [RelayCommand]
