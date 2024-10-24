@@ -46,9 +46,9 @@ namespace WorkLifeBalance.Services
             secondWindowView.Show();
 
             activeSecondWindowPage = (SecondWindowPageVMBase)navigation.NavigateTo<T>();
-            secondWindowVm.Width = (int)activeSecondWindowPage.RequiredWindowSize.X;
-            secondWindowVm.Height = (int)activeSecondWindowPage.RequiredWindowSize.Y;
-            secondWindowVm.PageName = activeSecondWindowPage.WindowPageName;
+            secondWindowVm.Width = activeSecondWindowPage.PageWidth;
+            secondWindowVm.Height = activeSecondWindowPage.PageHeight;
+            secondWindowVm.PageName = activeSecondWindowPage.PageName;
 
             await Task.Delay(300);
 

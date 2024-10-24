@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System.Numerics;
 using System.Threading.Tasks;
 using WorkLifeBalance.ViewModels.Base;
 
@@ -8,10 +7,13 @@ namespace WorkLifeBalance.ViewModels
     public abstract partial class SecondWindowPageVMBase : ViewModelBase
     {
         [ObservableProperty]
-        public Vector2 requiredWindowSize = new Vector2(250, 300);
+        private int pageWidth = 250;
         
         [ObservableProperty]
-        public string windowPageName = "Page";
+        private int pageHeight = 300;
+        
+        [ObservableProperty]
+        private string pageName = "Page";
 
         public virtual Task OnPageClosingAsync()
         {

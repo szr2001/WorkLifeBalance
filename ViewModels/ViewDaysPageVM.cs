@@ -21,22 +21,22 @@ namespace WorkLifeBalance.ViewModels
         public ObservableCollection<DayData> LoadedData { get; set; } = new();
 
         [ObservableProperty]
-        public int[]? filterDays;
+        private int[]? filterDays;
 
         [ObservableProperty]
-        public int selectedDay = 0;
+        private int selectedDay = 0;
         
         [ObservableProperty]
-        public int[]? filterMonths;
+        private int[]? filterMonths;
 
         [ObservableProperty]
-        public int selectedMonth = 0;
+        private int selectedMonth = 0;
         
         [ObservableProperty]
-        public int[]? filterYears;
+        private int[]? filterYears;
 
         [ObservableProperty]
-        public int selectedYear = 0;
+        private int selectedYear = 0;
 
         private DayData[]? backupdata;
         //use this to request the correct page when leaving the DayActivity page
@@ -46,7 +46,8 @@ namespace WorkLifeBalance.ViewModels
         private DataStorageFeature dataStorage;
         public ViewDaysPageVM(ISecondWindowService secondWindowService, DataBaseHandler database, DataStorageFeature dataStorage)
         {
-            RequiredWindowSize = new Vector2(710, 570);
+            PageHeight = 570;
+            PageWidth = 710;
             this.secondWindowService = secondWindowService;
             this.database = database;
             this.dataStorage = dataStorage;
@@ -89,15 +90,15 @@ namespace WorkLifeBalance.ViewModels
             {
                 case 0:
                     Days = await database.ReadMonth();
-                    WindowPageName = "All Months Days";
+                    PageName = "All Months Days";
                     break;
                 case 1:
                     Days = await database.ReadMonth(currentDate.ToString("MM"), currentDate.ToString("yyyy"));
-                    WindowPageName = "Current Month Days";
+                    PageName = "Current Month Days";
                     break;
                 case 2:
                     Days = await database.ReadMonth(previousDate.ToString("MM"), previousDate.ToString("yyyy"));
-                    WindowPageName = "Previous Month Days";
+                    PageName = "Previous Month Days";
                     break;
             }
 

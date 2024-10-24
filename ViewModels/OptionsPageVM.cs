@@ -11,8 +11,9 @@ namespace WorkLifeBalance.ViewModels
         public OptionsPageVM(ISecondWindowService secondWindowService)
         {
             this.secondWindowService = secondWindowService;
-            RequiredWindowSize = new Vector2(250, 320);
-            WindowPageName = "Options";
+            PageHeight = 320;
+            PageWidth = 250;
+            PageName = "Options";
         }
 
         [RelayCommand]

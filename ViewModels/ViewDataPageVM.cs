@@ -58,8 +58,9 @@ namespace WorkLifeBalance.ViewModels
         private ISecondWindowService secondWindowService;
         public ViewDataPageVM(DataBaseHandler databaseHandler, DataStorageFeature dataStorageFeature, ISecondWindowService secondWindowService)
         {
-            RequiredWindowSize = new Vector2(750, 580);
-            WindowPageName = "View Data";
+            PageHeight = 580;
+            PageWidth = 750;
+            PageName = "View Data";
             this.secondWindowService = secondWindowService;
             this.databaseHandler = databaseHandler;
             this.dataStorageFeature = dataStorageFeature;

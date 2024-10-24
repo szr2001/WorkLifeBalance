@@ -26,8 +26,9 @@ namespace WorkLifeBalance.ViewModels
         private ISecondWindowService secondWindowService;
         public BackgroundProcessesViewPageVM(DataStorageFeature dataStorageFeature, LowLevelHandler lowLevelHandler, ActivityTrackerFeature activityTrackerFeature, ISecondWindowService secondWindowService)
         {
-            RequiredWindowSize = new Vector2(700, 570);
-            WindowPageName = "Customize Work Apps";
+            PageHeight = 570;
+            PageWidth = 700;
+            PageName = "Customize Work Apps";
             this.dataStorageFeature = dataStorageFeature;
             this.lowLevelHandler = lowLevelHandler;
             this.activityTrackerFeature = activityTrackerFeature;
