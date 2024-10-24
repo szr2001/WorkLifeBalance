@@ -9,17 +9,20 @@ namespace WorkLifeBalance.ViewModels
     {
         public ISecondWindowService SecondWindowService { get; set; }
 
+        public Action? OnShowView { get; set; } = new(() => { });
+        public Action? OnHideView { get; set; } = new(() => { });
+
         public SecondWindowVM(ISecondWindowService secondWindowService)
         {
             this.SecondWindowService = secondWindowService;
+            SecondWindowService.OnPageLoaded += () => { OnShowView?.Invoke(); };
         }
-
-        public Action OnWindowClosing { get; set; } = new(() => { });
 
         [RelayCommand]
         private void CloseSecondWindow()
         {
-            OnWindowClosing.Invoke();
+            SecondWindowService.CloseWindow();
+            OnHideView?.Invoke();
         }
     }
 }

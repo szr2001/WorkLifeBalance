@@ -139,8 +139,9 @@ namespace WorkLifeBalance
             //starts the main timer
             appTimer.StartTick();
 
-            var mainWindow = _servicesProvider.GetRequiredService<MainWindow>();
-            mainWindow.Show();
+            //request the secondWindow so we will have it there to subscribe to events
+            _servicesProvider.GetRequiredService<SecondWindow>();
+            _servicesProvider.GetRequiredService<MainWindow>().Show();
 
             Log.Information("------------------App Initialized------------------");
         }

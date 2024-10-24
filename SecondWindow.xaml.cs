@@ -19,6 +19,8 @@ namespace WorkLifeBalance
         {
             ViewModel = viewModel;
             DataContext = ViewModel;
+            ViewModel.OnShowView += Show;
+            ViewModel.OnHideView += Hide;
             InitializeComponent();
         }
 

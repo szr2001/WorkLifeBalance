@@ -15,15 +15,16 @@ namespace WorkLifeBalance.Services
 
         private SecondWindowPageVMBase? activeSecondWindowPage;
 
+        public Action? OnPageLoaded { get; set; } = new(() => { });
+
         public SecondWindowService(INavigationService navigation)
         {
             this.navigation = navigation;
         }
 
-        private void CloseWindow()
+        public void CloseWindow()
         {
             _ = Task.Run(ClearPage);
-            //secondWindowView.Hide();
         }
 
         private async Task ClearPage()
@@ -42,7 +43,7 @@ namespace WorkLifeBalance.Services
             SecondWindowPageVMBase loading = (SecondWindowPageVMBase)navigation.NavigateTo<LoadingPageVM>();
 
             LoadedPage = loading;
-            //secondWindowView.Show();
+            OnPageLoaded?.Invoke();
 
             activeSecondWindowPage = (SecondWindowPageVMBase)navigation.NavigateTo<T>();
 
@@ -55,6 +56,7 @@ namespace WorkLifeBalance.Services
                 App.Current.Dispatcher.Invoke(() =>
                 {
                     LoadedPage = activeSecondWindowPage;
+                    OnPageLoaded?.Invoke();
                 });
             });
         }
