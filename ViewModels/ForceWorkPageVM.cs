@@ -81,6 +81,7 @@ namespace WorkLifeBalance.ViewModels
         {
             if (IsFeatureActiv)
             {
+                mainWindowDetailsService.CloseWindow();
                 featuresServices.RemoveFeature<ForceWorkFeature>();
                 IsFeatureActiv = false;
             }
@@ -91,6 +92,7 @@ namespace WorkLifeBalance.ViewModels
                 forceWorkFeature.SetTotalWorkTime(TotalWorkHours, TotalWorkMinutes);
                 forceWorkFeature.SetLongRestTime(LongRestHours, LongRestMinutes, LongRestInterval);
 
+                mainWindowDetailsService.OpenWindowWith<ForceWorkMainMenuDetailsPageVM>();
                 featuresServices.AddFeature<ForceWorkFeature>();
                 IsFeatureActiv = true;
             }

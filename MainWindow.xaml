@@ -27,7 +27,7 @@
             <ColumnDefinition Width="400"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Border Grid.Column="1" Height="215" VerticalAlignment="Bottom" 
+        <Border Grid.Column="1" Height="180" Margin="0,40,0,0" VerticalAlignment="Center" 
                 Grid.RowSpan="2" Visibility="{Binding MainWindowDetailsService.LoadedPage, Converter={StaticResource NullToVisibilityConverter}}">
             <Frame Content="{Binding MainWindowDetailsService.LoadedPage}"
                    NavigationUIVisibility="Hidden">

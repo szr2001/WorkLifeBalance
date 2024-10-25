@@ -44,9 +44,9 @@ namespace WorkLifeBalance.Services.Feature
 
         protected override Func<Task> ReturnFeatureMethod()
         {
-            return TriggerCheckIdle;
+            return TriggerForceWork;
         }
-        private async Task TriggerCheckIdle()
+        private async Task TriggerForceWork()
         {
             if (IsFeatureRuning) return;
 

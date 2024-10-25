@@ -78,6 +78,8 @@ namespace WorkLifeBalance
             services.AddSingleton<LoadingPageVM>();
             services.AddSingleton<ViewDayDetailsPageVM>();
             services.AddSingleton<ViewDaysPageVM>();
+
+            services.AddSingleton<ForceWorkMainMenuDetailsPageVM>();
         }
 
         protected override void OnStartup(StartupEventArgs e)
