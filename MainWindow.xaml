@@ -15,6 +15,7 @@
         Title="WorkLifeBalance" Height="258" Width="500">
     <Window.Resources>
         <converters:TimeOnlyToStringConverter x:Key="TimeOnlyToStringConverter"/>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
     </Window.Resources>
 
     <Grid>
@@ -26,8 +27,9 @@
             <ColumnDefinition Width="400"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Border Grid.Column="1" Height="215" VerticalAlignment="Bottom" Grid.RowSpan="2">
-            <Frame Content=""
+        <Border Grid.Column="1" Height="215" VerticalAlignment="Bottom" 
+                Grid.RowSpan="2" Visibility="{Binding MainWindowDetailsService.LoadedPage, Converter={StaticResource NullToVisibilityConverter}}">
+            <Frame Content="{Binding MainWindowDetailsService.LoadedPage}"
                    NavigationUIVisibility="Hidden">
 
             </Frame>
