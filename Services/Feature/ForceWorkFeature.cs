@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WorkLifeBalance.Services.Feature
 {
-    partial class ForceWorkFeature : FeatureBase
+    partial class ForceWorkFeature : FeatureBase 
     {
         private readonly AppStateHandler appStateHandler;
         private readonly ActivityTrackerFeature activityTrackerFeature;
