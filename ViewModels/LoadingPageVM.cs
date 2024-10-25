@@ -8,5 +8,9 @@ namespace WorkLifeBalance.ViewModels
 {
     public class LoadingPageVM : SecondWindowPageVMBase
     {
+        public LoadingPageVM()
+        {
+            PageName = "Loading...";
+        }
     }
 }

@@ -112,13 +112,16 @@ namespace WorkLifeBalance
 
         private async Task InitializeApp()
         {
+            //request the secondWindow so we will have it there to subscribe to events
+            _servicesProvider.GetRequiredService<SecondWindow>();
+
             DataStorageFeature dataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
 
             SqlLiteDatabaseIntegrity sqlLiteDatabaseIntegrity = _servicesProvider.GetRequiredService<SqlLiteDatabaseIntegrity>();
 
             IUpdateCheckerService updateCheckerService = _servicesProvider.GetRequiredService<IUpdateCheckerService>();
 
-            //await updateCheckerService.CheckForUpdate();
+            await updateCheckerService.CheckForUpdate();
 
             await sqlLiteDatabaseIntegrity.CheckDatabaseIntegrity();
 
@@ -139,8 +142,6 @@ namespace WorkLifeBalance
             //starts the main timer
             appTimer.StartTick();
 
-            //request the secondWindow so we will have it there to subscribe to events
-            _servicesProvider.GetRequiredService<SecondWindow>();
             _servicesProvider.GetRequiredService<MainWindow>().Show();
 
             Log.Information("------------------App Initialized------------------");

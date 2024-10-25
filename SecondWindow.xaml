@@ -7,8 +7,10 @@
         mc:Ignorable="d" Background="Transparent"
         ResizeMode="NoResize" AllowsTransparency="True"
         WindowStyle="None" Title="SecondWindow" 
-        Height="{Binding SecondWindowService.LoadedPage.PageHeight}" 
-        Width="{Binding SecondWindowService.LoadedPage.PageWidth}">
+        MinHeight="{Binding SecondWindowService.LoadedPage.PageHeight, Mode = TwoWay}"
+        MinWidth="{Binding SecondWindowService.LoadedPage.PageWidth, Mode = TwoWay}"
+        MaxHeight="{Binding SecondWindowService.LoadedPage.PageHeight, Mode = TwoWay}" 
+        MaxWidth="{Binding SecondWindowService.LoadedPage.PageWidth, Mode = TwoWay}">
 
     <Grid Grid.RowSpan="2">
         <Grid.RenderTransform>
