@@ -44,6 +44,13 @@ namespace WorkLifeBalance.Services
         public async Task OpenWindowWith<T>(object? args = null) where T : SecondWindowPageVMBase 
         {
             SecondWindowPageVMBase loading = (SecondWindowPageVMBase)navigation.NavigateTo<LoadingPageVM>();
+            
+            if(activeSecondWindowPage != null)
+            {
+                loading.PageWidth = activeSecondWindowPage.PageWidth;
+                loading.PageHeight= activeSecondWindowPage.PageHeight;
+            }
+
             LoadedPage = loading;
 
             await Task.Delay(150);
