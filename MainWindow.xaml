@@ -14,7 +14,7 @@
         WindowStyle="None"
         Title="WorkLifeBalance" Height="258" Width="500">
     <Window.Resources>
-        <converters:TimeOnlyStringConverter x:Key="TimeOnlyStringConverter"/>
+        <converters:TimeOnlyToStringConverter x:Key="TimeOnlyToStringConverter"/>
     </Window.Resources>
 
     <Grid>
@@ -149,11 +149,11 @@
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Column="1" HorizontalAlignment="Center"
                                 Margin="0,10,5,10">
-                        <TextBlock Text="{Binding ElapsedWorkTime, Converter={StaticResource TimeOnlyStringConverter}}"                               
+                        <TextBlock Text="{Binding ElapsedWorkTime, Converter={StaticResource TimeOnlyToStringConverter}}"                               
                                    Foreground="White" Margin="5" FontSize="30"/>
-                        <TextBlock Text="{Binding ElapsedRestTime, Converter={StaticResource TimeOnlyStringConverter}}"                               
+                        <TextBlock Text="{Binding ElapsedRestTime, Converter={StaticResource TimeOnlyToStringConverter}}"                               
                                    Foreground="White" Margin="5" FontSize="30"/>
-                        <TextBlock Text="{Binding ElapsedIdleTime, Converter={StaticResource TimeOnlyStringConverter}}"
+                        <TextBlock Text="{Binding ElapsedIdleTime, Converter={StaticResource TimeOnlyToStringConverter}}"
                                    Foreground="White" Margin="5" FontSize="30"/>
 
                     </StackPanel>

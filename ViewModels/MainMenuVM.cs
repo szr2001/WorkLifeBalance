@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Services;
@@ -25,18 +26,22 @@ namespace WorkLifeBalance.ViewModels
         [ObservableProperty]
         private AppState appState = AppState.Resting;
 
+        public IMainWindowDetailsService MainWindowDetailsService { get; set; }
+
         private readonly AppStateHandler appStateHandler;
         private readonly LowLevelHandler lowLevelHandler;
         private readonly DataStorageFeature dataStorageFeature;
         private readonly TimeTrackerFeature timeTrackerFeature;
         private readonly ISecondWindowService secondWindowService;
-        public MainWindowVM(AppTimer mainTimer, LowLevelHandler lowLevelHandler, DataStorageFeature dataStorageFeature, TimeTrackerFeature timeTrackerFeature, ISecondWindowService secondWindowService, AppStateHandler appStateHandler)
+
+        public MainWindowVM(AppTimer mainTimer, LowLevelHandler lowLevelHandler, DataStorageFeature dataStorageFeature, TimeTrackerFeature timeTrackerFeature, ISecondWindowService secondWindowService, AppStateHandler appStateHandler, IMainWindowDetailsService mainWindowDetailsService)
         {
             this.lowLevelHandler = lowLevelHandler;
             this.dataStorageFeature = dataStorageFeature;
             this.timeTrackerFeature = timeTrackerFeature;
             this.secondWindowService = secondWindowService;
             this.appStateHandler = appStateHandler;
+            this.MainWindowDetailsService = mainWindowDetailsService;
 
             DateText = $"Today: {dataStorageFeature.TodayData.DateC:MM/dd/yyyy}";
 

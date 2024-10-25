@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace WorkLifeBalance.Converters
 {
-    public class IntStringConverter : IValueConverter
+    public class IntToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

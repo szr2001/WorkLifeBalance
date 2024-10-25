@@ -9,10 +9,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="1270" d:DesignWidth="200"
       Title="SettingsPage">
-    <Page.Resources>
-        <converters:IntStringConverter x:Key="IntStringConverter"/>
-        <converters:BoolVisibilityConverter x:Key="BoolVisibilityConverter"/>
-    </Page.Resources>
+    
     <Border Margin="8,0,8,8">
             <ScrollViewer VerticalScrollBarVisibility="Hidden">
                 <StackPanel>
