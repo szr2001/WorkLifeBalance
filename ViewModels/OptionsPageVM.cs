@@ -25,5 +25,11 @@ namespace WorkLifeBalance.ViewModels
         {
             secondWindowService.OpenWindowWith<BackgroundProcessesViewPageVM>();
         }
+
+        [RelayCommand]
+        private void OpenForceWork()
+        {
+            secondWindowService.OpenWindowWith<ForceWorkPageVM>();
+        }
     }
 }

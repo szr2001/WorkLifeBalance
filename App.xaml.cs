@@ -69,6 +69,7 @@ namespace WorkLifeBalance
 
             services.AddSingleton<BackgroundProcessesViewPageVM>();
             services.AddSingleton<MainWindowVM>();
+            services.AddSingleton<ForceWorkPageVM>();
             services.AddSingleton<OptionsPageVM>();
             services.AddSingleton<SecondWindowVM>();
             services.AddSingleton<SettingsPageVM>();
