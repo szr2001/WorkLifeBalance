@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WorkLifeBalance.Services.Feature
 {
-    public abstract class FeatureBase : ObservableObject
+    public abstract class FeatureBase
     {
         //base class for every feature, it cancels the feature delay if feature removed.
         //features use a bool to ignore the main timer event when the feature was triggered
@@ -22,6 +22,12 @@ namespace WorkLifeBalance.Services.Feature
             IsFeatureRuning = false;
             CancelTokenS = new();
             OnFeatureAdded();
+            return ReturnFeatureMethod();
+        }
+
+        //get the method
+        public Func<Task> GetFeature()
+        {
             return ReturnFeatureMethod();
         }
 

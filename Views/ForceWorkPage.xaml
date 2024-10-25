@@ -5,13 +5,180 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WorkLifeBalance.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="400" d:DesignWidth="400"
+      d:DesignHeight="360" d:DesignWidth="400"
       Title="ForceWorkPage">
 
-    <Grid>
-        <Border Margin="15" Background="{StaticResource WBlue}" 
-                CornerRadius="8">
-            
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
+        <Border Margin="5"
+                    CornerRadius="15"
+                    Background="{StaticResource WBlue}">
+            <StackPanel Orientation="Vertical" Margin="10">
+                <TextBlock Text="Total Work"
+                       TextAlignment="Center"
+                       FontWeight="Bold"
+                       FontSize="20"
+                       Foreground="White"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="2">
+                    <ComboBox Width="50"
+                              Height="30"
+                              SelectedItem="{Binding TotalWorkHours, Mode=TwoWay}"
+                              ItemsSource="{Binding Hours}"
+                              Style="{StaticResource CustomComboBoxStyle}"
+                              ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
+                              Margin="0,2,0,0"/>
+                    <TextBlock Text=":"
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               FontSize="20"
+                               Foreground="White"/>
+                    <ComboBox Width="60"
+                              Height="30"
+                              SelectedItem="{Binding TotalWorkMinutes, Mode=TwoWay}"
+                              ItemsSource="{Binding Minutes}"
+                              Style="{StaticResource CustomComboBoxStyle}"
+                              ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
+                              Margin="0,2,0,0"/>
+                </StackPanel>
+            </StackPanel>
         </Border>
-    </Grid>
+        <StackPanel Orientation="Horizontal">
+            <Border Margin="5"
+                    CornerRadius="15"
+                    Background="{StaticResource WBlue}">
+            <StackPanel Orientation="Vertical" Margin="10">
+                <TextBlock Text="Work"
+                       TextAlignment="Center"
+                       FontWeight="Bold"
+                       FontSize="20"
+                       Foreground="White"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="2">
+                    <ComboBox Width="50"
+                              Height="30"
+                              SelectedItem="{Binding WorkHours, Mode=TwoWay}"
+                              ItemsSource="{Binding Hours}"
+                              Style="{StaticResource CustomComboBoxStyle}"
+                              ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
+                              Margin="0,2,0,0"/>
+                    <TextBlock Text=":"
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               FontSize="20"
+                               Foreground="White"/>
+                    <ComboBox Width="60"
+                              Height="30"
+                              SelectedItem="{Binding WorkMinutes, Mode=TwoWay}"
+                              ItemsSource="{Binding Minutes}"
+                              Style="{StaticResource CustomComboBoxStyle}"
+                              ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
+                              Margin="0,2,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+            <Border Margin="5"
+                    CornerRadius="15"
+                    Width="180"
+                    Background="{StaticResource WBlue}">
+                <StackPanel Orientation="Vertical" Margin="10">
+                <TextBlock Text="Rest"
+                       TextAlignment="Center"
+                       FontWeight="Bold"
+                       FontSize="20"
+                       Foreground="White"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="2">
+                    <ComboBox Width="50"
+                              Height="30"
+                              SelectedItem="{Binding RestHours, Mode=TwoWay}"
+                              ItemsSource="{Binding Hours}"
+                              Style="{StaticResource CustomComboBoxStyle}"
+                              ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
+                              Margin="0,2,0,0"/>
+                    <TextBlock Text=":"
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               FontSize="20"
+                               Foreground="White"/>
+                    <ComboBox Width="60"
+                              Height="30"
+                              SelectedItem="{Binding RestMinutes, Mode=TwoWay}"
+                              ItemsSource="{Binding Minutes}"
+                              Style="{StaticResource CustomComboBoxStyle}"
+                              ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
+                              Margin="0,2,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Border Margin="5"
+                CornerRadius="15"
+                Background="{StaticResource WBlue}">
+            <StackPanel Orientation="Vertical" Margin="10">
+                <TextBlock Text="Long Rest"
+                           TextAlignment="Center"
+                           FontWeight="Bold"
+                           FontSize="20"
+                           Foreground="White"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="2">
+                    <ComboBox Width="50"
+                              Height="30"
+                              SelectedItem="{Binding LongRestHours, Mode=TwoWay}"
+                              ItemsSource="{Binding Hours}"
+                              Style="{StaticResource CustomComboBoxStyle}"
+                              ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
+                              Margin="0,2,0,0"/>
+                    <TextBlock Text=":"
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               FontSize="20"
+                               Foreground="White"/>
+                    <ComboBox Width="60"
+                              Height="30"
+                              SelectedItem="{Binding LongRestMinutes, Mode=TwoWay}"
+                              ItemsSource="{Binding Minutes}"
+                              Style="{StaticResource CustomComboBoxStyle}"
+                              ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
+                              Margin="0,2,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+            <Border Margin="5"
+                    CornerRadius="15"
+                    Background="{StaticResource WBlue}">
+            <StackPanel Orientation="Vertical" Margin="5">
+                <TextBlock Text="Long Rest Interval"
+                           TextAlignment="Center"
+                           FontWeight="Bold"
+                           FontSize="20"
+                           Foreground="White"/>
+                    <ComboBox Width="50"
+                              Height="30"
+                              SelectedItem="{Binding LongRestInterval, Mode=TwoWay}"
+                              ItemsSource="{Binding Hours}"
+                              Style="{StaticResource CustomComboBoxStyle}"
+                              ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
+                              Margin="0,2,0,0"/>
+            </StackPanel>
+        </Border>
+        </StackPanel>
+        <Grid Width="250">
+            <Button Margin="4" Width="100"
+                    HorizontalAlignment="Left"
+                    Command="{Binding ReturnToOptionsCommand}"
+                    Template="{StaticResource SlightRoundedBtnTemp}"
+                    Style="{StaticResource RoundedBtnStyle}">
+                    <TextBlock Text="Back" FontWeight="Bold" Margin="5"
+                               VerticalAlignment="Center" Foreground="White" FontSize="25"/>
+            </Button>
+            <Button Margin="4" Width="100"
+                    HorizontalAlignment="Right"
+                    Command="{Binding ToggleForceWorkCommand}"
+                    Template="{StaticResource SlightRoundedBtnTemp}"
+                    Style="{StaticResource RoundedBtnStyle}"
+                    Background="Purple">
+                <TextBlock Text="Start" FontWeight="Bold" Margin="5"
+                            VerticalAlignment="Center" Foreground="White" FontSize="25"/>
+            </Button>
+
+        </Grid>
+    </StackPanel>
 </Page>
