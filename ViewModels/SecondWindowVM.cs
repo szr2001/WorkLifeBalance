@@ -1,45 +1,29 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
-using System.DirectoryServices.ActiveDirectory;
-using System.Threading.Tasks;
-using System.Windows;
 using WorkLifeBalance.Interfaces;
 
 namespace WorkLifeBalance.ViewModels
 {
     public partial class SecondWindowVM : ObservableObject
     {
+        public ISecondWindowService SecondWindowService { get; set; }
 
-        [ObservableProperty]
-        public SecondWindowPageVMBase? activePage;
+        public Action? OnShowView { get; set; } = new(() => { });
+        public Action? OnHideView { get; set; } = new(() => { });
 
-        [ObservableProperty]
-        public string pageName = "Page";
-
-        [ObservableProperty]
-        public int height = 300;
-
-        [ObservableProperty]
-        public int width = 250;
-
-        public Action OnWindowClosing = new(() => { });
+        public SecondWindowVM(ISecondWindowService secondWindowService)
+        {
+            this.SecondWindowService = secondWindowService;
+            SecondWindowService.OnPageLoaded += () => { OnShowView?.Invoke(); };
+        }
 
         [RelayCommand]
         private void CloseSecondWindow()
         {
-            OnWindowClosing.Invoke();
+            SecondWindowService.CloseWindow();
+            OnHideView?.Invoke();
         }
-    }
-
-    public enum SecondWindowType
-    {
-        Settings,
-        ViewData,
-        ViewDays,
-        BackgroundProcesses,
-        ViewDayActivity,
-        Options
     }
 }
 

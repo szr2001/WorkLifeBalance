@@ -29,6 +29,15 @@ namespace WorkLifeBalance.Services
             _ = TimerLoop(CancelTick.Token);
         }
 
+        public bool IsFeaturePresent(Func<Task> eventname)
+        {
+            if (OnTimerTick != null)
+            {
+                return OnTimerTick.GetInvocationList().Contains(eventname);
+            }
+            return false;
+        }
+
         public void Subscribe(Func<Task> eventname)
         {
             if (OnTimerTick != null)

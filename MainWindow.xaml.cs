@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using WorkLifeBalance.ViewModels;
 
 namespace WorkLifeBalance
 {
@@ -9,9 +10,13 @@ namespace WorkLifeBalance
     /// 
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private readonly MainWindowVM ViewModel;
+
+        public MainWindow(MainWindowVM viewModel)
         {
             Topmost = true;
+            ViewModel = viewModel;
+            DataContext = viewModel;
             SetStartUpLocation();
             InitializeComponent();
         }

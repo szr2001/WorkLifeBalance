@@ -13,8 +13,14 @@ namespace WorkLifeBalance
     /// //use it in dependency injection, make searate method for req windows
     public partial class SecondWindow : Window
     {
-        public SecondWindow() 
+        private readonly SecondWindowVM ViewModel;
+
+        public SecondWindow(SecondWindowVM viewModel)
         {
+            ViewModel = viewModel;
+            DataContext = ViewModel;
+            ViewModel.OnShowView += Show;
+            ViewModel.OnHideView += Hide;
             InitializeComponent();
         }
 

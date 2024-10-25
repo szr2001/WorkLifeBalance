@@ -16,12 +16,13 @@
                         Style="{StaticResource RoundedBtnStyle}"
                         Template="{StaticResource SlightRoundedBtnTemp}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/Assets/Settings.png" Width="20" Margin="1"/>
+                        <Image Source="/Assets/Settings.png" Width="30" Margin="1"/>
                         <TextBlock Text="Settings"
                                    TextAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
                                    FontWeight="Bold"
                                    FontSize="20"
-                                   Margin="0,0,0,4"
                                    Foreground="White"/>
                     </StackPanel>
                 </Button>
@@ -30,13 +31,38 @@
                         Height="30"
                         Template="{StaticResource SlightRoundedBtnTemp}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/Assets/Automat.png" Width="20" Margin="1"/>
+                        <Image Source="/Assets/Automat.png" Width="25" Margin="1"/>
                         <TextBlock Text="Configure Working"
                                    TextAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
                                    FontWeight="Bold"
                                    FontSize="15"
-                                   Margin="0,0,0,4"
                                    Foreground="White"/>
+                    </StackPanel>
+                </Button>
+                <Button Margin="5" Command="{Binding OpenForceWorkCommand}"
+                       Style="{StaticResource RoundedBtnStyle}"
+                       Height="30"
+                       Template="{StaticResource SlightRoundedBtnTemp}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Assets/Work.png" Width="30" Margin="1"/>
+                        <TextBlock Text="Force Working"
+                                   TextAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontWeight="Bold"
+                                   FontSize="20"
+                                   Foreground="White">
+                            <TextBlock.ToolTip>
+                                <ToolTip>
+                                    <DockPanel Width="50" Height="70">
+                                        <Image Source="/Assets/Work.png"/>
+                                        <TextBlock>Useful information goes here.</TextBlock>
+                                    </DockPanel>
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
                     </StackPanel>
                 </Button>
             </StackPanel>

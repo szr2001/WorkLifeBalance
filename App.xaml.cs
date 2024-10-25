@@ -10,6 +10,7 @@ using System.IO;
 using Serilog;
 using System;
 using System.Threading.Tasks;
+using WorkLifeBalance.ViewModels.Base;
 
 namespace WorkLifeBalance
 {
@@ -37,20 +38,22 @@ namespace WorkLifeBalance
 
         private void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(provider => new MainWindow
-            {
-                DataContext = provider.GetRequiredService<MainMenuVM>()
-            });
-            services.AddSingleton(provider => new SecondWindow
-            {
-                DataContext = provider.GetService<SecondWindowVM>()
-            });
+            services.AddSingleton<INavigationService, NavigationService>();
+            services.AddSingleton<ISecondWindowService, SecondWindowService>();
+            services.AddSingleton<IFeaturesServices, FeaturesService>();
+            services.AddSingleton<IUpdateCheckerService, UpdateCheckerService>();
+            services.AddSingleton<IMainWindowDetailsService, MainWindowDetailsService>();
+
+            services.AddSingleton<MainWindow>();
+            services.AddSingleton<SecondWindow>();
+
             services.AddSingleton<DataStorageFeature>();
             services.AddSingleton<ActivityTrackerFeature>();
             services.AddSingleton<IdleCheckerFeature>();
             services.AddSingleton<StateCheckerFeature>();
             services.AddSingleton<TimeTrackerFeature>();
             services.AddSingleton<ForceWorkFeature>();
+
             services.AddSingleton<SqlDataAccess>();
             services.AddSingleton(_configuration);
             services.AddSingleton<DataBaseHandler>();
@@ -58,10 +61,6 @@ namespace WorkLifeBalance
             services.AddSingleton<AppStateHandler>();
             services.AddSingleton<SqlLiteDatabaseIntegrity>();
             services.AddSingleton<AppTimer>();
-            services.AddSingleton<INavigationService, NavigationService>();
-            services.AddSingleton<ISecondWindowService, SecondWindowService>();
-            services.AddSingleton<IFeaturesServices, FeaturesService>();
-            services.AddSingleton<IUpdateCheckerService, UpdateCheckerService>();
 
             //factory method for ViewModelBase.
             services.AddSingleton<Func<Type, ViewModelBase>>(serviceProvider => viewModelType => (ViewModelBase)serviceProvider.GetRequiredService(viewModelType));
@@ -69,7 +68,8 @@ namespace WorkLifeBalance
             services.AddSingleton<Func<Type, FeatureBase>>(serviceProvider => featureBase => (FeatureBase)serviceProvider.GetRequiredService(featureBase));
 
             services.AddSingleton<BackgroundProcessesViewPageVM>();
-            services.AddSingleton<MainMenuVM>();
+            services.AddSingleton<MainWindowVM>();
+            services.AddSingleton<ForceWorkPageVM>();
             services.AddSingleton<OptionsPageVM>();
             services.AddSingleton<SecondWindowVM>();
             services.AddSingleton<SettingsPageVM>();
@@ -78,6 +78,8 @@ namespace WorkLifeBalance
             services.AddSingleton<LoadingPageVM>();
             services.AddSingleton<ViewDayDetailsPageVM>();
             services.AddSingleton<ViewDaysPageVM>();
+
+            services.AddSingleton<ForceWorkMainMenuDetailsPageVM>();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -113,6 +115,9 @@ namespace WorkLifeBalance
 
         private async Task InitializeApp()
         {
+            //request the secondWindow so we will have it there to subscribe to events
+            _servicesProvider.GetRequiredService<SecondWindow>();
+
             DataStorageFeature dataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
 
             SqlLiteDatabaseIntegrity sqlLiteDatabaseIntegrity = _servicesProvider.GetRequiredService<SqlLiteDatabaseIntegrity>();
@@ -124,9 +129,9 @@ namespace WorkLifeBalance
             await sqlLiteDatabaseIntegrity.CheckDatabaseIntegrity();
 
             await dataStorageFeature.LoadData();
-            
+
             AppTimer appTimer = _servicesProvider.GetRequiredService<AppTimer>();
-            
+
             //set app ready so timers can start
             dataStorageFeature.IsAppReady = true;
 
@@ -140,8 +145,8 @@ namespace WorkLifeBalance
             //starts the main timer
             appTimer.StartTick();
 
-            var mainWindow = _servicesProvider.GetRequiredService<MainWindow>();
-            mainWindow.Show();
+            _servicesProvider.GetRequiredService<MainWindow>().Show();
+
             Log.Information("------------------App Initialized------------------");
         }
 

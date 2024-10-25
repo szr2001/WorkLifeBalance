@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Security.AccessControl;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,9 +12,9 @@ namespace WorkLifeBalance.Services.Feature
         //features use a bool to ignore the main timer event when the feature was triggered
         //if the main timer runs every second and a feature has a 5 minute trigger interval
         //it will run once then ignore the main timer for 5 minutes and repeat.
-        protected CancellationTokenSource CancelTokenS = new();
+        protected CancellationTokenSource CancelTokenS { get; set; } = new();
 
-        public bool IsFeatureRuning = false;
+        public bool IsFeatureRuning { get; set; }
 
         //used to add the current feature and create a new canceltoken,returns overrided method
         public Func<Task> AddFeature()
@@ -21,6 +22,12 @@ namespace WorkLifeBalance.Services.Feature
             IsFeatureRuning = false;
             CancelTokenS = new();
             OnFeatureAdded();
+            return ReturnFeatureMethod();
+        }
+
+        //get the method
+        public Func<Task> GetFeature()
+        {
             return ReturnFeatureMethod();
         }
 

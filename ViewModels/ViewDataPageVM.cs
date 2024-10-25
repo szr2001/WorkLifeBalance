@@ -1,13 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
-using System.Numerics;
 using System.Threading.Tasks;
 using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Models;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WorkLifeBalance.ViewModels
 {
@@ -58,8 +56,9 @@ namespace WorkLifeBalance.ViewModels
         private ISecondWindowService secondWindowService;
         public ViewDataPageVM(DataBaseHandler databaseHandler, DataStorageFeature dataStorageFeature, ISecondWindowService secondWindowService)
         {
-            RequiredWindowSize = new Vector2(750, 580);
-            WindowPageName = "View Data";
+            PageHeight = 580;
+            PageWidth = 750;
+            PageName = "View Data";
             this.secondWindowService = secondWindowService;
             this.databaseHandler = databaseHandler;
             this.dataStorageFeature = dataStorageFeature;

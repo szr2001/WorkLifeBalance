@@ -29,4 +29,10 @@
     <DataTemplate DataType="{x:Type viewModel:UpdatePageVM}">
         <views:UpdatePage/>
     </DataTemplate>
+    <DataTemplate DataType="{x:Type viewModel:ForceWorkPageVM}">
+        <views:ForceWorkPage/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type viewModel:ForceWorkMainMenuDetailsPageVM}">
+        <views:ForceWorkMainMenuDetailsPage/>
+    </DataTemplate>
 </ResourceDictionary>

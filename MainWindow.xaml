@@ -12,9 +12,10 @@
         AllowsTransparency="True"
         WindowStartupLocation="Manual"
         WindowStyle="None"
-        Title="WorkLifeBalance" Height="258" Width="400">
+        Title="WorkLifeBalance" Height="258" Width="515">
     <Window.Resources>
-        <converters:TimeOnlyStringConverter x:Key="TimeOnlyStringConverter"/>
+        <converters:TimeOnlyToStringConverter x:Key="TimeOnlyToStringConverter"/>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
     </Window.Resources>
 
     <Grid>
@@ -22,7 +23,11 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
-        <Grid Grid.RowSpan="2" x:Name="AnimatedGrid" RenderTransformOrigin="0.1,0.9">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.RowSpan="2" x:Name="AnimatedGrid" RenderTransformOrigin="0.1,0.9" Grid.ColumnSpan="2">
             <Grid.RenderTransform>
                 <ScaleTransform ScaleX="1" ScaleY="1" />
             </Grid.RenderTransform>
@@ -36,8 +41,26 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="15"/>
+                <ColumnDefinition Width="110"/>
+                <ColumnDefinition Width="10"/>
             </Grid.ColumnDefinitions>
-            <Border Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5"
+            <Border Grid.Column="4" Height="190" Margin="0,40,0,0" VerticalAlignment="Center" CornerRadius="0,10,10,0"
+                    Grid.RowSpan="3" Visibility="{Binding MainWindowDetailsService.LoadedPage, Converter={StaticResource NullToVisibilityConverter}}">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="1,0" EndPoint="0,0">
+                        <GradientStop Color="{StaticResource WDarkPurpleShadowC}" Offset="1"/>
+                        <GradientStop Color="{StaticResource WDarkPurpleC}" Offset="0.5"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="5" Opacity="0.5"/>
+                </Border.Effect>
+                <Frame Content="{Binding MainWindowDetailsService.LoadedPage}"
+                       NavigationUIVisibility="Hidden">
+
+                </Frame>
+            </Border>
+            <Border Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4"
                     CornerRadius="8" MouseDown="MoveWindow">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
@@ -139,11 +162,11 @@
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Column="1" HorizontalAlignment="Center"
                                 Margin="0,10,5,10">
-                        <TextBlock Text="{Binding ElapsedWorkTime, Converter={StaticResource TimeOnlyStringConverter}}"                               
+                        <TextBlock Text="{Binding ElapsedWorkTime, Converter={StaticResource TimeOnlyToStringConverter}}"                               
                                    Foreground="White" Margin="5" FontSize="30"/>
-                        <TextBlock Text="{Binding ElapsedRestTime, Converter={StaticResource TimeOnlyStringConverter}}"                               
+                        <TextBlock Text="{Binding ElapsedRestTime, Converter={StaticResource TimeOnlyToStringConverter}}"                               
                                    Foreground="White" Margin="5" FontSize="30"/>
-                        <TextBlock Text="{Binding ElapsedIdleTime, Converter={StaticResource TimeOnlyStringConverter}}"
+                        <TextBlock Text="{Binding ElapsedIdleTime, Converter={StaticResource TimeOnlyToStringConverter}}"
                                    Foreground="White" Margin="5" FontSize="30"/>
 
                     </StackPanel>

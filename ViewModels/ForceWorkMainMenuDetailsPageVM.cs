@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorkLifeBalance.ViewModels.Base;
 
 namespace WorkLifeBalance.ViewModels
 {
-    public class LoadingPageVM : SecondWindowPageVMBase
+    public partial class ForceWorkMainMenuDetailsPageVM : MainWindowDetailsPageBase
     {
-        public LoadingPageVM()
-        {
-            PageName = "Loading...";
-        }
+
     }
 }

@@ -1,64 +1,70 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Threading.Tasks;
 using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.ViewModels;
 
 namespace WorkLifeBalance.Services
 {
-    public class SecondWindowService : ISecondWindowService
+    public partial class SecondWindowService : ObservableObject, ISecondWindowService
     {
-        private readonly SecondWindowVM secondWindowVm;
-        private readonly SecondWindow secondWindowView;
         private readonly INavigationService navigation;
 
-        public SecondWindowService(SecondWindowVM secondWindowVm, SecondWindow secondWindowView, INavigationService navigation)
+        [ObservableProperty]
+        private SecondWindowPageVMBase? loadedPage;
+
+        private SecondWindowPageVMBase? activeSecondWindowPage;
+
+        public Action? OnPageLoaded { get; set; } = new(() => { });
+
+        partial void OnLoadedPageChanged(SecondWindowPageVMBase? oldValue, SecondWindowPageVMBase? newValue)
         {
-            this.secondWindowVm = secondWindowVm;
-            this.secondWindowView = secondWindowView;
-            this.navigation = navigation;
-            secondWindowVm.OnWindowClosing += CloseWindow;
+            OnPageLoaded?.Invoke();
         }
 
-        private void CloseWindow()
+        public SecondWindowService(INavigationService navigation)
+        {
+            this.navigation = navigation;
+        }
+
+        public void CloseWindow()
         {
             _ = Task.Run(ClearPage);
-            secondWindowView.Hide();
         }
 
         private async Task ClearPage()
         {
-            SecondWindowPageVMBase activeModel = (SecondWindowPageVMBase)navigation.ActiveView;
-            if(activeModel != null)
+            if(activeSecondWindowPage != null)
             {
-                await activeModel.OnPageClosingAsync().ConfigureAwait(false);
+                await activeSecondWindowPage.OnPageClosingAsync();
+                activeSecondWindowPage = null;
             }
         }
 
         public async Task OpenWindowWith<T>(object? args = null) where T : SecondWindowPageVMBase 
         {
-            _ = Task.Run(ClearPage);
-
-            navigation.NavigateTo<LoadingPageVM>();
-            SecondWindowPageVMBase loading = (SecondWindowPageVMBase)navigation.ActiveView;
+            SecondWindowPageVMBase loading = (SecondWindowPageVMBase)navigation.NavigateTo<LoadingPageVM>();
             
-            secondWindowVm.ActivePage = loading;
-            secondWindowView.Show();
-
-            navigation.NavigateTo<T>();
-            SecondWindowPageVMBase activeModel = (SecondWindowPageVMBase)navigation.ActiveView;
-            secondWindowVm.Width = (int)activeModel.RequiredWindowSize.X;
-            secondWindowVm.Height = (int)activeModel.RequiredWindowSize.Y;
-            secondWindowVm.PageName = activeModel.WindowPageName;
-
-            await Task.Delay(300);
-
-            _ = Task.Run(async () =>
+            if(activeSecondWindowPage != null)
             {
-                await activeModel.OnPageOppeningAsync(args);
+                loading.PageWidth = activeSecondWindowPage.PageWidth;
+                loading.PageHeight= activeSecondWindowPage.PageHeight;
+            }
 
+            LoadedPage = loading;
+
+            await Task.Delay(150);
+            
+            await Task.Run(ClearPage);
+
+            activeSecondWindowPage = (SecondWindowPageVMBase)navigation.NavigateTo<T>();
+
+            await Task.Run(async () =>
+            {
+                await activeSecondWindowPage.OnPageOppeningAsync(args);
                 App.Current.Dispatcher.Invoke(() =>
                 {
-                    secondWindowVm.ActivePage = activeModel;
+                    LoadedPage = activeSecondWindowPage;
                 });
             });
         }

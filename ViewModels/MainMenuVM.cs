@@ -1,47 +1,47 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Serilog;
 using System;
-using System.IO.Pipes;
-using System.Numerics;
+using System.Net;
 using System.Threading.Tasks;
-using System.Windows;
 using WorkLifeBalance.Interfaces;
-using WorkLifeBalance.Models;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
 
 namespace WorkLifeBalance.ViewModels
 {
-    public partial class MainMenuVM : ObservableObject
+    public partial class MainWindowVM : ObservableObject
     {
         [ObservableProperty]
-        public string? dateText;
+        private string? dateText;
 
         [ObservableProperty]
-        public TimeOnly elapsedWorkTime;
+        private TimeOnly elapsedWorkTime;
 
         [ObservableProperty]
-        public TimeOnly elapsedRestTime;
+        private TimeOnly elapsedRestTime;
 
         [ObservableProperty]
-        public TimeOnly elapsedIdleTime;
+        private TimeOnly elapsedIdleTime;
 
         [ObservableProperty]
-        public AppState appState = AppState.Resting;
+        private AppState appState = AppState.Resting;
+
+        public IMainWindowDetailsService MainWindowDetailsService { get; set; }
 
         private readonly AppStateHandler appStateHandler;
         private readonly LowLevelHandler lowLevelHandler;
         private readonly DataStorageFeature dataStorageFeature;
         private readonly TimeTrackerFeature timeTrackerFeature;
         private readonly ISecondWindowService secondWindowService;
-        public MainMenuVM(AppTimer mainTimer, LowLevelHandler lowLevelHandler, DataStorageFeature dataStorageFeature, TimeTrackerFeature timeTrackerFeature, ISecondWindowService secondWindowService, AppStateHandler appStateHandler)
+
+        public MainWindowVM(AppTimer mainTimer, LowLevelHandler lowLevelHandler, DataStorageFeature dataStorageFeature, TimeTrackerFeature timeTrackerFeature, ISecondWindowService secondWindowService, AppStateHandler appStateHandler, IMainWindowDetailsService mainWindowDetailsService)
         {
             this.lowLevelHandler = lowLevelHandler;
             this.dataStorageFeature = dataStorageFeature;
             this.timeTrackerFeature = timeTrackerFeature;
             this.secondWindowService = secondWindowService;
             this.appStateHandler = appStateHandler;
+            this.MainWindowDetailsService = mainWindowDetailsService;
 
             DateText = $"Today: {dataStorageFeature.TodayData.DateC:MM/dd/yyyy}";
 

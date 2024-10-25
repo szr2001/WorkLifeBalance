@@ -34,7 +34,7 @@ namespace WorkLifeBalance.Services
                         }
                         catch (Exception ex)
                         {
-                            Log.Error($"Write data to database error with sql: {sql} Error: {ex}");
+                            Log.Error($"Execute SQL error with sql: {sql} Error: {ex}");
                             await transaction.RollbackAsync();
                             throw;
                         }

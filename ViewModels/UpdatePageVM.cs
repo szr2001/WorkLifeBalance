@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using Serilog;
 using System.Diagnostics;
-using System.Numerics;
 using System.Threading.Tasks;
 using WorkLifeBalance.Models;
 
@@ -20,8 +19,9 @@ namespace WorkLifeBalance.ViewModels
 
         public UpdatePageVM()
         {
-            windowPageName = "Update Available";
-            RequiredWindowSize = new Vector2(400, 350);
+            PageName = "Update Available";
+            PageHeight = 400;
+            PageWidth = 350;
         }
 
         public override Task OnPageOppeningAsync(object? args = null)

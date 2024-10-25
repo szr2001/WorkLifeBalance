@@ -1,6 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using System.Numerics;
-using System.Threading.Tasks;
 using WorkLifeBalance.Interfaces;
 
 namespace WorkLifeBalance.ViewModels
@@ -11,8 +9,9 @@ namespace WorkLifeBalance.ViewModels
         public OptionsPageVM(ISecondWindowService secondWindowService)
         {
             this.secondWindowService = secondWindowService;
-            RequiredWindowSize = new Vector2(250, 320);
-            WindowPageName = "Options";
+            PageHeight = 320;
+            PageWidth = 250;
+            PageName = "Options";
         }
 
         [RelayCommand]
@@ -25,6 +24,12 @@ namespace WorkLifeBalance.ViewModels
         private void ConfigureAutoDetect()
         {
             secondWindowService.OpenWindowWith<BackgroundProcessesViewPageVM>();
+        }
+
+        [RelayCommand]
+        private void OpenForceWork()
+        {
+            secondWindowService.OpenWindowWith<ForceWorkPageVM>();
         }
     }
 }

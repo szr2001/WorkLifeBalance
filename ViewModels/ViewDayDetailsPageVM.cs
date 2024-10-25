@@ -3,9 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
-using System.Windows;
 using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Models;
 using WorkLifeBalance.Services;
@@ -15,18 +13,19 @@ namespace WorkLifeBalance.ViewModels
     public partial class ViewDayDetailsPageVM : SecondWindowPageVMBase
     {
         [ObservableProperty]
-        public ProcessActivityData[]? activities;
+        private ProcessActivityData[]? activities;
 
         [ObservableProperty]
         private DayData? loadedDayData;
 
-        private int LoadedPageType = 0;
+        private int LoadedPageType;
         private ISecondWindowService secondWindowService;
         private DataBaseHandler database;
         public ViewDayDetailsPageVM(ISecondWindowService secondWindowService, DataBaseHandler database)
         {
-            RequiredWindowSize = new Vector2(430, 440);
-            WindowPageName = "View Day Details";
+            PageHeight = 440;
+            PageWidth = 430;
+            PageName = "View Day Details";
             this.secondWindowService = secondWindowService;
             this.database = database;
         }
@@ -45,7 +44,7 @@ namespace WorkLifeBalance.ViewModels
                 {
                     LoadedPageType = loadedpagetype;
                     LoadedDayData = day;
-                    WindowPageName = $"{LoadedDayData.DateC.ToString("MM/dd/yyyy")} Activity";
+                    PageName = $"{LoadedDayData.DateC.ToString("MM/dd/yyyy")} Activity";
                     _ = RequiestData();
                     return base.OnPageOppeningAsync(args);
                 }

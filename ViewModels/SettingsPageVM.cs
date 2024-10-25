@@ -1,14 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using IWshRuntimeLibrary;
-using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 using WorkLifeBalance.Interfaces;
-using WorkLifeBalance.Models;
 using WorkLifeBalance.Services.Feature;
 using File = System.IO.File;
 using Path = System.IO.Path;
@@ -41,8 +36,9 @@ namespace WorkLifeBalance.ViewModels
         {
             this.featuresServices = featuresServices;
             this.dataStorageFeature = dataStorageFeature;
-            RequiredWindowSize = new Vector2(250, 320);
-            WindowPageName = "Settings";
+            PageHeight = 320;
+            PageWidth = 250;
+            PageName = "Settings";
 
             InitializeData();
         }

@@ -12,7 +12,7 @@
             Background="Transparent">
 
         <StackPanel Orientation="Vertical">
-            <Border Height="430"
+            <Border Height="450"
                     CornerRadius="20"
                     Margin="10,10,10,0"
                     Background="{StaticResource WBlue}">

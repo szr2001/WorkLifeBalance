@@ -21,6 +21,12 @@ namespace WorkLifeBalance.Services
             _appTimer.Subscribe(feature.AddFeature());
         }
 
+        public bool IsFeaturePresent<TFeature>() where TFeature : FeatureBase
+        {
+            FeatureBase feature = _featureFactory.Invoke(typeof(TFeature));
+            return _appTimer.IsFeaturePresent(feature.GetFeature());
+        }
+
         public void RemoveFeature<TFeature>() where TFeature : FeatureBase
         {
             FeatureBase feature = _featureFactory.Invoke(typeof(TFeature));

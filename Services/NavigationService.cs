@@ -1,14 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using WorkLifeBalance.Interfaces;
-using WorkLifeBalance.ViewModels;
+using WorkLifeBalance.ViewModels.Base;
 
 namespace WorkLifeBalance.Services
 {
-    public partial class NavigationService : ObservableObject, INavigationService
+    public partial class NavigationService : INavigationService
     {
-        [ObservableProperty]
-        public ViewModelBase? activeView;
+
         private readonly Func<Type, ViewModelBase> _viewModelFactory;
 
         public NavigationService(Func<Type, ViewModelBase> viewModelFactory)
@@ -16,10 +15,9 @@ namespace WorkLifeBalance.Services
             _viewModelFactory = viewModelFactory;
         }
 
-        public void NavigateTo<TViewModelbase>() where TViewModelbase : ViewModelBase
+        public ViewModelBase NavigateTo<TViewModelbase>() where TViewModelbase : ViewModelBase
         {
-            ViewModelBase viewModel = _viewModelFactory.Invoke(typeof(TViewModelbase)); 
-            ActiveView = viewModel;
+            return _viewModelFactory.Invoke(typeof(TViewModelbase)); 
         }
     }
 }

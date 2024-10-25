@@ -9,7 +9,7 @@
       d:DesignHeight="370" d:DesignWidth="400"
       Title="ViewDayDetailsPage">
     <Page.Resources>
-        <converters:TimeOnlyStringConverter x:Key="TimeOnlyStringConverter"/>
+        <converters:TimeOnlyToStringConverter x:Key="TimeOnlyToStringConverter"/>
     </Page.Resources>
     <Border Background="Transparent">
         <Grid>
@@ -78,7 +78,7 @@
                                FontWeight="Bold"
                                FontSize="23"
                                Foreground="White"/>
-                    <TextBlock Text="{Binding LoadedDayData.WorkedAmmountC, Converter={StaticResource TimeOnlyStringConverter}}"
+                    <TextBlock Text="{Binding LoadedDayData.WorkedAmmountC, Converter={StaticResource TimeOnlyToStringConverter}}"
                                TextAlignment="Center"
                                FontWeight="Bold"
                                FontSize="16"
@@ -88,7 +88,7 @@
                                FontWeight="Bold"
                                FontSize="23"
                                Foreground="White"/>
-                    <TextBlock Text="{Binding LoadedDayData.RestedAmmountC, Converter={StaticResource TimeOnlyStringConverter}}"
+                    <TextBlock Text="{Binding LoadedDayData.RestedAmmountC, Converter={StaticResource TimeOnlyToStringConverter}}"
                                TextAlignment="Center"
                                FontWeight="Bold"
                                FontSize="16"
@@ -98,7 +98,7 @@
                                FontWeight="Bold"
                                FontSize="23"
                                Foreground="White"/>
-                    <TextBlock Text="{Binding LoadedDayData.IdleAmmountC, Converter={StaticResource TimeOnlyStringConverter}}"
+                    <TextBlock Text="{Binding LoadedDayData.IdleAmmountC, Converter={StaticResource TimeOnlyToStringConverter}}"
                                TextAlignment="Center"
                                FontWeight="Bold"
                                FontSize="16"
