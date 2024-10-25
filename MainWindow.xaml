@@ -12,7 +12,7 @@
         AllowsTransparency="True"
         WindowStartupLocation="Manual"
         WindowStyle="None"
-        Title="WorkLifeBalance" Height="258" Width="500">
+        Title="WorkLifeBalance" Height="258" Width="515">
     <Window.Resources>
         <converters:TimeOnlyToStringConverter x:Key="TimeOnlyToStringConverter"/>
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
@@ -41,10 +41,20 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="15"/>
-                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="110"/>
+                <ColumnDefinition Width="10"/>
             </Grid.ColumnDefinitions>
-            <Border Grid.Column="4" Height="190" Margin="0,40,0,0" VerticalAlignment="Center" 
-                Grid.RowSpan="3" Visibility="{Binding MainWindowDetailsService.LoadedPage, Converter={StaticResource NullToVisibilityConverter}}">
+            <Border Grid.Column="4" Height="190" Margin="0,40,0,0" VerticalAlignment="Center" CornerRadius="0,10,10,0"
+                    Grid.RowSpan="3" Visibility="{Binding MainWindowDetailsService.LoadedPage, Converter={StaticResource NullToVisibilityConverter}}">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="1,0" EndPoint="0,0">
+                        <GradientStop Color="{StaticResource WDarkPurpleShadowC}" Offset="1"/>
+                        <GradientStop Color="{StaticResource WDarkPurpleC}" Offset="0.5"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="5" Opacity="0.5"/>
+                </Border.Effect>
                 <Frame Content="{Binding MainWindowDetailsService.LoadedPage}"
                        NavigationUIVisibility="Hidden">
 

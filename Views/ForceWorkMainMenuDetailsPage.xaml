@@ -9,9 +9,6 @@
       Title="ForceWorkMainMenuDetailsPage">
 
     <Grid>
-        <Border Background="{StaticResource WBlue}" CornerRadius="8">
-            
-        </Border>
-        
+        <TextBlock Text="RAWr" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontWeight="Bold" FontSize="25"/>
     </Grid>
 </Page>
