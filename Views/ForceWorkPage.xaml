@@ -9,11 +9,11 @@
       d:DesignHeight="360" d:DesignWidth="400"
       Title="ForceWorkPage">
     <Page.Resources>
-        <converters:BoolToCollapseVisibilityConverter x:Key="BoolToCollapseVisibilityConverter"/>
-        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter"/>
+        <converters:BoolToVisibleConverter x:Key="BoolToVisibleConverter"/>
     </Page.Resources>
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
-        <StackPanel Orientation="Vertical" Visibility="{Binding IsFeatureActiv, Converter= {StaticResource BoolToCollapseVisibilityConverter}}">
+        <StackPanel Orientation="Vertical" Visibility="{Binding IsFeatureActiv, Converter= {StaticResource BoolToCollapsedConverter}}">
             <Border Margin="5"
                         CornerRadius="15"
                         Background="{StaticResource WBlue}">
@@ -166,7 +166,7 @@
             </Border>
             </StackPanel>
         </StackPanel>
-        <StackPanel Orientation="Vertical" Visibility="{Binding IsFeatureActiv, Converter= {StaticResource BoolToVisibilityConverter}}">
+        <StackPanel Orientation="Vertical" Visibility="{Binding IsFeatureActiv, Converter= {StaticResource BoolToVisibleConverter}}">
             <Border Margin="5"
                         CornerRadius="15"
                         Background="{StaticResource WBlue}">
