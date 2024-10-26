@@ -48,7 +48,7 @@
                 Style="{StaticResource RoundedBtnStyle}"
                 Background="Purple">
             <TextBlock Text="Edit" FontWeight="Bold" Margin="5"
-               VerticalAlignment="Center" Foreground="White" FontSize="20"/>
+               VerticalAlignment="Center" Foreground="White" FontSize="15"/>
         </Button>
     </StackPanel>
 </Page>

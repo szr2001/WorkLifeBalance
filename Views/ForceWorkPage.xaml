@@ -10,6 +10,7 @@
       Title="ForceWorkPage">
     <Page.Resources>
         <converters:BoolToCollapseVisibilityConverter x:Key="BoolToCollapseVisibilityConverter"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </Page.Resources>
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
         <StackPanel Orientation="Vertical" Visibility="{Binding IsFeatureActiv, Converter= {StaticResource BoolToCollapseVisibilityConverter}}">
@@ -164,6 +165,40 @@
                 </StackPanel>
             </Border>
             </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Visibility="{Binding IsFeatureActiv, Converter= {StaticResource BoolToVisibilityConverter}}">
+            <Border Margin="5"
+                        CornerRadius="15"
+                        Background="{StaticResource WBlue}">
+                <StackPanel Orientation="Vertical" Margin="10">
+                    <TextBlock Text="Total Work"
+                           TextAlignment="Center"
+                           FontWeight="Bold"
+                           FontSize="20"
+                           Foreground="White"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="2">
+                        <ComboBox Width="50"
+                                  Height="30"
+                                  SelectedItem="{Binding TotalWorkHours, Mode=TwoWay}"
+                                  ItemsSource="{Binding Hours}"
+                                  Style="{StaticResource CustomComboBoxStyle}"
+                                  ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
+                                  Margin="0,2,0,0"/>
+                        <TextBlock Text=":"
+                                   TextAlignment="Center"
+                                   FontWeight="Bold"
+                                   FontSize="20"
+                                   Foreground="White"/>
+                        <ComboBox Width="60"
+                                  Height="30"
+                                  SelectedItem="{Binding TotalWorkMinutes, Mode=TwoWay}"
+                                  ItemsSource="{Binding Minutes}"
+                                  Style="{StaticResource CustomComboBoxStyle}"
+                                  ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
+                                  Margin="0,2,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
         </StackPanel>
         <Grid Width="250">
             <Button Margin="4" Width="100"

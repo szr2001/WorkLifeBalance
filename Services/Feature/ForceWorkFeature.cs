@@ -8,13 +8,14 @@ namespace WorkLifeBalance.Services.Feature
 {
     public partial class ForceWorkFeature : FeatureBase 
     {
-        public TimeOnly workTime { get; private set; }
-        public TimeOnly restTime { get; private set; }
-        public TimeOnly totalWorkTime { get; private set; }
-        public TimeOnly longRestTime { get; private set; }
+        public TimeOnly TotalWorkTime { get; private set; }
         public int ReceievedWarnings { get; private set; }
         public Action OnDataUpdated { get; set; } = new(() => { });
+        public AppState RequiredAppState { get; private set; } = AppState.Working;
 
+        private TimeOnly workTime;
+        private TimeOnly restTime;
+        private TimeOnly longRestTime;
         private readonly ActivityTrackerFeature activityTrackerFeature;
         private readonly AppStateHandler appStateHandler;
         private readonly LowLevelHandler lowLevelHandler;
@@ -46,7 +47,7 @@ namespace WorkLifeBalance.Services.Feature
         }
         public void SetTotalWorkTime(int hours, int minutes)
         {
-            totalWorkTime = new(hours, minutes);
+            TotalWorkTime = new(hours, minutes);
         }
 
         protected override Func<Task> ReturnFeatureMethod()
@@ -62,7 +63,15 @@ namespace WorkLifeBalance.Services.Feature
 
         private void CheckIdle()
         {
-
+            switch (appStateHandler.AppTimerState)
+            {
+                case AppState.Working:
+                    break;
+                case AppState.Resting:
+                    break;
+                case AppState.Idle:
+                    break;
+            }
         }
     }
 }
