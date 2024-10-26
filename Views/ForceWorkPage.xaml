@@ -12,20 +12,35 @@
         <converters:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter"/>
         <converters:BoolToVisibleConverter x:Key="BoolToVisibleConverter"/>
     </Page.Resources>
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="15">
-        <StackPanel Orientation="Vertical" Visibility="{Binding IsFeatureActiv, Converter= {StaticResource BoolToCollapsedConverter}}">
-            <Border Margin="5"
-                        CornerRadius="15"
-                        Background="{StaticResource WBlue}">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="45"/>
+        </Grid.RowDefinitions>
+        <Grid Visibility="{Binding IsFeatureActiv, Converter= {StaticResource BoolToCollapsedConverter}, FallbackValue=Collapsed}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Border Margin="5" Grid.ColumnSpan="2"
+                    CornerRadius="15"
+                    Background="{StaticResource WBlue}">
                 <StackPanel Orientation="Vertical" Margin="10">
                     <TextBlock Text="Total Work"
                            TextAlignment="Center"
                            FontWeight="Bold"
-                           FontSize="20"
+                           FontSize="25"
                            Foreground="White"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="2">
-                        <ComboBox Width="50"
+                        <ComboBox Width="55"
                                   Height="30"
+                                  FontSize="15"
+                                  FontWeight="Bold"
                                   SelectedItem="{Binding TotalWorkHours, Mode=TwoWay}"
                                   ItemsSource="{Binding Hours}"
                                   Style="{StaticResource CustomComboBoxStyle}"
@@ -36,8 +51,10 @@
                                    FontWeight="Bold"
                                    FontSize="20"
                                    Foreground="White"/>
-                        <ComboBox Width="60"
+                        <ComboBox Width="65"
                                   Height="30"
+                                  FontSize="15"
+                                  FontWeight="Bold"
                                   SelectedItem="{Binding TotalWorkMinutes, Mode=TwoWay}"
                                   ItemsSource="{Binding Minutes}"
                                   Style="{StaticResource CustomComboBoxStyle}"
@@ -46,19 +63,20 @@
                     </StackPanel>
                 </StackPanel>
             </Border>
-            <StackPanel Orientation="Horizontal">
-                <Border Margin="5"
-                        CornerRadius="15"
-                        Background="{StaticResource WBlue}">
-                <StackPanel Orientation="Vertical" Margin="10">
+            <Border Margin="5" Grid.Column="1"
+                    CornerRadius="15" Grid.Row="3"
+                    Background="{StaticResource WBlue}">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10">
                     <TextBlock Text="Work"
-                           TextAlignment="Center"
-                           FontWeight="Bold"
-                           FontSize="20"
-                           Foreground="White"/>
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               FontSize="25"
+                               Foreground="White"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="2">
                         <ComboBox Width="50"
                                   Height="30"
+                                  FontSize="15"
+                                  FontWeight="Bold"
                                   SelectedItem="{Binding WorkHours, Mode=TwoWay}"
                                   ItemsSource="{Binding Hours}"
                                   Style="{StaticResource CustomComboBoxStyle}"
@@ -71,6 +89,8 @@
                                    Foreground="White"/>
                         <ComboBox Width="60"
                                   Height="30"
+                                  FontSize="15"
+                                  FontWeight="Bold"
                                   SelectedItem="{Binding WorkMinutes, Mode=TwoWay}"
                                   ItemsSource="{Binding Minutes}"
                                   Style="{StaticResource CustomComboBoxStyle}"
@@ -79,19 +99,20 @@
                     </StackPanel>
                 </StackPanel>
             </Border>
-                <Border Margin="5"
-                        CornerRadius="15"
-                        Width="180"
-                        Background="{StaticResource WBlue}">
-                    <StackPanel Orientation="Vertical" Margin="10">
+            <Border Margin="5" Grid.Row="1"
+                    CornerRadius="15"
+                    Background="{StaticResource WBlue}">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10">
                     <TextBlock Text="Rest"
                            TextAlignment="Center"
                            FontWeight="Bold"
-                           FontSize="20"
+                           FontSize="25"
                            Foreground="White"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="2">
                         <ComboBox Width="50"
                                   Height="30"
+                                  FontSize="15"
+                                  FontWeight="Bold"
                                   SelectedItem="{Binding RestHours, Mode=TwoWay}"
                                   ItemsSource="{Binding Hours}"
                                   Style="{StaticResource CustomComboBoxStyle}"
@@ -104,6 +125,8 @@
                                    Foreground="White"/>
                         <ComboBox Width="60"
                                   Height="30"
+                                  FontSize="15"
+                                  FontWeight="Bold"
                                   SelectedItem="{Binding RestMinutes, Mode=TwoWay}"
                                   ItemsSource="{Binding Minutes}"
                                   Style="{StaticResource CustomComboBoxStyle}"
@@ -112,20 +135,20 @@
                     </StackPanel>
                 </StackPanel>
             </Border>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Border Margin="5"
-                    CornerRadius="15"
+            <Border Margin="5" Grid.Column="1"
+                    CornerRadius="15" Grid.Row="1"
                     Background="{StaticResource WBlue}">
-                <StackPanel Orientation="Vertical" Margin="10">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10">
                     <TextBlock Text="Long Rest"
                                TextAlignment="Center"
                                FontWeight="Bold"
-                               FontSize="20"
+                               FontSize="25"
                                Foreground="White"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="2">
                         <ComboBox Width="50"
                                   Height="30"
+                                  FontSize="15"
+                                  FontWeight="Bold"
                                   SelectedItem="{Binding LongRestHours, Mode=TwoWay}"
                                   ItemsSource="{Binding Hours}"
                                   Style="{StaticResource CustomComboBoxStyle}"
@@ -138,6 +161,8 @@
                                    Foreground="White"/>
                         <ComboBox Width="60"
                                   Height="30"
+                                  FontSize="15"
+                                  FontWeight="Bold"
                                   SelectedItem="{Binding LongRestMinutes, Mode=TwoWay}"
                                   ItemsSource="{Binding Minutes}"
                                   Style="{StaticResource CustomComboBoxStyle}"
@@ -146,17 +171,19 @@
                     </StackPanel>
                 </StackPanel>
             </Border>
-                <Border Margin="5"
-                        CornerRadius="15"
-                        Background="{StaticResource WBlue}">
-                <StackPanel Orientation="Vertical" Margin="5">
+            <Border Margin="5" Grid.Row="3"
+                    CornerRadius="15"
+                    Background="{StaticResource WBlue}">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="5">
                     <TextBlock Text="Long Rest Interval"
                                TextAlignment="Center"
                                FontWeight="Bold"
-                               FontSize="20"
+                               FontSize="21"
                                Foreground="White"/>
                         <ComboBox Width="50"
                                   Height="30"
+                                  FontSize="15"
+                                  FontWeight="Bold"
                                   SelectedItem="{Binding LongRestInterval, Mode=TwoWay}"
                                   ItemsSource="{Binding Hours}"
                                   Style="{StaticResource CustomComboBoxStyle}"
@@ -164,43 +191,140 @@
                                   Margin="0,2,0,0"/>
                 </StackPanel>
             </Border>
-            </StackPanel>
-        </StackPanel>
-        <StackPanel Orientation="Vertical" Visibility="{Binding IsFeatureActiv, Converter= {StaticResource BoolToVisibleConverter}}">
-            <Border Margin="5"
-                        CornerRadius="15"
-                        Background="{StaticResource WBlue}">
-                <StackPanel Orientation="Vertical" Margin="10">
-                    <TextBlock Text="Total Work"
-                           TextAlignment="Center"
-                           FontWeight="Bold"
-                           FontSize="20"
-                           Foreground="White"/>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="2">
-                        <ComboBox Width="50"
-                                  Height="30"
-                                  SelectedItem="{Binding TotalWorkHours, Mode=TwoWay}"
-                                  ItemsSource="{Binding Hours}"
-                                  Style="{StaticResource CustomComboBoxStyle}"
-                                  ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
-                                  Margin="0,2,0,0"/>
-                        <TextBlock Text=":"
-                                   TextAlignment="Center"
-                                   FontWeight="Bold"
-                                   FontSize="20"
-                                   Foreground="White"/>
-                        <ComboBox Width="60"
-                                  Height="30"
-                                  SelectedItem="{Binding TotalWorkMinutes, Mode=TwoWay}"
-                                  ItemsSource="{Binding Minutes}"
-                                  Style="{StaticResource CustomComboBoxStyle}"
-                                  ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
-                                  Margin="0,2,0,0"/>
-                    </StackPanel>
+        </Grid>
+        <Grid Visibility="{Binding IsFeatureActiv, Converter= {StaticResource BoolToVisibleConverter}, FallbackValue=Visible}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="155"/>
+                <RowDefinition Height="75"/>
+                <RowDefinition Height="68"/>
+            </Grid.RowDefinitions>
+            <Border Margin="5" CornerRadius="15" Grid.ColumnSpan="2"
+                    Background="{StaticResource WBlue}">
+                <StackPanel Orientation="Vertical" Margin="2">
+                    <TextBlock Text="Settings" HorizontalAlignment ="Center"
+                            TextAlignment="Center" VerticalAlignment ="Center"
+                            FontWeight="Bold" Margin="2" FontSize="20"
+                            Foreground="White"/>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Border Margin="5" CornerRadius="15"
+                                Background="{StaticResource WBlueShadow}">
+                            <StackPanel Orientation="Vertical" Margin="2">
+                                <TextBlock Text="Total Work" HorizontalAlignment ="Center"
+                                           TextAlignment="Center" VerticalAlignment ="Center"
+                                           FontWeight="Bold" Margin="1" FontSize="15"
+                                           Foreground="White"/>
+                                <TextBlock Text="00:00:00" HorizontalAlignment ="Center"
+                                           TextAlignment="Center" VerticalAlignment ="Center"
+                                           FontWeight="Bold" FontSize="15"
+                                           Foreground="White"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Margin="5" CornerRadius="15" Grid.Column="1"
+                                Background="{StaticResource WBlueShadow}">
+                            <StackPanel Orientation="Vertical" Margin="2">
+                                <TextBlock Text="Work" HorizontalAlignment ="Center"
+                                           TextAlignment="Center" VerticalAlignment ="Center"
+                                           FontWeight="Bold" Margin="1" FontSize="15"
+                                           Foreground="White"/>
+                                <TextBlock Text="00:00:00" HorizontalAlignment ="Center"
+                                           TextAlignment="Center" VerticalAlignment ="Center"
+                                           FontWeight="Bold" FontSize="15"
+                                           Foreground="White"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Margin="5" CornerRadius="15" Grid.Column="2"
+                                Background="{StaticResource WBlueShadow}">
+                            <StackPanel Orientation="Vertical" Margin="2">
+                                <TextBlock Text="Rest" HorizontalAlignment ="Center"
+                                           TextAlignment="Center" VerticalAlignment ="Center"
+                                           FontWeight="Bold" Margin="1" FontSize="15"
+                                           Foreground="White"/>
+                                <TextBlock Text="00:00:00" HorizontalAlignment ="Center"
+                                           TextAlignment="Center" VerticalAlignment ="Center"
+                                           FontWeight="Bold" FontSize="15"
+                                           Foreground="White"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Margin="5" CornerRadius="15" Grid.Row="1"
+                                Background="{StaticResource WBlueShadow}">
+                            <StackPanel Orientation="Vertical" Margin="2">
+                                <TextBlock Text="Long Rest" HorizontalAlignment ="Center"
+                                           TextAlignment="Center" VerticalAlignment ="Center"
+                                           FontWeight="Bold" Margin="1" FontSize="15"
+                                           Foreground="White"/>
+                                <TextBlock Text="00:00:00" HorizontalAlignment ="Center"
+                                           TextAlignment="Center" VerticalAlignment ="Center"
+                                           FontWeight="Bold" FontSize="15"
+                                           Foreground="White"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Margin="5" CornerRadius="15" Grid.Column="1" Grid.Row="1"
+                                Background="{StaticResource WBlueShadow}" Grid.ColumnSpan="2">
+                            <StackPanel Orientation="Vertical" Margin="2">
+                                <TextBlock Text="Long Rest Interval" HorizontalAlignment ="Center"
+                                           TextAlignment="Center" VerticalAlignment ="Center"
+                                           FontWeight="Bold" Margin="1" FontSize="15"
+                                           Foreground="White"/>
+                                <TextBlock Text="00:00:00" HorizontalAlignment ="Center"
+                                           TextAlignment="Center" VerticalAlignment ="Center"
+                                           FontWeight="Bold" FontSize="15"
+                                           Foreground="White"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
                 </StackPanel>
             </Border>
-        </StackPanel>
-        <Grid Width="250">
+            <Border Margin="5" Grid.Row="1" CornerRadius="15" Grid.ColumnSpan="2"
+                    Background="{StaticResource WBlue}">
+                <StackPanel Orientation="Vertical" Margin="2">
+                    <TextBlock Text="Top Distractions" HorizontalAlignment ="Center"
+                            TextAlignment="Center" VerticalAlignment ="Center"
+                            FontWeight="Bold" Margin="2" FontSize="20"
+                            Foreground="White"/>
+                    <Grid Margin="5">
+                        <TextBlock Text="Process.exe" MaxWidth="111" TextTrimming="CharacterEllipsis" HorizontalAlignment ="Left"
+                                   TextAlignment="Center" VerticalAlignment ="Center"
+                                   FontWeight="Bold" Margin="2" FontSize="15"
+                                   Foreground="White"/>
+                        <TextBlock Text="Process.exe" MaxWidth="111" TextTrimming="CharacterEllipsis" HorizontalAlignment ="Center"
+                                   TextAlignment="Center" VerticalAlignment ="Center"
+                                   FontWeight="Bold" Margin="2" FontSize="15"
+                                   Foreground="White"/>
+                        <TextBlock Text="Process.exe" MaxWidth="111" TextTrimming="CharacterEllipsis" HorizontalAlignment ="Right"
+                                   TextAlignment="Center" VerticalAlignment ="Center"
+                                   FontWeight="Bold" Margin="2" FontSize="15"
+                                   Foreground="White"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+            <Border Margin="5" CornerRadius="15" Grid.Row="2" Grid.ColumnSpan="2"
+                    Background="{StaticResource WBlue}">
+                <StackPanel Orientation="Vertical" Margin="2">
+                    <TextBlock Text="Distractions Count" HorizontalAlignment ="Center"
+                            TextAlignment="Center" VerticalAlignment ="Center"
+                            FontWeight="Bold" Margin="1" FontSize="20"
+                            Foreground="White"/>
+                    <TextBlock Text="0" HorizontalAlignment ="Center"
+                            TextAlignment="Center" VerticalAlignment ="Center"
+                            FontWeight="Bold" FontSize="20"
+                            Foreground="White"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+        <Grid VerticalAlignment="Bottom" Grid.Row="2">
             <Button Margin="4" Width="100"
                     HorizontalAlignment="Left"
                     Command="{Binding ReturnToOptionsCommand}"
@@ -234,5 +358,5 @@
             </Button>
 
         </Grid>
-    </StackPanel>
+    </Grid>
 </Page>
