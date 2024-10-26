@@ -5,10 +5,50 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WorkLifeBalance.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="350" d:DesignWidth="150"
+      d:DesignHeight="200" d:DesignWidth="150"
       Title="ForceWorkMainMenuDetailsPage">
 
-    <Grid>
-        <TextBlock Text="RAWr" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontWeight="Bold" FontSize="25"/>
-    </Grid>
+    <StackPanel Orientation="Vertical">
+        <TextBlock Text="Force Work" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
+                   FontWeight="Bold" FontStyle="Italic" FontSize="15"/>
+        <Border Margin="3" Background="{StaticResource WBlue}" CornerRadius="10">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Current Stage" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
+                           FontWeight="Bold"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Image Source="/Assets/Work.png" Width="30"/>
+                    <TextBlock Text="Work" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
+                               FontWeight="Bold"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <Border Margin="3" Background="{StaticResource WBlue}" CornerRadius="10">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Next Stage" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
+                   FontWeight="Bold"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="00:00:00" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
+                   FontWeight="Bold"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <Border Margin="3" Background="{StaticResource WBlue}" CornerRadius="10">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Total Work Left" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
+                   FontWeight="Bold"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="00:00:00" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
+                   FontWeight="Bold"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <Button Margin="2" HorizontalAlignment="Center"
+                Command="{Binding EditForceWorkCommand}"
+                Template="{StaticResource SlightRoundedBtnTemp}"
+                Style="{StaticResource RoundedBtnStyle}"
+                Background="Purple">
+            <TextBlock Text="Edit" FontWeight="Bold" Margin="5"
+               VerticalAlignment="Center" Foreground="White" FontSize="20"/>
+        </Button>
+    </StackPanel>
 </Page>

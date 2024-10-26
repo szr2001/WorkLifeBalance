@@ -12,6 +12,7 @@ namespace WorkLifeBalance.Services
 {
     public partial class MainWindowDetailsService : ObservableObject, IMainWindowDetailsService
     {
+        //needs a way to stop multiple features requesting a MainWindowDetails page.
         private INavigationService navigationService;
 
         [ObservableProperty]
