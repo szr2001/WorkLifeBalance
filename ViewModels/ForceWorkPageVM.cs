@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,6 +49,23 @@ namespace WorkLifeBalance.ViewModels
         [ObservableProperty]
         private bool isFeatureActiv;
 
+        [ObservableProperty]
+        private TimeOnly totalWorkTimeSetting;
+        [ObservableProperty]
+        private TimeOnly workTimeSetting;
+        [ObservableProperty]
+        private TimeOnly restTimeSetting;
+        [ObservableProperty]
+        private TimeOnly longRestTimeSetting;
+        [ObservableProperty]
+        private int longRestIntervalSetting;
+
+        [ObservableProperty]
+        private int distractionCount;
+
+        [ObservableProperty]
+        private string[] distractions = { "Process.exe", "Process.exe", "Process.exe" };
+
         private readonly ForceWorkFeature forceWorkFeature;
         private readonly IMainWindowDetailsService mainWindowDetailsService;
         private readonly ISecondWindowService secondWindowService;
@@ -64,9 +82,32 @@ namespace WorkLifeBalance.ViewModels
             PageName = "Force Work";
         }
 
+        //maybe use observable pattern for properties instead of one onUpdate event
+        private void UpdateDataFromForceWork()
+        {
+            Distractions = forceWorkFeature.Distractions;
+            DistractionCount = forceWorkFeature.DistractionsCount;
+        }
+
+        private void GetForceWorkSettings()
+        {
+            TotalWorkTimeSetting = forceWorkFeature.TotalWorkTimeSetting;
+            WorkTimeSetting = forceWorkFeature.WorkTimeSetting;
+            RestTimeSetting = forceWorkFeature.RestTimeSetting;
+            LongRestTimeSetting = forceWorkFeature.LongRestTimeSetting;
+            LongRestIntervalSetting = forceWorkFeature.LongRestIntervalSetting;
+        }
+
         public override Task OnPageOppeningAsync(object? args = null)
         {
             IsFeatureActiv = featuresServices.IsFeaturePresent<ForceWorkFeature>();
+            forceWorkFeature.OnDataUpdated += UpdateDataFromForceWork;
+            return Task.CompletedTask;
+        }
+
+        public override Task OnPageClosingAsync()
+        {
+            forceWorkFeature.OnDataUpdated -= UpdateDataFromForceWork;
             return Task.CompletedTask;
         }
 
@@ -92,8 +133,9 @@ namespace WorkLifeBalance.ViewModels
                 forceWorkFeature.SetTotalWorkTime(TotalWorkHours, TotalWorkMinutes);
                 forceWorkFeature.SetLongRestTime(LongRestHours, LongRestMinutes, LongRestInterval);
 
-                mainWindowDetailsService.OpenWindowWith<ForceWorkMainMenuDetailsPageVM>();
+                mainWindowDetailsService.OpenDetailsPageWith<ForceWorkMainMenuDetailsPageVM>();
                 featuresServices.AddFeature<ForceWorkFeature>();
+                GetForceWorkSettings();
                 IsFeatureActiv = true;
             }
         }

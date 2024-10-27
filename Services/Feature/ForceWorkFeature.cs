@@ -8,22 +8,28 @@ namespace WorkLifeBalance.Services.Feature
 {
     public partial class ForceWorkFeature : FeatureBase 
     {
-        public TimeOnly TotalWorkTime { get; private set; }
-        public int ReceievedWarnings { get; private set; }
         public Action OnDataUpdated { get; set; } = new(() => { });
         public AppState RequiredAppState { get; private set; } = AppState.Working;
+        public string[] Distractions { get; private set; } = new string[3];
+        public int DistractionsCount { get; private set; }
 
-        private TimeOnly workTime;
-        private TimeOnly restTime;
-        private TimeOnly longRestTime;
+        public TimeOnly TotalWorkTimeSetting { get; private set; }
+        public TimeOnly WorkTimeSetting { get; private set; }
+        public TimeOnly RestTimeSetting { get; private set; }
+        public TimeOnly LongRestTimeSetting { get; private set; }
+        public int LongRestIntervalSetting { get; private set; }
+
+        public TimeOnly TotalWorkTimeRemaining { get; private set; }
+        public TimeOnly CurrentStageTimeRemaining { get; private set; }
+
         private readonly ActivityTrackerFeature activityTrackerFeature;
         private readonly AppStateHandler appStateHandler;
         private readonly LowLevelHandler lowLevelHandler;
-        private readonly TimeOnly oneSecond = new(0,0,1);
-        private int longRestInterval;
-        private int maxWarnings = 5;
 
-        private readonly int Delay = 1;
+        private int maxWarnings = 5;
+        private int warnings;
+
+        private readonly TimeOnly oneSecond = new(0,0,1);
         public ForceWorkFeature(AppStateHandler appStateHandler, ActivityTrackerFeature activityTrackerFeature, LowLevelHandler lowLevelHandler)
         {
             this.appStateHandler = appStateHandler;
@@ -33,21 +39,21 @@ namespace WorkLifeBalance.Services.Feature
 
         public void SetWorkTime(int hours, int minutes)
         {
-            workTime = new(hours,minutes);
+            WorkTimeSetting = new(hours,minutes);
         }
         public void SetRestTime(int hours, int minutes)
         {
 
-            restTime = new(hours,minutes);
+            RestTimeSetting = new(hours,minutes);
         }
         public void SetLongRestTime(int hours, int minutes, int interval)
         {
-            longRestTime = new(hours,minutes);
-            longRestInterval = interval;
+            LongRestTimeSetting = new(hours,minutes);
+            LongRestIntervalSetting = interval;
         }
         public void SetTotalWorkTime(int hours, int minutes)
         {
-            TotalWorkTime = new(hours, minutes);
+            TotalWorkTimeSetting = new(hours, minutes);
         }
 
         protected override Func<Task> ReturnFeatureMethod()

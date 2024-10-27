@@ -28,7 +28,7 @@ namespace WorkLifeBalance.Services
             LoadedPage = null;
         }
 
-        public async Task OpenWindowWith<T>() where T : MainWindowDetailsPageBase
+        public async Task OpenDetailsPageWith<T>() where T : MainWindowDetailsPageBase
         {
             LoadedPage = (MainWindowDetailsPageBase)navigationService.NavigateTo<T>();
 

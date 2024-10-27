@@ -11,6 +11,7 @@
     <Page.Resources>
         <converters:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter"/>
         <converters:BoolToVisibleConverter x:Key="BoolToVisibleConverter"/>
+        <converters:TimeOnlyToStringConverter x:Key="TimeOnlyToStringConverter"/>
     </Page.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -206,9 +207,9 @@
                     Background="{StaticResource WBlue}">
                 <StackPanel Orientation="Vertical" Margin="2">
                     <TextBlock Text="Settings" HorizontalAlignment ="Center"
-                            TextAlignment="Center" VerticalAlignment ="Center"
-                            FontWeight="Bold" Margin="2" FontSize="20"
-                            Foreground="White"/>
+                                TextAlignment="Center" VerticalAlignment ="Center"
+                                FontWeight="Bold" Margin="2" FontSize="20"
+                                Foreground="White"/>
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition/>
@@ -226,7 +227,7 @@
                                            TextAlignment="Center" VerticalAlignment ="Center"
                                            FontWeight="Bold" Margin="1" FontSize="15"
                                            Foreground="White"/>
-                                <TextBlock Text="00:00:00" HorizontalAlignment ="Center"
+                                <TextBlock Text="{Binding TotalWorkTimeSetting, Converter={StaticResource TimeOnlyToStringConverter}}" HorizontalAlignment ="Center"
                                            TextAlignment="Center" VerticalAlignment ="Center"
                                            FontWeight="Bold" FontSize="15"
                                            Foreground="White"/>
@@ -239,7 +240,7 @@
                                            TextAlignment="Center" VerticalAlignment ="Center"
                                            FontWeight="Bold" Margin="1" FontSize="15"
                                            Foreground="White"/>
-                                <TextBlock Text="00:00:00" HorizontalAlignment ="Center"
+                                <TextBlock Text="{Binding WorkTimeSetting, Converter={StaticResource TimeOnlyToStringConverter}}" HorizontalAlignment ="Center"
                                            TextAlignment="Center" VerticalAlignment ="Center"
                                            FontWeight="Bold" FontSize="15"
                                            Foreground="White"/>
@@ -252,7 +253,7 @@
                                            TextAlignment="Center" VerticalAlignment ="Center"
                                            FontWeight="Bold" Margin="1" FontSize="15"
                                            Foreground="White"/>
-                                <TextBlock Text="00:00:00" HorizontalAlignment ="Center"
+                                <TextBlock Text="{Binding RestTimeSetting, Converter={StaticResource TimeOnlyToStringConverter}}" HorizontalAlignment ="Center"
                                            TextAlignment="Center" VerticalAlignment ="Center"
                                            FontWeight="Bold" FontSize="15"
                                            Foreground="White"/>
@@ -265,7 +266,7 @@
                                            TextAlignment="Center" VerticalAlignment ="Center"
                                            FontWeight="Bold" Margin="1" FontSize="15"
                                            Foreground="White"/>
-                                <TextBlock Text="00:00:00" HorizontalAlignment ="Center"
+                                <TextBlock Text="{Binding LongRestTimeSetting, Converter={StaticResource TimeOnlyToStringConverter}}" HorizontalAlignment ="Center"
                                            TextAlignment="Center" VerticalAlignment ="Center"
                                            FontWeight="Bold" FontSize="15"
                                            Foreground="White"/>
@@ -278,7 +279,7 @@
                                            TextAlignment="Center" VerticalAlignment ="Center"
                                            FontWeight="Bold" Margin="1" FontSize="15"
                                            Foreground="White"/>
-                                <TextBlock Text="00:00:00" HorizontalAlignment ="Center"
+                                <TextBlock Text="{Binding LongRestIntervalSetting}" HorizontalAlignment ="Center"
                                            TextAlignment="Center" VerticalAlignment ="Center"
                                            FontWeight="Bold" FontSize="15"
                                            Foreground="White"/>
@@ -294,20 +295,26 @@
                             TextAlignment="Center" VerticalAlignment ="Center"
                             FontWeight="Bold" Margin="2" FontSize="20"
                             Foreground="White"/>
-                    <Grid Margin="5">
-                        <TextBlock Text="Process.exe" MaxWidth="111" TextTrimming="CharacterEllipsis" HorizontalAlignment ="Left"
-                                   TextAlignment="Center" VerticalAlignment ="Center"
-                                   FontWeight="Bold" Margin="2" FontSize="15"
-                                   Foreground="White"/>
-                        <TextBlock Text="Process.exe" MaxWidth="111" TextTrimming="CharacterEllipsis" HorizontalAlignment ="Center"
-                                   TextAlignment="Center" VerticalAlignment ="Center"
-                                   FontWeight="Bold" Margin="2" FontSize="15"
-                                   Foreground="White"/>
-                        <TextBlock Text="Process.exe" MaxWidth="111" TextTrimming="CharacterEllipsis" HorizontalAlignment ="Right"
-                                   TextAlignment="Center" VerticalAlignment ="Center"
-                                   FontWeight="Bold" Margin="2" FontSize="15"
-                                   Foreground="White"/>
-                    </Grid>
+                    <ItemsControl ItemsSource="{Binding Distractions}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"
+                                              HorizontalAlignment="Center"
+                                              Margin="3"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{StaticResource WBlueShadow}"
+                                        CornerRadius="8" Margin="3,0,3,0">
+                                    <TextBlock Text="{Binding}" MaxWidth="100" TextTrimming="CharacterEllipsis" HorizontalAlignment ="Left"
+                                               TextAlignment="Center" VerticalAlignment ="Center"
+                                               FontWeight="Bold" Margin="5" FontSize="12"
+                                               Foreground="White"/>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </StackPanel>
             </Border>
             <Border Margin="5" CornerRadius="15" Grid.Row="2" Grid.ColumnSpan="2"
@@ -317,7 +324,7 @@
                             TextAlignment="Center" VerticalAlignment ="Center"
                             FontWeight="Bold" Margin="1" FontSize="20"
                             Foreground="White"/>
-                    <TextBlock Text="0" HorizontalAlignment ="Center"
+                    <TextBlock Text="{Binding DistractionCount}" HorizontalAlignment ="Center"
                             TextAlignment="Center" VerticalAlignment ="Center"
                             FontWeight="Bold" FontSize="20"
                             Foreground="White"/>
