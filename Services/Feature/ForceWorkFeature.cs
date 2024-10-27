@@ -25,16 +25,20 @@ namespace WorkLifeBalance.Services.Feature
         private readonly ActivityTrackerFeature activityTrackerFeature;
         private readonly AppStateHandler appStateHandler;
         private readonly LowLevelHandler lowLevelHandler;
+        private readonly IFeaturesServices featuresServices;
+        private readonly string workLifeBalanceProcess = "WorkLifeBalance.exe";
+        private readonly string explorerProcess = "explorer.exe";
 
         private int maxWarnings = 5;
         private int warnings;
 
-        private readonly TimeOnly oneSecond = new(0,0,1);
-        public ForceWorkFeature(AppStateHandler appStateHandler, ActivityTrackerFeature activityTrackerFeature, LowLevelHandler lowLevelHandler)
+        private readonly TimeSpan minusOneSecond = new(0,0,-1);
+        public ForceWorkFeature(AppStateHandler appStateHandler, ActivityTrackerFeature activityTrackerFeature, LowLevelHandler lowLevelHandler, IFeaturesServices featuresServices)
         {
             this.appStateHandler = appStateHandler;
             this.activityTrackerFeature = activityTrackerFeature;
             this.lowLevelHandler = lowLevelHandler;
+            this.featuresServices = featuresServices;
         }
 
         public void SetWorkTime(int hours, int minutes)
@@ -70,12 +74,64 @@ namespace WorkLifeBalance.Services.Feature
 
         private Task TriggerForceWork()
         {
-            CheckIdle();
+            ForceWorkLogic();
             return Task.CompletedTask;
         }
 
-        private void CheckIdle()
+        private void ForceWorkLogic()
         {
+            if(TotalWorkTimeRemaining == TimeOnly.MinValue)
+            {
+                featuresServices.RemoveFeature<ForceWorkFeature>();
+                return;
+            }
+
+            switch (RequiredAppState)
+            {
+                case AppState.Working:
+                    HandleWorkingTime();
+                    break;
+                case AppState.Resting:
+                    HandleRestingTime();
+                    break;
+            }
+            OnDataUpdated?.Invoke();
+        }
+
+        private void HandleWorkingTime()
+        {
+            if (activityTrackerFeature.ActiveWindow == workLifeBalanceProcess ||
+                activityTrackerFeature.ActiveWindow == explorerProcess) return;
+
+            switch (appStateHandler.AppTimerState)
+            {
+                case AppState.Working:
+                    if(CurrentStageTimeRemaining == TimeOnly.MinValue)
+                    {
+                        RequiredAppState = AppState.Resting;
+                        CurrentStageTimeRemaining = RestTimeSetting;
+                        return;
+                    }
+                    TotalWorkTimeRemaining = TotalWorkTimeRemaining.Add(minusOneSecond);
+                    CurrentStageTimeRemaining = CurrentStageTimeRemaining.Add(minusOneSecond);
+                    break;
+                case AppState.Resting:
+                    break;
+                case AppState.Idle:
+                    break;
+            }
+        }
+
+        private void HandleRestingTime()
+        {
+            if (CurrentStageTimeRemaining == TimeOnly.MinValue)
+            {
+                RequiredAppState = AppState.Working;
+                CurrentStageTimeRemaining = WorkTimeSetting;
+                return;
+            }
+            CurrentStageTimeRemaining = CurrentStageTimeRemaining.Add(minusOneSecond);
+
             switch (appStateHandler.AppTimerState)
             {
                 case AppState.Working:
