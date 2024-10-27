@@ -134,8 +134,8 @@ namespace WorkLifeBalance.ViewModels
                 forceWorkFeature.SetLongRestTime(LongRestHours, LongRestMinutes, LongRestInterval);
 
                 mainWindowDetailsService.OpenDetailsPageWith<ForceWorkMainMenuDetailsPageVM>();
-                featuresServices.AddFeature<ForceWorkFeature>();
                 GetForceWorkSettings();
+                featuresServices.AddFeature<ForceWorkFeature>();
                 IsFeatureActiv = true;
             }
         }

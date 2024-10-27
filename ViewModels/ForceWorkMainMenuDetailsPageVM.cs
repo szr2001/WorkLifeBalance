@@ -34,14 +34,13 @@ namespace WorkLifeBalance.ViewModels
 
         public override Task OnPageOppeningAsync(object? args = null)
         {
-            Console.WriteLine("OPENED DETAILS");
             forceWorkFeature.OnDataUpdated += UpdateDataFromForceWork;
+            UpdateDataFromForceWork();
             return Task.CompletedTask;
         }
 
         public override Task OnPageClosingAsync()
         {
-            Console.WriteLine("Closed DETAILS");
             forceWorkFeature.OnDataUpdated -= UpdateDataFromForceWork;
             return Task.CompletedTask;
         }

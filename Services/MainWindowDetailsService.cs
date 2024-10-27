@@ -32,10 +32,9 @@ namespace WorkLifeBalance.Services
 
         private async Task ClearPage()
         {
-            if (activeMainWindowPage != null)
+            if (LoadedPage != null)
             {
-                await activeMainWindowPage.OnPageClosingAsync();
-                activeMainWindowPage = null;
+                await LoadedPage.OnPageClosingAsync();
                 LoadedPage = null;
             }
         }
@@ -45,8 +44,6 @@ namespace WorkLifeBalance.Services
             await Task.Run(ClearPage);
 
             activeMainWindowPage = (MainWindowDetailsPageBase)navigationService.NavigateTo<T>();
-
-            await activeMainWindowPage.OnPageOppeningAsync();
 
             await Task.Run(async () =>
             {

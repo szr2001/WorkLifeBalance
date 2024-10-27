@@ -56,6 +56,13 @@ namespace WorkLifeBalance.Services.Feature
             TotalWorkTimeSetting = new(hours, minutes);
         }
 
+        protected override void OnFeatureAdded()
+        {
+            //create a copy of the settings
+            TotalWorkTimeRemaining = TotalWorkTimeSetting;
+            CurrentStageTimeRemaining = WorkTimeSetting;
+        }
+
         protected override Func<Task> ReturnFeatureMethod()
         {
             return TriggerForceWork;
