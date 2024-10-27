@@ -12,10 +12,13 @@ namespace WorkLifeBalance.Services
 {
     public partial class MainWindowDetailsService : ObservableObject, IMainWindowDetailsService
     {
+        //needs a way to stop multiple features requesting a MainWindowDetails page.
         private INavigationService navigationService;
 
         [ObservableProperty]
         private MainWindowDetailsPageBase? loadedPage;
+
+        private MainWindowDetailsPageBase? activeMainWindowPage;
 
         public MainWindowDetailsService(INavigationService navigationService)
         {
@@ -24,14 +27,35 @@ namespace WorkLifeBalance.Services
 
         public void CloseWindow()
         {
-            LoadedPage = null;
+            _ = Task.Run(ClearPage);
         }
 
-        public async Task OpenWindowWith<T>() where T : MainWindowDetailsPageBase
+        private async Task ClearPage()
         {
-            LoadedPage = (MainWindowDetailsPageBase)navigationService.NavigateTo<T>();
+            if (activeMainWindowPage != null)
+            {
+                await activeMainWindowPage.OnPageClosingAsync();
+                activeMainWindowPage = null;
+                LoadedPage = null;
+            }
+        }
 
-            await Task.CompletedTask;
+        public async Task OpenDetailsPageWith<T>(object? args) where T : MainWindowDetailsPageBase
+        {
+            await Task.Run(ClearPage);
+
+            activeMainWindowPage = (MainWindowDetailsPageBase)navigationService.NavigateTo<T>();
+
+            await activeMainWindowPage.OnPageOppeningAsync();
+
+            await Task.Run(async () =>
+            {
+                await activeMainWindowPage.OnPageOppeningAsync(args);
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    LoadedPage = activeMainWindowPage;
+                });
+            });
         }
     }
 }

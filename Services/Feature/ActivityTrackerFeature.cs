@@ -9,7 +9,7 @@ namespace WorkLifeBalance.Services.Feature
         public delegate void ActiveProcess(string ActiveWindow);
         public event ActiveProcess? OnWindowChange;
 
-        public string ActiveWindow = "";
+        public string ActiveWindow { get; set; } = "";
 
         private readonly TimeSpan OneSec = new (0, 0, 1);
 

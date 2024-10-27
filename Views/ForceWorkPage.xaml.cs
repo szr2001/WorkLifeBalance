@@ -24,5 +24,10 @@ namespace WorkLifeBalance.Views
         {
             InitializeComponent();
         }
+
+        private void StackPanel_GotFocus(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

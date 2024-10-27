@@ -4,7 +4,7 @@ using WorkLifeBalance.ViewModels.Base;
 
 namespace WorkLifeBalance.ViewModels
 {
-    public abstract partial class SecondWindowPageVMBase : ViewModelBase
+    public abstract partial class SecondWindowPageVMBase : PageViewModelBase
     {
         [ObservableProperty]
         private double pageWidth = 250;
@@ -14,15 +14,5 @@ namespace WorkLifeBalance.ViewModels
         
         [ObservableProperty]
         private string pageName = "Page";
-
-        public virtual Task OnPageClosingAsync()
-        {
-            return Task.CompletedTask;
-        }
-
-        public virtual Task OnPageOppeningAsync(object? args = null) 
-        {
-            return Task.CompletedTask;
-        }
     }
 }
