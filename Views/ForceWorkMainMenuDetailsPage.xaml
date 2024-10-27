@@ -4,10 +4,13 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WorkLifeBalance.Views"
+      xmlns:converters="clr-namespace:WorkLifeBalance.Converters"
       mc:Ignorable="d" 
       d:DesignHeight="200" d:DesignWidth="150"
       Title="ForceWorkMainMenuDetailsPage">
-
+    <Page.Resources>
+        <converters:TimeOnlyToStringConverter x:Key="TimeOnlyToStringConverter"/>
+    </Page.Resources>
     <StackPanel Orientation="Vertical">
         <TextBlock Text="Force Work" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
                    FontWeight="Bold" FontStyle="Italic" FontSize="15"/>
@@ -16,8 +19,22 @@
                 <TextBlock Text="Current Stage" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
                            FontWeight="Bold"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Image Source="/Assets/Work.png" Width="30"/>
-                    <TextBlock Text="Work" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
+                    <Image Width="30">
+                        <Image.Style>
+                            <Style TargetType="Image">
+                                <Setter Property="Source" Value="/Assets/Work.png"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RequiredAppState, Mode=TwoWay}" Value="Resting">
+                                        <Setter Property="Source" Value="/Assets/Rest.png"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding RequiredAppState, Mode=TwoWay}" Value="Working">
+                                        <Setter Property="Source" Value="/Assets/Work.png"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
+                    <TextBlock Text="{Binding RequiredAppState}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
                                FontWeight="Bold"/>
                 </StackPanel>
             </StackPanel>
@@ -27,7 +44,7 @@
                 <TextBlock Text="Next Stage" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
                    FontWeight="Bold"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBlock Text="00:00:00" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
+                    <TextBlock Text="{Binding CurrentStageTimeRemaining, Converter={StaticResource TimeOnlyToStringConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
                    FontWeight="Bold"/>
                 </StackPanel>
             </StackPanel>
@@ -37,7 +54,7 @@
                 <TextBlock Text="Total Work Left" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
                    FontWeight="Bold"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBlock Text="00:00:00" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
+                    <TextBlock Text="{Binding TotalWorkTimeRemaining, Converter={StaticResource TimeOnlyToStringConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
                    FontWeight="Bold"/>
                 </StackPanel>
             </StackPanel>

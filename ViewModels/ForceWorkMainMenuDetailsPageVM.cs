@@ -13,6 +13,16 @@ namespace WorkLifeBalance.ViewModels
 {
     public partial class ForceWorkMainMenuDetailsPageVM : MainWindowDetailsPageBase
     {
+
+        [ObservableProperty]
+        private AppState requiredAppState;
+
+        [ObservableProperty]
+        private TimeOnly currentStageTimeRemaining;
+
+        [ObservableProperty]
+        private TimeOnly totalWorkTimeRemaining;
+
         private readonly ForceWorkFeature forceWorkFeature;
         private readonly ISecondWindowService secondWindowService;
         
@@ -20,11 +30,27 @@ namespace WorkLifeBalance.ViewModels
         {
             this.forceWorkFeature = forceWorkFeature;
             this.secondWindowService = secondWindowService;
-            forceWorkFeature.OnDataUpdated += UpdateVMData;
         }
 
-        private void UpdateVMData()
+        public override Task OnPageOppeningAsync(object? args = null)
         {
+            Console.WriteLine("OPENED DETAILS");
+            forceWorkFeature.OnDataUpdated += UpdateDataFromForceWork;
+            return Task.CompletedTask;
+        }
+
+        public override Task OnPageClosingAsync()
+        {
+            Console.WriteLine("Closed DETAILS");
+            forceWorkFeature.OnDataUpdated -= UpdateDataFromForceWork;
+            return Task.CompletedTask;
+        }
+
+        private void UpdateDataFromForceWork()
+        {
+            RequiredAppState = forceWorkFeature.RequiredAppState;
+            CurrentStageTimeRemaining = forceWorkFeature.CurrentStageTimeRemaining;
+            TotalWorkTimeRemaining = forceWorkFeature.TotalWorkTimeRemaining;
         }
 
         [RelayCommand]

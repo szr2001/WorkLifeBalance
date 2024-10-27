@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace WorkLifeBalance.ViewModels.Base
 {
-    public class MainWindowDetailsPageBase : ViewModelBase
+    public class MainWindowDetailsPageBase : PageViewModelBase
     {
-
     }
 }

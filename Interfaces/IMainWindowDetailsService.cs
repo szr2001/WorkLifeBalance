@@ -7,6 +7,6 @@ namespace WorkLifeBalance.Interfaces
     public interface IMainWindowDetailsService
     {
         public void CloseWindow();
-        Task OpenDetailsPageWith<T>() where T : MainWindowDetailsPageBase;
+        Task OpenDetailsPageWith<T>(object? args = null) where T : MainWindowDetailsPageBase;
     }
 }
