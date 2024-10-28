@@ -2,6 +2,7 @@
 using System;
 using System.Globalization;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using WorkLifeBalance.Interfaces;
 
@@ -27,34 +28,36 @@ namespace WorkLifeBalance.Services.Feature
         private readonly AppStateHandler appStateHandler;
         private readonly LowLevelHandler lowLevelHandler;
         private readonly IFeaturesServices featuresServices;
+        private readonly ISoundService soundService;
         private readonly string workLifeBalanceProcess = "WorkLifeBalance.exe";
         private readonly string explorerProcess = "explorer.exe";
 
-        private int workIterations; //LongRestIntervalSetting
+        private int workIterations;
         private int maxWarnings = 5;
         private int warnings;
 
         private readonly TimeSpan minusOneSecond = new(0,0,-1);
-        public ForceWorkFeature(AppStateHandler appStateHandler, ActivityTrackerFeature activityTrackerFeature, LowLevelHandler lowLevelHandler, IFeaturesServices featuresServices)
+        public ForceWorkFeature(AppStateHandler appStateHandler, ActivityTrackerFeature activityTrackerFeature, LowLevelHandler lowLevelHandler, IFeaturesServices featuresServices, ISoundService soundService)
         {
             this.appStateHandler = appStateHandler;
             this.activityTrackerFeature = activityTrackerFeature;
             this.lowLevelHandler = lowLevelHandler;
             this.featuresServices = featuresServices;
+            this.soundService = soundService;
         }
 
         public void SetWorkTime(int hours, int minutes)
         {
-            WorkTimeSetting = new(0, 0, 6);
+            WorkTimeSetting = new(hours, minutes);
         }
         public void SetRestTime(int hours, int minutes)
         {
 
-            RestTimeSetting = new(0, 0, 5);
+            RestTimeSetting = new(hours, minutes);
         }
         public void SetLongRestTime(int hours, int minutes, int interval)
         {
-            LongRestTimeSetting = new(0, 0, 15);
+            LongRestTimeSetting = new(hours, minutes);
             LongRestIntervalSetting = interval;
         }
         public void SetTotalWorkTime(int hours, int minutes)
@@ -65,8 +68,8 @@ namespace WorkLifeBalance.Services.Feature
         protected override void OnFeatureAdded()
         {
             //create a copy of the settings
-            TotalWorkTimeRemaining = new(0,1,0);
-            CurrentStageTimeRemaining = new(0,0,5);
+            TotalWorkTimeRemaining = TotalWorkTimeSetting;
+            CurrentStageTimeRemaining = WorkTimeSetting;
         }
 
         protected override Func<Task> ReturnFeatureMethod()
@@ -126,12 +129,39 @@ namespace WorkLifeBalance.Services.Feature
                     }
                     TotalWorkTimeRemaining = TotalWorkTimeRemaining.Add(minusOneSecond);
                     CurrentStageTimeRemaining = CurrentStageTimeRemaining.Add(minusOneSecond);
+                    warnings = 0;
                     break;
                 case AppState.Resting:
+                    PunishUser();
                     break;
                 case AppState.Idle:
+                    WarnUser();
                     break;
             }
+        }
+
+        private void WarnUser()
+        {
+            soundService.PlaySound(ISoundService.SoundType.Warning);
+            Console.WriteLine("WARNINGS BEACH");
+        }
+
+        private void PunishUser()
+        {
+            if(warnings == maxWarnings)
+            {
+                MinimizeForegroundWindow();
+                warnings = 0;
+                return;
+            }
+
+            WarnUser();
+            warnings++;
+        }
+
+        private void MinimizeForegroundWindow()
+        {
+            soundService.PlaySound(ISoundService.SoundType.Termination);
         }
 
         private void HandleRestingTime()
@@ -147,10 +177,13 @@ namespace WorkLifeBalance.Services.Feature
             switch (appStateHandler.AppTimerState)
             {
                 case AppState.Working:
+                    PunishUser();
                     break;
                 case AppState.Resting:
+                    warnings = 0;
                     break;
                 case AppState.Idle:
+                    WarnUser();
                     break;
             }
         }

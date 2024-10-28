@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkLifeBalance.Interfaces;
 using System.Windows.Media;
+using System.DirectoryServices;
 
 namespace WorkLifeBalance.Services
 {
@@ -26,7 +27,9 @@ namespace WorkLifeBalance.Services
 
         public void PlaySound(ISoundService.SoundType type)
         {
-            Sounds[type].Play();
+            MediaPlayer activeSound = Sounds[type];
+            activeSound.Position = TimeSpan.Zero;
+            activeSound.Play();
         }
     }
 }
