@@ -1,5 +1,6 @@
 ﻿using Serilog;
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Numerics;
 using System.Runtime.InteropServices;
@@ -161,7 +162,16 @@ namespace WorkLifeBalance.Services.Feature
 
         private void MinimizeForegroundWindow()
         {
-            soundService.PlaySound(ISoundService.SoundType.Termination);
+            try
+            {
+                lowLevelHandler.MinimizeWindow(activityTrackerFeature.ActiveWindow);
+                lowLevelHandler.SetForeground(explorerProcess);
+                soundService.PlaySound(ISoundService.SoundType.Termination);
+            }
+            catch(Exception ex)
+            {
+                Log.Error(ex.Message);
+            }
         }
 
         private void HandleRestingTime()

@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
+using System.Windows;
 
 namespace WorkLifeBalance.Services
 {
@@ -20,6 +22,12 @@ namespace WorkLifeBalance.Services
 
         [DllImport("kernel32.dll")]
         private static extern bool AllocConsole();
+
+        [DllImport("user32.dll")]
+        private static extern bool SetForegroundWindow(nint hWnd);
+
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindow(nint hWnd, int nCmdShow);
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -63,6 +71,61 @@ namespace WorkLifeBalance.Services
         public void EnableConsole()
         {
             AllocConsole();
+        }
+
+        public void SetForeground(string process)
+        {
+            nint window = -1;
+            bool EnumWindowsCallback(nint hWnd, nint lParam)
+            {
+                // Get the process name associated with the window.
+                string processName = GetProcessname(hWnd);
+
+                // Check if they are the same process
+                if (processName.Equals(process, StringComparison.OrdinalIgnoreCase) && IsWindowVisible(hWnd))
+                {
+                    window = hWnd;
+                    return false;
+                }
+
+                return true;
+            }
+
+            // Enumerate through all windows.
+            EnumWindows(EnumWindowsCallback, nint.Zero);
+            if(window != -1)
+            {
+                SetForegroundWindow(window);
+            }
+        }
+
+        public void MinimizeWindow(string process)
+        {
+            List<nint> Windows = new();
+
+            // Callback function to find the window associated with the process name.
+            bool EnumWindowsCallback(nint hWnd, nint lParam)
+            {
+                // Get the process name associated with the window.
+                string processName = GetProcessname(hWnd);
+
+                // Check if they are the same process
+                if (processName.Equals(process, StringComparison.OrdinalIgnoreCase) && IsWindowVisible(hWnd))
+                {
+                    Windows.Add(hWnd);
+                }
+
+                return true;
+            }
+
+            // Enumerate through all windows.
+            EnumWindows(EnumWindowsCallback, nint.Zero);
+
+            //hide all windows found with that process
+            foreach(nint window in Windows)
+            {
+                ShowWindow(window, 2);
+            }
         }
 
         public nint ReadForegroundWindow()
@@ -109,6 +172,17 @@ namespace WorkLifeBalance.Services
             HashSet<string> Appnames = new();
 
             List<nint> windows = new List<nint>();
+
+            bool EnumWindowsCallback(nint hWnd, nint lParam)
+            {
+                if (IsWindowVisible(hWnd))
+                {
+                    windows.Add(hWnd);
+                }
+
+                return true;
+            }
+
             EnumWindows(EnumWindowsCallback, GCHandle.ToIntPtr(GCHandle.Alloc(windows)));
 
             foreach (nint windowId in windows)
@@ -133,18 +207,6 @@ namespace WorkLifeBalance.Services
             WindowsPrincipal principal = new WindowsPrincipal(identity);
 
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
-        }
-
-        private bool EnumWindowsCallback(nint hWnd, nint lParam)
-        {
-            List<nint>? windows = GCHandle.FromIntPtr(lParam).Target as List<nint>;
-
-            if (IsWindowVisible(hWnd))
-            {
-                windows!.Add(hWnd);
-            }
-
-            return true;
         }
     }
 }
