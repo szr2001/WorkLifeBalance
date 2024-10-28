@@ -1,5 +1,6 @@
 ﻿using Serilog;
 using System;
+using System.Globalization;
 using System.Numerics;
 using System.Threading.Tasks;
 using WorkLifeBalance.Interfaces;
@@ -29,6 +30,7 @@ namespace WorkLifeBalance.Services.Feature
         private readonly string workLifeBalanceProcess = "WorkLifeBalance.exe";
         private readonly string explorerProcess = "explorer.exe";
 
+        private int workIterations; //LongRestIntervalSetting
         private int maxWarnings = 5;
         private int warnings;
 
@@ -108,8 +110,18 @@ namespace WorkLifeBalance.Services.Feature
                 case AppState.Working:
                     if(CurrentStageTimeRemaining == TimeOnly.MinValue)
                     {
+                        workIterations++;
                         RequiredAppState = AppState.Resting;
-                        CurrentStageTimeRemaining = RestTimeSetting;
+
+                        if (workIterations == maxWarnings)
+                        {
+                            CurrentStageTimeRemaining = LongRestTimeSetting;
+                            workIterations = 0;
+                        }
+                        else
+                        {
+                            CurrentStageTimeRemaining = RestTimeSetting;
+                        }
                         return;
                     }
                     TotalWorkTimeRemaining = TotalWorkTimeRemaining.Add(minusOneSecond);
