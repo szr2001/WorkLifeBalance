@@ -45,16 +45,16 @@ namespace WorkLifeBalance.Services.Feature
 
         public void SetWorkTime(int hours, int minutes)
         {
-            WorkTimeSetting = new(hours,minutes);
+            WorkTimeSetting = new(0, 0, 6);
         }
         public void SetRestTime(int hours, int minutes)
         {
 
-            RestTimeSetting = new(hours,minutes);
+            RestTimeSetting = new(0, 0, 5);
         }
         public void SetLongRestTime(int hours, int minutes, int interval)
         {
-            LongRestTimeSetting = new(hours,minutes);
+            LongRestTimeSetting = new(0, 0, 15);
             LongRestIntervalSetting = interval;
         }
         public void SetTotalWorkTime(int hours, int minutes)
@@ -65,8 +65,8 @@ namespace WorkLifeBalance.Services.Feature
         protected override void OnFeatureAdded()
         {
             //create a copy of the settings
-            TotalWorkTimeRemaining = TotalWorkTimeSetting;
-            CurrentStageTimeRemaining = WorkTimeSetting;
+            TotalWorkTimeRemaining = new(0,1,0);
+            CurrentStageTimeRemaining = new(0,0,5);
         }
 
         protected override Func<Task> ReturnFeatureMethod()

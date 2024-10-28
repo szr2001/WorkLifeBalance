@@ -43,6 +43,7 @@ namespace WorkLifeBalance
             services.AddSingleton<IFeaturesServices, FeaturesService>();
             services.AddSingleton<IUpdateCheckerService, UpdateCheckerService>();
             services.AddSingleton<IMainWindowDetailsService, MainWindowDetailsService>();
+            services.AddSingleton<ISoundService, SoundService>();
 
             services.AddSingleton<MainWindow>();
             services.AddSingleton<SecondWindow>();
