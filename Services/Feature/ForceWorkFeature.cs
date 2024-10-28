@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WorkLifeBalance.Interfaces;
+using WorkLifeBalance.ViewModels;
 
 namespace WorkLifeBalance.Services.Feature
 {
@@ -27,6 +28,7 @@ namespace WorkLifeBalance.Services.Feature
         private readonly AppStateHandler appStateHandler;
         private readonly LowLevelHandler lowLevelHandler;
         private readonly IFeaturesServices featuresServices;
+        private readonly IMainWindowDetailsService mainWindowDetailsService;
         private readonly ISoundService soundService;
         private readonly string workLifeBalanceProcess = "WorkLifeBalance.exe";
         private readonly string explorerProcess = "explorer.exe";
@@ -37,13 +39,14 @@ namespace WorkLifeBalance.Services.Feature
         private int warnings;
 
         private readonly TimeSpan minusOneSecond = new(0,0,-1);
-        public ForceWorkFeature(AppStateHandler appStateHandler, ActivityTrackerFeature activityTrackerFeature, LowLevelHandler lowLevelHandler, IFeaturesServices featuresServices, ISoundService soundService)
+        public ForceWorkFeature(AppStateHandler appStateHandler, ActivityTrackerFeature activityTrackerFeature, LowLevelHandler lowLevelHandler, IFeaturesServices featuresServices, ISoundService soundService, IMainWindowDetailsService mainWindowDetailsService)
         {
             this.appStateHandler = appStateHandler;
             this.activityTrackerFeature = activityTrackerFeature;
             this.lowLevelHandler = lowLevelHandler;
             this.featuresServices = featuresServices;
             this.soundService = soundService;
+            this.mainWindowDetailsService = mainWindowDetailsService;
         }
 
         public void SetWorkTime(int hours, int minutes)
@@ -76,6 +79,12 @@ namespace WorkLifeBalance.Services.Feature
             DistractionsCount = 0;
             workIterations = 0;
             warnings = 0;
+            mainWindowDetailsService.OpenDetailsPageWith<ForceWorkMainMenuDetailsPageVM>();
+        }
+
+        protected override void OnFeatureRemoved()
+        {
+            mainWindowDetailsService.CloseWindow();
         }
 
         protected override Func<Task> ReturnFeatureMethod()
@@ -94,6 +103,7 @@ namespace WorkLifeBalance.Services.Feature
             if(TotalWorkTimeRemaining == TimeOnly.MinValue)
             {
                 featuresServices.RemoveFeature<ForceWorkFeature>();
+                OnDataUpdated?.Invoke();
                 return;
             }
 

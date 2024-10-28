@@ -67,14 +67,12 @@ namespace WorkLifeBalance.ViewModels
         private string[] distractions = { "Process.exe", "Process.exe", "Process.exe" };
 
         private readonly ForceWorkFeature forceWorkFeature;
-        private readonly IMainWindowDetailsService mainWindowDetailsService;
         private readonly ISecondWindowService secondWindowService;
         private readonly IFeaturesServices featuresServices;
 
-        public ForceWorkPageVM(ForceWorkFeature forceWorkFeature, IMainWindowDetailsService mainWindowDetailsService, ISecondWindowService secondWindowService, IFeaturesServices featuresServices)
+        public ForceWorkPageVM(ForceWorkFeature forceWorkFeature, ISecondWindowService secondWindowService, IFeaturesServices featuresServices)
         {
             this.forceWorkFeature = forceWorkFeature;
-            this.mainWindowDetailsService = mainWindowDetailsService;
             this.featuresServices = featuresServices;
             this.secondWindowService = secondWindowService;
             PageHeight = 410;
@@ -87,6 +85,7 @@ namespace WorkLifeBalance.ViewModels
         {
             Distractions = forceWorkFeature.Distractions;
             DistractionCount = forceWorkFeature.DistractionsCount;
+            IsFeatureActiv = featuresServices.IsFeaturePresent<ForceWorkFeature>();
         }
 
         private void GetForceWorkSettings()
@@ -122,7 +121,6 @@ namespace WorkLifeBalance.ViewModels
         {
             if (IsFeatureActiv)
             {
-                mainWindowDetailsService.CloseWindow();
                 featuresServices.RemoveFeature<ForceWorkFeature>();
                 IsFeatureActiv = false;
             }
@@ -133,7 +131,6 @@ namespace WorkLifeBalance.ViewModels
                 forceWorkFeature.SetTotalWorkTime(TotalWorkHours, TotalWorkMinutes);
                 forceWorkFeature.SetLongRestTime(LongRestHours, LongRestMinutes, LongRestInterval);
 
-                mainWindowDetailsService.OpenDetailsPageWith<ForceWorkMainMenuDetailsPageVM>();
                 GetForceWorkSettings();
                 featuresServices.AddFeature<ForceWorkFeature>();
                 IsFeatureActiv = true;
