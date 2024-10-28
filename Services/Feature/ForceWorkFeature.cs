@@ -1,9 +1,7 @@
 ﻿using Serilog;
 using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.Numerics;
-using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using WorkLifeBalance.Interfaces;
 
@@ -13,7 +11,7 @@ namespace WorkLifeBalance.Services.Feature
     {
         public Action OnDataUpdated { get; set; } = new(() => { });
         public AppState RequiredAppState { get; private set; } = AppState.Working;
-        public string[] Distractions { get; private set; } = new string[3];
+        public string[] Distractions { get; private set; } = Array.Empty<string>();
         public int DistractionsCount { get; private set; }
 
         public TimeOnly TotalWorkTimeSetting { get; private set; }
@@ -32,7 +30,8 @@ namespace WorkLifeBalance.Services.Feature
         private readonly ISoundService soundService;
         private readonly string workLifeBalanceProcess = "WorkLifeBalance.exe";
         private readonly string explorerProcess = "explorer.exe";
-
+        private Dictionary<string, int> DistractionApps = new();
+ 
         private int workIterations;
         private int maxWarnings = 5;
         private int warnings;
@@ -68,9 +67,15 @@ namespace WorkLifeBalance.Services.Feature
 
         protected override void OnFeatureAdded()
         {
-            //create a copy of the settings
+            //Reset values
             TotalWorkTimeRemaining = TotalWorkTimeSetting;
             CurrentStageTimeRemaining = WorkTimeSetting;
+            Distractions = Array.Empty<string>();
+            DistractionApps.Clear();
+            OnDataUpdated.Invoke();
+            DistractionsCount = 0;
+            workIterations = 0;
+            warnings = 0;
         }
 
         protected override Func<Task> ReturnFeatureMethod()
@@ -117,7 +122,7 @@ namespace WorkLifeBalance.Services.Feature
                         workIterations++;
                         RequiredAppState = AppState.Resting;
 
-                        if (workIterations == maxWarnings)
+                        if (workIterations >= LongRestIntervalSetting)
                         {
                             CurrentStageTimeRemaining = LongRestTimeSetting;
                             workIterations = 0;
@@ -144,12 +149,11 @@ namespace WorkLifeBalance.Services.Feature
         private void WarnUser()
         {
             soundService.PlaySound(ISoundService.SoundType.Warning);
-            Console.WriteLine("WARNINGS BEACH");
         }
 
         private void PunishUser()
         {
-            if(warnings == maxWarnings)
+            if(warnings >= maxWarnings)
             {
                 MinimizeForegroundWindow();
                 warnings = 0;
@@ -162,6 +166,16 @@ namespace WorkLifeBalance.Services.Feature
 
         private void MinimizeForegroundWindow()
         {
+            string currentWindow = activityTrackerFeature.ActiveWindow;
+            if (DistractionApps.ContainsKey(currentWindow))
+            {
+                DistractionApps[currentWindow]++;
+            }
+            else
+            {
+                DistractionApps.Add(currentWindow, 1);
+            }
+
             try
             {
                 lowLevelHandler.MinimizeWindow(activityTrackerFeature.ActiveWindow);
@@ -172,6 +186,11 @@ namespace WorkLifeBalance.Services.Feature
             {
                 Log.Error(ex.Message);
             }
+            DistractionsCount++;
+
+            Distractions = DistractionApps.OrderByDescending(kv => kv.Value).Take(3).Select((pair)=> pair.Key).ToArray();
+
+            OnDataUpdated.Invoke();
         }
 
         private void HandleRestingTime()
