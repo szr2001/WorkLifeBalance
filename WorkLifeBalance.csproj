@@ -25,6 +25,7 @@
     <None Remove="Assets\Cancel.png" />
     <None Remove="Assets\DataSheet.png" />
     <None Remove="Assets\Idle.png" />
+    <None Remove="Assets\info.png" />
     <None Remove="Assets\Minimize.png" />
     <None Remove="Assets\Rest.png" />
     <None Remove="Assets\Settings.png" />
@@ -75,6 +76,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Idle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\info.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Minimize.png">
