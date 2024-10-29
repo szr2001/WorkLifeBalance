@@ -211,6 +211,25 @@ namespace WorkLifeBalance.Services
             return retrivedDay;
         }
 
+        public async Task<int> GetAvgSecondsTimeOnly(string timeOnlyCollumn, string Month = "", string year = "")
+        {
+            int avgAmount;
+
+            string sql = @$"WITH ConvertedTimes AS 
+                    (
+                        SELECT 
+                        (CAST(SUBSTR({timeOnlyCollumn}, 1, 2) AS INTEGER) * 3600 +
+                        CAST(SUBSTR({timeOnlyCollumn}, 3, 2) AS INTEGER) * 60 +
+                        CAST(SUBSTR({timeOnlyCollumn}, 5, 2) AS INTEGER)) AS TotalSeconds, date FROM Days
+                    )
+                    SELECT COALESCE(AVG(TotalSeconds), 0) AS AvgSeconds
+                    FROM ConvertedTimes WHERE date LIKE @Template";
+
+            avgAmount = (await dataAccess.ReadDataAsync<int, dynamic>(sql, new { Template = $"{Month}%{year}" })).FirstOrDefault();
+
+            return avgAmount;
+        }
+
         public async Task<ProcessActivityData> GetMostActiveActivity(string activity, string Month = "", string year = "")
         {
             ProcessActivityData? retrivedDay = null;
