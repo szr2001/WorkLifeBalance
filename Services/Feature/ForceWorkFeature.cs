@@ -27,6 +27,7 @@ namespace WorkLifeBalance.Services.Feature
         private readonly ActivityTrackerFeature activityTrackerFeature;
         private readonly AppStateHandler appStateHandler;
         private readonly LowLevelHandler lowLevelHandler;
+        private readonly DataStorageFeature dataStorageFeature;
         private readonly IFeaturesServices featuresServices;
         private readonly IMainWindowDetailsService mainWindowDetailsService;
         private readonly ISoundService soundService;
@@ -35,11 +36,11 @@ namespace WorkLifeBalance.Services.Feature
         private Dictionary<string, int> DistractionApps = new();
  
         private int workIterations;
-        private int maxWarnings = 5;
+        private int maxWarnings = 4;
         private int warnings;
 
         private readonly TimeSpan minusOneSecond = new(0,0,-1);
-        public ForceWorkFeature(AppStateHandler appStateHandler, ActivityTrackerFeature activityTrackerFeature, LowLevelHandler lowLevelHandler, IFeaturesServices featuresServices, ISoundService soundService, IMainWindowDetailsService mainWindowDetailsService)
+        public ForceWorkFeature(AppStateHandler appStateHandler, ActivityTrackerFeature activityTrackerFeature, LowLevelHandler lowLevelHandler, IFeaturesServices featuresServices, ISoundService soundService, IMainWindowDetailsService mainWindowDetailsService, DataStorageFeature dataStorageFeature)
         {
             this.appStateHandler = appStateHandler;
             this.activityTrackerFeature = activityTrackerFeature;
@@ -47,6 +48,7 @@ namespace WorkLifeBalance.Services.Feature
             this.featuresServices = featuresServices;
             this.soundService = soundService;
             this.mainWindowDetailsService = mainWindowDetailsService;
+            this.dataStorageFeature = dataStorageFeature;
         }
 
         public void SetWorkTime(int hours, int minutes)
@@ -70,6 +72,14 @@ namespace WorkLifeBalance.Services.Feature
 
         protected override void OnFeatureAdded()
         {
+            //if there is no window set up as working, remove the feature
+            if(dataStorageFeature.AutoChangeData.WorkingStateWindows.Length == 0)
+            {
+                featuresServices.RemoveFeature<ForceWorkFeature>();
+                OnDataUpdated.Invoke();
+                return;
+            }
+
             //Reset values
             TotalWorkTimeRemaining = TotalWorkTimeSetting;
             CurrentStageTimeRemaining = WorkTimeSetting;
@@ -122,7 +132,11 @@ namespace WorkLifeBalance.Services.Feature
         private void HandleWorkingTime()
         {
             if (activityTrackerFeature.ActiveWindow == workLifeBalanceProcess ||
-                activityTrackerFeature.ActiveWindow == explorerProcess) return;
+                activityTrackerFeature.ActiveWindow == explorerProcess)
+            {
+                warnings = 0;
+                return;
+            }
 
             switch (appStateHandler.AppTimerState)
             {
@@ -163,6 +177,8 @@ namespace WorkLifeBalance.Services.Feature
 
         private void PunishUser()
         {
+            if (dataStorageFeature.AutoChangeData.WorkingStateWindows.Contains(activityTrackerFeature.ActiveWindow)) return;
+
             if(warnings >= maxWarnings)
             {
                 MinimizeForegroundWindow();
