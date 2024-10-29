@@ -10,9 +10,38 @@
                 <ResourceDictionary Source="Style/Buttons.xaml"/>
                 <ResourceDictionary Source="Style/PageVMBindings.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="FontFamily"
                         Value="Segoe UI" />
+            </Style>
+            
+            <Style TargetType="{x:Type ToolTip}">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding" Value="5"/>
+                <Setter Property="Placement" Value="Mouse"/>
+                <Setter Property="OverridesDefaultStyle" Value="True"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ToolTip}">
+                            <Border Background="{StaticResource WBlueHighlight}" 
+                                    CornerRadius="15" 
+                                    Padding="5">
+                                <StackPanel Orientation="Vertical">
+                                    <Image Source="/Assets/info.png" Width="25"/>
+                                    <TextBlock Text="{TemplateBinding Content}"
+                                               TextAlignment="Center" TextWrapping="Wrap"
+                                               MaxWidth="200"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"
+                                               FontWeight="Bold" FontSize="12"
+                                               Foreground="White"/>
+                                </StackPanel>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
         </ResourceDictionary>
         

@@ -28,7 +28,7 @@
                 </Button>
                 <Button Margin="5" Command="{Binding ConfigureAutoDetectCommand}"
                         Style="{StaticResource RoundedBtnStyle}"
-                        Height="30"
+                        Height="30" ToolTip="Specify working windows"
                         Template="{StaticResource SlightRoundedBtnTemp}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Assets/Automat.png" Width="25" Margin="1"/>
@@ -43,7 +43,7 @@
                 </Button>
                 <Button Margin="5" Command="{Binding OpenForceWorkCommand}"
                        Style="{StaticResource RoundedBtnStyle}"
-                       Height="30"
+                       Height="30" ToolTip="Pomodoro timer, calculate work and rest intervals"
                        Template="{StaticResource SlightRoundedBtnTemp}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Assets/Work.png" Width="30" Margin="1"/>
@@ -54,14 +54,6 @@
                                    FontWeight="Bold"
                                    FontSize="20"
                                    Foreground="White">
-                            <TextBlock.ToolTip>
-                                <ToolTip>
-                                    <DockPanel Width="50" Height="70">
-                                        <Image Source="/Assets/Work.png"/>
-                                        <TextBlock>Useful information goes here.</TextBlock>
-                                    </DockPanel>
-                                </ToolTip>
-                            </TextBlock.ToolTip>
                         </TextBlock>
                     </StackPanel>
                 </Button>

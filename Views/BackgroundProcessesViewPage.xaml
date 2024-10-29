@@ -21,7 +21,7 @@
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="0">
+            <StackPanel Orientation="Vertical" Margin="0,0,10,0" Grid.Column="1" Grid.Row="0">
                 
                 <TextBlock Text="Selected as 'Working'" FontWeight="Bold" 
                            FontSize="15" HorizontalAlignment="Center"
@@ -61,7 +61,7 @@
                     </ScrollViewer>
                 </Border>
             </StackPanel>
-            <StackPanel Orientation="Vertical" Grid.Column="1"
+            <StackPanel Orientation="Vertical" Margin="0,0,10,0" Grid.Column="1"
                         Grid.Row="1" Grid.RowSpan="2">
                 <TextBlock Text="Detected processes" FontWeight="Bold" 
                            FontSize="15" HorizontalAlignment="Center"

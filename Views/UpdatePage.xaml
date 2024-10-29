@@ -13,7 +13,7 @@
                    FontWeight="Bold" Text="{Binding Version}" Height="40"/>
         <Border Margin="10" Height="200" Background="{StaticResource WBlue}" CornerRadius="8">
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
-                <TextBlock Foreground="White" FontSize="20" Margin="5" FontWeight="Bold" 
+                <TextBlock Foreground="White" FontSize="20" Margin="5" FontWeight="Bold"
                            TextAlignment="Center" VerticalAlignment="Center"
                            Text="{Binding UpdateLog}" TextWrapping="Wrap" HorizontalAlignment="Center"/>
             </ScrollViewer>

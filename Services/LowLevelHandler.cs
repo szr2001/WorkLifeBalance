@@ -1,20 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
+using System.Windows;
 
 namespace WorkLifeBalance.Services
 {
     //low level handling of windows and mouse
     public class LowLevelHandler
     {
-        // Constants for the SetWindowLoc functions
-        public const uint SWP_NOSIZE = 0x0001;
-        public const uint SWP_NOZORDER = 0x0004;
-        //read mouse pos
         [DllImport("user32.dll")]
         private static extern bool GetCursorPos(out POINT lpPoint);
 
@@ -22,9 +20,14 @@ namespace WorkLifeBalance.Services
         private static extern bool AllocConsole();
 
         [DllImport("user32.dll")]
+        private static extern bool SetForegroundWindow(nint hWnd);
+
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindow(nint hWnd, int nCmdShow);
+
+        [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, nint lParam);
-        // Delegate for EnumWindows for callback
         private delegate bool EnumWindowsProc(nint hWnd, nint lParam);
 
         [DllImport("user32.dll")]
@@ -32,22 +35,10 @@ namespace WorkLifeBalance.Services
         public static extern bool IsWindowVisible(nint hWnd);
 
         [DllImport("user32.dll")]
-        private static extern nint FindWindow(string? lpClassName, string lpWindowName);
-
-        [DllImport("user32.dll")]
-        private static extern bool SetWindowPos(nint hWnd, nint hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
-
-        [DllImport("user32.dll")]
         private static extern nint GetForegroundWindow();
-
-
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        private static extern int GetWindowText(nint hWnd, StringBuilder lpString, int nMaxCount);
-
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern uint GetWindowThreadProcessId(nint hWnd, out uint lpdwProcessId);
-
 
         [DllImport("psapi.dll")]
         private static extern uint GetModuleFileNameEx(nint hProcess, nint hModule, StringBuilder lpBaseName, int nSize);
@@ -65,28 +56,64 @@ namespace WorkLifeBalance.Services
             AllocConsole();
         }
 
+        public void SetForeground(string process)
+        {
+            nint window = -1;
+            bool EnumWindowsCallback(nint hWnd, nint lParam)
+            {
+                // Get the process name associated with the window.
+                string processName = GetProcessname(hWnd);
+
+                // Check if they are the same process
+                if (processName.Equals(process, StringComparison.OrdinalIgnoreCase) && IsWindowVisible(hWnd))
+                {
+                    window = hWnd;
+                    return false;
+                }
+
+                return true;
+            }
+
+            // Enumerate through all windows.
+            EnumWindows(EnumWindowsCallback, nint.Zero);
+            if(window != -1)
+            {
+                SetForegroundWindow(window);
+            }
+        }
+
+        public void MinimizeWindow(string process)
+        {
+            List<nint> Windows = new();
+
+            // Callback function to find the window associated with the process name.
+            bool EnumWindowsCallback(nint hWnd, nint lParam)
+            {
+                // Get the process name associated with the window.
+                string processName = GetProcessname(hWnd);
+
+                // Check if they are the same process
+                if (processName.Equals(process, StringComparison.OrdinalIgnoreCase) && IsWindowVisible(hWnd))
+                {
+                    Windows.Add(hWnd);
+                }
+
+                return true;
+            }
+
+            // Enumerate through all windows.
+            EnumWindows(EnumWindowsCallback, nint.Zero);
+
+            //hide all windows found with that process
+            foreach(nint window in Windows)
+            {
+                ShowWindow(window, 2);
+            }
+        }
+
         public nint ReadForegroundWindow()
         {
             return GetForegroundWindow();
-        }
-
-        public void SetWindowLocation(nint windowHandle, int x, int y)
-        {
-            // Call SetWindowPos with the SWP_NOSIZE and SWP_NOZORDER flags
-            SetWindowPos(windowHandle, nint.Zero, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
-        }
-
-        public nint GetWindow(string? lpClassName, string lpWindowName)
-        {
-            return FindWindow(lpClassName, lpWindowName);
-        }
-
-        public string GetWindowTitle(nint hWnd)
-        {
-            const int nChars = 256;
-            StringBuilder windowTitle = new StringBuilder(nChars);
-            GetWindowText(hWnd, windowTitle, nChars);
-            return windowTitle.ToString();
         }
 
         public string GetProcessname(nint hWnd)
@@ -109,6 +136,17 @@ namespace WorkLifeBalance.Services
             HashSet<string> Appnames = new();
 
             List<nint> windows = new List<nint>();
+
+            bool EnumWindowsCallback(nint hWnd, nint lParam)
+            {
+                if (IsWindowVisible(hWnd))
+                {
+                    windows.Add(hWnd);
+                }
+
+                return true;
+            }
+
             EnumWindows(EnumWindowsCallback, GCHandle.ToIntPtr(GCHandle.Alloc(windows)));
 
             foreach (nint windowId in windows)
@@ -133,18 +171,6 @@ namespace WorkLifeBalance.Services
             WindowsPrincipal principal = new WindowsPrincipal(identity);
 
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
-        }
-
-        private bool EnumWindowsCallback(nint hWnd, nint lParam)
-        {
-            List<nint>? windows = GCHandle.FromIntPtr(lParam).Target as List<nint>;
-
-            if (IsWindowVisible(hWnd))
-            {
-                windows!.Add(hWnd);
-            }
-
-            return true;
         }
     }
 }
