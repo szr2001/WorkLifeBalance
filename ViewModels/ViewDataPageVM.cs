@@ -66,10 +66,17 @@ namespace WorkLifeBalance.ViewModels
             _ = CalculateData();
         }
 
-        private async Task CalculateData() //break code up
+        private async Task CalculateData()
         {
             DateOnly currentDate = dataStorageFeature.TodayData.DateC;
 
+            await CalculateCurrentMonth(currentDate);
+            await CalculatePreviousMonth(currentDate);
+            await CalculateRecordValues(currentDate);
+        }
+
+        private async Task CalculateCurrentMonth(DateOnly currentDate)
+        {
             DayData TempDay;
 
             //calculate current month records
@@ -92,9 +99,11 @@ namespace WorkLifeBalance.ViewModels
 
             CurrentMonthMostRested = TempDay.RestedAmmountC;
             CurrentMonthMostRestedDate = TempDay.DateC;
+        }
 
-
-
+        private async Task CalculatePreviousMonth(DateOnly currentDate)
+        {
+            DayData TempDay;
             //calculate previous month records
             DateTime previousMonthDateTime = currentDate.ToDateTime(new TimeOnly(0, 0, 0)).AddMonths(-1);
             DateOnly previousDate = DateOnly.FromDateTime(previousMonthDateTime);
@@ -108,8 +117,12 @@ namespace WorkLifeBalance.ViewModels
 
             PreviousMonthMostRested = TempDay.RestedAmmountC;
             PreviousMonthMostRestedDate = TempDay.DateC;
+        }
 
-
+        private async Task CalculateRecordValues(DateOnly currentDate)
+        {
+            DateTime previousMonthDateTime = currentDate.ToDateTime(new TimeOnly(0, 0, 0)).AddMonths(-1);
+            DateOnly previousDate = DateOnly.FromDateTime(previousMonthDateTime);
             //calculate total days in current and previous months
             CurrentMonthTotalDays = await databaseHandler.ReadCountInMonth(currentDate.ToString("MM"));
             PreviousMonthTotalDays = await databaseHandler.ReadCountInMonth(previousDate.ToString("MM"));
