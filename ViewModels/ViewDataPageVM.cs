@@ -103,20 +103,20 @@ namespace WorkLifeBalance.ViewModels
             try
             {
 
-            DayData TempDay;
+                DayData TempDay;
 
-            int MonthToporkedSeconds = await databaseHandler.GetAvgSecondsTimeOnly("WorkedAmmount", currentDate.ToString("MM"));
-            CurrentMonthAverageWorked = ConvertSecondsToTime(MonthToporkedSeconds);
+                int MonthToporkedSeconds = await databaseHandler.GetAvgSecondsTimeOnly("WorkedAmmount", currentDate.ToString("MM"));
+                CurrentMonthAverageWorked = ConvertSecondsToTime(MonthToporkedSeconds);
 
-            TempDay = await databaseHandler.GetMaxValue("WorkedAmmount", currentDate.ToString("MM"), currentDate.ToString("yyyy"));
-            CurrentMonthMostWorked = TempDay.WorkedAmmountC;
-            CurrentMonthMostWorkedDate = TempDay.DateC;
+                TempDay = await databaseHandler.GetMaxValue("WorkedAmmount", currentDate.ToString("MM"), currentDate.ToString("yyyy"));
+                CurrentMonthMostWorked = TempDay.WorkedAmmountC;
+                CurrentMonthMostWorkedDate = TempDay.DateC;
 
-            TempDay = await databaseHandler.GetMaxValue("RestedAmmount", currentDate.ToString("MM"), currentDate.ToString("yyyy"));
+                TempDay = await databaseHandler.GetMaxValue("RestedAmmount", currentDate.ToString("MM"), currentDate.ToString("yyyy"));
 
-            CurrentMonthMostRested = TempDay.RestedAmmountC;
-            CurrentMonthMostRestedDate = TempDay.DateC;
-            CurrentMonthTotalDays = await databaseHandler.ReadCountInMonth(currentDate.ToString("MM"));
+                CurrentMonthMostRested = TempDay.RestedAmmountC;
+                CurrentMonthMostRestedDate = TempDay.DateC;
+                CurrentMonthTotalDays = await databaseHandler.ReadCountInMonth(currentDate.ToString("MM"));
             }
             catch(Exception ex)
             {
@@ -157,7 +157,6 @@ namespace WorkLifeBalance.ViewModels
 
         private TimeOnly ConvertSecondsToTime(int seconds)
         {
-            TimeOnly time = new();
             int minutes = 0;
             int hours = 0;
             if (seconds != 0)
@@ -165,11 +164,9 @@ namespace WorkLifeBalance.ViewModels
                 minutes = seconds / 60;
                 seconds = seconds % 60;
 
-                hours = minutes == 0 ? 0 : minutes % 60;
+                hours = minutes == 0 ? 0 : minutes / 60;
                 minutes = minutes % 60;
             }
-
-
             return new TimeOnly(hours,minutes,seconds);
         }
 
