@@ -36,7 +36,7 @@ namespace WorkLifeBalance.Services.Feature
         private Dictionary<string, int> DistractionApps = new();
  
         private int workIterations;
-        private int maxWarnings = 4;
+        private int maxWarnings = 1;
         private int warnings;
 
         private readonly TimeSpan minusOneSecond = new(0,0,-1);
@@ -162,7 +162,12 @@ namespace WorkLifeBalance.Services.Feature
                     warnings = 0;
                     break;
                 case AppState.Resting:
-                    PunishUser();
+                    //handle when the app is transitioning from resting to working
+                    //there is a small time span when the app is in resting but the user is on the working apps
+                    if (!dataStorageFeature.AutoChangeData.WorkingStateWindows.Contains(activityTrackerFeature.ActiveWindow))
+                    {
+                        PunishUser();
+                    }
                     break;
                 case AppState.Idle:
                     WarnUser();
@@ -177,8 +182,6 @@ namespace WorkLifeBalance.Services.Feature
 
         private void PunishUser()
         {
-            if (dataStorageFeature.AutoChangeData.WorkingStateWindows.Contains(activityTrackerFeature.ActiveWindow)) return;
-
             if(warnings >= maxWarnings)
             {
                 MinimizeForegroundWindow();
@@ -192,14 +195,20 @@ namespace WorkLifeBalance.Services.Feature
 
         private void MinimizeForegroundWindow()
         {
-            string currentWindow = activityTrackerFeature.ActiveWindow;
-            if (DistractionApps.ContainsKey(currentWindow))
+            if(RequiredAppState == AppState.Working)
             {
-                DistractionApps[currentWindow]++;
-            }
-            else
-            {
-                DistractionApps.Add(currentWindow, 1);
+                string currentWindow = activityTrackerFeature.ActiveWindow;
+                if (DistractionApps.ContainsKey(currentWindow))
+                {
+                    DistractionApps[currentWindow]++;
+                }
+                else
+                {
+                    DistractionApps.Add(currentWindow, 1);
+                }
+                DistractionsCount++;
+                Distractions = DistractionApps.OrderByDescending(kv => kv.Value).Take(3).Select((pair)=> pair.Key).ToArray();
+                OnDataUpdated.Invoke();
             }
 
             try
@@ -212,11 +221,7 @@ namespace WorkLifeBalance.Services.Feature
             {
                 Log.Error(ex.Message);
             }
-            DistractionsCount++;
-
-            Distractions = DistractionApps.OrderByDescending(kv => kv.Value).Take(3).Select((pair)=> pair.Key).ToArray();
-
-            OnDataUpdated.Invoke();
+         
         }
 
         private void HandleRestingTime()
@@ -232,7 +237,12 @@ namespace WorkLifeBalance.Services.Feature
             switch (appStateHandler.AppTimerState)
             {
                 case AppState.Working:
-                    PunishUser();
+                    //handle when the app is transitioning from working to resting
+                    //there is a small time span when the app is in working but the user is on the resting apps
+                    if (dataStorageFeature.AutoChangeData.WorkingStateWindows.Contains(activityTrackerFeature.ActiveWindow))
+                    {
+                        PunishUser();
+                    }
                     break;
                 case AppState.Resting:
                     warnings = 0;

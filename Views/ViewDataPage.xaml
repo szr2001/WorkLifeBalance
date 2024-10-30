@@ -54,25 +54,6 @@
                                    FontSize="20"
                                    Foreground="White"/>
                     </Border>
-                    <Border Height="42"
-                            Margin="15,5,10,5"
-                            ToolTip="Record Work Ratio"
-                            CornerRadius="15"
-                            Background="{StaticResource WBlueShadow}">
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Text="Work Ratio"
-                                       TextAlignment="Center"
-                                       FontWeight="Bold"
-                                       FontSize="15"
-                                       Foreground="White"/>
-                            <TextBlock Text="{Binding RecordWorkRestRatio}"
-                                       TextAlignment="Center"
-                                       FontWeight="Bold"
-                                       FontSize="13"
-                                       Foreground="White"/>
-                        </StackPanel>
-
-                    </Border>
                     <Border Height="57"
                             Margin="15,5,10,5"
                             CornerRadius="15"
@@ -251,6 +232,24 @@
                         </StackPanel>
 
                     </Border>
+                    <Border Height="45"
+                            Margin="15,5,10,5"
+                            ToolTip="Previous Month Most Worked"
+                            CornerRadius="15"
+                            Background="{StaticResource WBlueShadow}">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Average Worked"
+                                       TextAlignment="Center"
+                                       FontWeight="Bold"
+                                       FontSize="15"
+                                       Foreground="White"/>
+                            <TextBlock Text="{Binding PreviousMonthAverageWorked, Converter={StaticResource TimeOnlyToStringConverter}}"
+                                       TextAlignment="Center"
+                                       FontWeight="Bold"
+                                       FontSize="13"
+                                       Foreground="White"/>
+                        </StackPanel>
+                    </Border>
                     <Border Height="57"
                             Margin="15,5,10,5"
                             ToolTip="Previous Month Most Rested"
@@ -357,6 +356,24 @@
                                        Foreground="White"/>
                         </StackPanel>
 
+                    </Border>
+                    <Border Height="45"
+                            Margin="15,5,10,5"
+                            ToolTip="Previous Month Most Worked"
+                            CornerRadius="15"
+                            Background="{StaticResource WBlueShadow}">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Average Worked"
+                                       TextAlignment="Center"
+                                       FontWeight="Bold"
+                                       FontSize="15"
+                                       Foreground="White"/>
+                            <TextBlock Text="{Binding CurrentMonthAverageWorked, Converter={StaticResource TimeOnlyToStringConverter}}"
+                                       TextAlignment="Center"
+                                       FontWeight="Bold"
+                                       FontSize="13"
+                                       Foreground="White"/>
+                        </StackPanel>
                     </Border>
                     <Border Height="57"
                             Margin="15,5,10,5"

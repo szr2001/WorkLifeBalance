@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Serilog;
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using System.Windows;
 using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
@@ -95,20 +97,20 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         public async Task CloseApp()
         {
-            //if (dataStorageFeature.IsClosingApp) return;
+            if (dataStorageFeature.IsClosingApp) return;
 
-            //dataStorageFeature.IsClosingApp = true;
+            dataStorageFeature.IsClosingApp = true;
 
-            ////CloseSideBar(null, null);
+            //CloseSideBar(null, null);
 
-            //await dataStorageFeature.SaveData();
+            await dataStorageFeature.SaveData();
 
-            //Log.Information("------------------App Shuting Down------------------");
+            Log.Information("------------------App Shuting Down------------------");
 
-            //await Log.CloseAndFlushAsync();
+            await Log.CloseAndFlushAsync();
 
-            //Application.Current.Shutdown();
-            //await Task.Delay(55);
+            Application.Current.Shutdown();
+            await Task.Delay(55);
         }
 
     }
