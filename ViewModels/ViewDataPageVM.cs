@@ -28,6 +28,8 @@ namespace WorkLifeBalance.ViewModels
         [ObservableProperty]
         private TimeOnly currentMonthMostWorked;
         [ObservableProperty]
+        private TimeOnly currentMonthAverageWorked;
+        [ObservableProperty]
         private DateOnly currentMonthMostWorkedDate;
 
         [ObservableProperty]
@@ -41,6 +43,8 @@ namespace WorkLifeBalance.ViewModels
         private int previousMonthTotalDays = 0;
         [ObservableProperty]
         private TimeOnly previousMonthMostWorked;
+        [ObservableProperty]
+        private TimeOnly previousMonthAverageWorked;
         [ObservableProperty]
         private DateOnly previousMonthMostWorkedDate;
 
@@ -64,6 +68,11 @@ namespace WorkLifeBalance.ViewModels
             _ = CalculateData();
         }
 
+        public override async Task OnPageOppeningAsync(object? args = null)
+        {
+            await CalculateData();
+        }
+
         private async Task CalculateData()
         {
             DateOnly currentDate = dataStorageFeature.TodayData.DateC;
@@ -72,7 +81,7 @@ namespace WorkLifeBalance.ViewModels
             await CalculateCurrentMonth(currentDate);
             await CalculatePreviousMonth(previousMonthDateTime);
             await CalculateRecord();
-            await CalculateWorkRatios(currentDate, previousMonthDateTime);
+            CalculateWorkRatios(currentDate, previousMonthDateTime);
         }
 
         private async Task CalculateRecord()
@@ -91,10 +100,15 @@ namespace WorkLifeBalance.ViewModels
         }
         private async Task CalculateCurrentMonth(DateOnly currentDate)
         {
+            try
+            {
+
             DayData TempDay;
 
-            TempDay = await databaseHandler.GetMaxValue("WorkedAmmount", currentDate.ToString("MM"), currentDate.ToString("yyyy"));
+            int MonthToporkedSeconds = await databaseHandler.GetAvgSecondsTimeOnly("WorkedAmmount", currentDate.ToString("MM"));
+            CurrentMonthAverageWorked = ConvertSecondsToTime(MonthToporkedSeconds);
 
+            TempDay = await databaseHandler.GetMaxValue("WorkedAmmount", currentDate.ToString("MM"), currentDate.ToString("yyyy"));
             CurrentMonthMostWorked = TempDay.WorkedAmmountC;
             CurrentMonthMostWorkedDate = TempDay.DateC;
 
@@ -103,14 +117,21 @@ namespace WorkLifeBalance.ViewModels
             CurrentMonthMostRested = TempDay.RestedAmmountC;
             CurrentMonthMostRestedDate = TempDay.DateC;
             CurrentMonthTotalDays = await databaseHandler.ReadCountInMonth(currentDate.ToString("MM"));
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         private async Task CalculatePreviousMonth(DateOnly previousDate)
         {
             DayData TempDay;
 
-            TempDay = await databaseHandler.GetMaxValue("WorkedAmmount", previousDate.ToString("MM"), previousDate.ToString("yyyy"));
+            int MonthToporkedSeconds = await databaseHandler.GetAvgSecondsTimeOnly("WorkedAmmount", previousDate.ToString("MM"));
+            PreviousMonthAverageWorked = ConvertSecondsToTime(MonthToporkedSeconds);
 
+            TempDay = await databaseHandler.GetMaxValue("WorkedAmmount", previousDate.ToString("MM"), previousDate.ToString("yyyy"));
             PreviousMonthMostWorked = TempDay.WorkedAmmountC;
             PreviousMonthMostWorkedDate = TempDay.DateC;
 
@@ -121,17 +142,46 @@ namespace WorkLifeBalance.ViewModels
             PreviousMonthTotalDays = await databaseHandler.ReadCountInMonth(previousDate.ToString("MM"));
         }
 
-        private async Task CalculateWorkRatios(DateOnly currentDate, DateOnly previousDate)
+        private void CalculateWorkRatios(DateOnly currentDate, DateOnly previousDate)
         {
-            float MonthToporkedSeconds = await databaseHandler.GetAvgSecondsTimeOnly("WorkedAmmount", previousDate.ToString("MM"));
+            float MonthToporkedSeconds = ConvertTimeToSeconds(PreviousMonthAverageWorked);
 
             PreviousMonthWorkRestRatio = MonthToporkedSeconds == 0 ? 0 : MonthToporkedSeconds / 86400;
             PreviousMonthWorkRestRatio = (float)Math.Round(PreviousMonthWorkRestRatio, 2);
 
-            MonthToporkedSeconds = await databaseHandler.GetAvgSecondsTimeOnly("WorkedAmmount", currentDate.ToString("MM"));
+            MonthToporkedSeconds = ConvertTimeToSeconds(CurrentMonthAverageWorked);
 
             CurrentMonthWorkRestRatio = MonthToporkedSeconds == 0 ? 0 : MonthToporkedSeconds / 86400;
             CurrentMonthWorkRestRatio = (float)Math.Round(CurrentMonthWorkRestRatio, 2);
+        }
+
+        private TimeOnly ConvertSecondsToTime(int seconds)
+        {
+            TimeOnly time = new();
+            int minutes = 0;
+            int hours = 0;
+            if (seconds != 0)
+            {
+                minutes = seconds / 60;
+                seconds = seconds % 60;
+
+                hours = minutes == 0 ? 0 : minutes % 60;
+                minutes = minutes % 60;
+            }
+
+
+            return new TimeOnly(hours,minutes,seconds);
+        }
+
+        private int ConvertTimeToSeconds(TimeOnly time)
+        {
+            int seconds = 0;
+
+            seconds += time.Second;
+            seconds += time.Minute * 60;
+            seconds += time.Hour * 60 * 60;
+
+            return seconds;
         }
 
         [RelayCommand]
