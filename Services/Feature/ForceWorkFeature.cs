@@ -36,7 +36,7 @@ namespace WorkLifeBalance.Services.Feature
         private Dictionary<string, int> DistractionApps = new();
  
         private int workIterations;
-        private int maxWarnings = 4;
+        private int maxWarnings = 1;
         private int warnings;
 
         private readonly TimeSpan minusOneSecond = new(0,0,-1);

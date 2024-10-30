@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -7,12 +8,19 @@ using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
 using System.Windows;
+using WorkLifeBalance.Services.Feature;
 
 namespace WorkLifeBalance.Services
 {
     //low level handling of windows and mouse
     public class LowLevelHandler
     {
+        private readonly DataStorageFeature dataStorageFeature;
+        public LowLevelHandler(DataStorageFeature dataStorageFeature)
+        {
+            this.dataStorageFeature = dataStorageFeature;
+        }
+
         [DllImport("user32.dll")]
         private static extern bool GetCursorPos(out POINT lpPoint);
 
@@ -80,6 +88,19 @@ namespace WorkLifeBalance.Services
             {
                 SetForegroundWindow(window);
             }
+        }
+
+        public void RestartApplicationWithAdmin()
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = dataStorageFeature.Settings.AppExePath,
+                UseShellExecute = true,
+                Verb = "runas"
+            };
+
+            Process.Start(psi);
+            App.Current.Shutdown();
         }
 
         public void MinimizeWindow(string process)
