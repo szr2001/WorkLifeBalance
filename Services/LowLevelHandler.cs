@@ -64,6 +64,11 @@ namespace WorkLifeBalance.Services
             AllocConsole();
         }
 
+        public void OpenLink(string link)
+        {
+            Process.Start(new ProcessStartInfo(link) { UseShellExecute = true });
+        }
+
         public void SetForeground(string process)
         {
             nint window = -1;
