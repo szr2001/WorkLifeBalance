@@ -57,7 +57,7 @@
                     <Border Height="57"
                             Margin="15,5,10,5"
                             CornerRadius="15"
-                            ToolTip="Record Most Worked Ever"
+                            ToolTip="The day you worked the most, and the work amount"
                             Background="{StaticResource WBlueShadow}">
                         <StackPanel Orientation="Vertical">
                             <TextBlock Text="Most Worked"
@@ -79,7 +79,7 @@
                         
                     </Border>
                     <Border Height="57"
-                            ToolTip="Record Most Rested Ever"
+                            ToolTip="The day you rested the most, and the rest amount"
                             Margin="15,5,10,5"
                             CornerRadius="15"
                             Background="{StaticResource WBlueShadow}">
@@ -100,9 +100,7 @@
                                        FontSize="13"
                                        Foreground="White"/>
                         </StackPanel>
-
                     </Border>
-
                 </StackPanel>
             </Border>
             <Border Grid.Column="0"
@@ -191,7 +189,7 @@
                     </Border>
                     <Border Height="42"
                             Margin="15,5,10,5"
-                            ToolTip="Previous Month Work Ratio."
+                            ToolTip="Previous Month Work Ratio, the average amount of work divided by 24 hours"
                             CornerRadius="15"
                             Background="{StaticResource WBlueShadow}">
                         <StackPanel Orientation="Vertical">
@@ -210,7 +208,7 @@
                     </Border>
                     <Border Height="57"
                             Margin="15,5,10,5"
-                            ToolTip="Previous Month Most Worked"
+                            ToolTip="The day you worked the most in the last month, and the work amount"
                             CornerRadius="15"
                             Background="{StaticResource WBlueShadow}">
                         <StackPanel Orientation="Vertical">
@@ -234,7 +232,7 @@
                     </Border>
                     <Border Height="45"
                             Margin="15,5,10,5"
-                            ToolTip="Previous Month Most Worked"
+                            ToolTip="The averate amount of work last month"
                             CornerRadius="15"
                             Background="{StaticResource WBlueShadow}">
                         <StackPanel Orientation="Vertical">
@@ -252,7 +250,7 @@
                     </Border>
                     <Border Height="57"
                             Margin="15,5,10,5"
-                            ToolTip="Previous Month Most Rested"
+                            ToolTip="The day you rested the most in the last month, and the rest amount"
                             CornerRadius="15"
                             Background="{StaticResource WBlueShadow}">
                         <StackPanel Orientation="Vertical">
@@ -276,7 +274,7 @@
                     </Border>
                     <Border Height="42"
                             Margin="15,5,10,5"
-                            ToolTip="Previous Month Total Recorded Days"
+                            ToolTip="Total recorded days in the previous month"
                             CornerRadius="15"
                             Background="{StaticResource WBlueShadow}">
                         <StackPanel Orientation="Vertical">
@@ -315,7 +313,7 @@
                                    Foreground="White"/>
                     </Border>
                     <Border Height="42"
-                            ToolTip="Current Month Work Ratio."
+                            ToolTip="Current Month Work Ratio, the average amount of work divided by 24 hours"
                             Margin="15,5,10,5"
                             CornerRadius="15"
                             Background="{StaticResource WBlueShadow}">
@@ -335,7 +333,7 @@
                     </Border>
                     <Border Height="57"
                             Margin="15,5,10,5"
-                            ToolTip="Current Month Most Worked"
+                            ToolTip="The day you worked the most in the current month, and the work amount"
                             CornerRadius="15"
                             Background="{StaticResource WBlueShadow}">
                         <StackPanel Orientation="Vertical">
@@ -359,7 +357,7 @@
                     </Border>
                     <Border Height="45"
                             Margin="15,5,10,5"
-                            ToolTip="Previous Month Most Worked"
+                            ToolTip="The averate amount of work in the current month"
                             CornerRadius="15"
                             Background="{StaticResource WBlueShadow}">
                         <StackPanel Orientation="Vertical">
@@ -377,7 +375,7 @@
                     </Border>
                     <Border Height="57"
                             Margin="15,5,10,5"
-                            ToolTip="Current Month Most Rested"
+                            ToolTip="The day you rested the most in the current month, and the rest amount"
                             CornerRadius="15"
                             Background="{StaticResource WBlueShadow}">
                         <StackPanel Orientation="Vertical">
@@ -401,7 +399,7 @@
                     </Border>
                     <Border Height="42"
                             Margin="15,5,10,5"
-                            ToolTip="Current Month Total Recorded Days"
+                            ToolTip="Total recorded days in the current month"
                             CornerRadius="15"
                             Background="{StaticResource WBlueShadow}">
                         <StackPanel Orientation="Vertical">
@@ -416,7 +414,6 @@
                                        FontSize="13"
                                        Foreground="White"/>
                         </StackPanel>
-
                     </Border>
                 </StackPanel>
             </Border>

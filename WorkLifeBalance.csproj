@@ -10,6 +10,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <StartupObject></StartupObject>
     <AnalysisLevel>6.0-recommended</AnalysisLevel>
+    <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);Microsoft.Extensions.Configuration.Binder.SourceGeneration</InterceptorsPreviewNamespaces>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,6 +28,8 @@
     <None Remove="Assets\Idle.png" />
     <None Remove="Assets\info.png" />
     <None Remove="Assets\Minimize.png" />
+    <None Remove="Assets\money.png" />
+    <None Remove="Assets\notebook.png" />
     <None Remove="Assets\Rest.png" />
     <None Remove="Assets\Settings.png" />
     <None Remove="Assets\Sounds\Error.mp3" />
@@ -82,6 +85,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Minimize.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\money.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\notebook.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Rest.png">

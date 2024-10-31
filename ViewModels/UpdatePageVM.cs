@@ -4,6 +4,7 @@ using Serilog;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using WorkLifeBalance.Models;
+using WorkLifeBalance.Services;
 
 namespace WorkLifeBalance.ViewModels
 {
@@ -16,9 +17,10 @@ namespace WorkLifeBalance.ViewModels
         private string updateLog = "Error";
 
         private VersionData? Vdata;
-
-        public UpdatePageVM()
+        private readonly LowLevelHandler lowLevelHandler;
+        public UpdatePageVM(LowLevelHandler lowLevelHandler)
         {
+            this.lowLevelHandler = lowLevelHandler;
             PageName = "Update Available";
             PageHeight = 400;
             PageWidth = 350;
@@ -46,7 +48,7 @@ namespace WorkLifeBalance.ViewModels
         {
             if(Vdata != null)
             {
-                Process.Start(new ProcessStartInfo(Vdata.DownloadLink!) { UseShellExecute = true });
+                lowLevelHandler.OpenLink(Vdata.DownloadLink!);
                 App.Current.Shutdown();
             }
         }

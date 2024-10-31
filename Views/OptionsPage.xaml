@@ -57,6 +57,38 @@
                         </TextBlock>
                     </StackPanel>
                 </Button>
+                <Button Margin="5" Command="{Binding OpenFeedbackCommand}"
+                        Style="{StaticResource RoundedBtnStyle}"
+                        Height="30" ToolTip="App is still new, if you have any feedback or found a bug, I'm all ears!"
+                        Template="{StaticResource SlightRoundedBtnTemp}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Assets/notebook.png" Width="30" Margin="1"/>
+                        <TextBlock Text="Feedback"
+                                   TextAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontWeight="Bold"
+                                   FontSize="20"
+                                   Foreground="White">
+                        </TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Margin="5" Command="{Binding OpenDonationsCommand}"
+                        Style="{StaticResource RoundedBtnStyle}"
+                        Height="30" ToolTip="If you like the app and can afford don't forget to donate"
+                        Template="{StaticResource SlightRoundedBtnTemp}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Assets/money.png" Width="30" Margin="1"/>
+                        <TextBlock Text="Donations"
+                                   TextAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontWeight="Bold"
+                                   FontSize="20"
+                                   Foreground="White">
+                        </TextBlock>
+                    </StackPanel>
+                </Button>
             </StackPanel>
         </ScrollViewer>
     </Border>

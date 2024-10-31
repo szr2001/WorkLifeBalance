@@ -221,7 +221,6 @@ namespace WorkLifeBalance.Services.Feature
             {
                 Log.Error(ex.Message);
             }
-         
         }
 
         private void HandleRestingTime()
