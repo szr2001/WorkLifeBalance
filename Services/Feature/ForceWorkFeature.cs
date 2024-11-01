@@ -14,6 +14,7 @@ namespace WorkLifeBalance.Services.Feature
         public AppState RequiredAppState { get; private set; } = AppState.Working;
         public string[] Distractions { get; private set; } = Array.Empty<string>();
         public int DistractionsCount { get; private set; }
+        public int MaxWarnings { get; private set; } = 3;
 
         public TimeOnly TotalWorkTimeSetting { get; private set; }
         public TimeOnly WorkTimeSetting { get; private set; }
@@ -36,7 +37,6 @@ namespace WorkLifeBalance.Services.Feature
         private Dictionary<string, int> DistractionApps = new();
  
         private int workIterations;
-        private int maxWarnings = 1;
         private int warnings;
 
         private readonly TimeSpan minusOneSecond = new(0,0,-1);
@@ -51,9 +51,10 @@ namespace WorkLifeBalance.Services.Feature
             this.dataStorageFeature = dataStorageFeature;
         }
 
-        public void SetWorkTime(int hours, int minutes)
+        public void SetWorkTime(int hours, int minutes, int maxWarnings)
         {
             WorkTimeSetting = new(hours, minutes);
+            MaxWarnings = maxWarnings;
         }
         public void SetRestTime(int hours, int minutes)
         {
@@ -182,7 +183,7 @@ namespace WorkLifeBalance.Services.Feature
 
         private void PunishUser()
         {
-            if(warnings >= maxWarnings)
+            if(warnings >= MaxWarnings)
             {
                 MinimizeForegroundWindow();
                 warnings = 0;
