@@ -38,7 +38,7 @@ namespace WorkLifeBalance.Services.Feature
  
         private int workIterations;
         private int warnings;
-
+        private bool distractionDetected; 
         private readonly TimeSpan minusOneSecond = new(0,0,-1);
         public ForceWorkFeature(AppStateHandler appStateHandler, ActivityTrackerFeature activityTrackerFeature, LowLevelHandler lowLevelHandler, IFeaturesServices featuresServices, ISoundService soundService, IMainWindowDetailsService mainWindowDetailsService, DataStorageFeature dataStorageFeature)
         {
@@ -82,6 +82,7 @@ namespace WorkLifeBalance.Services.Feature
             }
 
             //Reset values
+            distractionDetected = false;
             TotalWorkTimeRemaining = TotalWorkTimeSetting;
             CurrentStageTimeRemaining = WorkTimeSetting;
             Distractions = Array.Empty<string>();
@@ -92,7 +93,7 @@ namespace WorkLifeBalance.Services.Feature
             warnings = 0;
             mainWindowDetailsService.OpenDetailsPageWith<ForceWorkMainMenuDetailsPageVM>();
         }
-
+        
         protected override void OnFeatureRemoved()
         {
             mainWindowDetailsService.CloseWindow();
@@ -135,6 +136,7 @@ namespace WorkLifeBalance.Services.Feature
             if (activityTrackerFeature.ActiveWindow == workLifeBalanceProcess ||
                 activityTrackerFeature.ActiveWindow == explorerProcess)
             {
+                distractionDetected = false;
                 warnings = 0;
                 return;
             }
@@ -161,6 +163,7 @@ namespace WorkLifeBalance.Services.Feature
                     TotalWorkTimeRemaining = TotalWorkTimeRemaining.Add(minusOneSecond);
                     CurrentStageTimeRemaining = CurrentStageTimeRemaining.Add(minusOneSecond);
                     warnings = 0;
+                    distractionDetected = false;
                     break;
                 case AppState.Resting:
                     //handle when the app is transitioning from resting to working
@@ -176,8 +179,55 @@ namespace WorkLifeBalance.Services.Feature
             }
         }
 
+        private void HandleRestingTime()
+        {
+            if (CurrentStageTimeRemaining == TimeOnly.MinValue)
+            {
+                RequiredAppState = AppState.Working;
+                CurrentStageTimeRemaining = WorkTimeSetting;
+                return;
+            }
+
+            switch (appStateHandler.AppTimerState)
+            {
+                case AppState.Working:
+                    //handle when the app is transitioning from working to resting
+                    //there is a small time span when the app is in working but the user is on the resting apps
+                    if (dataStorageFeature.AutoChangeData.WorkingStateWindows.Contains(activityTrackerFeature.ActiveWindow))
+                    {
+                        PunishUser();
+                        return;
+                    }
+                    break;
+                case AppState.Resting:
+                    warnings = 0;
+                    break;
+                case AppState.Idle:
+                    WarnUser();
+                    break;
+            }
+            CurrentStageTimeRemaining = CurrentStageTimeRemaining.Add(minusOneSecond);
+        }
+
         private void WarnUser()
         {
+            if (RequiredAppState == AppState.Working && distractionDetected == false)
+            {
+                string currentWindow = activityTrackerFeature.ActiveWindow;
+                if (DistractionApps.ContainsKey(currentWindow))
+                {
+                    DistractionApps[currentWindow]++;
+                }
+                else
+                {
+                    DistractionApps.Add(currentWindow, 1);
+                }
+                DistractionsCount++;
+                Distractions = DistractionApps.OrderByDescending(kv => kv.Value).Take(3).Select((pair) => pair.Key).ToArray();
+                OnDataUpdated.Invoke();
+                distractionDetected = true;
+            }
+
             soundService.PlaySound(ISoundService.SoundType.Warning);
         }
 
@@ -196,22 +246,6 @@ namespace WorkLifeBalance.Services.Feature
 
         private void MinimizeForegroundWindow()
         {
-            if(RequiredAppState == AppState.Working)
-            {
-                string currentWindow = activityTrackerFeature.ActiveWindow;
-                if (DistractionApps.ContainsKey(currentWindow))
-                {
-                    DistractionApps[currentWindow]++;
-                }
-                else
-                {
-                    DistractionApps.Add(currentWindow, 1);
-                }
-                DistractionsCount++;
-                Distractions = DistractionApps.OrderByDescending(kv => kv.Value).Take(3).Select((pair)=> pair.Key).ToArray();
-                OnDataUpdated.Invoke();
-            }
-
             try
             {
                 lowLevelHandler.MinimizeWindow(activityTrackerFeature.ActiveWindow);
@@ -221,35 +255,6 @@ namespace WorkLifeBalance.Services.Feature
             catch(Exception ex)
             {
                 Log.Error(ex.Message);
-            }
-        }
-
-        private void HandleRestingTime()
-        {
-            if (CurrentStageTimeRemaining == TimeOnly.MinValue)
-            {
-                RequiredAppState = AppState.Working;
-                CurrentStageTimeRemaining = WorkTimeSetting;
-                return;
-            }
-            CurrentStageTimeRemaining = CurrentStageTimeRemaining.Add(minusOneSecond);
-
-            switch (appStateHandler.AppTimerState)
-            {
-                case AppState.Working:
-                    //handle when the app is transitioning from working to resting
-                    //there is a small time span when the app is in working but the user is on the resting apps
-                    if (dataStorageFeature.AutoChangeData.WorkingStateWindows.Contains(activityTrackerFeature.ActiveWindow))
-                    {
-                        PunishUser();
-                    }
-                    break;
-                case AppState.Resting:
-                    warnings = 0;
-                    break;
-                case AppState.Idle:
-                    WarnUser();
-                    break;
             }
         }
     }
