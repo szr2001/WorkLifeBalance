@@ -18,7 +18,7 @@
             <RowDefinition/>
             <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
-        <Grid Visibility="{Binding IsFeatureActiv, Converter= {StaticResource BoolToCollapsedConverter}, FallbackValue=Collapsed}">
+        <Grid Visibility="{Binding IsFeatureActiv, Converter= {StaticResource BoolToCollapsedConverter}, FallbackValue=Visible}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition/>
@@ -28,7 +28,7 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Border Margin="5" Grid.ColumnSpan="2"
+            <Border Margin="5" Grid.ColumnSpan="1"
                     CornerRadius="15"
                     Background="{StaticResource WBlue}">
                 <StackPanel Orientation="Vertical" Margin="10">
@@ -62,6 +62,26 @@
                                   ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
                                   Margin="0,2,0,0"/>
                     </StackPanel>
+                </StackPanel>
+            </Border>
+            <Border Margin="5" CornerRadius="15" Grid.Row ="1"
+                    Background="{StaticResource WBlue}">
+                <StackPanel Orientation="Vertical" Margin="10">
+                    <TextBlock Text="Max Warnings"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               FontSize="25"
+                               Foreground="White"/>
+                        <ComboBox Width="55"
+                                  Height="30"
+                                  FontSize="15"
+                                  FontWeight="Bold"
+                                  SelectedItem="{Binding MaxWarnings, Mode=TwoWay}"
+                                  ItemsSource="{Binding Hours}"
+                                  Style="{StaticResource CustomComboBoxStyle}"
+                                  ItemContainerStyle ="{StaticResource CustomComboBoxItemStyle}"
+                                  Margin="0,2,0,0"/>
                 </StackPanel>
             </Border>
             <Border Margin="5" Grid.Column="1"
@@ -100,7 +120,7 @@
                     </StackPanel>
                 </StackPanel>
             </Border>
-            <Border Margin="5" Grid.Row="1"
+            <Border Margin="5" Grid.Column="1"
                     CornerRadius="15"
                     Background="{StaticResource WBlue}">
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10">
@@ -193,7 +213,7 @@
                 </StackPanel>
             </Border>
         </Grid>
-        <Grid Visibility="{Binding IsFeatureActiv, Converter= {StaticResource BoolToVisibleConverter}, FallbackValue=Visible}">
+        <Grid Visibility="{Binding IsFeatureActiv, Converter= {StaticResource BoolToVisibleConverter}, FallbackValue=Collapsed}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition/>
@@ -273,13 +293,27 @@
                             </StackPanel>
                         </Border>
                         <Border Margin="5" CornerRadius="15" Grid.Column="1" Grid.Row="1"
-                                Background="{StaticResource WBlueShadow}" Grid.ColumnSpan="2">
+                                Background="{StaticResource WBlueShadow}">
                             <StackPanel Orientation="Vertical" Margin="2">
-                                <TextBlock Text="Long Rest Interval" HorizontalAlignment ="Center"
+                                <TextBlock Text="Long Rest Interval" 
+                                           HorizontalAlignment ="Center"
                                            TextAlignment="Center" VerticalAlignment ="Center"
-                                           FontWeight="Bold" Margin="1" FontSize="15"
+                                           FontWeight="Bold" Margin="1" FontSize="11"
                                            Foreground="White"/>
                                 <TextBlock Text="{Binding LongRestIntervalSetting}" HorizontalAlignment ="Center"
+                                           TextAlignment="Center" VerticalAlignment ="Center"
+                                           FontWeight="Bold" FontSize="15"
+                                           Foreground="White"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Margin="5" CornerRadius="15" Grid.Column="2" Grid.Row="1"
+                                Background="{StaticResource WBlueShadow}">
+                            <StackPanel Orientation="Vertical" Margin="2">
+                                <TextBlock Text="Max Warnings" HorizontalAlignment ="Center"
+                                           TextAlignment="Center" VerticalAlignment ="Center"
+                                           FontWeight="Bold" Margin="1" FontSize="13"
+                                           Foreground="White"/>
+                                <TextBlock Text="{Binding MaxWarnings}" HorizontalAlignment ="Center"
                                            TextAlignment="Center" VerticalAlignment ="Center"
                                            FontWeight="Bold" FontSize="15"
                                            Foreground="White"/>

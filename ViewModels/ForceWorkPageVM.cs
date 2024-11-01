@@ -50,6 +50,9 @@ namespace WorkLifeBalance.ViewModels
         private bool isFeatureActiv;
 
         [ObservableProperty]
+        private int maxWarnings = 3;
+
+        [ObservableProperty]
         private TimeOnly totalWorkTimeSetting;
         [ObservableProperty]
         private TimeOnly workTimeSetting;
@@ -126,7 +129,7 @@ namespace WorkLifeBalance.ViewModels
             }
             else
             {
-                forceWorkFeature.SetWorkTime(WorkHours, WorkMinutes);
+                forceWorkFeature.SetWorkTime(WorkHours, WorkMinutes, MaxWarnings);
                 forceWorkFeature.SetRestTime(RestHours, RestMinutes);
                 forceWorkFeature.SetTotalWorkTime(TotalWorkHours, TotalWorkMinutes);
                 forceWorkFeature.SetLongRestTime(LongRestHours, LongRestMinutes, LongRestInterval);
