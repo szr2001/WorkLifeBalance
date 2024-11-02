@@ -33,6 +33,7 @@
     <None Remove="Assets\Rest.png" />
     <None Remove="Assets\Settings.png" />
     <None Remove="Assets\Sounds\Error.mp3" />
+    <None Remove="Assets\Sounds\Finish.mp3" />
     <None Remove="Assets\Sounds\Termination.mp3" />
     <None Remove="Assets\Work.png" />
     <None Remove="Assets\WorkLifeBalanceLogo.png" />
@@ -100,6 +101,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Sounds\Error.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\Finish.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Sounds\Termination.mp3">

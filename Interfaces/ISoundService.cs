@@ -13,7 +13,8 @@ namespace WorkLifeBalance.Interfaces
         public enum SoundType 
         {
             Warning,
-            Termination
+            Termination,
+            Finish
         }
     }
 }

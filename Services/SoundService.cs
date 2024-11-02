@@ -21,8 +21,12 @@ namespace WorkLifeBalance.Services
             MediaPlayer Termination = new();
             Termination.Open(new Uri("Assets/Sounds/Termination.mp3", UriKind.Relative));
 
+            MediaPlayer Finish = new();
+            Finish.Open(new Uri("Assets/Sounds/Finish.mp3", UriKind.Relative));
+
             Sounds.Add(ISoundService.SoundType.Warning, Warning);
             Sounds.Add(ISoundService.SoundType.Termination, Termination);
+            Sounds.Add(ISoundService.SoundType.Finish, Finish);
         }
 
         public void PlaySound(ISoundService.SoundType type)
