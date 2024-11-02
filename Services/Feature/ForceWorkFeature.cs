@@ -40,6 +40,8 @@ namespace WorkLifeBalance.Services.Feature
         private int warnings;
         private bool distractionDetected; 
         private readonly TimeSpan minusOneSecond = new(0,0,-1);
+        private int defaultDelay = 6000;
+        private int delay;
         public ForceWorkFeature(AppStateHandler appStateHandler, ActivityTrackerFeature activityTrackerFeature, LowLevelHandler lowLevelHandler, IFeaturesServices featuresServices, ISoundService soundService, IMainWindowDetailsService mainWindowDetailsService, DataStorageFeature dataStorageFeature)
         {
             this.appStateHandler = appStateHandler;
@@ -58,7 +60,6 @@ namespace WorkLifeBalance.Services.Feature
         }
         public void SetRestTime(int hours, int minutes)
         {
-
             RestTimeSetting = new(hours, minutes);
         }
         public void SetLongRestTime(int hours, int minutes, int interval)
@@ -91,6 +92,7 @@ namespace WorkLifeBalance.Services.Feature
             DistractionsCount = 0;
             workIterations = 0;
             warnings = 0;
+            delay = 0;
             mainWindowDetailsService.OpenDetailsPageWith<ForceWorkMainMenuDetailsPageVM>();
         }
         
@@ -104,10 +106,15 @@ namespace WorkLifeBalance.Services.Feature
             return TriggerForceWork;
         }
 
-        private Task TriggerForceWork()
+        private async Task TriggerForceWork()
         {
+            if (IsFeatureRuning) return;
+
+            IsFeatureRuning = true;
+
+            await Task.Delay(delay);
             ForceWorkLogic();
-            return Task.CompletedTask;
+            IsFeatureRuning = false;
         }
 
         private void ForceWorkLogic()
@@ -119,6 +126,7 @@ namespace WorkLifeBalance.Services.Feature
                 return;
             }
 
+            delay = 0;
             switch (RequiredAppState)
             {
                 case AppState.Working:
@@ -133,6 +141,25 @@ namespace WorkLifeBalance.Services.Feature
 
         private void HandleWorkingTime()
         {
+            if (CurrentStageTimeRemaining == TimeOnly.MinValue)
+            {
+                workIterations++;
+                soundService.PlaySound(ISoundService.SoundType.Finish);
+                RequiredAppState = AppState.Resting;
+                delay = defaultDelay;
+
+                if (workIterations >= LongRestIntervalSetting)
+                {
+                    CurrentStageTimeRemaining = LongRestTimeSetting;
+                    workIterations = 0;
+                }
+                else
+                {
+                    CurrentStageTimeRemaining = RestTimeSetting;
+                }
+                return;
+            }
+
             if (activityTrackerFeature.ActiveWindow == workLifeBalanceProcess ||
                 activityTrackerFeature.ActiveWindow == explorerProcess)
             {
@@ -141,25 +168,10 @@ namespace WorkLifeBalance.Services.Feature
                 return;
             }
 
+
             switch (appStateHandler.AppTimerState)
             {
                 case AppState.Working:
-                    if(CurrentStageTimeRemaining == TimeOnly.MinValue)
-                    {
-                        workIterations++;
-                        RequiredAppState = AppState.Resting;
-
-                        if (workIterations >= LongRestIntervalSetting)
-                        {
-                            CurrentStageTimeRemaining = LongRestTimeSetting;
-                            workIterations = 0;
-                        }
-                        else
-                        {
-                            CurrentStageTimeRemaining = RestTimeSetting;
-                        }
-                        return;
-                    }
                     TotalWorkTimeRemaining = TotalWorkTimeRemaining.Add(minusOneSecond);
                     CurrentStageTimeRemaining = CurrentStageTimeRemaining.Add(minusOneSecond);
                     warnings = 0;
@@ -185,6 +197,8 @@ namespace WorkLifeBalance.Services.Feature
             {
                 RequiredAppState = AppState.Working;
                 CurrentStageTimeRemaining = WorkTimeSetting;
+                soundService.PlaySound(ISoundService.SoundType.Finish);
+                delay = defaultDelay;
                 return;
             }
 
