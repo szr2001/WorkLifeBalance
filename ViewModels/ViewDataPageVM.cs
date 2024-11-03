@@ -116,7 +116,11 @@ namespace WorkLifeBalance.ViewModels
 
                 CurrentMonthMostRested = TempDay.RestedAmmountC;
                 CurrentMonthMostRestedDate = TempDay.DateC;
-                CurrentMonthTotalDays = await databaseHandler.ReadCountInMonth(currentDate.ToString("MM"));
+                CurrentMonthTotalDays = await databaseHandler.ReadCountInMonth
+                    (
+                        currentDate.ToString("MM"), 
+                        currentDate.ToString("yyyy")
+                    );
             }
             catch(Exception ex)
             {
@@ -139,7 +143,11 @@ namespace WorkLifeBalance.ViewModels
 
             PreviousMonthMostRested = TempDay.RestedAmmountC;
             PreviousMonthMostRestedDate = TempDay.DateC;
-            PreviousMonthTotalDays = await databaseHandler.ReadCountInMonth(previousDate.ToString("MM"));
+            PreviousMonthTotalDays = await databaseHandler.ReadCountInMonth
+                    (
+                        previousDate.ToString("MM"),
+                        previousDate.ToString("yyyy")
+                    );
         }
 
         private void CalculateWorkRatios(DateOnly currentDate, DateOnly previousDate)
