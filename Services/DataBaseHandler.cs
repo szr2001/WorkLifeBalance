@@ -144,12 +144,12 @@ namespace WorkLifeBalance.Services
             return retrivedDay;
         }
 
-        public async Task<int> ReadCountInMonth(string month)
+        public async Task<int> ReadCountInMonth(string month, string year)
         {
             int affectedRows = 0;
             string sql = @$"SELECT COUNT(*) AS row_count
                             FROM Days WHERE date LIKE @Pattern";
-            affectedRows = await dataAccess.ExecuteAsync(sql, new { Pattern = $"{month}%%" });
+            affectedRows = await dataAccess.ExecuteAsync(sql, new { Pattern = $"{month}%{year}" });
 
             return affectedRows;
         }
