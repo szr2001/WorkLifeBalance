@@ -263,7 +263,7 @@ namespace WorkLifeBalance.Services.Feature
             try
             {
                 lowLevelHandler.MinimizeWindow(activityTrackerFeature.ActiveWindow);
-                lowLevelHandler.SetForeground(explorerProcess);
+                lowLevelHandler.SetForeground(workLifeBalanceProcess);
                 soundService.PlaySound(ISoundService.SoundType.Termination);
             }
             catch(Exception ex)
