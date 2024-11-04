@@ -158,7 +158,7 @@ namespace WorkLifeBalance.Services
                 	"SaveInterval"	INTEGER,
                 	"AutoDetectInterval"	INTEGER,
                 	"AutoDetectIdleInterval"	INTEGER,
-                	"Version"	TEXT NOT NULL DEFAULT "{dataStorageFeature.Settings.Version}");
+                    "Version"	TEXT);
                 """;
             await sqlDataAccess.ExecuteAsync(createSettingsSQL, new { });
 
@@ -168,6 +168,8 @@ namespace WorkLifeBalance.Services
                 	"WorkingStateWindows"	TEXT NOT NULL UNIQUE);
                 """;
             await sqlDataAccess.ExecuteAsync(createWorkingWindowsSQL, new { });
+
+            await UpdateDatabaseVersion("2.0.1");
         }
 
         private async Task Update2_0_0To2_0_1()
