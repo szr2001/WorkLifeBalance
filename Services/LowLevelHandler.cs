@@ -95,19 +95,6 @@ namespace WorkLifeBalance.Services
             }
         }
 
-        public void RestartApplicationWithAdmin()
-        {
-            var psi = new ProcessStartInfo
-            {
-                FileName = dataStorageFeature.Settings.AppExePath,
-                UseShellExecute = true,
-                Verb = "runas"
-            };
-
-            Process.Start(psi);
-            App.Current.Shutdown();
-        }
-
         public void MinimizeWindow(string process)
         {
             List<nint> Windows = new();
@@ -189,14 +176,6 @@ namespace WorkLifeBalance.Services
             Vector2 pos = new Vector2(p.X, p.Y);
 
             return pos;
-        }
-
-        public bool IsRunningAsAdmin()
-        {
-            WindowsIdentity identity = WindowsIdentity.GetCurrent();
-            WindowsPrincipal principal = new WindowsPrincipal(identity);
-
-            return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
     }
 }

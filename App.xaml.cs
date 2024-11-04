@@ -89,12 +89,6 @@ namespace WorkLifeBalance
 
             LowLevelHandler lowHandler = _servicesProvider.GetRequiredService<LowLevelHandler>();
 
-            if (!lowHandler.IsRunningAsAdmin())
-            {
-                lowHandler.RestartApplicationWithAdmin();
-                return;
-            }
-
             bool isDebug = _configuration.GetValue<bool>("Debug");
             if (isDebug)
             {
