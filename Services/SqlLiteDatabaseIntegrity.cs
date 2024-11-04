@@ -24,10 +24,11 @@ namespace WorkLifeBalance.Services
 
             DatabaseUpdates = new()
             {
-                { "2.0.0", Create2_0_0V},
+                { "2.0.0", Update2_0_0To2_0_1},
                 { "Beta", UpdateBetaTo2_0_0V}
             };
         }
+
 
         public async Task CheckDatabaseIntegrity()
         {
@@ -39,7 +40,7 @@ namespace WorkLifeBalance.Services
             else
             {
                 Log.Warning("Database file not found, genereting one");
-                await DatabaseUpdates[dataStorageFeature.Settings.Version]();
+                await CreateLatestDatabase();
             }
             Log.Information($"Database is up to date!");
         }
@@ -67,7 +68,7 @@ namespace WorkLifeBalance.Services
                     //if we don't have an update for that version, it means the databse is really old or bugged
                     //so we delete it and call the update with the current versiom, which will just create the databse
                     DeleteDatabaseFile();
-                    await DatabaseUpdates[dataStorageFeature.Settings.Version]();
+                    await CreateLatestDatabase();
                 }
             }
         }
@@ -125,6 +126,54 @@ namespace WorkLifeBalance.Services
         {
             return File.Exists(databasePath);
         }
+        
+        private async Task CreateLatestDatabase()
+        {
+            string createActivitySQL =
+                """
+                    CREATE TABLE "Activity" 
+                    (
+                	"Date"	TEXT NOT NULL,
+                	"Process"	TEXT NOT NULL,
+                	"TimeSpent"	TEXT NOT NULL);
+                """;
+            await sqlDataAccess.ExecuteAsync(createActivitySQL, new { });
+
+            string createDaysSQL =
+                """
+                    CREATE TABLE "Days" (
+                	"Date"	TEXT NOT NULL UNIQUE,
+                	"WorkedAmmount"	TEXT NOT NULL DEFAULT '000000',
+                    "IdleAmmount" TEXT NOT NULL DEFAULT '000000',
+                	"RestedAmmount"	TEXT NOT NULL DEFAULT '000000',
+                	PRIMARY KEY("Date"));
+                """;
+            await sqlDataAccess.ExecuteAsync(createDaysSQL, new { });
+
+            string createSettingsSQL =
+                $"""
+                    CREATE TABLE "Settings" (
+                	"LastTimeOpened"	TEXT,
+                	"StartWithWindows"	INTEGER,
+                	"SaveInterval"	INTEGER,
+                	"AutoDetectInterval"	INTEGER,
+                	"AutoDetectIdleInterval"	INTEGER,
+                	"Version"	TEXT NOT NULL DEFAULT "{dataStorageFeature.Settings.Version}");
+                """;
+            await sqlDataAccess.ExecuteAsync(createSettingsSQL, new { });
+
+            string createWorkingWindowsSQL =
+                """
+                    CREATE TABLE "WorkingWindows" (
+                	"WorkingStateWindows"	TEXT NOT NULL UNIQUE);
+                """;
+            await sqlDataAccess.ExecuteAsync(createWorkingWindowsSQL, new { });
+        }
+
+        private async Task Update2_0_0To2_0_1()
+        {
+            await UpdateDatabaseVersion("2.0.1");
+        }
 
         private async Task UpdateBetaTo2_0_0V()
         {
@@ -159,52 +208,6 @@ namespace WorkLifeBalance.Services
             await sqlDataAccess.ExecuteAsync(sqlRemoveStartupCornerTable, new { });
             await sqlDataAccess.ExecuteAsync(sqlRemoveDetectStateBoolTable, new { });
             await sqlDataAccess.ExecuteAsync(sqlRemoveDetectIdleBoolTable, new { });
-        }
-
-        private async Task Create2_0_0V()
-        {
-            string createActivitySQL =
-                """
-                    CREATE TABLE "Activity" 
-                    (
-                	"Date"	TEXT NOT NULL,
-                	"Process"	TEXT NOT NULL,
-                	"TimeSpent"	TEXT NOT NULL);
-                """;
-            await sqlDataAccess.ExecuteAsync(createActivitySQL, new { });
-
-            string createDaysSQL =
-                """
-                    CREATE TABLE "Days" (
-                	"Date"	TEXT NOT NULL UNIQUE,
-                	"WorkedAmmount"	TEXT NOT NULL DEFAULT '000000',
-                    "IdleAmmount" TEXT NOT NULL DEFAULT '000000',
-                	"RestedAmmount"	TEXT NOT NULL DEFAULT '000000',
-                	PRIMARY KEY("Date"));
-                """;
-            await sqlDataAccess.ExecuteAsync(createDaysSQL, new { });
-
-            string createSettingsSQL =
-                """
-                    CREATE TABLE "Settings" (
-                	"LastTimeOpened"	TEXT,
-                	"StartWithWindows"	INTEGER,
-                	"SaveInterval"	INTEGER,
-                	"AutoDetectInterval"	INTEGER,
-                	"AutoDetectIdleInterval"	INTEGER,
-                	"Version"	TEXT);
-                """;
-            await sqlDataAccess.ExecuteAsync(createSettingsSQL, new { });
-
-            string createWorkingWindowsSQL =
-                """
-                    CREATE TABLE "WorkingWindows" (
-                	"WorkingStateWindows"	TEXT NOT NULL UNIQUE);
-                """;
-            await sqlDataAccess.ExecuteAsync(createWorkingWindowsSQL, new { });
-
-
-            await UpdateDatabaseVersion("2.0.0");
         }
     }
 }
