@@ -13,6 +13,7 @@ namespace WorkLifeBalance.Services
         private readonly SqlDataAccess sqlDataAccess;
         private readonly DataStorageFeature dataStorageFeature;
         private readonly Dictionary<string, Func<Task>> DatabaseUpdates;
+        private string directoryPath = "";
         private string databasePath = "";
 
         public SqlLiteDatabaseIntegrity(SqlDataAccess sqlDataAccess, DataStorageFeature dataStorageFeature)
@@ -20,10 +21,12 @@ namespace WorkLifeBalance.Services
             this.sqlDataAccess = sqlDataAccess;
             this.dataStorageFeature = dataStorageFeature;
 
-            databasePath = @$"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\WorkLifeBalance\RecordedData.db";
+            directoryPath = @$"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\WorkLifeBalance";
+            databasePath = @$"{directoryPath}\RecordedData.db";
 
             DatabaseUpdates = new()
             {
+                { "2.0.1", Update2_0_1To2_0_2},
                 { "2.0.0", Update2_0_0To2_0_1},
                 { "Beta", UpdateBetaTo2_0_0V}
             };
@@ -124,6 +127,11 @@ namespace WorkLifeBalance.Services
 
         private bool IsDatabasePresent()
         {
+            if (!Directory.Exists(directoryPath))
+            {
+                Log.Warning($"{directoryPath} does not exist, creating it");
+                Directory.CreateDirectory(directoryPath);
+            }
             return File.Exists(databasePath);
         }
         
@@ -169,7 +177,12 @@ namespace WorkLifeBalance.Services
                 """;
             await sqlDataAccess.ExecuteAsync(createWorkingWindowsSQL, new { });
 
-            await UpdateDatabaseVersion("2.0.1");
+            await UpdateDatabaseVersion(dataStorageFeature.Settings.Version);
+        }
+
+        private async Task Update2_0_1To2_0_2()
+        {
+            await UpdateDatabaseVersion("2.0.2");
         }
 
         private async Task Update2_0_0To2_0_1()
