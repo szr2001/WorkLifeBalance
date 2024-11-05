@@ -249,7 +249,7 @@ namespace WorkLifeBalance.Services.Feature
         {
             if(warnings >= MaxWarnings)
             {
-                MinimizeForegroundWindow();
+                MinimizeApps();
                 warnings = 0;
                 return;
             }
@@ -258,12 +258,11 @@ namespace WorkLifeBalance.Services.Feature
             warnings++;
         }
 
-        private void MinimizeForegroundWindow()
+        private void MinimizeApps()
         {
             try
             {
-                lowLevelHandler.MinimizeWindow(activityTrackerFeature.ActiveWindow);
-                lowLevelHandler.SetForeground(workLifeBalanceProcess);
+                lowLevelHandler.MinimizeAllApps();
                 soundService.PlaySound(ISoundService.SoundType.Termination);
             }
             catch(Exception ex)
