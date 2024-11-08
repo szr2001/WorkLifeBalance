@@ -99,7 +99,7 @@ namespace WorkLifeBalance.ViewModels
             {
                 WshShell shell = new();
                 IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(startupfolder);
-                shortcut.TargetPath = dataStorageFeature.Settings.AppDirectory;
+                shortcut.TargetPath = dataStorageFeature.Settings.AppExePath;
                 shortcut.WorkingDirectory = dataStorageFeature.Settings.AppDirectory;
                 shortcut.Save();
             }

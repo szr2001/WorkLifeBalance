@@ -5,8 +5,8 @@ namespace WorkLifeBalance.Models
 {
     public class AppSettingsData
     {
-        public readonly string Version = "2.0.2";
-        public string AppName;
+        public readonly string Version = "2.0.3";
+        public readonly string AppName = "WorkLifeBalance";
         public string AppDirectory;
         public string AppExePath;
         public string LastTimeOpened { get; set; } = "";
@@ -22,7 +22,6 @@ namespace WorkLifeBalance.Models
 
         public AppSettingsData()
         {
-            AppName = "WorkLifeBalance";
             AppDirectory = AppDomain.CurrentDomain.BaseDirectory;
             AppExePath = $"{AppDirectory}/{AppName}.exe";
         }

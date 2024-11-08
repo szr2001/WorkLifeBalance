@@ -26,6 +26,7 @@ namespace WorkLifeBalance.Services
 
             DatabaseUpdates = new()
             {
+                { "2.0.2", Update2_0_2To2_0_3},
                 { "2.0.1", Update2_0_1To2_0_2},
                 { "2.0.0", Update2_0_0To2_0_1},
                 { "Beta", UpdateBetaTo2_0_0V}
@@ -178,6 +179,11 @@ namespace WorkLifeBalance.Services
             await sqlDataAccess.ExecuteAsync(createWorkingWindowsSQL, new { });
 
             await UpdateDatabaseVersion(dataStorageFeature.Settings.Version);
+        }
+
+        private async Task Update2_0_2To2_0_3()
+        {
+            await UpdateDatabaseVersion("2.0.3");
         }
 
         private async Task Update2_0_1To2_0_2()
