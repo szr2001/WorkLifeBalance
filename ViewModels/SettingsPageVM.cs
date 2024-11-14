@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WorkLifeBalance.Interfaces;
+using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
 using File = System.IO.File;
 using Path = System.IO.Path;
@@ -32,10 +33,12 @@ namespace WorkLifeBalance.ViewModels
 
         private readonly DataStorageFeature dataStorageFeature;
         private readonly IFeaturesServices featuresServices;
-        public SettingsPageVM(DataStorageFeature dataStorageFeature, IFeaturesServices featuresServices)
+        private readonly LowLevelHandler lowLevelHandler;
+        public SettingsPageVM(DataStorageFeature dataStorageFeature, IFeaturesServices featuresServices, LowLevelHandler lowLevelHandler)
         {
             this.featuresServices = featuresServices;
             this.dataStorageFeature = dataStorageFeature;
+            this.lowLevelHandler = lowLevelHandler;
             PageHeight = 320;
             PageWidth = 250;
             PageName = "Settings";
@@ -81,35 +84,13 @@ namespace WorkLifeBalance.ViewModels
 
         private void ApplyStartToWindows()
         {
-            string startupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), $"{dataStorageFeature.Settings.Version}.lnk");
-
             if (dataStorageFeature.Settings.StartWithWindowsC)
             {
-                CreateShortcut(startupFolderPath);
+                lowLevelHandler.CreateStartupShortcut();
             }
             else
             {
-                DeleteShortcut(startupFolderPath);
-            }
-        }
-
-        private void CreateShortcut(string startupfolder)
-        {
-            if (!File.Exists(startupfolder))
-            {
-                WshShell shell = new();
-                IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(startupfolder);
-                shortcut.TargetPath = dataStorageFeature.Settings.AppExePath;
-                shortcut.WorkingDirectory = dataStorageFeature.Settings.AppDirectory;
-                shortcut.Save();
-            }
-        }
-
-        private void DeleteShortcut(string startupfolder)
-        {
-            if (File.Exists(startupfolder))
-            {
-                File.Delete(startupfolder);
+                lowLevelHandler.DeleteStartupShortcut();
             }
         }
     }

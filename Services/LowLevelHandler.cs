@@ -1,14 +1,17 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using IWshRuntimeLibrary;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using System.Security.Principal;
+using Microsoft.Win32.TaskScheduler;
 using System.Text;
-using System.Windows;
 using WorkLifeBalance.Services.Feature;
+
+using File = System.IO.File;
+using Serilog;
 
 namespace WorkLifeBalance.Services
 {
@@ -80,6 +83,50 @@ namespace WorkLifeBalance.Services
             keybd_event(VK_D, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
             // win up
             keybd_event(VK_LWIN, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
+        }
+
+        public void CreateStartupShortcut()
+        {
+            try
+            {
+                using (TaskService taskService = new TaskService())
+                {
+                    DeleteStartupShortcut();
+
+                    TaskDefinition taskDefinition = taskService.NewTask();
+                    taskDefinition.RegistrationInfo.Description = $"Run {dataStorageFeature.Settings.AppName} at windows startup as administrator to start recording activity.";
+
+                    taskDefinition.Triggers.Add(new LogonTrigger());
+
+                    taskDefinition.Actions.Add(new ExecAction(dataStorageFeature.Settings.AppExePath, null, dataStorageFeature.Settings.AppDirectory));
+
+                    taskDefinition.Settings.StopIfGoingOnBatteries = false;
+                    taskDefinition.Settings.StartWhenAvailable = true;
+                    taskDefinition.Settings.RestartInterval = TimeSpan.FromMinutes(1);
+                    taskDefinition.Settings.RestartCount = 3;
+                    taskDefinition.Settings.ExecutionTimeLimit = TimeSpan.Zero;
+
+                    taskDefinition.Principal.RunLevel = TaskRunLevel.Highest;
+                    taskService.RootFolder.RegisterTaskDefinition(dataStorageFeature.Settings.AppName, taskDefinition);
+                }
+            }
+            catch(Exception ex)
+            {
+                Log.Error(ex.Message);
+                Log.Error(ex,"");
+            }
+        }
+
+        public void DeleteStartupShortcut()
+        {
+            using (TaskService taskService = new TaskService())
+            {
+                Task existingTask = taskService.FindTask(dataStorageFeature.Settings.AppName);
+                if (existingTask != null)
+                {
+                    taskService.RootFolder.DeleteTask(dataStorageFeature.Settings.AppName);
+                }
+            }
         }
 
         public nint ReadForegroundWindow()
