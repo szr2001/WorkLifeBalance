@@ -25,11 +25,13 @@ namespace WorkLifeBalance.ViewModels
 
         private readonly ForceWorkFeature forceWorkFeature;
         private readonly ISecondWindowService secondWindowService;
-        
-        public ForceWorkMainMenuDetailsPageVM(ForceWorkFeature forceWorkFeature, ISecondWindowService secondWindowService)
+        private readonly IFeaturesServices featuresServices;
+
+        public ForceWorkMainMenuDetailsPageVM(ForceWorkFeature forceWorkFeature, ISecondWindowService secondWindowService, IFeaturesServices featuresServices)
         {
             this.forceWorkFeature = forceWorkFeature;
             this.secondWindowService = secondWindowService;
+            this.featuresServices = featuresServices;
         }
 
         public override Task OnPageOppeningAsync(object? args = null)
@@ -42,6 +44,7 @@ namespace WorkLifeBalance.ViewModels
         public override Task OnPageClosingAsync()
         {
             forceWorkFeature.OnDataUpdated -= UpdateDataFromForceWork;
+            featuresServices.RemoveFeature<ForceWorkFeature>();
             return Task.CompletedTask;
         }
 

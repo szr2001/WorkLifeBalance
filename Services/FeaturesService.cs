@@ -17,6 +17,7 @@ namespace WorkLifeBalance.Services
 
         public void AddFeature<TFeature>() where TFeature : FeatureBase
         {
+            if (IsFeaturePresent<TFeature>()) return;
             FeatureBase feature = _featureFactory.Invoke(typeof(TFeature));
             _appTimer.Subscribe(feature.AddFeature());
         }
@@ -29,6 +30,7 @@ namespace WorkLifeBalance.Services
 
         public void RemoveFeature<TFeature>() where TFeature : FeatureBase
         {
+            if (!IsFeaturePresent<TFeature>()) return;
             FeatureBase feature = _featureFactory.Invoke(typeof(TFeature));
             _appTimer.UnSubscribe(feature.RemoveFeature());
         }
