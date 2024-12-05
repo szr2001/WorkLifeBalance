@@ -9,20 +9,35 @@ namespace WorkLifeBalance.Services.Feature
     {
         private readonly IMainWindowDetailsService mainWindowDetailsService;
         private readonly DataStorageFeature dataStorageFeature;
-        public ForceStateFeature(IMainWindowDetailsService mainWindowDetailsService, DataStorageFeature dataStorageFeature)
+        private readonly IFeaturesServices featuresServices;
+        private readonly AppStateHandler appStateHandler;
+        public ForceStateFeature(IMainWindowDetailsService mainWindowDetailsService, DataStorageFeature dataStorageFeature, IFeaturesServices featuresServices, AppStateHandler appStateHandler)
         {
             this.mainWindowDetailsService = mainWindowDetailsService;
             this.dataStorageFeature = dataStorageFeature;
+            this.featuresServices = featuresServices;
+            this.appStateHandler = appStateHandler;
         }
 
         protected override void OnFeatureAdded()
         {
+            featuresServices.RemoveFeature<IdleCheckerFeature>();
+            featuresServices.RemoveFeature<StateCheckerFeature>();
+            
             dataStorageFeature.Settings.IsForceStateActive = true;
             mainWindowDetailsService.OpenDetailsPageWith<ForceStateMainMenuDetailsPageVM>();
         }
 
+        public void SetForcedAppState(AppState state)
+        {
+            appStateHandler.SetAppState(state);
+        }
+
         protected override void OnFeatureRemoved()
         {
+            featuresServices.AddFeature<IdleCheckerFeature>();
+            featuresServices.AddFeature<StateCheckerFeature>();
+
             dataStorageFeature.Settings.IsForceStateActive = false;
             mainWindowDetailsService.CloseWindow();
         }
