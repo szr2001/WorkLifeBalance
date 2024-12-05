@@ -5,6 +5,7 @@ using System.Linq;
 using System.IO;
 using Serilog;
 using System;
+using Microsoft.Extensions.Configuration;
 
 namespace WorkLifeBalance.Services
 {
@@ -12,26 +13,41 @@ namespace WorkLifeBalance.Services
     {
         private readonly SqlDataAccess sqlDataAccess;
         private readonly DataStorageFeature dataStorageFeature;
+        private readonly LowLevelHandler lowLevelHandler;
+        private readonly IConfiguration configuration;
         private readonly Dictionary<string, Func<Task>> DatabaseUpdates;
-        private string directoryPath = "";
-        private string databasePath = "";
+        private string dbdirectoryPath = "";
+        private string dbPath = "";
 
-        public SqlLiteDatabaseIntegrity(SqlDataAccess sqlDataAccess, DataStorageFeature dataStorageFeature)
+        public SqlLiteDatabaseIntegrity(SqlDataAccess sqlDataAccess, DataStorageFeature dataStorageFeature, LowLevelHandler lowLevelHandler, IConfiguration configuration)
         {
             this.sqlDataAccess = sqlDataAccess;
             this.dataStorageFeature = dataStorageFeature;
 
-            directoryPath = @$"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\WorkLifeBalance";
-            databasePath = @$"{directoryPath}\RecordedData.db";
+            string? overridedDirectory = configuration.GetValue<string>("OverrideDbDirectory");
+
+            if(string.IsNullOrEmpty(overridedDirectory))
+            {
+                dbdirectoryPath = @$"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\WorkLifeBalance";
+            }
+            else
+            {
+                dbdirectoryPath = overridedDirectory;
+            }
+
+            dbPath = @$"{dbdirectoryPath}\RecordedData.db";
 
             DatabaseUpdates = new()
             {
+                { "2.0.4", Update2_0_4To2_0_5},
                 { "2.0.3", Update2_0_3To2_0_4},
                 { "2.0.2", Update2_0_2To2_0_3},
                 { "2.0.1", Update2_0_1To2_0_2},
                 { "2.0.0", Update2_0_0To2_0_1},
                 { "Beta", UpdateBetaTo2_0_0V}
             };
+            this.lowLevelHandler = lowLevelHandler;
+            this.configuration = configuration;
         }
 
 
@@ -69,20 +85,29 @@ namespace WorkLifeBalance.Services
                 }
                 else
                 {
-                    Log.Error($"Database corupted, re-genereting it");
+                    Log.Error($"Database corupted, marking it as Corupted and genereting a new one");
                     //if we don't have an update for that version, it means the databse is really old or bugged
-                    //so we delete it and call the update with the current versiom, which will just create the databse
-                    DeleteDatabaseFile();
+                    //so we mark it as such and call the update with the current versiom, which will just create the databse
+                    MarkDbAsCorupted();
                     await CreateLatestDatabase();
                 }
             }
         }
 
-        private void DeleteDatabaseFile()
+        private void MarkDbAsCorupted()
         {
-            if (File.Exists(databasePath))
+            try
             {
-                File.Delete(databasePath);
+                if (File.Exists(dbPath))
+                {
+                    File.Copy(dbPath, @$"{dbdirectoryPath}\RecordedData_{DateTime.UtcNow:yyyy_MM_dd_HH_mm_ss}_Corrupted.db", false);
+
+                    File.Delete(dbPath);
+                }
+            }
+            catch(Exception ex)
+            {
+                Log.Error(ex.Message);
             }
         }
 
@@ -129,12 +154,12 @@ namespace WorkLifeBalance.Services
 
         private bool IsDatabasePresent()
         {
-            if (!Directory.Exists(directoryPath))
+            if (!Directory.Exists(dbdirectoryPath))
             {
-                Log.Warning($"{directoryPath} does not exist, creating it");
-                Directory.CreateDirectory(directoryPath);
+                Log.Warning($"{dbdirectoryPath} does not exist, creating it");
+                Directory.CreateDirectory(dbdirectoryPath);
             }
-            return File.Exists(databasePath);
+            return File.Exists(dbPath);
         }
         
         private async Task CreateLatestDatabase()
@@ -168,6 +193,7 @@ namespace WorkLifeBalance.Services
                 	"SaveInterval"	INTEGER,
                 	"AutoDetectInterval"	INTEGER,
                 	"AutoDetectIdleInterval"	INTEGER,
+                	"MinimizeToTray"	INTEGER,
                     "Version"	TEXT);
                 """;
             await sqlDataAccess.ExecuteAsync(createSettingsSQL, new { });
@@ -182,13 +208,21 @@ namespace WorkLifeBalance.Services
             await UpdateDatabaseVersion(dataStorageFeature.Settings.Version);
         }
 
+        private async Task Update2_0_4To2_0_5()
+        {
+            lowLevelHandler.DeleteStartupShortcut();
+            string sqlCreateMinimizeToTrayTable =
+                """
+                    ALTER TABLE Settings
+                    ADD COLUMN MinimizeToTray INT NOT NULL DEFAULT 0;
+                """;
+            await sqlDataAccess.ExecuteAsync(sqlCreateMinimizeToTrayTable, new { });
+            await UpdateDatabaseVersion("2.0.5");
+        }
+
         private async Task Update2_0_3To2_0_4()
         {
-            string startupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), "2.0.3.lnk");
-            if (File.Exists(startupFolderPath))
-            {
-                File.Delete(startupFolderPath);
-            }
+            lowLevelHandler.DeleteStartupShortcut();
             await UpdateDatabaseVersion("2.0.4");
         }
 

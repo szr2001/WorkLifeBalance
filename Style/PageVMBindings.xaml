@@ -35,4 +35,7 @@
     <DataTemplate DataType="{x:Type viewModel:ForceWorkMainMenuDetailsPageVM}">
         <views:ForceWorkMainMenuDetailsPage/>
     </DataTemplate>
+    <DataTemplate DataType="{x:Type viewModel:CloseWarningPageVM}">
+        <views:CloseWarningPage/>
+    </DataTemplate>
 </ResourceDictionary>

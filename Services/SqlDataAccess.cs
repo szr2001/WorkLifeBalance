@@ -6,14 +6,32 @@ using System.Linq;
 using Serilog;
 using System;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 
 namespace WorkLifeBalance.Services
 {
     public class SqlDataAccess
     {
+        private readonly IConfiguration configuration;
         private readonly SemaphoreSlim _semaphore = new(1);
         //use config to read the connection string
-        private readonly string ConnectionString = @$"Data Source={Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\WorkLifeBalance\RecordedData.db;Version=3;";
+        private string ConnectionString = "";
+
+        public SqlDataAccess(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+
+            string? overridedDirectory = configuration.GetValue<string>("OverrideDbDirectory");
+
+            if (string.IsNullOrEmpty(overridedDirectory))
+            {
+                ConnectionString = @$"Data Source={Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\WorkLifeBalance\RecordedData.db;Version=3;";
+            }
+            else
+            {
+                ConnectionString = @$"Data Source={overridedDirectory}\RecordedData.db;Version=3;";
+            }
+        }
 
         public async Task<int> ExecuteAsync<T>(string sql, T parameters)
         {

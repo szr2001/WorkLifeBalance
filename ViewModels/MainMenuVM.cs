@@ -97,22 +97,7 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         public void CloseApp()
         {
-            if (dataStorageFeature.IsClosingApp) return;
-
-            dataStorageFeature.IsClosingApp = true;
-
-            Log.Information("------------------App Shuting Down------------------");
-            
-            _ = Task.Run(async () => 
-            {
-                await dataStorageFeature.SaveData();
-                await Log.CloseAndFlushAsync();
-
-                App.Current.Dispatcher.Invoke(() =>
-                {
-                    Application.Current.Shutdown();
-                });
-            });
+            secondWindowService.OpenWindowWith<CloseWarningPageVM>();
         }
     }
 }

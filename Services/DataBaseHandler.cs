@@ -97,7 +97,8 @@ namespace WorkLifeBalance.Services
                         StartWithWindows = @StartWithWindows,
                         SaveInterval = @SaveInterval,
                         AutoDetectInterval = @AutoDetectInterval,
-                        AutoDetectIdleInterval = @AutoDetectIdleInterval
+                        AutoDetectIdleInterval = @AutoDetectIdleInterval,
+                        MinimizeToTray = @MinimizeToTray
                         LIMIT 1";
 
             await dataAccess.WriteDataAsync(sql, sett);
