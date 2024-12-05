@@ -1,13 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using WorkLifeBalance.Services.Feature;
-using WorkLifeBalance.ViewModels.Base;
 
 namespace WorkLifeBalance.ViewModels
 {

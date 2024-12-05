@@ -2,8 +2,6 @@
 using System.Threading.Tasks;
 using WorkLifeBalance.Models;
 using System.Linq;
-using System;
-using Dapper;
 
 namespace WorkLifeBalance.Services
 {
@@ -97,8 +95,7 @@ namespace WorkLifeBalance.Services
                         StartWithWindows = @StartWithWindows,
                         SaveInterval = @SaveInterval,
                         AutoDetectInterval = @AutoDetectInterval,
-                        AutoDetectIdleInterval = @AutoDetectIdleInterval,
-                        MinimizeToTray = @MinimizeToTray
+                        AutoDetectIdleInterval = @AutoDetectIdleInterval
                         LIMIT 1";
 
             await dataAccess.WriteDataAsync(sql, sett);

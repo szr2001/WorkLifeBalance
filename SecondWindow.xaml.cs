@@ -17,18 +17,10 @@ namespace WorkLifeBalance
 
         public SecondWindow(SecondWindowVM viewModel)
         {
+            Topmost = true;
             ViewModel = viewModel;
             DataContext = ViewModel;
             ViewModel.OnShowView += Show;
-
-            //maybe fixes the problem where the user clicks to view a page
-            //but the second window is behind something or minimized
-            //ViewModel.OnShowView += () =>
-            //{
-            //    set minimized to false idk what the code was
-            //    Show();
-            //    BringIntoView();
-            //};
             ViewModel.OnHideView += Hide;
             InitializeComponent();
         }
