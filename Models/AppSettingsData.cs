@@ -1,24 +1,28 @@
 ﻿using Serilog;
 using System;
+using WorkLifeBalance.Services.Feature;
 
 namespace WorkLifeBalance.Models
 {
     public class AppSettingsData
     {
-        public readonly string Version = "2.0.5";
+        public readonly string Version = "2.0.6";
         public readonly string AppName = "WorkLifeBalance";
-        public string AppDirectory;
-        public string AppExePath;
+        public string AppDirectory { get; set; }
+        public string AppExePath { get; set; }
         public string LastTimeOpened { get; set; } = "";
         public int SaveInterval { get; set; } = 5;
         public int AutoDetectInterval { get; set; } = 1;
         public int AutoDetectIdleInterval { get; set; } = 1;
         public int StartWithWindows { get; set; }
 
-        public DateTime LastTimeOpenedC = new();
-        public bool StartWithWindowsC = false;
+        public DateTime LastTimeOpenedC { get; set; }
+        public bool StartWithWindowsC { get; set; }
 
-        public Action OnSettingsChanged = new(() => { });
+        public bool IsForceStateActive { get; set; }
+        public AppState ForcedAppstate { get; set; }
+
+        public Action OnSettingsChanged { get; set; } = new(() => { });
 
         public AppSettingsData()
         {

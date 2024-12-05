@@ -7,15 +7,15 @@ namespace WorkLifeBalance.Services.Feature
 {
     public class DataStorageFeature : FeatureBase
     {
-        public bool IsAppSaving { get; private set; } = false;
-        public bool IsAppLoading { get; private set; } = false;
+        public bool IsAppSaving { get; private set; }
+        public bool IsAppLoading { get; private set; }
 
-        public bool IsClosingApp = false;
-        public bool IsAppReady = false;
+        public bool IsClosingApp { get; set; }
+        public bool IsAppReady { get; set; }
 
-        public DayData TodayData = new();
-        public AppSettingsData Settings = new();
-        public AutoStateChangeData AutoChangeData = new();
+        public DayData TodayData { get; set; } = new();
+        public AppSettingsData Settings { get; set; } = new();
+        public AutoStateChangeData AutoChangeData { get; set; } = new();
 
         public event Action? OnLoading;
         public event Action? OnLoaded;

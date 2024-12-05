@@ -7,7 +7,7 @@ namespace WorkLifeBalance.Services.Feature
 {
     public class StateCheckerFeature : FeatureBase
     {
-        public bool IsFocusingOnWorkingWindow = false;
+        public bool IsFocusingOnWorkingWindow { get; set; }
         private readonly DataStorageFeature dataStorageFeature;
         private readonly ActivityTrackerFeature activityTrackerFeature;
         private readonly AppStateHandler appStateHandler;

@@ -34,9 +34,10 @@ namespace WorkLifeBalance.ViewModels
         private readonly LowLevelHandler lowLevelHandler;
         private readonly DataStorageFeature dataStorageFeature;
         private readonly TimeTrackerFeature timeTrackerFeature;
+        private readonly IFeaturesServices featuresServices;
         private readonly ISecondWindowService secondWindowService;
 
-        public MainWindowVM(AppTimer mainTimer, LowLevelHandler lowLevelHandler, DataStorageFeature dataStorageFeature, TimeTrackerFeature timeTrackerFeature, ISecondWindowService secondWindowService, AppStateHandler appStateHandler, IMainWindowDetailsService mainWindowDetailsService)
+        public MainWindowVM(AppTimer mainTimer, LowLevelHandler lowLevelHandler, DataStorageFeature dataStorageFeature, TimeTrackerFeature timeTrackerFeature, ISecondWindowService secondWindowService, AppStateHandler appStateHandler, IMainWindowDetailsService mainWindowDetailsService, IFeaturesServices featuresServices)
         {
             this.lowLevelHandler = lowLevelHandler;
             this.dataStorageFeature = dataStorageFeature;
@@ -48,6 +49,7 @@ namespace WorkLifeBalance.ViewModels
             DateText = $"Today: {dataStorageFeature.TodayData.DateC:MM/dd/yyyy}";
 
             SubscribeToEvents();
+            this.featuresServices = featuresServices;
         }
 
         private void SubscribeToEvents()
@@ -83,19 +85,32 @@ namespace WorkLifeBalance.ViewModels
         }
 
         [RelayCommand]
-        public void OpenViewDataWindow()
+        private void ToggleForceState()
+        {
+            if (featuresServices.IsFeaturePresent<ForceStateFeature>())
+            {
+                featuresServices.RemoveFeature<ForceStateFeature>();
+            }
+            else
+            {
+                featuresServices.AddFeature<ForceStateFeature>();
+            }
+        }
+
+        [RelayCommand]
+        private void OpenViewDataWindow()
         {
             secondWindowService.OpenWindowWith<ViewDataPageVM>();
         }
 
         [RelayCommand]
-        public void OpenOptionsWindow()
+        private void OpenOptionsWindow()
         {
             secondWindowService.OpenWindowWith<OptionsPageVM>();
         }
 
         [RelayCommand]
-        public void CloseApp()
+        private void CloseApp()
         {
             secondWindowService.OpenWindowWith<CloseWarningPageVM>();
         }

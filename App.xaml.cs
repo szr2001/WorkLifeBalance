@@ -52,6 +52,7 @@ namespace WorkLifeBalance
             services.AddSingleton<ActivityTrackerFeature>();
             services.AddSingleton<IdleCheckerFeature>();
             services.AddSingleton<StateCheckerFeature>();
+            services.AddSingleton<ForceStateFeature>();
             services.AddSingleton<TimeTrackerFeature>();
             services.AddSingleton<ForceWorkFeature>();
 
@@ -82,6 +83,7 @@ namespace WorkLifeBalance
             services.AddSingleton<ViewDaysPageVM>();
 
             services.AddSingleton<ForceWorkMainMenuDetailsPageVM>();
+            services.AddSingleton<ForceStateMainMenuDetailsPageVM>();
         }
 
         protected override void OnStartup(StartupEventArgs e)
