@@ -34,7 +34,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="45"/>
                 <RowDefinition/>
-                <RowDefinition Height="35"/>
+                <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="15"/>
@@ -172,10 +172,10 @@
                     </StackPanel>
                 </Grid>
             </Border>
-            <Border Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3"
+            <Border Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3" 
                     CornerRadius="8,8,8,8" Background="{StaticResource WDarkPurple}">
-                <Grid Margin="130,0,0,0">
-                    <Button Margin="4" Background="Purple" HorizontalAlignment="Left"
+                <Grid Margin="120,0,0,0">
+                    <Button Margin="6" Background="{StaticResource WPurple}" HorizontalAlignment="Left"
                             Command="{Binding ToggleForceStateCommand}"
                             Template="{StaticResource SlightRoundedBtnTemp}"
                             Style="{StaticResource RoundedBtnStyle}">
@@ -187,10 +187,6 @@
                                Margin="10"/>
                 </Grid>
             </Border>
-            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" 
-                        Grid.ColumnSpan="3" Grid.RowSpan="2">
-
-            </StackPanel>
         </Grid>
         <Grid HorizontalAlignment="Left" Grid.Row="1">
             <Border Background="{StaticResource WPurple}" Height="30" Width="100" 
