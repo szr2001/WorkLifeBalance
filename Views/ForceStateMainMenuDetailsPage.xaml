@@ -10,49 +10,41 @@
 
     <StackPanel Orientation="Vertical">
         <TextBlock Text="Force State" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
-                   FontWeight="Bold" FontStyle="Italic" FontSize="15"/>
-        <Border Margin="3" Background="{StaticResource WBlue}" CornerRadius="10">
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="Current Stage" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
-                           FontWeight="Bold"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Image Width="30">
-                        <Image.Style>
-                            <Style TargetType="Image">
+                   FontWeight="Bold" Margin="0,10,0,0" FontStyle="Italic" FontSize="18"/>
+        <Button VerticalAlignment="Bottom" Margin="0,30,0,0" Command="{Binding ChangeForcedStateCommand}" HorizontalAlignment="Center"
+              Template="{StaticResource RoundedBtnTemp}" Width="80" Height="80">
+            <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource RoundedBtnHoverStyle}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ForcedAppState, Mode=TwoWay}" Value="Resting">
+                            <Setter Property="Background" Value="{StaticResource WLFBOceanBlue}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ForcedAppState, Mode=TwoWay}" Value="Working">
+                            <Setter Property="Background" Value="{StaticResource WLFBLighterPurple}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ForcedAppState, Mode=TwoWay}" Value="Idle">
+                            <Setter Property="Background" Value="{StaticResource WLFBLightBlue}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <Image Margin="5">
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ForcedAppState, Mode=TwoWay}" Value="Resting">
+                                <Setter Property="Source" Value="/Assets/Rest.png"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ForcedAppState, Mode=TwoWay}" Value="Working">
                                 <Setter Property="Source" Value="/Assets/Work.png"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding RequiredAppState, Mode=TwoWay}" Value="Resting">
-                                        <Setter Property="Source" Value="/Assets/Rest.png"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding RequiredAppState, Mode=TwoWay}" Value="Working">
-                                        <Setter Property="Source" Value="/Assets/Work.png"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Image.Style>
-                    </Image>
-                    <TextBlock Text="{Binding RequiredAppState}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
-                               FontWeight="Bold"/>
-                </StackPanel>
-            </StackPanel>
-        </Border>
-        <Border Margin="3" Background="{StaticResource WBlue}" CornerRadius="10">
-
-        </Border>
-        <Border Margin="3" Background="{StaticResource WBlue}" CornerRadius="10">
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="Total Work Left" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" 
-                   FontWeight="Bold"/>
-
-            </StackPanel>
-        </Border>
-        <Button Margin="2" HorizontalAlignment="Center"
-                Command="{Binding EditForceWorkCommand}"
-                Template="{StaticResource SlightRoundedBtnTemp}"
-                Style="{StaticResource RoundedBtnStyle}"
-                Background="Purple">
-            <TextBlock Text="Edit" FontWeight="Bold" Margin="5"
-               VerticalAlignment="Center" Foreground="White" FontSize="15"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ForcedAppState, Mode=TwoWay}" Value="Idle">
+                                <Setter Property="Source" Value="/Assets/Idle.png"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
         </Button>
     </StackPanel>
 </Page>
