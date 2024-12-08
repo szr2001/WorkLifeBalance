@@ -117,6 +117,18 @@ namespace WorkLifeBalance.Services
             }
         }
 
+        public void RegenerateStartupShortcut()
+        {
+            using (TaskService taskService = new TaskService())
+            {
+                Task existingTask = taskService.FindTask(dataStorageFeature.Settings.AppName);
+                if (existingTask != null)
+                {
+                    CreateStartupShortcut();
+                }
+            }
+        }
+
         public void DeleteStartupShortcut()
         {
             using (TaskService taskService = new TaskService())

@@ -93,7 +93,10 @@ namespace WorkLifeBalance.Services
                     MarkDbAsCorupted();
                     await CreateLatestDatabase();
                 }
+                return;
             }
+         
+            lowLevelHandler.RegenerateStartupShortcut();
         }
 
         private void MarkDbAsCorupted()
@@ -212,7 +215,6 @@ namespace WorkLifeBalance.Services
 
         private async Task Update2_0_6To2_0_7()
         {
-            lowLevelHandler.DeleteStartupShortcut();
             string sqlCreateMinimizeToTrayTable =
                 """
                     ALTER TABLE Settings
@@ -224,19 +226,16 @@ namespace WorkLifeBalance.Services
 
         private async Task Update2_0_5To2_0_6()
         {
-            lowLevelHandler.DeleteStartupShortcut();
             await UpdateDatabaseVersion("2.0.6");
         }
 
         private async Task Update2_0_4To2_0_5()
         {
-            lowLevelHandler.DeleteStartupShortcut();
             await UpdateDatabaseVersion("2.0.5");
         }
 
         private async Task Update2_0_3To2_0_4()
         {
-            lowLevelHandler.DeleteStartupShortcut();
             await UpdateDatabaseVersion("2.0.4");
         }
 
