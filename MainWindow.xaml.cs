@@ -25,16 +25,9 @@ namespace WorkLifeBalance
             {
                 Icon = System.Drawing.Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location)
             };
-            NotifyIcon.DoubleClick += OnNotifyIconOnDoubleClick;
+            NotifyIcon.Click += OnNotifyIconOnClick;
             SetStartUpLocation();
             InitializeComponent();
-        }
-
-        private void OnNotifyIconOnDoubleClick(object? sender, EventArgs args)
-        {
-            Show();
-            WindowState = WindowState.Normal;
-            NotifyIcon.Visible = false;
         }
 
         private void SetStartUpLocation()
@@ -52,10 +45,24 @@ namespace WorkLifeBalance
             }
         }
 
+        private void OnNotifyIconOnClick(object? sender, EventArgs args)
+        {
+            Show();
+            WindowState = WindowState.Normal;
+            NotifyIcon.Visible = false;
+        }
+
         private void HideWindow(object sender, RoutedEventArgs e)
         {
-            Hide();
-            NotifyIcon.Visible = true;
+            if (ViewModel.MinimizeToTray)
+            {
+                Hide();
+                NotifyIcon.Visible = true;
+            }
+            else
+            {
+                WindowState = WindowState.Minimized;
+            }
         }
 
         public void Dispose()

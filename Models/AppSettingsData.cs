@@ -6,7 +6,7 @@ namespace WorkLifeBalance.Models
 {
     public class AppSettingsData
     {
-        public readonly string Version = "2.0.6";
+        public readonly string Version = "2.0.7";
         public readonly string AppName = "WorkLifeBalance";
         public string AppDirectory { get; set; }
         public string AppExePath { get; set; }
@@ -15,9 +15,11 @@ namespace WorkLifeBalance.Models
         public int AutoDetectInterval { get; set; } = 1;
         public int AutoDetectIdleInterval { get; set; } = 1;
         public int StartWithWindows { get; set; }
+        public int MinimizeToTray { get; set; }
 
         public DateTime LastTimeOpenedC { get; set; }
         public bool StartWithWindowsC { get; set; }
+        public bool MinimizeToTrayC { get; set; }
 
         public bool IsForceStateActive { get; set; }
         public AppState ForcedAppstate { get; set; }
@@ -47,6 +49,7 @@ namespace WorkLifeBalance.Models
                         );
                 }
                 StartWithWindowsC = StartWithWindows == 1;
+                MinimizeToTrayC = MinimizeToTray == 1;
 
             }
             catch (Exception ex)
@@ -63,7 +66,7 @@ namespace WorkLifeBalance.Models
                 LastTimeOpenedC = DateTime.Now;
                 LastTimeOpened = LastTimeOpenedC.ToString("HHmmMMddyyyy");
 
-                StartWithWindows = StartWithWindowsC ? 1 : 0;
+                MinimizeToTray = MinimizeToTrayC ? 1 : 0;
             }
             catch (Exception ex)
             {

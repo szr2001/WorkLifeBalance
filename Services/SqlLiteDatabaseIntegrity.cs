@@ -39,6 +39,7 @@ namespace WorkLifeBalance.Services
 
             DatabaseUpdates = new()
             {
+                { "2.0.6", Update2_0_6To2_0_7},
                 { "2.0.5", Update2_0_5To2_0_6},
                 { "2.0.4", Update2_0_4To2_0_5},
                 { "2.0.3", Update2_0_3To2_0_4},
@@ -193,7 +194,8 @@ namespace WorkLifeBalance.Services
                 	"StartWithWindows"	INTEGER,
                 	"SaveInterval"	INTEGER,
                 	"AutoDetectInterval"	INTEGER,
-                	"AutoDetectIdleInterval"	INTEGER,
+                    "AutoDetectIdleInterval"	INTEGER,
+                    "MinimizeToTray"	INTEGER,
                     "Version"	TEXT);
                 """;
             await sqlDataAccess.ExecuteAsync(createSettingsSQL, new { });
@@ -206,6 +208,18 @@ namespace WorkLifeBalance.Services
             await sqlDataAccess.ExecuteAsync(createWorkingWindowsSQL, new { });
 
             await UpdateDatabaseVersion(dataStorageFeature.Settings.Version);
+        }
+
+        private async Task Update2_0_6To2_0_7()
+        {
+            lowLevelHandler.DeleteStartupShortcut();
+            string sqlCreateMinimizeToTrayTable =
+                """
+                    ALTER TABLE Settings
+                    ADD COLUMN MinimizeToTray INT NOT NULL DEFAULT 0;
+                """;
+            await sqlDataAccess.ExecuteAsync(sqlCreateMinimizeToTrayTable, new { });
+            await UpdateDatabaseVersion("2.0.7");
         }
 
         private async Task Update2_0_5To2_0_6()

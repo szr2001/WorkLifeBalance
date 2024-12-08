@@ -24,8 +24,8 @@
                                    FontWeight="Bold" 
                                    Name="VersionT" Margin="2" FontSize="12"
                                    Foreground="White"/>
-                    </Border>
-                <Border Height="55"
+                </Border>
+                <Border Height="45"
                         Margin="0,0,0,5"
                         CornerRadius="15"
                         Background="{StaticResource WBlue}">
@@ -37,16 +37,36 @@
                                        FontWeight="Bold"
                                        FontSize="15"
                                        Foreground="White"/>
-                            <ToggleButton Height="25"
-                                          Width="25"
+                            <ToggleButton Height="20"
+                                          Width="20"
                                           IsChecked="{Binding StartWithWin, Mode=TwoWay}"
-                                          Margin="0,5,0,0"
                                           Style="{StaticResource RoundedToggleBtnStyle}"
                                           Template="{StaticResource RoundedToggleBtnTemp}">
 
                             </ToggleButton>
                         </StackPanel>
-                    </Border>
+                </Border>
+                <Border Height="45"
+                        Margin="0,0,0,5"
+                        CornerRadius="15"
+                        Background="{StaticResource WBlue}">
+
+                    <StackPanel Orientation="Vertical">
+
+                        <TextBlock Text="Minimize To Tray?"
+                                   TextAlignment="Center"
+                                   FontWeight="Bold"
+                                   FontSize="15"
+                                   Foreground="White"/>
+                        <ToggleButton Height="20"
+                                      Width="20"
+                                      IsChecked="{Binding MinimizeToTray, Mode=TwoWay}"
+                                      Style="{StaticResource RoundedToggleBtnStyle}"
+                                      Template="{StaticResource RoundedToggleBtnTemp}">
+
+                        </ToggleButton>
+                    </StackPanel>
+                </Border>
                 <Border Height="50"
                         Margin="0,5,0,5"
                         ToolTip="The interval of saving information in minutes"

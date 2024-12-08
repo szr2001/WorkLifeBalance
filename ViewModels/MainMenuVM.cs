@@ -28,6 +28,14 @@ namespace WorkLifeBalance.ViewModels
         [ObservableProperty]
         private AppState appState = AppState.Resting;
 
+        public bool MinimizeToTray 
+        {
+            get 
+            { 
+                return dataStorageFeature.Settings.MinimizeToTrayC;
+            } 
+        }
+
         public IMainWindowDetailsService MainWindowDetailsService { get; set; }
 
         private readonly AppStateHandler appStateHandler;
@@ -45,11 +53,11 @@ namespace WorkLifeBalance.ViewModels
             this.secondWindowService = secondWindowService;
             this.appStateHandler = appStateHandler;
             this.MainWindowDetailsService = mainWindowDetailsService;
+            this.featuresServices = featuresServices;
 
             DateText = $"Today: {dataStorageFeature.TodayData.DateC:MM/dd/yyyy}";
 
             SubscribeToEvents();
-            this.featuresServices = featuresServices;
         }
 
         private void SubscribeToEvents()

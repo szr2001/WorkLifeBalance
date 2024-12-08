@@ -29,6 +29,9 @@ namespace WorkLifeBalance.ViewModels
         private bool startWithWin = false;
 
         [ObservableProperty]
+        private bool minimizeToTray = false;
+
+        [ObservableProperty]
         private int[]? numbers;
 
         private readonly DataStorageFeature dataStorageFeature;
@@ -58,6 +61,8 @@ namespace WorkLifeBalance.ViewModels
 
             StartWithWin = dataStorageFeature.Settings.StartWithWindowsC;
 
+            MinimizeToTray = dataStorageFeature.Settings.MinimizeToTrayC;
+
             List<int> numbersTemp = new();
             for(int x = 1; x <= 300; x++)
             {
@@ -75,6 +80,8 @@ namespace WorkLifeBalance.ViewModels
             dataStorageFeature.Settings.AutoDetectIdleInterval = AutoDetectIdleInterval;
 
             dataStorageFeature.Settings.StartWithWindowsC = StartWithWin;
+
+            dataStorageFeature.Settings.MinimizeToTrayC = MinimizeToTray;
 
             await dataStorageFeature.SaveData();
 
