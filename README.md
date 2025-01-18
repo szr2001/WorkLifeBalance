@@ -1,9 +1,59 @@
 # WorkLifeBalance
-This is a productivity app that keeps track of time, it can automatically toggle based on what window is in focus and also keep tracks of how much time you spent in other applications.You can customize what applications are considerated "work" and the app will try its best to toggle from working to resting and vice versa.
-It has a window to compare current month productivity with last month productivity while also being able
-to see each day activity separately combined with a force work option based on the pomodoro techinque which also gets rid of distractions.
 
-The app requires Administrator privileges so it can detect the apps that are also ran as Administrator.
+WorkLifeBalance is a productivity application designed to help users monitor and optimize their time usage. The app provides automatic toggling between work and rest modes, detailed activity tracking, and a comparison of productivity metrics over time.
 
-This work is licensed under MIT License
-![alt text](Assets/WorkLifeBalanceThumb.png)
+![WorkLifeBalance Overview](Assets/WorkLifeBalanceThumb.png)
+
+## Features
+
+### Time Tracking
+- **Automatic Toggles**:
+  - Automatically detects the active window to determine if the user is working or resting.
+  - Customize which applications are classified as "work" to ensure accurate tracking.
+
+### Productivity Analysis
+- **Monthly Comparison**:
+  - Compare current month's productivity metrics with last month's performance.
+  - View detailed daily activity logs to understand time usage.
+- **Pomodoro Integration**:
+  - Use the Pomodoro technique with a built-in "force work" option to eliminate distractions.
+- **Afk Detection**
+  -  Use mouse tracking to detect away from keyboard scenarios and switch to IDLE state
+- **Customizable**
+  -  Modify action intervals, save&load, state detection, window detect, afk detection and more
+
+### Modular Architecture
+- Enable or disable features at runtime to suit your workflow and preferences.
+
+### System Requirements
+- Requires Administrator privileges to monitor and track applications running with elevated permissions.
+
+## Installation and Setup
+
+1. Download the application from the official website and follow the instructions.
+3. Launch the application with Administrator privileges to enable full functionality.
+
+## Usage
+
+1. Customize your settings:
+   - Define which applications are considered "work."
+   - Configure the Pomodoro timer for forced focus sessions when used.
+2. Let the app track your activity automatically:
+   - Monitor your productivity without manual toggles.
+3. Analyze your productivity:
+   - Compare monthly metrics and review daily activity to identify patterns.
+
+Detailed video tutorial:
+https://www.youtube.com/watch?v=PVNq04e8AJo
+
+## Support
+If you like the app and want to support it:
+https://buymeacoffee.com/roberbot
+
+## Future Planed Features
+- The ability to create custom states like "Learing" "Gaming" on top of the default "Resting, Idle, Working" states.
+- An **Advanced Detection** mode that's able to more accurate detect activities even specific webpages.
+- A possible port from WPF to Avalonia to allow for Linux support.  
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
