@@ -53,7 +53,8 @@ https://buymeacoffee.com/roberbot
 ## Future Planed Features
 - The ability to create custom states like "Learing" "Gaming" on top of the default "Resting, Idle, Working" states.
 - An **Advanced Detection** mode that's able to more accurate detect activities even specific webpages.
-- A possible port from WPF to Avalonia to allow for Linux support.  
+- A possible port from WPF to Avalonia to allow for Linux support.
+- Enhanced documentation for a smoother community contribution process.
 
 ## License
 This project is licensed under the MIT License. See the LICENSE file for details.
