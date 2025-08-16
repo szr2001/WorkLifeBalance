@@ -31,6 +31,7 @@ WorkLifeBalance is a productivity application designed to help users monitor and
 ## Installation and Setup
 
 1. Download the application from the official website and follow the instructions.
+   https://roberbot.itch.io/work-life-balance
 3. Launch the application with Administrator privileges to enable full functionality.
 
 ## Usage
