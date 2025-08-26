@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace WorkLifeBalance.ViewModels
 {
@@ -11,6 +7,16 @@ namespace WorkLifeBalance.ViewModels
         public LoadingPageVM()
         {
             PageName = "Loading...";
+        }
+
+        public override Task OnPageClosingAsync()
+        {
+            return Task.CompletedTask;
+        }
+
+        public override Task OnPageOpeningAsync(object? args = null)
+        {
+            return Task.CompletedTask;
         }
     }
 }

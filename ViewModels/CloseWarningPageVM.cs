@@ -37,5 +37,9 @@ namespace WorkLifeBalance.ViewModels
                 });
             });
         }
+
+        public override Task OnPageClosingAsync() => Task.CompletedTask;
+
+        public override Task OnPageOpeningAsync(object? args = null) => Task.CompletedTask;
     }
 }

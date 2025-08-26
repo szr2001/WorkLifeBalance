@@ -42,17 +42,18 @@ namespace WorkLifeBalance.ViewModels
             }
         }
 
-        public override Task OnPageOppeningAsync(object? args = null)
+        public override Task OnPageOpeningAsync(object? args = null)
         {
-
             forceStateFeature.SetForcedAppState(ForcedAppState);
-            return base.OnPageOppeningAsync(args);
+
+            return Task.CompletedTask;
         }
 
         public override Task OnPageClosingAsync()
         {
             featuresServices.RemoveFeature<ForceStateFeature>();
-            return base.OnPageClosingAsync();
+            
+            return Task.CompletedTask;
         }
     }
 }

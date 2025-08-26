@@ -1,26 +1,26 @@
-﻿using IWshRuntimeLibrary;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.TaskScheduler;
 using System.Text;
+using System.Windows.Automation;
 using WorkLifeBalance.Services.Feature;
-
-using File = System.IO.File;
 using Serilog;
+using WorkLifeBalance.Helpers;
 
 namespace WorkLifeBalance.Services
 {
     //low level handling of windows and mouse
     public class LowLevelHandler
     {
+        private Dictionary<string, List<uint>?> browserMap;
         private readonly DataStorageFeature dataStorageFeature;
         public LowLevelHandler(DataStorageFeature dataStorageFeature)
         {
+            this.browserMap = new Dictionary<string, List<uint>?>();
             this.dataStorageFeature = dataStorageFeature;
         }
 
@@ -146,11 +146,12 @@ namespace WorkLifeBalance.Services
             return GetForegroundWindow();
         }
 
-        public string GetProcessname(nint hWnd)
+        public string GetProcessWithId(nint hWnd, out uint id)
         {
             GetWindowThreadProcessId(hWnd, out uint processId);
             Process process = Process.GetProcessById((int)processId);
-
+            id = processId;
+            
             const int nChars = 1024;
             StringBuilder applicationName = new StringBuilder(nChars);
             GetModuleFileNameEx(process.Handle, nint.Zero, applicationName, nChars);
@@ -159,6 +160,18 @@ namespace WorkLifeBalance.Services
             string fileName = System.IO.Path.GetFileName(applicationName.ToString());
 
             return fileName;
+        }
+
+        public string? GetActiveTab(uint processId)
+        {
+            Process proc = Process.GetProcessById((int)processId);
+            
+            if (proc.MainWindowHandle == IntPtr.Zero)
+            {
+                return null;
+            }
+
+            return BrowserHelper.GetUrl(proc);
         }
 
         public List<string> GetBackgroundApplicationsName()
@@ -179,14 +192,47 @@ namespace WorkLifeBalance.Services
 
             EnumWindows(EnumWindowsCallback, GCHandle.ToIntPtr(GCHandle.Alloc(windows)));
 
+            Dictionary<string, List<uint>?> namePidMap = new();
             foreach (nint windowId in windows)
             {
-                Appnames.Add(GetProcessname(windowId));
-            }
+                string processName = GetProcessWithId(windowId, out uint id);
 
+                if (Constants.BrowserExecutables.Contains(processName))
+                {
+                    if(namePidMap.TryGetValue(processName, out List<uint>? pids))
+                    {
+                        pids.Add(id);
+                    } else
+                    {
+                        namePidMap[processName] = new List<uint>() { id };
+                    }
+                }
+                
+                Appnames.Add(processName);
+            }
+            browserMap = namePidMap;
+            
             return Appnames.ToList();
         }
 
+        public List<string> GetActiveBackgroundTabs()
+        {
+            List<uint> pids = browserMap.Values.SelectMany(x => x).ToList();
+            HashSet<string> result = new();
+            
+            foreach (var pid in pids)
+            {
+                string? url = GetActiveTab(pid);
+                
+                if (!string.IsNullOrEmpty(url))
+                {
+                    result.Add(url);
+                }
+            }
+
+            return result.ToList();
+        }
+        
         public Vector2 GetMousePos()
         {
             GetCursorPos(out POINT p);
@@ -194,5 +240,6 @@ namespace WorkLifeBalance.Services
 
             return pos;
         }
+
     }
 }

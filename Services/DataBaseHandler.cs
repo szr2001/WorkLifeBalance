@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using WorkLifeBalance.Models;
 using System.Linq;
+using WorkLifeBalance.Models.Base;
 
 namespace WorkLifeBalance.Services
 {
@@ -23,6 +24,10 @@ namespace WorkLifeBalance.Services
 
             await dataAccess.ExecuteAsync(DeleteOldWorkingWindowsSQL, new { });
 
+            string DeleteOldWorkingPagesSSql = @"DELETE FROM WorkingUrls";
+
+            await dataAccess.ExecuteAsync(DeleteOldWorkingPagesSSql, new { });
+            
             string InsertNewWorkingWindowsSQL = @"INSERT INTO WorkingWindows (WorkingStateWindows)
                   VALUES (@WorkingWindow)";
 
@@ -30,60 +35,78 @@ namespace WorkLifeBalance.Services
             {
                 await dataAccess.WriteDataAsync(InsertNewWorkingWindowsSQL, new { WorkingWindow = window });
             }
+            
+            string insertNewWorkingPagesSql = @"INSERT INTO WorkingUrls (WorkingStateUrl)
+                  VALUES (@WorkingUrl)";
 
-            string UpdateActivitySql = @"UPDATE Activity
-                                SET TimeSpent = @TimeSpent
-                                WHERE Date = @Date AND Process = @Process";
-
-            string InsertActivitySql = @"INSERT INTO Activity (Date,Process,TimeSpent)
-                               VALUES (@Date,@Process,@TimeSpent)";
-
-            foreach (ProcessActivityData activity in autod.Activities)
+            foreach (string url in autod.WorkingStateUrls)
             {
-                int affectedRows = await dataAccess.WriteDataAsync(UpdateActivitySql, activity);
-
-                if (affectedRows == 0)
-                {
-                    await dataAccess.WriteDataAsync(InsertActivitySql, activity);
-                }
+                await dataAccess.WriteDataAsync(insertNewWorkingPagesSql, new { WorkingUrl = url });
             }
 
+            await InsertActivity(autod.ProcessActivities, "Process");
+            await InsertActivity(autod.PageActivities, "Url");
         }
 
         public async Task<AutoStateChangeData> ReadAutoStateData(string date)
         {
             AutoStateChangeData retrivedSettings = new();
 
-            string sql = @$"SELECT * FROM Activity
+            string sql = @$"SELECT Date, Process, TimeSpent FROM Activity
                             WHERE Date = @Date";
 
-            retrivedSettings.Activities = (await dataAccess.ReadDataAsync<ProcessActivityData, dynamic>(sql, new { Date = date })).ToArray();
+            retrivedSettings.ProcessActivities = (await dataAccess.ReadDataAsync<ProcessActivityData, dynamic>(sql, new { Date = date })).ToArray();
 
-            sql = @$"SELECT * FROM WorkingWindows";
+            sql = @$"SELECT Date, Url, TimeSpent FROM Activity
+                            WHERE Date = @Date";
+            
+            retrivedSettings.PageActivities = (await dataAccess.ReadDataAsync<PageActivityData, dynamic>(sql, new { Date = date })).ToArray();
+            
+            sql = @$"SELECT WorkingStateWindows FROM WorkingWindows";
 
             retrivedSettings.WorkingStateWindows = (await dataAccess.ReadDataAsync<string, dynamic>(sql, new { })).ToArray();
 
+            sql = @"SELECT WorkingStateUrl FROM WorkingUrls";
+            
+            retrivedSettings.WorkingStateUrls = (await dataAccess.ReadDataAsync<string, dynamic>(sql, new { })).ToArray();
+            
             retrivedSettings.ConvertSaveDataToUsableData();
             
             return retrivedSettings;
         }
 
-        public async Task<List<ProcessActivityData>> ReadDayActivity(string date)
+        public async Task<List<ProcessActivityData>> ReadProcessDayActivity(string date)
         {
-            List<ProcessActivityData> ReturnActivity = new();
+            List<ProcessActivityData> processActivity = new();
 
-            string sql = @$"SELECT * from Activity 
-                            WHERE Date Like @Date";
+            string sql = @$"SELECT Date, Process, TimeSpent from Activity 
+                            WHERE Date Like @Date AND Process IS NOT NULL";
 
+            processActivity = (await dataAccess.ReadDataAsync<ProcessActivityData, dynamic>(sql, new { Date = date })).ToList();
 
-            ReturnActivity = (await dataAccess.ReadDataAsync<ProcessActivityData, dynamic>(sql, new { Date = date })).ToList();
-
-            foreach (ProcessActivityData day in ReturnActivity)
+            foreach (ProcessActivityData day in processActivity)
             {
                 day.ConvertSaveDataToUsableData();
             }
 
-            return ReturnActivity;
+            return processActivity;
+        }
+        
+        public async Task<List<PageActivityData>> ReadUrlDayActivity(string date)
+        {
+            List<PageActivityData> pageActivity = new();
+
+            string sql = @$"SELECT Date, Url, TimeSpent from Activity 
+                            WHERE Date Like @Date AND Url IS NOT NULL";
+
+            pageActivity = (await dataAccess.ReadDataAsync<PageActivityData, dynamic>(sql, new { Date = date })).ToList();
+
+            foreach (PageActivityData day in pageActivity)
+            {
+                day.ConvertSaveDataToUsableData();
+            }
+
+            return pageActivity;
         }
 
         public async Task WriteSettings(AppSettingsData sett)
@@ -257,5 +280,25 @@ namespace WorkLifeBalance.Services
             return retrivedDay;
         }
 
+        private async Task InsertActivity<T>(T[] items, string column) where T : ActivityDataBase
+        {
+            
+            string updateActivitySql = @$"UPDATE Activity
+                                SET TimeSpent = @TimeSpent
+                                WHERE Date = @Date AND {column} = @{column}";
+
+            string insertActivitySql = @$"INSERT INTO Activity (Date,{column},TimeSpent)
+                               VALUES (@Date,@{column},@TimeSpent)";
+            
+            foreach (T activity in items)
+            {
+                int affectedRows = await dataAccess.WriteDataAsync(updateActivitySql, activity);
+
+                if (affectedRows == 0)
+                {
+                    await dataAccess.WriteDataAsync(insertActivitySql, activity);
+                }
+            }
+        }
     }
 }

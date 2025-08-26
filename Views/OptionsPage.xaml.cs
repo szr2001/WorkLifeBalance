@@ -1,6 +1,4 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using System.Windows.Controls;
-using WorkLifeBalance.ViewModels;
+﻿using System.Windows.Controls;
 
 namespace WorkLifeBalance.Views
 {

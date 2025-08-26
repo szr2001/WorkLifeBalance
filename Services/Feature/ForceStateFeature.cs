@@ -2,16 +2,17 @@
 using System.Threading.Tasks;
 using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.ViewModels;
+using WorkLifeBalance.ViewModels.Base;
 
 namespace WorkLifeBalance.Services.Feature
 {
     public class ForceStateFeature : FeatureBase
     {
-        private readonly IMainWindowDetailsService mainWindowDetailsService;
+        private readonly IWindowService<MainWindowDetailsPageBase> mainWindowDetailsService;
         private readonly DataStorageFeature dataStorageFeature;
         private readonly IFeaturesServices featuresServices;
         private readonly AppStateHandler appStateHandler;
-        public ForceStateFeature(IMainWindowDetailsService mainWindowDetailsService, DataStorageFeature dataStorageFeature, IFeaturesServices featuresServices, AppStateHandler appStateHandler)
+        public ForceStateFeature(IWindowService<MainWindowDetailsPageBase> mainWindowDetailsService, DataStorageFeature dataStorageFeature, IFeaturesServices featuresServices, AppStateHandler appStateHandler)
         {
             this.mainWindowDetailsService = mainWindowDetailsService;
             this.dataStorageFeature = dataStorageFeature;
@@ -25,7 +26,7 @@ namespace WorkLifeBalance.Services.Feature
             featuresServices.RemoveFeature<StateCheckerFeature>();
             
             dataStorageFeature.Settings.IsForceStateActive = true;
-            mainWindowDetailsService.OpenDetailsPageWith<ForceStateMainMenuDetailsPageVM>();
+            mainWindowDetailsService.OpenWith<ForceStateMainMenuDetailsPageVM>();
         }
 
         public void SetForcedAppState(AppState state)
@@ -39,7 +40,7 @@ namespace WorkLifeBalance.Services.Feature
             featuresServices.AddFeature<StateCheckerFeature>();
 
             dataStorageFeature.Settings.IsForceStateActive = false;
-            mainWindowDetailsService.CloseWindow();
+            mainWindowDetailsService.Close();
         }
 
         protected override Func<Task> ReturnFeatureMethod()

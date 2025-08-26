@@ -1,8 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WorkLifeBalance.Interfaces;
 using Newtonsoft.Json;
@@ -16,12 +13,12 @@ namespace WorkLifeBalance.Services
 {
     public class UpdateCheckerService : IUpdateCheckerService
     {
-        private readonly ISecondWindowService secondWindowService;
+        private readonly IWindowService<SecondWindowPageVMBase> secondWindowService;
         private readonly IConfiguration configuration;
         private readonly DataStorageFeature dataStorageFeature;
 
         private readonly string UpdateAdress = "";
-        public UpdateCheckerService(ISecondWindowService secondWindowService, IConfiguration configuration, DataStorageFeature dataStorageFeature)
+        public UpdateCheckerService(IWindowService<SecondWindowPageVMBase> secondWindowService, IConfiguration configuration, DataStorageFeature dataStorageFeature)
         {
             this.secondWindowService = secondWindowService;
             this.dataStorageFeature = dataStorageFeature;
@@ -49,7 +46,7 @@ namespace WorkLifeBalance.Services
             if(vdata.Version != dataStorageFeature.Settings.Version)
             {
                 Log.Warning($"New Update Available! Current Version: {dataStorageFeature.Settings.Version}, Latest Version: {vdata.Version}");
-                await secondWindowService.OpenWindowWith<UpdatePageVM>(vdata);
+                await secondWindowService.OpenWith<UpdatePageVM>(vdata);
                 return;
             }
 

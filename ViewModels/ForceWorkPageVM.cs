@@ -1,10 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Services.Feature;
@@ -70,10 +66,10 @@ namespace WorkLifeBalance.ViewModels
         private string[] distractions = { "Process.exe", "Process.exe", "Process.exe" };
 
         private readonly ForceWorkFeature forceWorkFeature;
-        private readonly ISecondWindowService secondWindowService;
+        private readonly IWindowService<SecondWindowPageVMBase> secondWindowService;
         private readonly IFeaturesServices featuresServices;
 
-        public ForceWorkPageVM(ForceWorkFeature forceWorkFeature, ISecondWindowService secondWindowService, IFeaturesServices featuresServices)
+        public ForceWorkPageVM(ForceWorkFeature forceWorkFeature, IWindowService<SecondWindowPageVMBase> secondWindowService, IFeaturesServices featuresServices)
         {
             this.forceWorkFeature = forceWorkFeature;
             this.featuresServices = featuresServices;
@@ -100,7 +96,7 @@ namespace WorkLifeBalance.ViewModels
             LongRestIntervalSetting = forceWorkFeature.LongRestIntervalSetting;
         }
 
-        public override Task OnPageOppeningAsync(object? args = null)
+        public override Task OnPageOpeningAsync(object? args = null)
         {
             IsFeatureActiv = featuresServices.IsFeaturePresent<ForceWorkFeature>();
             forceWorkFeature.OnDataUpdated += UpdateDataFromForceWork;
@@ -116,7 +112,7 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         private void ReturnToOptions()
         {
-            secondWindowService.OpenWindowWith<OptionsPageVM>();
+            secondWindowService.OpenWith<OptionsPageVM>();
         }
 
         [RelayCommand]

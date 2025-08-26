@@ -37,10 +37,10 @@ namespace WorkLifeBalance.ViewModels
         private DayData[]? backupdata;
         //use this to request the correct page when leaving the DayActivity page
         private int LoadedPageType;
-        private ISecondWindowService secondWindowService;
+        private IWindowService<SecondWindowPageVMBase> secondWindowService;
         private DataBaseHandler database;
         private DataStorageFeature dataStorage;
-        public ViewDaysPageVM(ISecondWindowService secondWindowService, DataBaseHandler database, DataStorageFeature dataStorage)
+        public ViewDaysPageVM(IWindowService<SecondWindowPageVMBase> secondWindowService, DataBaseHandler database, DataStorageFeature dataStorage)
         {
             PageHeight = 570;
             PageWidth = 710;
@@ -108,7 +108,9 @@ namespace WorkLifeBalance.ViewModels
             backupdata = LoadedData.ToArray();
         }
 
-        public override async Task OnPageOppeningAsync(object? args = null)
+        public override Task OnPageClosingAsync() => Task.CompletedTask;
+
+        public override async Task OnPageOpeningAsync(object? args = null)
         {
             if (args != null)
             {
@@ -123,7 +125,7 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         private void ReturnToPreviousPage()
         {
-            secondWindowService.OpenWindowWith<ViewDataPageVM>();
+            secondWindowService.OpenWith<ViewDataPageVM>();
         }
 
         [RelayCommand]
@@ -131,7 +133,7 @@ namespace WorkLifeBalance.ViewModels
         {
             data.ConvertSaveDataToUsableData();
 
-            secondWindowService.OpenWindowWith<ViewDayDetailsPageVM>((LoadedPageType, data));
+            secondWindowService.OpenWith<ViewDayDetailsPageVM>((LoadedPageType, data));
         }
 
         [RelayCommand]

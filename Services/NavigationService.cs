@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System;
+﻿using System;
 using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.ViewModels.Base;
 

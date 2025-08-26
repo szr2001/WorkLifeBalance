@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,30 +12,38 @@ namespace WorkLifeBalance.ViewModels
     public partial class ViewDayDetailsPageVM : SecondWindowPageVMBase
     {
         [ObservableProperty]
-        private ProcessActivityData[]? activities;
+        private ProcessActivityData[]? processActivities;
 
+        [ObservableProperty]
+        private PageActivityData[]? pageActivities;
+        
         [ObservableProperty]
         private DayData? loadedDayData;
 
         private int LoadedPageType;
-        private ISecondWindowService secondWindowService;
+        private IWindowService<SecondWindowPageVMBase> secondWindowService;
         private DataBaseHandler database;
-        public ViewDayDetailsPageVM(ISecondWindowService secondWindowService, DataBaseHandler database)
+        public ViewDayDetailsPageVM(IWindowService<SecondWindowPageVMBase> secondWindowService, DataBaseHandler database)
         {
             PageHeight = 440;
-            PageWidth = 430;
+            PageWidth = 630;
             PageName = "View Day Details";
             this.secondWindowService = secondWindowService;
             this.database = database;
         }
 
-        private async Task RequiestData()
+        private async Task RequestData()
         {
-            List<ProcessActivityData> RequestedActivity = (await database.ReadDayActivity(LoadedDayData!.Date));
-            Activities = RequestedActivity.OrderByDescending(data => data.TimeSpentC).ToArray();
+            List<ProcessActivityData> RequestedActivity = (await database.ReadProcessDayActivity(LoadedDayData!.Date));
+            List<PageActivityData> RequestedPageActivity = (await database.ReadUrlDayActivity(LoadedDayData!.Date));
+            
+            ProcessActivities = RequestedActivity.OrderByDescending(data => data.TimeSpentC).ToArray();
+            PageActivities = RequestedPageActivity.OrderByDescending(data => data.TimeSpentC).ToArray();
         }
 
-        public override Task OnPageOppeningAsync(object? args)
+        public override Task OnPageClosingAsync() => Task.CompletedTask;
+
+        public override Task OnPageOpeningAsync(object? args)
         {
             if (args != null)
             {
@@ -45,19 +52,19 @@ namespace WorkLifeBalance.ViewModels
                     LoadedPageType = loadedpagetype;
                     LoadedDayData = day;
                     PageName = $"{LoadedDayData.DateC.ToString("MM/dd/yyyy")} Activity";
-                    _ = RequiestData();
-                    return base.OnPageOppeningAsync(args);
+                    _ = RequestData();
+                    return Task.CompletedTask;
                 }
             }
 
             //MainWindow.ShowErrorBox("Error ViewDayDetails", "Requested ViewDayDetails Page with no/wrong arguments");
-            return base.OnPageOppeningAsync(args);
+            return Task.CompletedTask;
         }
 
         [RelayCommand]
         private void BackToViewDaysPage()
         {
-            secondWindowService.OpenWindowWith<ViewDaysPageVM>(LoadedPageType);
+            secondWindowService.OpenWith<ViewDaysPageVM>(LoadedPageType);
         }
     }
 }
