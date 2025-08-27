@@ -23,14 +23,20 @@ public abstract partial class WindowServiceBase<T> : ObservableObject where T : 
 
     partial void OnLoadedPageChanged(T? oldValue, T? newValue)
     {
-        OnPageLoaded?.Invoke();
+        if (newValue != null)
+        {
+            OnPageLoaded?.Invoke();
+        }
     }
     
     public abstract Task OpenWith<TVm>(object? args = null) where TVm : PageViewModelBase;
+
+    public virtual async Task Close()
+    {
+        await ClearPage();
+    }
     
-    public abstract Task Close();
-    
-    protected async Task ClearPage()
+    protected virtual async Task ClearPage()
     {
         if (activePage != null)
         {

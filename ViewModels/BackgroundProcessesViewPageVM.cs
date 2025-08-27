@@ -136,23 +136,29 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         private async Task OpenAddPageWindow()
         {
-            await popupService.OpenWith<AddUrlPageVM>();
             IEnumerable<string> pages = SelectedPages.Concat(DetectedTabs);
             string urls = string.Join("|", pages);
-            WeakReferenceMessenger.Default.Send(urls);
+            await popupService.OpenWith<AddUrlPageVM>(urls);
         }
         
         public void Receive(UrlsMessage message)
         {
-            string[] inputUrls = message.Value.Split('|');
-            string[] validUrls = PrepareAndValidateInputUrls(inputUrls);
-            HashSet<string> uniqueUrls = new HashSet<string>(validUrls.Union(DetectedTabs).Except(SelectedPages));
-            
-            DetectedTabs.Clear();
-            foreach (var url in uniqueUrls)
+            Task.Run(async () =>
             {
-                DetectedTabs.Add(url);
-            }
+                string[] inputUrls = message.Value.Split('|');
+                string[] validUrls = PrepareAndValidateInputUrls(inputUrls);
+                HashSet<string> uniqueUrls = new HashSet<string>(validUrls.Union(DetectedTabs).Except(SelectedPages));
+
+                await App.Current.Dispatcher.InvokeAsync(() =>
+                {
+                    DetectedTabs.Clear();
+                    foreach (var url in uniqueUrls)
+                    {
+                        DetectedTabs.Add(url);
+                    }
+                });
+
+            });
         }
 
         private static string[] PrepareAndValidateInputUrls(string[] inputUrls)

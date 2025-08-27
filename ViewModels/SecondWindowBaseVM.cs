@@ -6,12 +6,12 @@ using WorkLifeBalance.ViewModels.Base;
 
 namespace WorkLifeBalance.ViewModels;
 
-public partial class SecondWindowBaseVm : NewWindowBase<SecondWindowPageVMBase>
+public partial class SecondWindowBaseVM : NewWindowBase<SecondWindowPageVMBase>
 {
     public Action? OnShowView { get; set; } = () => { };
     public Action? OnHideView { get; set; } = () => { };
 
-    public SecondWindowBaseVm(IWindowService<SecondWindowPageVMBase> windowService) : base(windowService)
+    public SecondWindowBaseVM(IWindowService<SecondWindowPageVMBase> windowService) : base(windowService)
     {
         windowService.OnPageLoaded += () => { OnShowView?.Invoke(); };
     }

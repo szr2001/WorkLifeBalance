@@ -21,7 +21,7 @@ public static class UrlHelper
             return true;
         } catch (UriFormatException e)
         {
-            Log.Warning("Failed to get authority from url: " + url + " with error: " + e);
+            Log.Warning("Failed to get authority from url: {0}. Trying to resolve by schema/host", url);
 
             if (ValidateWithUriBuilder(url, out string? newUrl))
             {

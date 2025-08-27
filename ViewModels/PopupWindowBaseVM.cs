@@ -8,12 +8,12 @@ using WorkLifeBalance.ViewModels.Base;
 
 namespace WorkLifeBalance.ViewModels;
 
-public partial class PopupWindowBaseVm : NewWindowBase<PopupWindowPageVMBase>, IRecipient<PopupCloseMessage>
+public partial class PopupWindowBaseVM : NewWindowBase<PopupWindowPageVMBase>, IRecipient<PopupCloseMessage>
 {
     public Action? OnShowView { get; set; } = () => { };
     public Action? OnHideView { get; set; } = () => { };
 
-    public PopupWindowBaseVm(IWindowService<PopupWindowPageVMBase> windowService) : base(windowService)
+    public PopupWindowBaseVM(IWindowService<PopupWindowPageVMBase> windowService) : base(windowService)
     {
         windowService.OnPageLoaded += () =>
         {
@@ -21,7 +21,7 @@ public partial class PopupWindowBaseVm : NewWindowBase<PopupWindowPageVMBase>, I
             {
                 WeakReferenceMessenger.Default.Register(this);
             }
-            
+
             OnShowView?.Invoke();
         };
     }

@@ -7,7 +7,7 @@ using WorkLifeBalance.Models.Messages;
 
 namespace WorkLifeBalance.ViewModels;
 
-public partial class AddUrlPageVM: PopupWindowPageVMBase, IRecipient<UrlsMessage>
+public partial class AddUrlPageVM: PopupWindowPageVMBase
 {
     private readonly IWindowService<PopupWindowPageVMBase> windowService;
 
@@ -24,15 +24,17 @@ public partial class AddUrlPageVM: PopupWindowPageVMBase, IRecipient<UrlsMessage
 
     public override Task OnPageOpeningAsync(object? args = null)
     {
-        WeakReferenceMessenger.Default.Register(this);
-
+        if (args is string urlStr)
+        {
+            Urls = urlStr;
+        }
+        
         return Task.CompletedTask;
     }
 
     public override Task OnPageClosingAsync()
     {
         WeakReferenceMessenger.Default.Send(new UrlsMessage(urls));
-        WeakReferenceMessenger.Default.Unregister<UrlsMessage>(this);
         WeakReferenceMessenger.Default.Send(new PopupCloseMessage());
         return Task.CompletedTask;
     }

@@ -10,9 +10,9 @@ namespace WorkLifeBalance
     /// //use it in dependency injection, make searate method for req windows
     public partial class SecondWindow : Window
     {
-        private readonly SecondWindowBaseVm ViewModel;
+        private readonly SecondWindowBaseVM ViewModel;
 
-        public SecondWindow(SecondWindowBaseVm viewModel)
+        public SecondWindow(SecondWindowBaseVM viewModel)
         {
             Topmost = true;
             ViewModel = viewModel;

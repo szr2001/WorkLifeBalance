@@ -17,15 +17,19 @@ public class PopupWindowService : WindowServiceBase<PopupWindowPageVMBase>,
 
         activePage = (PopupWindowPageVMBase)navigationService.NavigateTo<TVm>();
 
-        await Task.Run(async () =>
+        await App.Current.Dispatcher.InvokeAsync(async () =>
         {
             await activePage.OnPageOpeningAsync(args);
-            App.Current.Dispatcher.Invoke(() => { LoadedPage = activePage; });
+            LoadedPage = activePage;
         });
     }
 
-    public override async Task Close()
+    protected virtual async Task ClearPage()
     {
-        await ClearPage();
+        if (LoadedPage != null)
+        {
+            await LoadedPage.OnPageClosingAsync();
+            LoadedPage = null;
+        }
     }
 }

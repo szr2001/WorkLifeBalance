@@ -9,15 +9,15 @@ namespace WorkLifeBalance
     /// </summary>
     public partial class PopupWindow : Window
     {
-        private readonly PopupWindowBaseVm ViewModel;
+        private readonly PopupWindowBaseVM ViewModel;
 
-        public PopupWindow(PopupWindowBaseVm viewModel)
+        public PopupWindow(PopupWindowBaseVM viewModel)
         {
             Topmost = true;
             ViewModel = viewModel;
             DataContext = ViewModel;
-            ViewModel.OnShowView += () => Show();
-            ViewModel.OnHideView += () => Hide();
+            ViewModel.OnShowView += Show;
+            ViewModel.OnHideView += Hide;
             InitializeComponent();
         }
 
