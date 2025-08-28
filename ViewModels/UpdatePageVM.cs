@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Serilog;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using WorkLifeBalance.Models;
 using WorkLifeBalance.Services;
@@ -26,7 +25,7 @@ namespace WorkLifeBalance.ViewModels
             PageWidth = 350;
         }
 
-        public override Task OnPageOppeningAsync(object? args = null)
+        public override Task OnPageOpeningAsync(object? args = null)
         {
             if (args is VersionData data)
             {
@@ -42,6 +41,8 @@ namespace WorkLifeBalance.ViewModels
 
             return Task.CompletedTask;
         }
+        
+        public override Task OnPageClosingAsync() => Task.CompletedTask;
 
         [RelayCommand]
         private void GoToDownload()

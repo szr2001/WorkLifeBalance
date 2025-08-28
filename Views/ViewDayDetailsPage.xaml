@@ -1,126 +1,196 @@
-﻿<Page x:Class="WorkLifeBalance.Views.ViewDayDetailsPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:converters="clr-namespace:WorkLifeBalance.Converters"
-      xmlns:local="clr-namespace:WorkLifeBalance.Views"
-      mc:Ignorable="d" 
-      d:DesignHeight="370" d:DesignWidth="400"
-      Title="ViewDayDetailsPage">
+﻿<Page
+    Title="ViewDayDetailsPage"
+    d:DesignHeight="370"
+    d:DesignWidth="600"
+    mc:Ignorable="d"
+    x:Class="WorkLifeBalance.Views.ViewDayDetailsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:converters="clr-namespace:WorkLifeBalance.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WorkLifeBalance.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Page.Resources>
-        <converters:TimeOnlyToStringConverter x:Key="TimeOnlyToStringConverter"/>
+        <converters:TimeOnlyToStringConverter x:Key="TimeOnlyToStringConverter" />
     </Page.Resources>
     <Border Background="Transparent">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
-            
-            <StackPanel Orientation="Vertical" Grid.Column="1" Grid.RowSpan="2">
-                <Border CornerRadius="10"
-                        Height="370"
-                        Margin="10,10,10,10"
-                        Background="{StaticResource WBlue}">
-                    <ScrollViewer VerticalScrollBarVisibility="Hidden" Margin="0,2,0,2">
-                            <ItemsControl ItemsSource="{Binding Activities}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Vertical"
-                                                   HorizontalAlignment="Center"
-                                                   Margin="5"/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
+
+            <StackPanel
+                Grid.Column="1"
+                Grid.RowSpan="2"
+                Orientation="Vertical">
+                <Border
+                    Background="{StaticResource WBlue}"
+                    CornerRadius="10"
+                    Height="370"
+                    Margin="10,10,10,10">
+                    <ScrollViewer Margin="0,2,0,2" VerticalScrollBarVisibility="Hidden">
+                        <ItemsControl ItemsSource="{Binding ProcessActivities}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel
+                                        HorizontalAlignment="Center"
+                                        Margin="5"
+                                        Orientation="Vertical" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Border Margin="4"
-                                            Background="{StaticResource WBlueShadow}"
-                                            CornerRadius="10">
+                                    <Border
+                                        Background="{StaticResource WBlueShadow}"
+                                        CornerRadius="10"
+                                        Margin="4">
                                         <StackPanel Orientation="Vertical">
-                                            <TextBlock Text="{Binding Process}"
-                                                        TextAlignment="Center"
-                                                        Margin="3"
-                                                        FontWeight="Bold"
-                                                        FontSize="16"
-                                                        Foreground="White"/>
-                                            <TextBlock Text="{Binding TimeSpentC, StringFormat=HH:mm:ss}"
-                                                        TextAlignment="Center"
-                                                        Margin="3"
-                                                        FontWeight="Bold"
-                                                        FontSize="14"
-                                                        Foreground="White"/>
+                                            <TextBlock
+                                                FontSize="16"
+                                                FontWeight="Bold"
+                                                Foreground="White"
+                                                Margin="3"
+                                                Text="{Binding Process}"
+                                                TextAlignment="Center" />
+                                            <TextBlock
+                                                FontSize="14"
+                                                FontWeight="Bold"
+                                                Foreground="White"
+                                                Margin="3"
+                                                Text="{Binding TimeSpentC, StringFormat=HH:mm:ss}"
+                                                TextAlignment="Center" />
                                         </StackPanel>
 
                                     </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
                     </ScrollViewer>
                 </Border>
             </StackPanel>
 
-            <Border CornerRadius="10"
-                    Height="170"
-                    Width ="140"
-                    VerticalAlignment="Top"
-                    Margin="10,10,0,00"
-                    Grid.RowSpan="1"
-                    Background="{StaticResource WBlueShadow}">
+            <StackPanel
+                Grid.Column="2"
+                Grid.RowSpan="2"
+                Orientation="Vertical">
+                <Border
+                    Background="{StaticResource WBlue}"
+                    CornerRadius="10"
+                    Height="370"
+                    Margin="10,10,10,10">
+                    <ScrollViewer Margin="0,2,0,2" VerticalScrollBarVisibility="Hidden">
+                        <ItemsControl ItemsSource="{Binding PageActivities}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel
+                                        HorizontalAlignment="Center"
+                                        Margin="5"
+                                        Orientation="Vertical" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border
+                                        Background="{StaticResource WBlueShadow}"
+                                        CornerRadius="10"
+                                        Margin="4">
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock
+                                                FontSize="16"
+                                                FontWeight="Bold"
+                                                Foreground="White"
+                                                Margin="3"
+                                                Text="{Binding Url}"
+                                                TextAlignment="Center" />
+                                            <TextBlock
+                                                FontSize="14"
+                                                FontWeight="Bold"
+                                                Foreground="White"
+                                                Margin="3"
+                                                Text="{Binding TimeSpentC, StringFormat=HH:mm:ss}"
+                                                TextAlignment="Center" />
+                                        </StackPanel>
+
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                    </ScrollViewer>
+                </Border>
+            </StackPanel>
+            <Border
+                Background="{StaticResource WBlueShadow}"
+                CornerRadius="10"
+                Grid.RowSpan="1"
+                Height="170"
+                Margin="10,10,0,00"
+                VerticalAlignment="Top"
+                Width="140">
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Worked:"
-                               TextAlignment="Center"
-                               FontWeight="Bold"
-                               FontSize="23"
-                               Foreground="White"/>
-                    <TextBlock Text="{Binding LoadedDayData.WorkedAmmountC, Converter={StaticResource TimeOnlyToStringConverter}}"
-                               TextAlignment="Center"
-                               FontWeight="Bold"
-                               FontSize="16"
-                               Foreground="White"/>
-                    <TextBlock Text="Rested:"
-                               TextAlignment="Center"
-                               FontWeight="Bold"
-                               FontSize="23"
-                               Foreground="White"/>
-                    <TextBlock Text="{Binding LoadedDayData.RestedAmmountC, Converter={StaticResource TimeOnlyToStringConverter}}"
-                               TextAlignment="Center"
-                               FontWeight="Bold"
-                               FontSize="16"
-                               Foreground="White"/>
-                    <TextBlock Text="Idle:"
-                               TextAlignment="Center"
-                               FontWeight="Bold"
-                               FontSize="23"
-                               Foreground="White"/>
-                    <TextBlock Text="{Binding LoadedDayData.IdleAmmountC, Converter={StaticResource TimeOnlyToStringConverter}}"
-                               TextAlignment="Center"
-                               FontWeight="Bold"
-                               FontSize="16"
-                               Foreground="White"/>
+                    <TextBlock
+                        FontSize="23"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="Worked:"
+                        TextAlignment="Center" />
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="{Binding LoadedDayData.WorkedAmmountC, Converter={StaticResource TimeOnlyToStringConverter}}"
+                        TextAlignment="Center" />
+                    <TextBlock
+                        FontSize="23"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="Rested:"
+                        TextAlignment="Center" />
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="{Binding LoadedDayData.RestedAmmountC, Converter={StaticResource TimeOnlyToStringConverter}}"
+                        TextAlignment="Center" />
+                    <TextBlock
+                        FontSize="23"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="Idle:"
+                        TextAlignment="Center" />
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="{Binding LoadedDayData.IdleAmmountC, Converter={StaticResource TimeOnlyToStringConverter}}"
+                        TextAlignment="Center" />
 
                 </StackPanel>
             </Border>
 
-            <Button Grid.Row="1"
-                    Height="40"
-                    Width="110"
-                    Margin="10"
-                    VerticalAlignment="Bottom"
-                    Command="{Binding BackToViewDaysPageCommand}"
-                    Style="{StaticResource RoundedBtnStyle}"
-                    Template="{StaticResource SlightRoundedBtnTemp}">
-                    <TextBlock Text="Back"
-                               TextAlignment="Center"
-                               FontWeight="Bold"
-                               FontSize="25"
-                               Margin="0,0,0,4"
-                               Foreground="White"/>
+            <Button
+                Command="{Binding BackToViewDaysPageCommand}"
+                Grid.Row="1"
+                Height="40"
+                Margin="10"
+                Style="{StaticResource RoundedBtnStyle}"
+                Template="{StaticResource SlightRoundedBtnTemp}"
+                VerticalAlignment="Bottom"
+                Width="110">
+                <TextBlock
+                    FontSize="25"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Margin="0,0,0,4"
+                    Text="Back"
+                    TextAlignment="Center" />
             </Button>
         </Grid>
     </Border>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.ViewModels;
+using WorkLifeBalance.ViewModels.Base;
 
 namespace WorkLifeBalance.Services.Feature
 {
@@ -30,7 +31,7 @@ namespace WorkLifeBalance.Services.Feature
         private readonly LowLevelHandler lowLevelHandler;
         private readonly DataStorageFeature dataStorageFeature;
         private readonly IFeaturesServices featuresServices;
-        private readonly IMainWindowDetailsService mainWindowDetailsService;
+        private readonly IWindowService<MainWindowDetailsPageBase> mainWindowDetailsService;
         private readonly ISoundService soundService;
         private readonly string workLifeBalanceProcess = "WorkLifeBalance.exe";
         private readonly string explorerProcess = "explorer.exe";
@@ -42,7 +43,7 @@ namespace WorkLifeBalance.Services.Feature
         private readonly TimeSpan minusOneSecond = new(0,0,-1);
         private int defaultDelay = 6000;
         private int delay;
-        public ForceWorkFeature(AppStateHandler appStateHandler, ActivityTrackerFeature activityTrackerFeature, LowLevelHandler lowLevelHandler, IFeaturesServices featuresServices, ISoundService soundService, IMainWindowDetailsService mainWindowDetailsService, DataStorageFeature dataStorageFeature)
+        public ForceWorkFeature(AppStateHandler appStateHandler, ActivityTrackerFeature activityTrackerFeature, LowLevelHandler lowLevelHandler, IFeaturesServices featuresServices, ISoundService soundService, IWindowService<MainWindowDetailsPageBase> mainWindowDetailsService, DataStorageFeature dataStorageFeature)
         {
             this.appStateHandler = appStateHandler;
             this.activityTrackerFeature = activityTrackerFeature;
@@ -93,12 +94,12 @@ namespace WorkLifeBalance.Services.Feature
             workIterations = 0;
             warnings = 0;
             delay = 0;
-            mainWindowDetailsService.OpenDetailsPageWith<ForceWorkMainMenuDetailsPageVM>();
+            mainWindowDetailsService.OpenWith<ForceWorkMainMenuDetailsPageVM>();
         }
         
         protected override void OnFeatureRemoved()
         {
-            mainWindowDetailsService.CloseWindow();
+            mainWindowDetailsService.Close();
         }
 
         protected override Func<Task> ReturnFeatureMethod()

@@ -1,0 +1,70 @@
+﻿<Page
+    Title="AddUrlViewPage"
+    d:DesignHeight="280"
+    d:DesignWidth="300"
+    mc:Ignorable="d"
+    x:Class="WorkLifeBalance.Views.AddUrlViewPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WorkLifeBalance.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Border Background="Transparent" CornerRadius="15">
+        <Grid>
+            <StackPanel Margin="10" Orientation="Vertical">
+                <Border
+                    Background="{StaticResource WBlue}"
+                    CornerRadius="20"
+                    Height="75">
+                    <TextBlock
+                        FontSize="15"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        HorizontalAlignment="Center"
+                        Margin="4"
+                        TextAlignment="Center"
+                        TextWrapping="Wrap"
+                        VerticalAlignment="Center">
+                        Enter page url.<LineBreak />
+                        You can enter multiple urls<LineBreak />
+                        separated by '|' character.</TextBlock>
+                </Border>
+                <Border
+                    Background="{StaticResource WBlue}"
+                    CornerRadius="20"
+                    Height="110"
+                    Margin="10">
+                    <TextBox
+                        Background="Transparent"
+                        FontSize="15"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Height="90"
+                        HorizontalAlignment="Center"
+                        HorizontalScrollBarVisibility="Hidden"
+                        Margin="4"
+                        Text="{Binding Urls, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        TextWrapping="Wrap"
+                        VerticalAlignment="Center"
+                        Width="240" />
+                </Border>
+                <Button
+                    Command="{Binding ClosePageCommand}"
+                    Height="30"
+                    Margin="4"
+                    Style="{StaticResource RoundedBtnStyle}"
+                    Template="{StaticResource SlightRoundedBtnTemp}"
+                    Width="75">
+                    <TextBlock
+                        FontSize="25"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        HorizontalAlignment="Center"
+                        Margin="4"
+                        Text="Back"
+                        VerticalAlignment="Center" />
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Page>

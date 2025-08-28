@@ -1,13 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using IWshRuntimeLibrary;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
-using File = System.IO.File;
-using Path = System.IO.Path;
 
 namespace WorkLifeBalance.ViewModels
 {
@@ -37,7 +33,9 @@ namespace WorkLifeBalance.ViewModels
         private readonly DataStorageFeature dataStorageFeature;
         private readonly IFeaturesServices featuresServices;
         private readonly LowLevelHandler lowLevelHandler;
-        public SettingsPageVM(DataStorageFeature dataStorageFeature, IFeaturesServices featuresServices, LowLevelHandler lowLevelHandler)
+
+        public SettingsPageVM(DataStorageFeature dataStorageFeature, IFeaturesServices featuresServices,
+            LowLevelHandler lowLevelHandler)
         {
             this.featuresServices = featuresServices;
             this.dataStorageFeature = dataStorageFeature;
@@ -48,6 +46,8 @@ namespace WorkLifeBalance.ViewModels
 
             InitializeData();
         }
+
+        public override Task OnPageOpeningAsync(object? args = null) => Task.CompletedTask;
 
         private void InitializeData()
         {

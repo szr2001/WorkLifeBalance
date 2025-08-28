@@ -55,8 +55,8 @@ namespace WorkLifeBalance.ViewModels
 
         private DataBaseHandler databaseHandler;
         private DataStorageFeature dataStorageFeature;
-        private ISecondWindowService secondWindowService;
-        public ViewDataPageVM(DataBaseHandler databaseHandler, DataStorageFeature dataStorageFeature, ISecondWindowService secondWindowService)
+        private IWindowService<SecondWindowPageVMBase> secondWindowService;
+        public ViewDataPageVM(DataBaseHandler databaseHandler, DataStorageFeature dataStorageFeature, IWindowService<SecondWindowPageVMBase> secondWindowService)
         {
             PageHeight = 580;
             PageWidth = 750;
@@ -68,7 +68,9 @@ namespace WorkLifeBalance.ViewModels
             _ = CalculateData();
         }
 
-        public override async Task OnPageOppeningAsync(object? args = null)
+        public override Task OnPageClosingAsync() => Task.CompletedTask;
+
+        public override async Task OnPageOpeningAsync(object? args = null)
         {
             await CalculateData();
         }
@@ -192,19 +194,19 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         private void SeePreviousMonth()
         {
-            secondWindowService.OpenWindowWith<ViewDaysPageVM>(2);
+            secondWindowService.OpenWith<ViewDaysPageVM>(2);
         }
 
         [RelayCommand]
         private void SeeCurrentMonth()
         {
-            secondWindowService.OpenWindowWith<ViewDaysPageVM>(1);
+            secondWindowService.OpenWith<ViewDaysPageVM>(1);
         }
 
         [RelayCommand]
         private void SeeAllDays()
         {
-            secondWindowService.OpenWindowWith<ViewDaysPageVM>(0);
+            secondWindowService.OpenWith<ViewDaysPageVM>(0);
         }
     }
 }

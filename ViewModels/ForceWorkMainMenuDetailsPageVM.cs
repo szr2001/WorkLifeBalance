@@ -1,9 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Services.Feature;
@@ -24,17 +21,17 @@ namespace WorkLifeBalance.ViewModels
         private TimeOnly totalWorkTimeRemaining;
 
         private readonly ForceWorkFeature forceWorkFeature;
-        private readonly ISecondWindowService secondWindowService;
+        private readonly IWindowService<SecondWindowPageVMBase> secondWindowService;
         private readonly IFeaturesServices featuresServices;
 
-        public ForceWorkMainMenuDetailsPageVM(ForceWorkFeature forceWorkFeature, ISecondWindowService secondWindowService, IFeaturesServices featuresServices)
+        public ForceWorkMainMenuDetailsPageVM(ForceWorkFeature forceWorkFeature, IWindowService<SecondWindowPageVMBase> secondWindowService, IFeaturesServices featuresServices)
         {
             this.forceWorkFeature = forceWorkFeature;
             this.secondWindowService = secondWindowService;
             this.featuresServices = featuresServices;
         }
 
-        public override Task OnPageOppeningAsync(object? args = null)
+        public override Task OnPageOpeningAsync(object? args = null)
         {
             forceWorkFeature.OnDataUpdated += UpdateDataFromForceWork;
             UpdateDataFromForceWork();
@@ -58,7 +55,7 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         private void EditForceWork()
         {
-            secondWindowService.OpenWindowWith<ForceWorkPageVM>();
+            secondWindowService.OpenWith<ForceWorkPageVM>();
         }
     }
 }

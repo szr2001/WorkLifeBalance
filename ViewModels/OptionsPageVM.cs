@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Input;
 using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Services;
 
@@ -6,9 +7,9 @@ namespace WorkLifeBalance.ViewModels
 {
     public partial class OptionsPageVM : SecondWindowPageVMBase
     {
-        private readonly ISecondWindowService secondWindowService;
+        private readonly IWindowService<SecondWindowPageVMBase> secondWindowService;
         private readonly LowLevelHandler LowLevelHandler;
-        public OptionsPageVM(ISecondWindowService secondWindowService, LowLevelHandler lowLevelHandler)
+        public OptionsPageVM(IWindowService<SecondWindowPageVMBase> secondWindowService, LowLevelHandler lowLevelHandler)
         {
             this.secondWindowService = secondWindowService;
             PageHeight = 320;
@@ -16,17 +17,20 @@ namespace WorkLifeBalance.ViewModels
             PageName = "Options";
             LowLevelHandler = lowLevelHandler;
         }
+        public override Task OnPageClosingAsync() => Task.CompletedTask;
+
+        public override Task OnPageOpeningAsync(object? args = null) => Task.CompletedTask;
 
         [RelayCommand]
         private void OpenSettings()
         {
-            secondWindowService.OpenWindowWith<SettingsPageVM>();
+            secondWindowService.OpenWith<SettingsPageVM>();
         }
 
         [RelayCommand]
         private void ConfigureAutoDetect()
         {
-            secondWindowService.OpenWindowWith<BackgroundProcessesViewPageVM>();
+            secondWindowService.OpenWith<BackgroundProcessesViewPageVM>();
         }
 
         [RelayCommand]
@@ -45,7 +49,7 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         private void OpenForceWork()
         {
-            secondWindowService.OpenWindowWith<ForceWorkPageVM>();
+            secondWindowService.OpenWith<ForceWorkPageVM>();
         }
     }
 }

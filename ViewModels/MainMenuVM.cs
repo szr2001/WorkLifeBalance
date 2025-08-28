@@ -1,13 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Serilog;
 using System;
-using System.Net;
-using System.Threading.Tasks;
-using System.Windows;
 using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Services;
 using WorkLifeBalance.Services.Feature;
+using WorkLifeBalance.ViewModels.Base;
 
 namespace WorkLifeBalance.ViewModels
 {
@@ -36,16 +33,16 @@ namespace WorkLifeBalance.ViewModels
             } 
         }
 
-        public IMainWindowDetailsService MainWindowDetailsService { get; set; }
+        public IWindowService<MainWindowDetailsPageBase> MainWindowDetailsService { get; set; }
 
         private readonly AppStateHandler appStateHandler;
         private readonly LowLevelHandler lowLevelHandler;
         private readonly DataStorageFeature dataStorageFeature;
         private readonly TimeTrackerFeature timeTrackerFeature;
         private readonly IFeaturesServices featuresServices;
-        private readonly ISecondWindowService secondWindowService;
+        private readonly IWindowService<SecondWindowPageVMBase> secondWindowService;
 
-        public MainWindowVM(AppTimer mainTimer, LowLevelHandler lowLevelHandler, DataStorageFeature dataStorageFeature, TimeTrackerFeature timeTrackerFeature, ISecondWindowService secondWindowService, AppStateHandler appStateHandler, IMainWindowDetailsService mainWindowDetailsService, IFeaturesServices featuresServices)
+        public MainWindowVM(AppTimer mainTimer, LowLevelHandler lowLevelHandler, DataStorageFeature dataStorageFeature, TimeTrackerFeature timeTrackerFeature, IWindowService<SecondWindowPageVMBase> secondWindowService, AppStateHandler appStateHandler, IWindowService<MainWindowDetailsPageBase> mainWindowDetailsService, IFeaturesServices featuresServices)
         {
             this.lowLevelHandler = lowLevelHandler;
             this.dataStorageFeature = dataStorageFeature;
@@ -108,19 +105,19 @@ namespace WorkLifeBalance.ViewModels
         [RelayCommand]
         private void OpenViewDataWindow()
         {
-            secondWindowService.OpenWindowWith<ViewDataPageVM>();
+            secondWindowService.OpenWith<ViewDataPageVM>();
         }
 
         [RelayCommand]
         private void OpenOptionsWindow()
         {
-            secondWindowService.OpenWindowWith<OptionsPageVM>();
+            secondWindowService.OpenWith<OptionsPageVM>();
         }
 
         [RelayCommand]
         private void CloseApp()
         {
-            secondWindowService.OpenWindowWith<CloseWarningPageVM>();
+            secondWindowService.OpenWith<CloseWarningPageVM>();
         }
     }
 }

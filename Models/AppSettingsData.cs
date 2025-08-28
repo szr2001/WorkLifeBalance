@@ -6,7 +6,7 @@ namespace WorkLifeBalance.Models
 {
     public class AppSettingsData
     {
-        public readonly string Version = "2.0.7";
+        public readonly string Version = "2.0.8";
         public readonly string AppName = "WorkLifeBalance";
         public string AppDirectory { get; set; }
         public string AppExePath { get; set; }

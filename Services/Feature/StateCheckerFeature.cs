@@ -8,9 +8,11 @@ namespace WorkLifeBalance.Services.Feature
     public class StateCheckerFeature : FeatureBase
     {
         public bool IsFocusingOnWorkingWindow { get; set; }
+        public bool IsFocusingOnWorkingPage { get; set; }
         private readonly DataStorageFeature dataStorageFeature;
         private readonly ActivityTrackerFeature activityTrackerFeature;
         private readonly AppStateHandler appStateHandler;
+
         public StateCheckerFeature(DataStorageFeature dataStorageFeature, ActivityTrackerFeature activityTrackerFeature, AppStateHandler appStateHandler)
         {
             this.dataStorageFeature = dataStorageFeature;
@@ -52,18 +54,20 @@ namespace WorkLifeBalance.Services.Feature
             if (string.IsNullOrEmpty(activityTrackerFeature.ActiveWindow)) return;
 
             IsFocusingOnWorkingWindow = dataStorageFeature.AutoChangeData.WorkingStateWindows.Contains(activityTrackerFeature.ActiveWindow);
-
+            IsFocusingOnWorkingPage =
+                dataStorageFeature.AutoChangeData.WorkingStateUrls.Contains(activityTrackerFeature.ActiveUrl);
+           
             switch (appStateHandler.AppTimerState)
             {
                 case AppState.Working:
-                    if (!IsFocusingOnWorkingWindow)
+                    if (!IsFocusingOnWorkingWindow && !IsFocusingOnWorkingPage)
                     {
                         appStateHandler.SetAppState(AppState.Resting);
                     }
                     break;
 
                 case AppState.Resting:
-                    if (IsFocusingOnWorkingWindow)
+                    if (IsFocusingOnWorkingWindow || IsFocusingOnWorkingPage)
                     {
                         appStateHandler.SetAppState(AppState.Working);
                     }

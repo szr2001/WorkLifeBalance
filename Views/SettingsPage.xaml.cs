@@ -1,5 +1,4 @@
 ﻿using System.Windows.Controls;
-using WorkLifeBalance.ViewModels;
 
 namespace WorkLifeBalance.Views
 {

@@ -1,7 +1,6 @@
 ﻿using System;
 using WorkLifeBalance.Interfaces;
 using WorkLifeBalance.Services.Feature;
-using WorkLifeBalance.ViewModels;
 
 namespace WorkLifeBalance.Services
 {

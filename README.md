@@ -31,6 +31,8 @@ WorkLifeBalance is a productivity application designed to help users monitor and
 ## Installation and Setup
 
 1. Download the application from the official website and follow the instructions.
+   https://roberbot.itch.io/work-life-balance
+
 3. Launch the application with Administrator privileges to enable full functionality.
 
 ## Usage
@@ -45,6 +47,16 @@ WorkLifeBalance is a productivity application designed to help users monitor and
 
 Detailed video tutorial:
 https://www.youtube.com/watch?v=PVNq04e8AJo
+
+## Support
+If you like the app and want to support it:
+https://buymeacoffee.com/roberbot
+
+## Future Planned Features
+- The ability to create custom states like "Learing" "Gaming" on top of the default "Resting, Idle, Working" states.
+- An **Advanced Detection** mode that's able to more accurate detect activities even specific webpages.
+- A possible port from WPF to Avalonia to allow for Linux support.
+- Enhanced documentation for a smoother community contribution process.
 
 ## License
 This project is licensed under the MIT License. See the LICENSE file for details.

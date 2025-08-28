@@ -1,8 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using WorkLifeBalance.Models;
-using WorkLifeBalance.ViewModels;
+﻿using System.Windows.Controls;
 
 namespace WorkLifeBalance.Views
 {

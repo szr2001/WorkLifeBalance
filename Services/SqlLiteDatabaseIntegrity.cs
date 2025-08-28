@@ -19,16 +19,18 @@ namespace WorkLifeBalance.Services
         private string dbdirectoryPath = "";
         private string dbPath = "";
 
-        public SqlLiteDatabaseIntegrity(SqlDataAccess sqlDataAccess, DataStorageFeature dataStorageFeature, LowLevelHandler lowLevelHandler, IConfiguration configuration)
+        public SqlLiteDatabaseIntegrity(SqlDataAccess sqlDataAccess, DataStorageFeature dataStorageFeature,
+            LowLevelHandler lowLevelHandler, IConfiguration configuration)
         {
             this.sqlDataAccess = sqlDataAccess;
             this.dataStorageFeature = dataStorageFeature;
 
             string? overridedDirectory = configuration.GetValue<string>("OverrideDbDirectory");
 
-            if(string.IsNullOrEmpty(overridedDirectory))
+            if (string.IsNullOrEmpty(overridedDirectory))
             {
-                dbdirectoryPath = @$"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\WorkLifeBalance";
+                dbdirectoryPath =
+                    @$"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\WorkLifeBalance";
             }
             else
             {
@@ -39,14 +41,15 @@ namespace WorkLifeBalance.Services
 
             DatabaseUpdates = new()
             {
-                { "2.0.6", Update2_0_6To2_0_7},
-                { "2.0.5", Update2_0_5To2_0_6},
-                { "2.0.4", Update2_0_4To2_0_5},
-                { "2.0.3", Update2_0_3To2_0_4},
-                { "2.0.2", Update2_0_2To2_0_3},
-                { "2.0.1", Update2_0_1To2_0_2},
-                { "2.0.0", Update2_0_0To2_0_1},
-                { "Beta", UpdateBetaTo2_0_0V}
+                { "2.0.7", Update2_0_7To2_0_8 },
+                { "2.0.6", Update2_0_6To2_0_7 },
+                { "2.0.5", Update2_0_5To2_0_6 },
+                { "2.0.4", Update2_0_4To2_0_5 },
+                { "2.0.3", Update2_0_3To2_0_4 },
+                { "2.0.2", Update2_0_2To2_0_3 },
+                { "2.0.1", Update2_0_1To2_0_2 },
+                { "2.0.0", Update2_0_0To2_0_1 },
+                { "Beta", UpdateBetaTo2_0_0V }
             };
             this.lowLevelHandler = lowLevelHandler;
             this.configuration = configuration;
@@ -65,6 +68,7 @@ namespace WorkLifeBalance.Services
                 Log.Warning("Database file not found, genereting one");
                 await CreateLatestDatabase();
             }
+
             Log.Information($"Database is up to date!");
         }
 
@@ -82,7 +86,7 @@ namespace WorkLifeBalance.Services
                     string databaseVersion = await GetDatabaseVersion();
                     //if its not up to date, then we call this method again, to give it the next update
                     Log.Warning($"Database Updated to version {databaseVersion}");
-                  
+
                     await UpdateOrCreateDatabase(databaseVersion);
                 }
                 else
@@ -93,9 +97,10 @@ namespace WorkLifeBalance.Services
                     MarkDbAsCorupted();
                     await CreateLatestDatabase();
                 }
+
                 return;
             }
-         
+
             lowLevelHandler.RegenerateStartupShortcut();
         }
 
@@ -105,12 +110,13 @@ namespace WorkLifeBalance.Services
             {
                 if (File.Exists(dbPath))
                 {
-                    File.Copy(dbPath, @$"{dbdirectoryPath}\RecordedData_{DateTime.UtcNow:yyyy_MM_dd_HH_mm_ss}_Corrupted.db", false);
+                    File.Copy(dbPath,
+                        @$"{dbdirectoryPath}\RecordedData_{DateTime.UtcNow:yyyy_MM_dd_HH_mm_ss}_Corrupted.db", false);
 
                     File.Delete(dbPath);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error(ex.Message);
             }
@@ -125,12 +131,12 @@ namespace WorkLifeBalance.Services
             try
             {
                 var result = (await sqlDataAccess.ReadDataAsync<string, dynamic>(sql, new { })).FirstOrDefault();
-                if(result != null)
+                if (result != null)
                 {
                     version = result;
                 }
             }
-            catch            
+            catch
             {
                 Log.Warning("Database Version collumn not found, indicatin Beta version database");
             }
@@ -145,7 +151,7 @@ namespace WorkLifeBalance.Services
 
             string updateVersionSQL = "";
 
-            if(ExistVersionRow)
+            if (ExistVersionRow)
             {
                 updateVersionSQL = "UPDATE Settings SET Version = @Version";
             }
@@ -164,9 +170,10 @@ namespace WorkLifeBalance.Services
                 Log.Warning($"{dbdirectoryPath} does not exist, creating it");
                 Directory.CreateDirectory(dbdirectoryPath);
             }
+
             return File.Exists(dbPath);
         }
-        
+
         private async Task CreateLatestDatabase()
         {
             string createActivitySQL =
@@ -174,7 +181,8 @@ namespace WorkLifeBalance.Services
                     CREATE TABLE "Activity" 
                     (
                 	"Date"	TEXT NOT NULL,
-                	"Process"	TEXT NOT NULL,
+                	"Process"	TEXT CHECK((Process IS NOT NULL AND Url IS NULL) OR (Url IS NOT NULL AND Process IS NULL)),
+                	"URL" TEXT,
                 	"TimeSpent"	TEXT NOT NULL);
                 """;
             await sqlDataAccess.ExecuteAsync(createActivitySQL, new { });
@@ -192,15 +200,15 @@ namespace WorkLifeBalance.Services
 
             string createSettingsSQL =
                 $"""
-                    CREATE TABLE "Settings" (
-                	"LastTimeOpened"	TEXT,
-                	"StartWithWindows"	INTEGER,
-                	"SaveInterval"	INTEGER,
-                	"AutoDetectInterval"	INTEGER,
-                    "AutoDetectIdleInterval"	INTEGER,
-                    "MinimizeToTray"	INTEGER,
-                    "Version"	TEXT);
-                """;
+                     CREATE TABLE "Settings" (
+                 	"LastTimeOpened"	TEXT,
+                 	"StartWithWindows"	INTEGER,
+                 	"SaveInterval"	INTEGER,
+                 	"AutoDetectInterval"	INTEGER,
+                     "AutoDetectIdleInterval"	INTEGER,
+                     "MinimizeToTray"	INTEGER,
+                     "Version"	TEXT);
+                 """;
             await sqlDataAccess.ExecuteAsync(createSettingsSQL, new { });
 
             string createWorkingWindowsSQL =
@@ -210,7 +218,32 @@ namespace WorkLifeBalance.Services
                 """;
             await sqlDataAccess.ExecuteAsync(createWorkingWindowsSQL, new { });
 
+            string createWorkingPageSQL =
+                """
+                    CREATE TABLE "WorkingUrls" (
+                	"WorkingStateUrl"	TEXT NOT NULL UNIQUE);
+                """;
+            await sqlDataAccess.ExecuteAsync(createWorkingPageSQL, new { });
             await UpdateDatabaseVersion(dataStorageFeature.Settings.Version);
+        }
+
+        private async Task Update2_0_7To2_0_8()
+        {
+            string sqlCreateUrlColumnForActivity =
+                """
+                CREATE TABLE "Activity_new" (
+                	"Date"	TEXT NOT NULL,
+                	"TimeSpent"	TEXT NOT NULL, 
+                	"Url" TEXT NULL,
+                	"Process" TEXT CHECK((Process IS NOT NULL AND Url IS NULL) OR (Url IS NOT NULL AND Process IS NULL))
+                	);
+                INSERT INTO Activity_new SELECT * FROM Activity;
+                DROP TABLE Activity;
+                ALTER TABLE Activity_new RENAME TO Activity;
+                CREATE TABLE "WorkingUrls" ("WorkingStateUrl" TEXT NOT NULL UNIQUE);
+                """;
+            await sqlDataAccess.ExecuteAsync(sqlCreateUrlColumnForActivity, new { });
+            await UpdateDatabaseVersion("2.0.8");
         }
 
         private async Task Update2_0_6To2_0_7()
