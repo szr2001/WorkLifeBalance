@@ -32,6 +32,8 @@ namespace WorkLifeBalance.Services.Feature
 
             Log.Information($"Saving...");
 
+            await CheckIsNewDay();
+
             IsAppSaving = true;
 
             OnSaving?.Invoke();
@@ -47,6 +49,12 @@ namespace WorkLifeBalance.Services.Feature
             Log.Information($"Save Complete!");
         }
 
+        private async Task CheckIsNewDay()
+        {
+            //use day data, check against DateTime.Now and if it's not equal
+            //save the day and create a new day data and use settings to set the new day
+        }
+        
         public async Task LoadData()
         {
             if (IsAppLoading) return;
