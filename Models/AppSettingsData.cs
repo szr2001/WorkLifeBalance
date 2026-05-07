@@ -6,7 +6,7 @@ namespace WorkLifeBalance.Models
 {
     public class AppSettingsData
     {
-        public readonly string Version = "2.0.8";
+        public readonly string Version = "2.0.7";
         public readonly string AppName = "WorkLifeBalance";
         public string AppDirectory { get; set; }
         public string AppExePath { get; set; }
@@ -67,6 +67,8 @@ namespace WorkLifeBalance.Models
                 LastTimeOpened = LastTimeOpenedC.ToString("HHmmMMddyyyy");
 
                 MinimizeToTray = MinimizeToTrayC ? 1 : 0;
+
+                StartWithWindows = StartWithWindowsC ? 1 : 0;
             }
             catch (Exception ex)
             {
