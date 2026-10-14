@@ -1,0 +1,14 @@
+<UserControl
+    x:Class="WorkLifeBalance.Shared.Navigation.LoadingView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:hc="https://handyorg.github.io/handycontrol">
+
+    <hc:CircleProgressBar
+        Width="50"
+        Height="50"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Background="Transparent"
+        IsIndeterminate="True" />
+</UserControl>

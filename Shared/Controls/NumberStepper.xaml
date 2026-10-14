@@ -1,0 +1,32 @@
+<UserControl
+    x:Class="WorkLifeBalance.Shared.Controls.NumberStepper"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:icons="clr-namespace:WorkLifeBalance.Shared.Icons"
+    Width="96"
+    MouseWheel="OnMouseWheel">
+
+    <Border Style="{StaticResource FieldBox}">
+        <DockPanel>
+            <RepeatButton
+                x:Name="Decrease"
+                Click="OnDecrease"
+                DockPanel.Dock="Left"
+                Style="{StaticResource StepperButton}"
+                Tag="{icons:Phosphor MinusBold}" />
+            <RepeatButton
+                x:Name="Increase"
+                Click="OnIncrease"
+                DockPanel.Dock="Right"
+                Style="{StaticResource StepperButton}"
+                Tag="{icons:Phosphor PlusBold}" />
+            <TextBlock
+                x:Name="Label"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="{StaticResource FontFamily.Numbers}"
+                FontSize="{StaticResource FontSize.Sm}"
+                Foreground="{DynamicResource PrimaryTextBrush}" />
+        </DockPanel>
+    </Border>
+</UserControl>

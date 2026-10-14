@@ -1,0 +1,82 @@
+<UserControl
+    x:Class="WorkLifeBalance.Features.Options.OptionsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:icons="clr-namespace:WorkLifeBalance.Shared.Icons"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:options="clr-namespace:WorkLifeBalance.Features.Options"
+    d:DataContext="{d:DesignInstance Type=options:OptionsViewModel}"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <!--  Icon in the Tag, title in the Content, description in AutomationProperties.HelpText  -->
+        <Style
+            x:Key="OptionRow"
+            BasedOn="{StaticResource RowButton}"
+            TargetType="Button">
+            <Setter Property="Margin" Value="0,0,0,2" />
+            <Setter Property="ContentTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <DockPanel>
+                            <Path
+                                Width="15"
+                                Height="15"
+                                Margin="0,2,10,0"
+                                VerticalAlignment="Top"
+                                Data="{Binding Tag, RelativeSource={RelativeSource AncestorType=Button}}"
+                                DockPanel.Dock="Left"
+                                Fill="{DynamicResource PrimaryBrush}"
+                                Stretch="Uniform" />
+                            <StackPanel>
+                                <TextBlock
+                                    FontSize="{StaticResource FontSize.Body}"
+                                    Foreground="{DynamicResource PrimaryTextBrush}"
+                                    Text="{Binding}" />
+                                <TextBlock
+                                    Style="{StaticResource CaptionText}"
+                                    Text="{Binding (AutomationProperties.HelpText), RelativeSource={RelativeSource AncestorType=Button}}"
+                                    TextTrimming="None"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                        </DockPanel>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <StackPanel>
+        <Button
+            Command="{Binding OpenSettingsCommand}"
+            Content="Settings"
+            Style="{StaticResource OptionRow}"
+            Tag="{icons:Phosphor GearSixBold}"
+            AutomationProperties.HelpText="Intervals, start with Windows, tray" />
+        <Button
+            Command="{Binding ConfigureAutoDetectCommand}"
+            Content="Configure Working"
+            Style="{StaticResource OptionRow}"
+            Tag="{icons:Phosphor BriefcaseBold}"
+            AutomationProperties.HelpText="Specify working windows" />
+        <Button
+            Command="{Binding OpenForceWorkCommand}"
+            Content="Force Working"
+            Style="{StaticResource OptionRow}"
+            Tag="{icons:Phosphor TimerBold}"
+            AutomationProperties.HelpText="Pomodoro timer, calculate work and rest intervals" />
+        <Button
+            Command="{Binding OpenFeedbackCommand}"
+            Content="Feedback"
+            Style="{StaticResource OptionRow}"
+            Tag="{icons:Phosphor ChatCircleTextBold}"
+            AutomationProperties.HelpText="App is still new, if you have any feedback or found a bug, I'm all ears!" />
+        <Button
+            Command="{Binding OpenDonationsCommand}"
+            Content="Donations"
+            Style="{StaticResource OptionRow}"
+            Tag="{icons:Phosphor HeartBold}"
+            AutomationProperties.HelpText="If you like the app and can afford don't forget to donate" />
+    </StackPanel>
+</UserControl>

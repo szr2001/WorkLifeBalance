@@ -1,0 +1,29 @@
+<UserControl
+    x:Class="WorkLifeBalance.Shared.Controls.GridPicker"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:WorkLifeBalance.Shared.Controls">
+
+    <ItemsControl ItemsSource="{Binding Options, RelativeSource={RelativeSource AncestorType=controls:GridPicker}}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <UniformGrid Columns="{Binding Columns, RelativeSource={RelativeSource AncestorType=controls:GridPicker}}" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate DataType="{x:Type controls:PickerOption}">
+                <Button
+                    Click="OnOptionClick"
+                    Content="{Binding Label}"
+                    Style="{StaticResource PickerCell}">
+                    <Button.Tag>
+                        <MultiBinding Converter="{StaticResource EnumToBooleanConverter}">
+                            <Binding Path="Value" />
+                            <Binding Path="SelectedValue" RelativeSource="{RelativeSource AncestorType=controls:GridPicker}" />
+                        </MultiBinding>
+                    </Button.Tag>
+                </Button>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</UserControl>

@@ -1,0 +1,38 @@
+<UserControl
+    x:Class="WorkLifeBalance.Features.WorkApps.AddUrlView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:workApps="clr-namespace:WorkLifeBalance.Features.WorkApps"
+    d:DataContext="{d:DesignInstance Type=workApps:AddUrlViewModel}"
+    mc:Ignorable="d">
+
+    <DockPanel>
+        <TextBlock
+            Margin="0,0,0,8"
+            DockPanel.Dock="Top"
+            Style="{StaticResource CaptionText}"
+            Text="Separate the pages with |"
+            TextTrimming="None"
+            TextWrapping="Wrap" />
+        <Button
+            Margin="0,10,0,0"
+            HorizontalAlignment="Right"
+            Command="{Binding ClosePageCommand}"
+            Content="Back"
+            DockPanel.Dock="Bottom"
+            Style="{StaticResource ToolbarButton}" />
+        <hc:TextBox
+            Padding="8"
+            VerticalContentAlignment="Top"
+            AcceptsReturn="False"
+            FontFamily="{StaticResource FontFamily.Numbers}"
+            FontSize="{StaticResource FontSize.Sm}"
+            HorizontalScrollBarVisibility="Disabled"
+            Text="{Binding Urls, UpdateSourceTrigger=PropertyChanged}"
+            TextWrapping="Wrap"
+            VerticalScrollBarVisibility="Auto" />
+    </DockPanel>
+</UserControl>

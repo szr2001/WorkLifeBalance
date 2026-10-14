@@ -1,0 +1,164 @@
+<UserControl
+    x:Class="WorkLifeBalance.Features.ForceWork.ForceWorkView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:forceWork="clr-namespace:WorkLifeBalance.Features.ForceWork"
+    xmlns:controls="clr-namespace:WorkLifeBalance.Shared.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance Type=forceWork:ForceWorkViewModel}"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <Style
+            x:Key="FieldLabel"
+            BasedOn="{StaticResource BodyText}"
+            TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="FieldRow" TargetType="DockPanel">
+            <Setter Property="Margin" Value="0,0,0,8" />
+        </Style>
+    </UserControl.Resources>
+
+    <DockPanel>
+        <Grid Margin="0,10,0,0" DockPanel.Dock="Bottom">
+            <Button
+                HorizontalAlignment="Right"
+                Command="{Binding ToggleForceWorkCommand}"
+                Content="Start"
+                Style="{StaticResource ToolbarButtonPrimary}"
+                Visibility="{Binding IsFeatureActive, Converter={StaticResource BoolToCollapsedConverter}}" />
+            <Button
+                HorizontalAlignment="Right"
+                Command="{Binding ToggleForceWorkCommand}"
+                Content="Stop"
+                Style="{StaticResource ToolbarButtonDanger}"
+                Visibility="{Binding IsFeatureActive, Converter={StaticResource BoolToVisibleConverter}}" />
+        </Grid>
+
+        <Grid>
+            <!--  Not running: the timer settings  -->
+            <StackPanel Visibility="{Binding IsFeatureActive, Converter={StaticResource BoolToCollapsedConverter}}">
+                <DockPanel Style="{StaticResource FieldRow}">
+                    <controls:DurationField
+                        Width="120"
+                        DockPanel.Dock="Right"
+                        Hours="{Binding TotalWorkHours}"
+                        Minutes="{Binding TotalWorkMinutes}" />
+                    <TextBlock Style="{StaticResource FieldLabel}" Text="Total work" />
+                </DockPanel>
+
+                <DockPanel Style="{StaticResource FieldRow}">
+                    <controls:DurationField
+                        Width="120"
+                        DockPanel.Dock="Right"
+                        Hours="{Binding WorkHours}"
+                        Minutes="{Binding WorkMinutes}" />
+                    <TextBlock Style="{StaticResource FieldLabel}" Text="Work" />
+                </DockPanel>
+
+                <DockPanel Style="{StaticResource FieldRow}">
+                    <controls:DurationField
+                        Width="120"
+                        DockPanel.Dock="Right"
+                        Hours="{Binding RestHours}"
+                        Minutes="{Binding RestMinutes}" />
+                    <TextBlock Style="{StaticResource FieldLabel}" Text="Rest" />
+                </DockPanel>
+
+                <DockPanel Style="{StaticResource FieldRow}">
+                    <controls:DurationField
+                        Width="120"
+                        DockPanel.Dock="Right"
+                        Hours="{Binding LongRestHours}"
+                        Minutes="{Binding LongRestMinutes}" />
+                    <TextBlock Style="{StaticResource FieldLabel}" Text="Long rest" />
+                </DockPanel>
+
+                <DockPanel Style="{StaticResource FieldRow}" ToolTip="Work stages before a long rest">
+                    <controls:NumberStepper
+                        Width="120"
+                        DockPanel.Dock="Right"
+                        Maximum="12"
+                        Value="{Binding LongRestInterval}" />
+                    <TextBlock Style="{StaticResource FieldLabel}" Text="Long rest interval" />
+                </DockPanel>
+
+                <DockPanel Style="{StaticResource FieldRow}" ToolTip="Warnings before every window is minimized">
+                    <controls:NumberStepper
+                        Width="120"
+                        DockPanel.Dock="Right"
+                        Maximum="12"
+                        Value="{Binding MaxWarnings}" />
+                    <TextBlock Style="{StaticResource FieldLabel}" Text="Max warnings" />
+                </DockPanel>
+            </StackPanel>
+
+            <!--  Running: the settings in use and the distractions  -->
+            <DockPanel Visibility="{Binding IsFeatureActive, Converter={StaticResource BoolToVisibleConverter}}">
+                <Border
+                    Margin="0,0,0,8"
+                    DockPanel.Dock="Top"
+                    Style="{StaticResource InsetCard}">
+                    <UniformGrid Columns="3" Rows="2">
+                        <StackPanel Margin="0,0,0,8">
+                            <TextBlock Style="{StaticResource StatLabel}" Text="TOTAL WORK" />
+                            <TextBlock Style="{StaticResource StatValue}" Text="{Binding TotalWorkTimeSetting, Converter={StaticResource TimeOnlyToStringConverter}}" />
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource StatLabel}" Text="WORK" />
+                            <TextBlock Style="{StaticResource StatValue}" Text="{Binding WorkTimeSetting, Converter={StaticResource TimeOnlyToStringConverter}}" />
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource StatLabel}" Text="REST" />
+                            <TextBlock Style="{StaticResource StatValue}" Text="{Binding RestTimeSetting, Converter={StaticResource TimeOnlyToStringConverter}}" />
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource StatLabel}" Text="LONG REST" />
+                            <TextBlock Style="{StaticResource StatValue}" Text="{Binding LongRestTimeSetting, Converter={StaticResource TimeOnlyToStringConverter}}" />
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource StatLabel}" Text="LONG REST INTERVAL" />
+                            <TextBlock Style="{StaticResource StatValue}" Text="{Binding LongRestIntervalSetting}" />
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource StatLabel}" Text="MAX WARNINGS" />
+                            <TextBlock Style="{StaticResource StatValue}" Text="{Binding MaxWarnings}" />
+                        </StackPanel>
+                    </UniformGrid>
+                </Border>
+
+                <Border Style="{StaticResource InsetCard}">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Right">
+                            <TextBlock Style="{StaticResource StatLabel}" Text="DISTRACTIONS" />
+                            <TextBlock
+                                FontSize="{StaticResource FontSize.Title}"
+                                Style="{StaticResource StatValue}"
+                                Text="{Binding DistractionCount}"
+                                TextAlignment="Right" />
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock
+                                Margin="0,0,0,4"
+                                Style="{StaticResource StatLabel}"
+                                Text="TOP DISTRACTIONS" />
+                            <ItemsControl ItemsSource="{Binding Distractions}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            Margin="0,2"
+                                            Style="{StaticResource NumberText}"
+                                            Text="{Binding}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+            </DockPanel>
+        </Grid>
+    </DockPanel>
+</UserControl>

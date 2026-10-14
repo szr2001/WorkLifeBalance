@@ -1,0 +1,67 @@
+using Serilog;
+using WorkLifeBalance.Features.Tracking;
+
+namespace WorkLifeBalance.Shared.Data
+{
+    public class AppSettingsData
+    {
+        public readonly string Version = "2.0.7";
+        public readonly string AppName = "WorkLifeBalance";
+
+        public AppSettingsData()
+        {
+            AppDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            AppExePath = $"{AppDirectory}{AppName}.exe";
+        }
+
+        public string AppDirectory { get; set; }
+        public string AppExePath { get; set; }
+        public string LastTimeOpened { get; set; } = "";
+        public int SaveInterval { get; set; } = 5;
+        public int AutoDetectInterval { get; set; } = 1;
+        public int AutoDetectIdleInterval { get; set; } = 1;
+        public int StartWithWindows { get; set; }
+        public int MinimizeToTray { get; set; }
+
+        public DateTime LastTimeOpenedC { get; set; }
+        public bool StartWithWindowsC { get; set; }
+        public bool MinimizeToTrayC { get; set; }
+
+        public bool IsForceStateActive { get; set; }
+        public AppState ForcedAppstate { get; set; }
+
+        public Action OnSettingsChanged { get; set; } = () => { };
+
+        public void ConvertSaveDataToUsableData()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(LastTimeOpened))
+                {
+                    LastTimeOpenedC = new DateTime(
+                        int.Parse(LastTimeOpened.Substring(8, 4)),
+                        int.Parse(LastTimeOpened.Substring(4, 2)),
+                        int.Parse(LastTimeOpened.Substring(6, 2)),
+                        int.Parse(LastTimeOpened.Substring(0, 2)),
+                        int.Parse(LastTimeOpened.Substring(2, 2)),
+                        0);
+                }
+
+                StartWithWindowsC = StartWithWindows == 1;
+                MinimizeToTrayC = MinimizeToTray == 1;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "AppSettings: failed to convert data to usable data");
+            }
+        }
+
+        public void ConvertUsableDataToSaveData()
+        {
+            LastTimeOpenedC = DateTime.Now;
+            LastTimeOpened = LastTimeOpenedC.ToString("HHmmMMddyyyy");
+            MinimizeToTray = MinimizeToTrayC ? 1 : 0;
+            StartWithWindows = StartWithWindowsC ? 1 : 0;
+        }
+    }
+}

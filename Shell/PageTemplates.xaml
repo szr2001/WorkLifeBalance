@@ -1,0 +1,54 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:closeApp="clr-namespace:WorkLifeBalance.Features.CloseApp"
+                    xmlns:forceState="clr-namespace:WorkLifeBalance.Features.ForceState"
+                    xmlns:forceWork="clr-namespace:WorkLifeBalance.Features.ForceWork"
+                    xmlns:options="clr-namespace:WorkLifeBalance.Features.Options"
+                    xmlns:settings="clr-namespace:WorkLifeBalance.Features.Settings"
+                    xmlns:statistics="clr-namespace:WorkLifeBalance.Features.Statistics"
+                    xmlns:updates="clr-namespace:WorkLifeBalance.Features.Updates"
+                    xmlns:workApps="clr-namespace:WorkLifeBalance.Features.WorkApps"
+                    xmlns:navigation="clr-namespace:WorkLifeBalance.Shared.Navigation">
+
+    <!--when we bind something to a SettingsViewModel, it will be displayed using the SettingsView
+        like binding a Frame to a SettingsViewModel, it will be displayed using a SettingsView view-->
+    <DataTemplate DataType="{x:Type closeApp:CloseWarningViewModel}">
+        <closeApp:CloseWarningView/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type forceState:ForceStatePanelViewModel}">
+        <forceState:ForceStatePanelView/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type forceWork:ForceWorkViewModel}">
+        <forceWork:ForceWorkView/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type forceWork:ForceWorkPanelViewModel}">
+        <forceWork:ForceWorkPanelView/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type options:OptionsViewModel}">
+        <options:OptionsView/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type settings:SettingsViewModel}">
+        <settings:SettingsView/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type statistics:StatisticsViewModel}">
+        <statistics:StatisticsView/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type statistics:DaysViewModel}">
+        <statistics:DaysView/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type statistics:DayDetailsViewModel}">
+        <statistics:DayDetailsView/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type updates:UpdateViewModel}">
+        <updates:UpdateView/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type workApps:WorkAppsViewModel}">
+        <workApps:WorkAppsView/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type workApps:AddUrlViewModel}">
+        <workApps:AddUrlView/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type navigation:LoadingViewModel}">
+        <navigation:LoadingView/>
+    </DataTemplate>
+</ResourceDictionary>

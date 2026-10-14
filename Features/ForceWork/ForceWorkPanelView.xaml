@@ -1,0 +1,50 @@
+<UserControl
+    x:Class="WorkLifeBalance.Features.ForceWork.ForceWorkPanelView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:forceWork="clr-namespace:WorkLifeBalance.Features.ForceWork"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance Type=forceWork:ForceWorkPanelViewModel}"
+    mc:Ignorable="d">
+
+    <DockPanel>
+        <TextBlock
+            DockPanel.Dock="Top"
+            Style="{StaticResource PanelHeaderText}"
+            Text="FORCE WORK" />
+        <Button
+            Margin="0,8,0,0"
+            HorizontalAlignment="Stretch"
+            Command="{Binding EditForceWorkCommand}"
+            Content="Edit"
+            DockPanel.Dock="Bottom"
+            Style="{StaticResource ToolbarButton}" />
+
+        <StackPanel VerticalAlignment="Center">
+            <StackPanel Margin="0,8,0,10" Orientation="Horizontal">
+                <Path
+                    Width="12"
+                    Height="12"
+                    Margin="0,0,6,0"
+                    Data="{Binding RequiredAppState, Converter={StaticResource AppStateToIconConverter}}"
+                    Fill="{Binding RequiredAppState, Converter={StaticResource AppStateToBrushConverter}}"
+                    Stretch="Uniform" />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource PrimaryTextBrush}"
+                    Text="{Binding RequiredAppState}" />
+            </StackPanel>
+
+            <TextBlock Style="{StaticResource StatLabel}" Text="NEXT STAGE IN" />
+            <TextBlock Style="{StaticResource StatValue}" Text="{Binding CurrentStageTimeRemaining, Converter={StaticResource TimeOnlyToStringConverter}}" />
+
+            <TextBlock
+                Margin="0,8,0,0"
+                Style="{StaticResource StatLabel}"
+                Text="TOTAL WORK LEFT" />
+            <TextBlock Style="{StaticResource StatValue}" Text="{Binding TotalWorkTimeRemaining, Converter={StaticResource TimeOnlyToStringConverter}}" />
+        </StackPanel>
+    </DockPanel>
+</UserControl>

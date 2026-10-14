@@ -1,153 +1,151 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using WorkLifeBalance.Services.Feature;
-using WorkLifeBalance.Interfaces;
-using WorkLifeBalance.ViewModels;
-using WorkLifeBalance.Services;
-using System.Windows;
 using System.IO;
+using System.Windows;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using System;
-using System.Threading.Tasks;
-using WorkLifeBalance.ViewModels.Base;
+using WorkLifeBalance.Features.CloseApp;
+using WorkLifeBalance.Features.ForceState;
+using WorkLifeBalance.Features.ForceWork;
+using WorkLifeBalance.Features.Options;
+using WorkLifeBalance.Features.Settings;
+using WorkLifeBalance.Features.Statistics;
+using WorkLifeBalance.Features.Tracking;
+using WorkLifeBalance.Features.Updates;
+using WorkLifeBalance.Features.WorkApps;
+using WorkLifeBalance.Shared.Data;
+using WorkLifeBalance.Shared.Native;
+using WorkLifeBalance.Shared.Navigation;
+using WorkLifeBalance.Shared.Scheduling;
+using WorkLifeBalance.Shared.Sound;
+using WorkLifeBalance.Shell;
 
 namespace WorkLifeBalance
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
-        private readonly ServiceProvider _servicesProvider;
+        private readonly ServiceProvider _services;
         private readonly IConfiguration _configuration;
 
         public App()
         {
-            var builder = new ConfigurationBuilder()
+            _configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
 
-            _configuration = builder.Build();
-
-            IServiceCollection services = new ServiceCollection();
-
+            var services = new ServiceCollection();
             ConfigureServices(services);
-
-            _servicesProvider = services.BuildServiceProvider();
-        }
-
-        private void ConfigureServices(IServiceCollection services)
-        {
-            services.AddSingleton<INavigationService, NavigationService>();
-            services.AddSingleton<IWindowService<SecondWindowPageVMBase>, SecondWindowService>();
-            services.AddSingleton<IWindowService<PopupWindowPageVMBase>, PopupWindowService>();
-            services.AddSingleton<IFeaturesServices, FeaturesService>();
-            services.AddSingleton<IUpdateCheckerService, UpdateCheckerService>();
-            services.AddSingleton<IWindowService<MainWindowDetailsPageBase>, MainWindowDetailsService>();
-            services.AddSingleton<ISoundService, SoundService>();
-
-            services.AddSingleton<MainWindow>();
-            services.AddSingleton<SecondWindow>();
-            services.AddSingleton<PopupWindow>();
-            
-            services.AddSingleton<DataStorageFeature>();
-            services.AddSingleton<ActivityTrackerFeature>();
-            services.AddSingleton<IdleCheckerFeature>();
-            services.AddSingleton<StateCheckerFeature>();
-            services.AddSingleton<ForceStateFeature>();
-            services.AddSingleton<TimeTrackerFeature>();
-            services.AddSingleton<ForceWorkFeature>();
-
-            services.AddSingleton<SqlDataAccess>();
-            services.AddSingleton(_configuration);
-            services.AddSingleton<DataBaseHandler>();
-            services.AddSingleton<LowLevelHandler>();
-            services.AddSingleton<AppStateHandler>();
-            services.AddSingleton<SqlLiteDatabaseIntegrity>();
-            services.AddSingleton<AppTimer>();
-
-            //factory method for ViewModelBase.
-            services.AddSingleton<Func<Type, ViewModelBase>>(serviceProvider =>
-                viewModelType => (ViewModelBase)serviceProvider.GetRequiredService(viewModelType));
-            //factory method for Features.
-            services.AddSingleton<Func<Type, FeatureBase>>(serviceProvider =>
-                featureBase => (FeatureBase)serviceProvider.GetRequiredService(featureBase));
-
-            services.AddSingleton<BackgroundProcessesViewPageVM>();
-            services.AddSingleton<MainWindowVM>();
-            services.AddSingleton<ForceWorkPageVM>();
-            services.AddSingleton<OptionsPageVM>();
-            services.AddSingleton<SecondWindowBaseVM>();
-            services.AddSingleton<PopupWindowBaseVM>();
-            services.AddSingleton<CloseWarningPageVM>();
-            services.AddSingleton<SettingsPageVM>();
-            services.AddSingleton<ViewDataPageVM>();
-            services.AddSingleton<UpdatePageVM>();
-            services.AddSingleton<LoadingPageVM>();
-            services.AddSingleton<ViewDayDetailsPageVM>();
-            services.AddSingleton<ViewDaysPageVM>();
-            services.AddSingleton<AddUrlPageVM>();
-
-            services.AddSingleton<ForceWorkMainMenuDetailsPageVM>();
-            services.AddSingleton<ForceStateMainMenuDetailsPageVM>();
+            _services = services.BuildServiceProvider();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
-            LowLevelHandler lowHandler = _servicesProvider.GetRequiredService<LowLevelHandler>();
-
 #if DEBUG
-            lowHandler.EnableConsole();
+            _services.GetRequiredService<LowLevelHandler>().EnableConsole();
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Console()
                 .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
 #else
-                Log.Logger = new LoggerConfiguration()
+            Log.Logger = new LoggerConfiguration()
                 .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
 #endif
+
             _ = InitializeApp();
+        }
+
+        private void ConfigureServices(IServiceCollection services)
+        {
+            services.AddSingleton(_configuration);
+
+            // Shared
+            services.AddSingleton<SqlDataAccess>();
+            services.AddSingleton<AppDataStore>();
+            services.AddSingleton<DatabaseIntegrity>();
+            services.AddSingleton<DataStorageFeature>();
+            services.AddSingleton<AppTimer>();
+            services.AddSingleton<IFeaturesService, FeaturesService>();
+            services.AddSingleton<LowLevelHandler>();
+            services.AddSingleton<StartupTask>();
+            services.AddSingleton<ISoundService, SoundService>();
+            services.AddSingleton<INavigationService, NavigationService>();
+            services.AddSingleton<SecondWindowService>();
+            services.AddSingleton<IWindowService<SecondWindowPageBase>>(provider => provider.GetRequiredService<SecondWindowService>());
+            services.AddSingleton<IWindowService<PopupWindowPageBase>, PopupWindowService>();
+            services.AddSingleton<IWindowService<MainWindowDetailsPageBase>, MainWindowDetailsService>();
+            services.AddSingleton<LoadingViewModel>();
+
+            // Pages and features are resolved by type (NavigationService, FeaturesService)
+            services.AddSingleton<Func<Type, ViewModelBase>>(provider => type => (ViewModelBase)provider.GetRequiredService(type));
+            services.AddSingleton<Func<Type, FeatureBase>>(provider => type => (FeatureBase)provider.GetRequiredService(type));
+
+            // Shell
+            services.AddSingleton<MainWindow>();
+            services.AddSingleton<MainViewModel>();
+            services.AddSingleton<SecondWindow>();
+            services.AddSingleton<SecondWindowViewModel>();
+            services.AddSingleton<PopupWindow>();
+            services.AddSingleton<PopupWindowViewModel>();
+
+            // Features
+            services.AddSingleton<AppStateHandler>();
+            services.AddSingleton<TimeTrackerFeature>();
+            services.AddSingleton<ActivityTrackerFeature>();
+            services.AddSingleton<StateCheckerFeature>();
+            services.AddSingleton<IdleCheckerFeature>();
+
+            services.AddSingleton<ForceStateFeature>();
+            services.AddSingleton<ForceStatePanelViewModel>();
+
+            services.AddSingleton<ForceWorkFeature>();
+            services.AddSingleton<ForceWorkViewModel>();
+            services.AddSingleton<ForceWorkPanelViewModel>();
+
+            services.AddSingleton<WorkAppsViewModel>();
+            services.AddSingleton<AddUrlViewModel>();
+
+            services.AddSingleton<StatisticsStore>();
+            services.AddSingleton<StatisticsViewModel>();
+            services.AddSingleton<DaysViewModel>();
+            services.AddSingleton<DayDetailsViewModel>();
+
+            services.AddSingleton<SettingsViewModel>();
+            services.AddSingleton<OptionsViewModel>();
+            services.AddSingleton<IUpdateCheckerService, UpdateCheckerService>();
+            services.AddSingleton<UpdateViewModel>();
+            services.AddSingleton<CloseWarningViewModel>();
         }
 
         private async Task InitializeApp()
         {
-            //request the secondWindow so we will have it there to subscribe to events
-            _servicesProvider.GetRequiredService<SecondWindow>();
-            _servicesProvider.GetRequiredService<PopupWindow>();
-            
-            DataStorageFeature dataStorageFeature = _servicesProvider.GetRequiredService<DataStorageFeature>();
+            // request the windows now so they are there to subscribe to the events
+            _services.GetRequiredService<SecondWindow>();
+            _services.GetRequiredService<PopupWindow>();
 
-            SqlLiteDatabaseIntegrity sqlLiteDatabaseIntegrity =
-                _servicesProvider.GetRequiredService<SqlLiteDatabaseIntegrity>();
+            var dataStorage = _services.GetRequiredService<DataStorageFeature>();
 
-            IUpdateCheckerService updateCheckerService = _servicesProvider.GetRequiredService<IUpdateCheckerService>();
+            await _services.GetRequiredService<IUpdateCheckerService>().CheckForUpdate();
+            await _services.GetRequiredService<DatabaseIntegrity>().CheckDatabaseIntegrity();
+            await dataStorage.LoadData();
 
-            await updateCheckerService.CheckForUpdate();
+            var appTimer = _services.GetRequiredService<AppTimer>();
 
-            await sqlLiteDatabaseIntegrity.CheckDatabaseIntegrity();
+            // set app ready so timers can start
+            dataStorage.IsAppReady = true;
 
-            await dataStorageFeature.LoadData();
-
-            AppTimer appTimer = _servicesProvider.GetRequiredService<AppTimer>();
-
-            //set app ready so timers can start
-            dataStorageFeature.IsAppReady = true;
-
-            IFeaturesServices featuresService = _servicesProvider.GetRequiredService<IFeaturesServices>();
+            var featuresService = _services.GetRequiredService<IFeaturesService>();
             featuresService.AddFeature<DataStorageFeature>();
             featuresService.AddFeature<TimeTrackerFeature>();
             featuresService.AddFeature<ActivityTrackerFeature>();
             featuresService.AddFeature<IdleCheckerFeature>();
             featuresService.AddFeature<StateCheckerFeature>();
 
-            //starts the main timer
             appTimer.StartTick();
 
-            _servicesProvider.GetRequiredService<MainWindow>().Show();
-
+            _services.GetRequiredService<MainWindow>().Show();
             Log.Information("------------------App Initialized------------------");
         }
     }

@@ -1,0 +1,160 @@
+<UserControl
+    x:Class="WorkLifeBalance.Features.WorkApps.WorkAppsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:icons="clr-namespace:WorkLifeBalance.Shared.Icons"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:workApps="clr-namespace:WorkLifeBalance.Features.WorkApps"
+    d:DataContext="{d:DesignInstance Type=workApps:WorkAppsViewModel}"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <ItemsPanelTemplate x:Key="WrapItems">
+            <WrapPanel />
+        </ItemsPanelTemplate>
+
+        <Style x:Key="ListTitle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,8,0,6" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize.XS}" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource SecondaryTextBrush}" />
+        </Style>
+    </UserControl.Resources>
+
+    <DockPanel>
+        <Grid Margin="0,10,0,0" DockPanel.Dock="Bottom">
+            <Button
+                HorizontalAlignment="Right"
+                Command="{Binding OpenAddPageWindowCommand}"
+                Style="{StaticResource ToolbarButton}"
+                ToolTip="Add pages to be considered as 'Working' when they are active">
+                <StackPanel Orientation="Horizontal">
+                    <Path
+                        Width="10"
+                        Height="10"
+                        Margin="0,0,6,0"
+                        Data="{icons:Phosphor PlusBold}"
+                        Fill="{DynamicResource SecondaryTextBrush}"
+                        Stretch="Uniform" />
+                    <TextBlock Text="Add pages" />
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <!--  What the tracker sees right now, to know what to pick  -->
+        <Border
+            Margin="0,10,0,0"
+            DockPanel.Dock="Bottom"
+            Style="{StaticResource InsetCard}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource StatLabel}" Text="ACTIVE WINDOW" />
+                    <TextBlock Style="{StaticResource StatValue}" Text="{Binding ActiveWindow}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <TextBlock Style="{StaticResource StatLabel}" Text="ACTIVE PAGE" />
+                    <TextBlock Style="{StaticResource StatValue}" Text="{Binding ActivePage}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <TextBlock
+            Margin="0,0,0,10"
+            DockPanel.Dock="Top"
+            Style="{StaticResource CaptionText}"
+            Text="You can select what processes/pages considered as 'Working' and the app will try to detect when you are working based on what window is focused"
+            TextTrimming="None"
+            TextWrapping="Wrap" />
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Border Style="{StaticResource InsetCard}">
+                <DockPanel>
+                    <TextBlock
+                        DockPanel.Dock="Top"
+                        Style="{StaticResource SectionHeaderText}"
+                        Text="Selected as 'Working'" />
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource ListTitle}" Text="PROCESSES" />
+                            <ItemsControl ItemsPanel="{StaticResource WrapItems}" ItemsSource="{Binding SelectedProcesses}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button
+                                            Command="{Binding DataContext.DeselectProcessCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Content="{Binding}"
+                                            Style="{StaticResource ChipButton}"
+                                            Tag="{icons:Phosphor XBold}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <TextBlock Style="{StaticResource ListTitle}" Text="PAGES" />
+                            <ItemsControl ItemsPanel="{StaticResource WrapItems}" ItemsSource="{Binding SelectedPages}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button
+                                            Command="{Binding DataContext.DeselectPageCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Content="{Binding}"
+                                            Style="{StaticResource ChipButton}"
+                                            Tag="{icons:Phosphor XBold}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
+
+            <Border Grid.Column="2" Style="{StaticResource InsetCard}">
+                <DockPanel>
+                    <TextBlock
+                        DockPanel.Dock="Top"
+                        Style="{StaticResource SectionHeaderText}"
+                        Text="Detected" />
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource ListTitle}" Text="PROCESSES" />
+                            <ItemsControl ItemsPanel="{StaticResource WrapItems}" ItemsSource="{Binding DetectedWindows}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button
+                                            Command="{Binding DataContext.SelectProcessCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Content="{Binding}"
+                                            Style="{StaticResource ChipButton}"
+                                            Tag="{icons:Phosphor PlusBold}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <TextBlock Style="{StaticResource ListTitle}" Text="PAGES" />
+                            <ItemsControl ItemsPanel="{StaticResource WrapItems}" ItemsSource="{Binding DetectedTabs}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button
+                                            Command="{Binding DataContext.SelectTabCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Content="{Binding}"
+                                            Style="{StaticResource ChipButton}"
+                                            Tag="{icons:Phosphor PlusBold}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
+        </Grid>
+    </DockPanel>
+</UserControl>
