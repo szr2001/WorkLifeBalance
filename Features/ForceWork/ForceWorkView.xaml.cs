@@ -2,11 +2,11 @@ using System.Windows.Controls;
 
 namespace WorkLifeBalance.Features.ForceWork
 {
-    public partial class ForceWorkView : UserControl
+  public partial class ForceWorkView : UserControl
+  {
+    public ForceWorkView()
     {
-        public ForceWorkView()
-        {
-            InitializeComponent();
-        }
+      InitializeComponent();
     }
+  }
 }

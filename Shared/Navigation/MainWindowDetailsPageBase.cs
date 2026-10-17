@@ -1,6 +1,6 @@
 namespace WorkLifeBalance.Shared.Navigation
 {
-    public abstract class MainWindowDetailsPageBase : PageViewModelBase
-    {
-    }
+  public abstract class MainWindowDetailsPageBase : PageViewModelBase
+  {
+  }
 }

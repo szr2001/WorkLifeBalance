@@ -2,11 +2,11 @@ using System.Windows.Controls;
 
 namespace WorkLifeBalance.Features.Settings
 {
-    public partial class SettingsView : UserControl
+  public partial class SettingsView : UserControl
+  {
+    public SettingsView()
     {
-        public SettingsView()
-        {
-            InitializeComponent();
-        }
+      InitializeComponent();
     }
+  }
 }

@@ -1,9 +1,9 @@
 namespace WorkLifeBalance.Shared.Navigation
 {
-    public interface INavigationService
-    {
-        ViewModelBase NavigateTo<T>() where T : ViewModelBase;
+  public interface INavigationService
+  {
+    ViewModelBase NavigateTo<T>() where T : ViewModelBase;
 
-        ViewModelBase NavigateTo(Type viewModelType);
-    }
+    ViewModelBase NavigateTo(Type viewModelType);
+  }
 }

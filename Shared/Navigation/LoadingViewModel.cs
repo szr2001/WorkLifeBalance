@@ -1,10 +1,10 @@
 namespace WorkLifeBalance.Shared.Navigation
 {
-    public class LoadingViewModel : SecondWindowPageBase
+  public class LoadingViewModel : SecondWindowPageBase
+  {
+    public LoadingViewModel()
     {
-        public LoadingViewModel()
-        {
-            PageName = "Loading...";
-        }
+      PageName = "Loading...";
     }
+  }
 }

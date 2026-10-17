@@ -1,6 +1,6 @@
 namespace WorkLifeBalance.Shared.Navigation
 {
-    public class PopupCloseMessage
-    {
-    }
+  public class PopupCloseMessage
+  {
+  }
 }

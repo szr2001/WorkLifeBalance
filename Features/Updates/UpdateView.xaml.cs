@@ -2,11 +2,11 @@ using System.Windows.Controls;
 
 namespace WorkLifeBalance.Features.Updates
 {
-    public partial class UpdateView : UserControl
+  public partial class UpdateView : UserControl
+  {
+    public UpdateView()
     {
-        public UpdateView()
-        {
-            InitializeComponent();
-        }
+      InitializeComponent();
     }
+  }
 }
