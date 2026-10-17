@@ -63,9 +63,13 @@ namespace WorkLifeBalance.Shell
     private void ToggleForceState()
     {
       if (_featuresService.IsFeaturePresent<ForceStateFeature>())
+      {
         _featuresService.RemoveFeature<ForceStateFeature>();
+      }
       else
+      {
         _featuresService.AddFeature<ForceStateFeature>();
+      }
     }
 
     [RelayCommand]

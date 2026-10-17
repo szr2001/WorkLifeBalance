@@ -43,6 +43,7 @@ namespace WorkLifeBalance.Features.Settings
 
     public override async Task OnPageClosingAsync()
     {
+      return;// stop saving data while in dev time
       Settings.SaveInterval = AutoSaveInterval;
       Settings.AutoDetectInterval = AutoDetectInterval;
       Settings.AutoDetectIdleInterval = AutoDetectIdleInterval;

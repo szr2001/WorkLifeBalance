@@ -13,25 +13,23 @@ namespace WorkLifeBalance.Shared.Scheduling
 
     public void AddFeature<TFeature>() where TFeature : FeatureBase
     {
-      if (IsFeaturePresent<TFeature>())
-        return;
+      if (IsFeaturePresent<TFeature>()) return;
 
-      var feature = _featureFactory(typeof(TFeature));
+      var feature = _featureFactory.Invoke(typeof(TFeature));
       _appTimer.Subscribe(feature.AddFeature());
     }
 
     public bool IsFeaturePresent<TFeature>() where TFeature : FeatureBase
     {
-      var feature = _featureFactory(typeof(TFeature));
+      var feature = _featureFactory.Invoke(typeof(TFeature));
       return _appTimer.IsFeaturePresent(feature.GetFeature());
     }
 
     public void RemoveFeature<TFeature>() where TFeature : FeatureBase
     {
-      if (!IsFeaturePresent<TFeature>())
-        return;
+      if (!IsFeaturePresent<TFeature>()) return;
 
-      var feature = _featureFactory(typeof(TFeature));
+      var feature = _featureFactory.Invoke(typeof(TFeature));
       _appTimer.UnSubscribe(feature.RemoveFeature());
     }
   }

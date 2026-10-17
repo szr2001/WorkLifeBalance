@@ -28,7 +28,10 @@ namespace WorkLifeBalance.Features.ForceState
 
     public override Task OnPageClosingAsync()
     {
-      _featuresService.RemoveFeature<ForceStateFeature>();
+      if (!_featuresService.IsFeaturePresent<ForceStateFeature>())
+      {
+        _featuresService.RemoveFeature<ForceStateFeature>();
+      }
       return Task.CompletedTask;
     }
 
