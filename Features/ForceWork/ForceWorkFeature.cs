@@ -76,7 +76,7 @@ namespace WorkLifeBalance.Features.ForceWork
 
     public void SetTotalWorkTime(int hours, int minutes) => TotalWorkTimeSetting = new TimeOnly(hours, minutes);
 
-    protected override void OnFeatureAdded()
+    public override void OnFeatureAdded()
     {
       // if there is no window set up as working, remove the feature
       if (WorkingWindows.Length == 0)
@@ -99,14 +99,13 @@ namespace WorkLifeBalance.Features.ForceWork
       _detailsService.OpenWith<ForceWorkPanelViewModel>();
     }
 
-    protected override void OnFeatureRemoved() => _detailsService.Close();
+    public override void OnFeatureRemoved() => _detailsService.Close();
 
     protected override Func<Task> ReturnFeatureMethod() => TriggerForceWork;
 
     private async Task TriggerForceWork()
     {
-      if (IsFeatureRunning)
-        return;
+      if (IsFeatureRunning) return;
 
       IsFeatureRunning = true;
       await Task.Delay(_delay);

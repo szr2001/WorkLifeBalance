@@ -23,7 +23,7 @@ namespace WorkLifeBalance.Features.ForceState
 
     public void SetForcedAppState(AppState state) => _appStateHandler.SetAppState(state);
 
-    protected override void OnFeatureAdded()
+    public override void OnFeatureAdded()
     {
       _featuresService.RemoveFeature<IdleCheckerFeature>();
       _featuresService.RemoveFeature<StateCheckerFeature>();
@@ -32,7 +32,7 @@ namespace WorkLifeBalance.Features.ForceState
       _detailsService.OpenWith<ForceStatePanelViewModel>();
     }
 
-    protected override void OnFeatureRemoved()
+    public override void OnFeatureRemoved()
     {
       _featuresService.AddFeature<IdleCheckerFeature>();
       _featuresService.AddFeature<StateCheckerFeature>();

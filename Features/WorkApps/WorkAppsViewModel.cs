@@ -89,7 +89,9 @@ namespace WorkLifeBalance.Features.WorkApps
     private void InitializeProcessNames()
     {
       if (!WeakReferenceMessenger.Default.IsRegistered<UrlsMessage>(this))
+      {
         WeakReferenceMessenger.Default.Register(this);
+      }
 
       SelectedProcesses = new ObservableCollection<string>(_dataStorage.AutoChangeData.WorkingStateWindows);
       SelectedPages = new ObservableCollection<string>(_dataStorage.AutoChangeData.WorkingStateUrls);

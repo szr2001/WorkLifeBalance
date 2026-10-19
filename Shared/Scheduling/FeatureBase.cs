@@ -14,7 +14,6 @@ namespace WorkLifeBalance.Shared.Scheduling
     {
       IsFeatureRunning = false;
       CancelTokenSource = new();
-      OnFeatureAdded();
       return ReturnFeatureMethod();
     }
 
@@ -24,17 +23,16 @@ namespace WorkLifeBalance.Shared.Scheduling
     {
       CancelTokenSource.Cancel();
       CancelTokenSource = new();
-      OnFeatureRemoved();
       return ReturnFeatureMethod();
     }
 
     protected abstract Func<Task> ReturnFeatureMethod();
 
-    protected virtual void OnFeatureAdded()
+    public virtual void OnFeatureAdded()
     {
     }
 
-    protected virtual void OnFeatureRemoved()
+    public virtual void OnFeatureRemoved()
     {
     }
   }

@@ -65,22 +65,30 @@ namespace WorkLifeBalance.Features.Tracking
     private void RecordActivityForProcess()
     {
       if (!string.IsNullOrEmpty(ActiveWindow))
+      {
         AddSecond(_dataStorage.AutoChangeData.ProcessActivitiesC, ActiveWindow);
+      }
     }
 
     private void RecordActivityForPage()
     {
       if (!string.IsNullOrEmpty(ActiveUrl))
+      {
         AddSecond(_dataStorage.AutoChangeData.PageActivitiesC, ActiveUrl);
+      }
     }
 
     // The first second of a new activity only creates the entry, like it always did
     private static void AddSecond(Dictionary<string, TimeOnly> activities, string key)
     {
       if (activities.TryGetValue(key, out var spent))
+      {
         activities[key] = spent.Add(OneSecond);
+      }
       else
+      {
         activities.Add(key, new TimeOnly());
+      }
     }
   }
 }

@@ -29,8 +29,7 @@ namespace WorkLifeBalance.Shared.Scheduling
 
     public void Subscribe(Func<Task> feature)
     {
-      if (IsFeaturePresent(feature))
-        return;
+      if (IsFeaturePresent(feature)) return;
 
       OnTimerTick += feature;
       Log.Information("{Feature} subscribed to the main timer", feature.Method.Name);
@@ -38,8 +37,7 @@ namespace WorkLifeBalance.Shared.Scheduling
 
     public void UnSubscribe(Func<Task> feature)
     {
-      if (!IsFeaturePresent(feature))
-        return;
+      if (!IsFeaturePresent(feature)) return;
 
       OnTimerTick -= feature;
       Log.Information("{Feature} unsubscribed from the main timer", feature.Method.Name);

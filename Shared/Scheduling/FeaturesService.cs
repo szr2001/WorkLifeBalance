@@ -17,6 +17,7 @@ namespace WorkLifeBalance.Shared.Scheduling
 
       var feature = _featureFactory.Invoke(typeof(TFeature));
       _appTimer.Subscribe(feature.AddFeature());
+      feature.OnFeatureAdded();
     }
 
     public bool IsFeaturePresent<TFeature>() where TFeature : FeatureBase
@@ -31,6 +32,7 @@ namespace WorkLifeBalance.Shared.Scheduling
 
       var feature = _featureFactory.Invoke(typeof(TFeature));
       _appTimer.UnSubscribe(feature.RemoveFeature());
+      feature.OnFeatureRemoved();
     }
   }
 }

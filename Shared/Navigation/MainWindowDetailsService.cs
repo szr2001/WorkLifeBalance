@@ -35,7 +35,7 @@ namespace WorkLifeBalance.Shared.Navigation
     {
       if (LoadedPage != null)
       {
-        await LoadedPage.OnPageClosingAsync();
+        //await LoadedPage.OnPageClosingAsync();
         LoadedPage = null;
       }
     }
