@@ -28,16 +28,12 @@ namespace WorkLifeBalance.Features.ForceState
 
     public override Task OnPageClosingAsync()
     {
-      if (!_featuresService.IsFeaturePresent<ForceStateFeature>())
-      {
-        _featuresService.RemoveFeature<ForceStateFeature>();
-      }
+      _featuresService.RemoveFeature<ForceStateFeature>();
       return Task.CompletedTask;
     }
 
     partial void OnForcedAppStateChanged(AppState value) => _forceStateFeature.SetForcedAppState(value);
 
-    // Working -> Resting -> Idle -> Working...
     [RelayCommand]
     private void ChangeForcedState()
     {
